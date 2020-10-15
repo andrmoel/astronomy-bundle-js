@@ -50,7 +50,7 @@ jobs:
         run: yarn release
 
       - name: 'Push release'
-        run: yarn release:publish
+        run: yarn release:push
 
       - name: 'Publish release'
         uses: JS-DevTools/npm-publish@v1

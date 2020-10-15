@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix ./src",
     "test": "jest ./src",
     "release": "git add . && standard-version --tag-prefix --commit-all",
-    "release:publish": "git push --follow-tags"
+    "release:push": "git push --follow-tags"
   },
   "devDependencies": {
     "@babel/core": "^7.12.0",
