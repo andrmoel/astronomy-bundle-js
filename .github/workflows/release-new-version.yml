@@ -49,10 +49,10 @@ jobs:
       - name: 'Prepare release'
         run: yarn release
 
-      - name: 'Publish release'
+      - name: 'Push release'
         run: yarn release:publish
 
-      - name: 'Publish release to npm'
-        run: yarn publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 'Publish release'
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
