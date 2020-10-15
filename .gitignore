@@ -1,0 +1,12 @@
+/.idea
+
+*.log
+.env.local
+.env.*.local
+stats.json
+
+/.next
+/out
+/node_modules
+/build
+/coverage
