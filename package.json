@@ -7,6 +7,7 @@
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "echo hello world",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src"
   },
