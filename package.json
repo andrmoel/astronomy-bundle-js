@@ -9,11 +9,14 @@
   "scripts": {
     "build": "echo hello world",
     "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src"
+    "lint:fix": "eslint --fix ./src",
+    "release": "git add . && standard-version --tag-prefix --commit-all",
+    "release:publish": "git push --follow-tags"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.11.0",
-    "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel"
+    "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
+    "standard-version": "^9.0.0"
   }
 }

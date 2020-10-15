@@ -8,5 +8,4 @@ stats.json
 /.next
 /out
 /node_modules
-/build
 /coverage
