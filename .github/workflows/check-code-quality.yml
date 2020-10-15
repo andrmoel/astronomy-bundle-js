@@ -34,5 +34,8 @@ jobs:
       - name: 'Check code style'
         run: yarn lint
 
+      - name: 'Run unit tests'
+        run yarn test
+
       - name: 'Build project'
         run: yarn build
