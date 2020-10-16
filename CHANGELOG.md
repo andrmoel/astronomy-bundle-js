@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.0.0 (2020-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **node:** use astronomy-bundle instead of astronomy-bundle-js
+
+* **node:** rename package ([6ddf574](https://github.com/andrmoel/astronomy-bundle-js/commit/6ddf574710cdecd11f6170cc8b1a91a071520222))
+
 ### 1.0.5 (2020-10-15)
 
 ### 1.0.4 (2020-10-15)
