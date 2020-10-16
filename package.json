@@ -7,7 +7,7 @@
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "echo hello world",
+    "build": "webpack",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "test": "jest ./src",
@@ -22,6 +22,8 @@
     "eslint": "^7.11.0",
     "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
     "jest": "^26.5.3",
-    "standard-version": "^9.0.0"
+    "standard-version": "^9.0.0",
+    "webpack": "^5.1.0",
+    "webpack-cli": "^4.0.0"
   }
 }
