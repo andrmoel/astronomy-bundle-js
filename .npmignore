@@ -1,0 +1,13 @@
+.idea
+.DS_Store
+.vscode/**
+coverage/**
+node_modules/**
+src/**
+webpack.config.js
+*.test.js
+*.log
+.babelrc.json
+.eslintrc.json
+.gitignore
+yarn.lock
