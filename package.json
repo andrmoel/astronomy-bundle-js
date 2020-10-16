@@ -1,6 +1,6 @@
 {
   "name": "astronomy-bundle",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
   "main": "index.js",
   "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
