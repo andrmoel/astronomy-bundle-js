@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.5.0 (2020-10-19)
+
+
+### Features
+
+* **moon:** calculate mean elongation, mean anomaly and argument of latitude ([a3acb78](https://github.com/andrmoel/astronomy-bundle-js/commit/a3acb78aea34cd4f7273709b2af2fca22fe074bc))
+
 ## 2.4.0 (2020-10-19)
 
 
