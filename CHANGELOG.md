@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.6.0 (2020-10-19)
+
+
+### Features
+
+* **moon:** add moon calculations ([eaa9703](https://github.com/andrmoel/astronomy-bundle-js/commit/eaa97039f84def1faa8605b73c6dadf54435fd5f))
+
 ### 2.5.2 (2020-10-19)
 
 ### 2.5.1 (2020-10-19)
