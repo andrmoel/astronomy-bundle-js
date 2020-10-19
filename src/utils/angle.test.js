@@ -1,4 +1,4 @@
-import {deg2rad, normalizeAngle, rad2deg} from './angle';
+import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, time2deg} from './angle';
 import {round} from './math';
 
 it('tests deg2rad', () => {
@@ -25,6 +25,38 @@ it('tests rad2deg', () => {
     expect(round(rad2deg(6.9813))).toBe(400);
     expect(round(rad2deg(-0.7854))).toBe(-45);
     expect(round(rad2deg(-1.5708))).toBe(-90);
+});
+
+it('tests deg2angle', () => {
+    expect(deg2angle(0.0)).toBe('0°0\'0"');
+    expect(deg2angle(45.2625)).toBe('45°15\'45"');
+    expect(deg2angle(270.5)).toBe('270°30\'0"');
+    expect(deg2angle(-0.00105222)).toBe('-0°0\'3.788"');
+    expect(deg2angle(-24.929312194388)).toBe('-24°55\'45.524"');
+});
+
+it('tests angle2deg', () => {
+    expect(round(angle2deg('0°0\'0"'), 6)).toBe(0.0);
+    expect(round(angle2deg('45°15\'45"'), 6)).toBe(45.2625);
+    expect(round(angle2deg('45° 15\' 45"'), 6)).toBe(45.2625);
+    expect(round(angle2deg('270°30\'0"'), 6)).toBe(270.5);
+    expect(round(angle2deg('-0°0\'3.788"'), 6)).toBe(-0.001052);
+});
+
+it('tests deg2time', () => {
+    expect(deg2time(0.0)).toBe('0h0m0s');
+    expect(deg2time(45.4)).toBe('3h1m36s');
+    expect(deg2time(360)).toBe('24h0m0s');
+    expect(deg2time(-45.4)).toBe('-3h1m36s');
+});
+
+it('tests time2deg', () => {
+    expect(round(time2deg('0h0m0s'), 6)).toBe(0);
+    expect(round(time2deg('3h1m36s'), 6)).toBe(45.4);
+    expect(round(time2deg('3h 1m 36s'), 6)).toBe(45.4);
+    expect(round(time2deg('24h0m0s'), 6)).toBe(360);
+    expect(round(time2deg('-3h1m36s'), 6)).toBe(-45.4);
+    expect(round(time2deg('12h45m15.512s'), 6)).toBe(191.314633);
 });
 
 it('tests normalizeAngle', () => {
