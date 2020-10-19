@@ -1,6 +1,10 @@
 import {deg2rad, normalizeAngle, rad2deg} from './angle';
 
-export function rectangular2spherical(x, y, z) {
+export function rectangular2spherical(x: number, y: number, z: number): {
+    lon: number,
+    lat: number,
+    radiusVector: number
+} {
     // Meeus 33.2
     const lonRad = Math.atan2(y, x);
     const lon = normalizeAngle(rad2deg(lonRad));
@@ -13,7 +17,11 @@ export function rectangular2spherical(x, y, z) {
     return {lon, lat, radiusVector}
 }
 
-export function spherical2rectangular(lon, lat, radiusVector) {
+export function spherical2rectangular(lon: number, lat: number, radiusVector: number): {
+    x: number,
+    y: number,
+    z: number
+} {
     const lonRad = deg2rad(lon);
     const latRad = deg2rad(lat);
 
