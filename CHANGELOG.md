@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.2.0 (2020-10-19)
+
+
+### Features
+
+* **angle:** transform into time and angle string ([2f64dc8](https://github.com/andrmoel/astronomy-bundle-js/commit/2f64dc807398fb8a75d37c5b52178244320b0844))
+
 ### 2.1.2 (2020-10-19)
 
 ### 2.1.1 (2020-10-19)
