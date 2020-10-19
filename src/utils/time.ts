@@ -1,4 +1,4 @@
-import {normalizeAngle} from "./angle";
+import {normalizeAngle} from './angle';
 
 export function julianDay2julianDay0(jd: number): number {
     return Math.floor(jd + 0.5) - 0.5;

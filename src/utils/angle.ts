@@ -1,4 +1,4 @@
-import {round} from "./math";
+import {round} from './math';
 
 export function deg2rad(degrees: number): number {
     return degrees * (Math.PI / 180);
@@ -62,7 +62,7 @@ export function time2deg(timeAngle: string): number {
     return angleDeg * 15;
 }
 
-export function normalizeAngle(degrees: number, baseAngle: number = 360.0): number {
+export function normalizeAngle(degrees: number, baseAngle = 360.0): number {
     let angle = degrees % baseAngle;
 
     if (angle < 0) {

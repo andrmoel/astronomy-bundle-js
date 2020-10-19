@@ -1,7 +1,7 @@
-import {deg2rad, normalizeAngle} from "./angle";
-import {getArgumentOfLatitude, getMeanAnomaly as getMeanMoonAnomaly, getMeanElongation} from "./moon";
-import {getMeanAnomaly as getMeanSunAnomaly} from "./sun";
-import {EARTH_ARGUMENTS_OF_NUTATION} from "../constants/earth";
+import {deg2rad, normalizeAngle} from './angle';
+import {getArgumentOfLatitude, getMeanAnomaly as getMeanMoonAnomaly, getMeanElongation} from './moon';
+import {getMeanAnomaly as getMeanSunAnomaly} from './sun';
+import {EARTH_ARGUMENTS_OF_NUTATION} from '../constants/earth';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4

@@ -1,4 +1,4 @@
-import {normalizeAngle} from "./angle";
+import {normalizeAngle} from './angle';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2

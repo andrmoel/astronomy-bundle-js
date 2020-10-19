@@ -14,7 +14,7 @@ export function rectangular2spherical(x: number, y: number, z: number): {
 
     const radiusVector = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 
-    return {lon, lat, radiusVector}
+    return {lon, lat, radiusVector};
 }
 
 export function spherical2rectangular(lon: number, lat: number, radiusVector: number): {

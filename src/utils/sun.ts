@@ -1,4 +1,4 @@
-import {deg2rad, normalizeAngle} from "./angle";
+import {deg2rad, normalizeAngle} from './angle';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
