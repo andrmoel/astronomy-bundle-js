@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.1.0 (2020-10-19)
+
+
+### Features
+
+* **angle:** add angle functions ([a4d9a02](https://github.com/andrmoel/astronomy-bundle-js/commit/a4d9a020764cb2053ffcefb7c83fbbadc791270e))
+
 ### 2.0.2 (2020-10-16)
 
 ### 2.0.1 (2020-10-16)
