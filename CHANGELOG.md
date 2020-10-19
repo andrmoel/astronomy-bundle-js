@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.3.0 (2020-10-19)
+
+
+### Features
+
+* **time:** add time function to calculate julian day ([fb624dc](https://github.com/andrmoel/astronomy-bundle-js/commit/fb624dca7617efabc3a38e245b478c5dbf940574))
+
 ## 2.2.0 (2020-10-19)
 
 
