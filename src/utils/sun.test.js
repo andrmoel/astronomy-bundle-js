@@ -2,21 +2,31 @@ import {getApparentLongitude, getEquationOfCenter, getMeanAnomaly, getTrueAnomal
 import {round} from './math';
 
 it('tests getMeanAnomaly', () => {
-    expect(round(getMeanAnomaly(-0.127296372348), 6)).toBe(94.980597);
+    const T = -0.127296372348;
+
+    expect(round(getMeanAnomaly(T), 6)).toBe(94.980597);
 });
 
 it('tests getTrueAnomaly', () => {
-    expect(round(getTrueAnomaly(-0.072183436002738), 6)).toBe(277.096642);
+    const T = -0.072183436002738;
+
+    expect(round(getTrueAnomaly(T), 6)).toBe(277.096642);
 });
 
 it('tests getTrueLongitude', () => {
-    expect(round(getTrueLongitude(-0.072183436), 6)).toBe(199.90987);
+    const T = -0.072183436;
+
+    expect(round(getTrueLongitude(T), 6)).toBe(199.90987);
 });
 
 it('tests getApparentLongitude', () => {
-    expect(round(getApparentLongitude(-0.072183436), 6)).toBe(199.908939);
+    const T = -0.072183436;
+
+    expect(round(getApparentLongitude(T), 6)).toBe(199.908939);
 });
 
 it('tests getEquationOfCenter', () => {
-    expect(round(getEquationOfCenter(-0.072183436002738), 6)).toBe(-1.897324);
+    const T = -0.072183436002738;
+
+    expect(round(getEquationOfCenter(T), 6)).toBe(-1.897324);
 });
