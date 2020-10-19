@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 .vscode/**
+.github/**
 coverage/**
 node_modules/**
 src/**
@@ -10,4 +11,5 @@ webpack.config.js
 .babelrc.json
 .eslintrc.json
 .gitignore
+tsconfig.json
 yarn.lock
