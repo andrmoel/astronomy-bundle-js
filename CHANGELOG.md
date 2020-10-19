@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.5.1 (2020-10-19)
+
+
+### Bug Fixes
+
+* **earth:** add earth constants ([c6a1fbf](https://github.com/andrmoel/astronomy-bundle-js/commit/c6a1fbf6a85b5f81f2e89dd7d774aa7a317e37a5))
+
 ## 2.5.0 (2020-10-19)
 
 
