@@ -11,7 +11,7 @@ import {
     julianDay2time,
     julianMillenniaJ20002julianDay,
     time2julianDay,
-} from './time';
+} from './timeCalc';
 import {round} from './math';
 import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 

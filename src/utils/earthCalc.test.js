@@ -8,9 +8,9 @@ import {
     getNutationInLongitude,
     getNutationInObliquity,
     getTrueObliquityOfEcliptic,
-} from './earth';
+} from './earthCalc';
 import {round} from './math';
-import {deg2angle, deg2time} from './angle';
+import {deg2angle, deg2time} from './angleCalc';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;

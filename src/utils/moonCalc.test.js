@@ -8,7 +8,7 @@ import {
     getMeanAnomaly,
     getMeanElongation,
     getMeanLongitude,
-} from './moon';
+} from './moonCalc';
 import {round} from './math';
 
 it('tests getMeanElongation', () => {

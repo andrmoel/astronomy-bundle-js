@@ -1,5 +1,5 @@
-import * as earthCalc from './earth';
-import {deg2rad, normalizeAngle, rad2deg} from './angle';
+import * as earthCalc from './earthCalc';
+import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4

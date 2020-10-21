@@ -1,4 +1,4 @@
-import {rectangular2spherical, spherical2rectangular} from './coordinate';
+import {rectangular2spherical, spherical2rectangular} from './coordinateCalc';
 import {round} from './math';
 
 it('tests rectangular2spherical', () => {

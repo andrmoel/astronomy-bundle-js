@@ -1,7 +1,7 @@
 import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
-import {deg2rad, normalizeAngle, rad2deg} from './angle';
-import {getMeanAnomaly as getMeanSunAnomaly} from './sun';
-import {getNutationInLongitude} from './earth';
+import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
+import {getMeanAnomaly as getMeanSunAnomaly} from './sunCalc';
+import {getNutationInLongitude} from './earthCalc';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2

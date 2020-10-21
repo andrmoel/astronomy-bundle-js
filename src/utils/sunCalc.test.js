@@ -5,7 +5,7 @@ import {
     getMeanAnomaly,
     getTrueAnomaly,
     getTrueLongitude,
-} from './sun';
+} from './sunCalc';
 import {round} from './math';
 
 it('tests getMeanAnomaly', () => {

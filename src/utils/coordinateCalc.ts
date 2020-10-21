@@ -1,4 +1,4 @@
-import {deg2rad, normalizeAngle, rad2deg} from './angle';
+import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export function rectangular2spherical(x: number, y: number, z: number): {
     lon: number,

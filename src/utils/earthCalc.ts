@@ -1,8 +1,8 @@
 import {EARTH_ARGUMENTS_OF_NUTATION} from '../constants/earth';
-import {deg2rad, normalizeAngle} from './angle';
-import {julianCenturiesJ20002julianDay} from "./time";
-import * as moonCalc from './moon';
-import * as sunCalc from './sun';
+import {deg2rad, normalizeAngle} from './angleCalc';
+import {julianCenturiesJ20002julianDay} from "./timeCalc";
+import * as moonCalc from './moonCalc';
+import * as sunCalc from './sunCalc';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4

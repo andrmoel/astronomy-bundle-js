@@ -1,4 +1,4 @@
-import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, time2deg} from './angle';
+import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, time2deg} from './angleCalc';
 import {round} from './math';
 
 it('tests deg2rad', () => {

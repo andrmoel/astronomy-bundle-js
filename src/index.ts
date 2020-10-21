@@ -1,5 +1,3 @@
-import * as angle from './utils/angle';
-import * as coordinate from './utils/coordinate';
-import * as math from './utils/math';
+import * as utils from './utils';
 
-export {angle, coordinate, math};
+export {utils};
