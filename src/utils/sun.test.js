@@ -1,4 +1,11 @@
-import {getApparentLongitude, getEquationOfCenter, getMeanAnomaly, getTrueAnomaly, getTrueLongitude} from './sun';
+import {
+    getApparentLongitude,
+    getApparentRightAscension,
+    getEquationOfCenter,
+    getMeanAnomaly,
+    getTrueAnomaly,
+    getTrueLongitude,
+} from './sun';
 import {round} from './math';
 
 it('tests getMeanAnomaly', () => {
@@ -29,4 +36,10 @@ it('tests getEquationOfCenter', () => {
     const T = -0.072183436002738;
 
     expect(round(getEquationOfCenter(T), 6)).toBe(-1.897324);
+});
+
+it('tests getApparentRightAscension', () => {
+    const T = -0.072183436002738;
+
+    expect(round(getApparentRightAscension(T), 6)).toBe(198.380822);
 });

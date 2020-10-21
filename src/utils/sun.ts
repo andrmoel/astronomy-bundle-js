@@ -1,4 +1,5 @@
-import {deg2rad, normalizeAngle} from './angle';
+import * as earthCalc from './earth';
+import {deg2rad, normalizeAngle, rad2deg} from './angle';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
@@ -59,4 +60,23 @@ export function getEquationOfCenter(T: number): number {
     C += 0.000289 * Math.sin(3 * deg2rad(M));
 
     return C;
+}
+
+export function getApparentRightAscension(T: number): number {
+    // TODO Use method with higher accuracy (Meeus p.166) 25.9
+
+    const lon = getApparentLongitude(T);
+    const lonRad = deg2rad(lon);
+
+    // Meeus 25.8 - Corrections
+    let e = earthCalc.getMeanObliquityOfEcliptic(T);
+    const O = 125.04 - 1934.136 * T;
+    const ORad = deg2rad(O);
+    e = e + 0.00256 * Math.cos(ORad);
+    const eRad = deg2rad(e);
+
+    // Meeus 25.6
+    const rightAscension = Math.atan2(Math.cos(eRad) * Math.sin(lonRad), Math.cos(lonRad));
+
+    return normalizeAngle(rad2deg(rightAscension));
 }
