@@ -25,7 +25,7 @@
     "release:push": "git push --follow-tags"
   },
   "dependencies": {
-    "@astronomy-bundle/utils": "file:utils"
+    "@astronomy-bundle/utils": "file:lib/utils"
   },
   "devDependencies": {
     "@babel/core": "^7.12.0",
