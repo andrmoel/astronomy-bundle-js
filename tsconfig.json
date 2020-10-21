@@ -6,7 +6,12 @@
     "outDir": "./lib",
     "strict": true,
     "declaration": true,
-    "removeComments": true
+    "removeComments": true,
+    "paths": {
+      "astronomy-bundle/utils": [
+        "./lib/utils"
+      ]
+    }
   },
   "include": [
     "src/**/*"

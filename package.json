@@ -6,7 +6,7 @@
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
   "exports": {
-    "utils": "./lib/utils"
+    "./": "./lib"
   },
   "files": [
     "./lib"
