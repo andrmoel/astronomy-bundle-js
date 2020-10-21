@@ -8,6 +8,9 @@
   "exports": {
     "utils": "./lib/utils"
   },
+  "files": [
+    "./lib"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src",
