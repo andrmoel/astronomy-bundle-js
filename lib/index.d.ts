@@ -1,3 +1,3 @@
-import * as utils from './utils';
+import sun from './sun';
 
-export {utils};
+export {sun};
