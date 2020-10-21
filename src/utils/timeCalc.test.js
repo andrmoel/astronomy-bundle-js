@@ -1,3 +1,4 @@
+import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 import {
     dayOfYear2time,
     getDayOfWeek,
@@ -13,7 +14,6 @@ import {
     time2julianDay,
 } from './timeCalc';
 import {round} from './math';
-import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 
 describe('test for time2julianDay', () => {
     it('has valid times', () => {
