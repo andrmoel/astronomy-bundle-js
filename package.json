@@ -7,6 +7,9 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "utils": "./lib/utils/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src",
