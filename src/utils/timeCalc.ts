@@ -1,7 +1,7 @@
-import TimeInterface from '../time/interfaces/TimeInterface';
+import Time from '../time/interfaces/Time';
 import {round} from "./math";
 
-export function time2julianDay(time: TimeInterface): number {
+export function time2julianDay(time: Time): number {
     const tmpYear = parseFloat(time.year + '.' + getDayOfYear(time));
 
     let Y;
@@ -32,7 +32,7 @@ export function time2julianDay(time: TimeInterface): number {
     return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + H + B - 1524.5;
 }
 
-export function julianDay2time(jd: number): TimeInterface {
+export function julianDay2time(jd: number): Time {
     jd = jd + 0.5;
 
     const Z = Math.floor(jd);
@@ -94,7 +94,7 @@ export function julianMillenniaJ20002julianDay(t: number): number {
     return julianCenturiesJ20002julianDay(T);
 }
 
-export function dayOfYear2time(year: number, dayOfYear: number): TimeInterface {
+export function dayOfYear2time(year: number, dayOfYear: number): Time {
     // Meeus 7
     const K = isLeapYear(year) ? 1 : 2;
     const month = dayOfYear < 32 ? 1 : Math.floor((9 * (K + dayOfYear)) / 275 + 0.98);
@@ -109,7 +109,7 @@ export function dayOfYear2time(year: number, dayOfYear: number): TimeInterface {
     return {year, month, day, hour, min, sec};
 }
 
-export function getDayOfYear(time: TimeInterface): number {
+export function getDayOfYear(time: Time): number {
     const K = isLeapYear(time.year) ? 1 : 2;
     const M = time.month;
     const D = time.day;
@@ -118,7 +118,7 @@ export function getDayOfYear(time: TimeInterface): number {
     return Math.floor((275 * M) / 9) - K * Math.floor((M + 9) / 12) + D - 30;
 }
 
-export function getDayOfWeek(time: TimeInterface): number {
+export function getDayOfWeek(time: Time): number {
     const jd = time2julianDay(time);
 
     // Meeus 7.e

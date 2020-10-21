@@ -1,4 +1,4 @@
-export default interface TimeInterface {
+export default interface Time {
     year: number,
     month: number,
     day: number,
