@@ -1,17 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.timeCalc = exports.sunCalc = exports.moonCalc = exports.earthCalc = exports.coordinateCalc = exports.angleCalc = void 0;
 var angleCalc = require("./angleCalc");
+exports.angleCalc = angleCalc;
 var coordinateCalc = require("./coordinateCalc");
+exports.coordinateCalc = coordinateCalc;
 var earthCalc = require("./earthCalc");
+exports.earthCalc = earthCalc;
 var moonCalc = require("./moonCalc");
+exports.moonCalc = moonCalc;
 var sunCalc = require("./sunCalc");
+exports.sunCalc = sunCalc;
 var timeCalc = require("./timeCalc");
-var utils = {
-    angleCalc: angleCalc,
-    coordinateCalc: coordinateCalc,
-    earthCalc: earthCalc,
-    moonCalc: moonCalc,
-    sunCalc: sunCalc,
-    timeCalc: timeCalc,
-};
-exports.default = utils;
+exports.timeCalc = timeCalc;

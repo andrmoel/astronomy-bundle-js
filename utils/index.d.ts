@@ -4,12 +4,4 @@ import * as earthCalc from './earthCalc';
 import * as moonCalc from './moonCalc';
 import * as sunCalc from './sunCalc';
 import * as timeCalc from './timeCalc';
-declare const utils: {
-    angleCalc: typeof angleCalc;
-    coordinateCalc: typeof coordinateCalc;
-    earthCalc: typeof earthCalc;
-    moonCalc: typeof moonCalc;
-    sunCalc: typeof sunCalc;
-    timeCalc: typeof timeCalc;
-};
-export default utils;
+export { angleCalc, coordinateCalc, earthCalc, moonCalc, sunCalc, timeCalc };

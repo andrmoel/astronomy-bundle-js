@@ -5,13 +5,4 @@ import * as moonCalc from './moonCalc';
 import * as sunCalc from './sunCalc';
 import * as timeCalc from './timeCalc';
 
-const utils = {
-    angleCalc,
-    coordinateCalc,
-    earthCalc,
-    moonCalc,
-    sunCalc,
-    timeCalc,
-};
-
-export default utils;
+export {angleCalc, coordinateCalc, earthCalc, moonCalc, sunCalc, timeCalc};
