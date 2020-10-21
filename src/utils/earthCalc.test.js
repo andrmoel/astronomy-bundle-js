@@ -68,7 +68,7 @@ describe('test for getGreenwichMeanSiderealTime', () => {
     });
 
     it('tests 1987-04-10 19:21:00', () => {
-        const T = -0.127296372348;
+        const T = -0.12727429842574;
 
         const GMST = getGreenwichMeanSiderealTime(T);
 
