@@ -85,9 +85,6 @@ const toi = createTimeOfInterest.fromTime(2017, 7, 2, 15, 30, 0);
 const date = new Date('2017-07-02 15:30:00');
 const toi = createTimeOfInterest.fromDate(date);
 
-// Create from string
-const toi = createTimeOfInterest.fromString('2017-07-02 15:30:00');
-
 // Create from Julian Day
 const jd = 2457937.1458333;
 const toi = createTimeOfInterest.fromJulianDay(jd);
