@@ -1,2 +1,5 @@
 import * as utils from './utils';
-export { utils };
+
+declare module 'astronomy-bundle/utils' {
+    export default utils;
+}
