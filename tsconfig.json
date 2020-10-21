@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "es5",
     "module": "commonjs",
     "outDir": "./lib",
     "strict": true,
     "declaration": true,
-    "removeComments": true
+    "removeComments": true,
+    "paths": {
+      "astronomy-bundle/*": [ "./src/*" ]
+    }
   },
   "include": [
     "src/**/*"
