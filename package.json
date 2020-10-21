@@ -5,6 +5,8 @@
   "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.js",
   "exports": {
     "utils": {
       "types": "./lib/utils/index.d.ts",
