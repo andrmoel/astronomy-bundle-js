@@ -8,7 +8,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.js",
   "exports": {
-    "sun": "./lib/sun"
+    "sun": "./lib/sun/index.js"
   },
   "files": [
     "./lib"
