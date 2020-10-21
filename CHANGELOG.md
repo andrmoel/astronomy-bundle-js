@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.5.8 (2020-10-21)
+
+
+### Bug Fixes
+
+* **github-actions:** lib directory does not exists anymore ([a19f376](https://github.com/andrmoel/astronomy-bundle-js/commit/a19f376c8d9c69fd15733fcdfab2466017bede9b))
+
 ### 2.5.7 (2020-10-21)
 
 ### 2.5.6 (2020-10-21)
