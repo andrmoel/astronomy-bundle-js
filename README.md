@@ -17,6 +17,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 ## Table of Contents  
 1.  [Installation](#installation)
 2. [Angle Utils](#angle-utils)
+3. [Time of Interest](#toi)
+    1. [Create Time Of Interest](#create-time-of-interest)
 
 ## <a name="installation"></a>Installation
 
@@ -61,3 +63,46 @@ const angleInDeg = angleCalc.time2deg(timeStr);
 
 The result of the calculation should be:\
 *Angle: 132.60292916667°*
+
+## <a name="toi"></a> Time of Interest
+
+The TimeOfInterest (TOI) object represents the time for which all the astronomical calculations are done.
+For that reason it is the **most important object** in this library.
+
+### <a name="create-time-of-interest"></a> Create the TimeOfInterest object
+
+There are several ways to initialize the TOI object.
+
+**Example 1**: Initialize the TimeOfInterest object for the date 02 July 2017 at 15:30:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+// Create from time
+const toi = createTimeOfInterest.fromTime(2017, 7, 2, 15, 30, 0);
+
+// Create from Date object
+const date = new Date('2017-07-02 15:30:00');
+const toi = createTimeOfInterest.fromDate(date);
+
+// Create from string
+const toi = createTimeOfInterest.fromString('2017-07-02 15:30:00');
+
+// Create from Julian Day
+const jd = 2457937.1458333;
+const toi = createTimeOfInterest.fromJulianDay(jd);
+
+// Create from Julian Centuries since J2000
+const T = 0.17500741501255;
+const toi = createTimeOfInterest.fromJulianCenturiesJ2000(T);
+```
+
+The result will be always: *2017-07-02 15:30:00*
+
+**Example 2**: Create the TOI object for the **current date and time in UTC**
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+const toi = createTimeOfInterest.fromCurrentTime();
+```
