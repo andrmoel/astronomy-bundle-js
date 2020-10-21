@@ -1,7 +1,8 @@
 import {EARTH_ARGUMENTS_OF_NUTATION} from '../constants/earth';
 import {deg2rad, normalizeAngle} from './angle';
-import {getArgumentOfLatitude, getMeanAnomaly as getMeanMoonAnomaly, getMeanElongation} from './moon';
-import {getMeanAnomaly as getMeanSunAnomaly} from './sun';
+import {julianCenturiesJ20002julianDay} from "./time";
+import * as moonCalc from './moon';
+import * as sunCalc from './sun';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
@@ -56,10 +57,10 @@ export function getTrueObliquityOfEcliptic(T: number): number {
 
 export function getNutationInLongitude(T: number): number {
     // Meeus chapter 22
-    const D = getMeanElongation(T);
-    const Msun = getMeanSunAnomaly(T);
-    const Mmoon = getMeanMoonAnomaly(T);
-    const F = getArgumentOfLatitude(T);
+    const D = moonCalc.getMeanElongation(T);
+    const Msun = sunCalc.getMeanAnomaly(T);
+    const Mmoon = moonCalc.getMeanAnomaly(T);
+    const F = moonCalc.getArgumentOfLatitude(T);
 
     // Longitude of the ascending node of moon's mean orbit on ecliptic
     const O = 125.04452
@@ -87,10 +88,10 @@ export function getNutationInLongitude(T: number): number {
 
 export function getNutationInObliquity(T: number): number {
     // Meeus chapter 22
-    const D = getMeanElongation(T);
-    const Msun = getMeanSunAnomaly(T);
-    const Mmoon = getMeanMoonAnomaly(T);
-    const F = getArgumentOfLatitude(T);
+    const D = moonCalc.getMeanElongation(T);
+    const Msun = sunCalc.getMeanAnomaly(T);
+    const Mmoon = moonCalc.getMeanAnomaly(T);
+    const F = moonCalc.getArgumentOfLatitude(T);
 
     // Longitude of the ascending node of moon's mean orbit on ecliptic
     const O = 125.04452
@@ -114,4 +115,31 @@ export function getNutationInObliquity(T: number): number {
     });
 
     return sumEps * 0.0001 / 3600;
+}
+
+
+export function getGreenwichMeanSiderealTime(T: number): number {
+    const jd = julianCenturiesJ20002julianDay(T);
+
+    // Meeus 12.4
+    const GMST = 280.46061837
+        + 360.98564736629 * (jd - 2451545)
+        + 0.000387933 * Math.pow(T, 2)
+        + Math.pow(T, 3) / 38710000;
+
+    return normalizeAngle(GMST);
+}
+
+export function getEquationOfTime(T: number): number {
+    // TODO Use method with higher accuracy (Meeus p.166) 25.9
+
+    const L0 = sunCalc.getMeanLongitude(T);
+    const rightAscension = sunCalc.getApparentRightAscension(T);
+
+    const dPhi = getNutationInLongitude(T);
+    const e = getTrueObliquityOfEcliptic(T);
+    const eRad = deg2rad(e);
+
+    // Meeus 28.1
+    return L0 - 0.0057183 - rightAscension + dPhi * Math.cos(eRad);
 }
