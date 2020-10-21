@@ -37,8 +37,8 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install
 
-      - name: 'Check code style'
-        run: yarn lint
+#      - name: 'Check code style'
+#        run: yarn lint
 
       - name: 'Run unit tests'
         run: yarn test
