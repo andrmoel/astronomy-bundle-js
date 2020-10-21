@@ -44,9 +44,7 @@ jobs:
         run: yarn test
 
       - name: 'Build project'
-        run: |
-          rm -r lib
-          yarn build
+        run: yarn build
 
       - name: 'Prepare release'
         run: yarn release
