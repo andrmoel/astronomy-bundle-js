@@ -6,7 +6,10 @@
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
   "exports": {
-    "./": "./lib"
+    "utils": {
+      "types": "./lib/utils/index.d.ts",
+      "default": "./lib/utils/index.js"
+    }
   },
   "files": [
     "./lib"
