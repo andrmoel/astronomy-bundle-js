@@ -5,14 +5,14 @@
   "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
   "author": "Andreas Moeller <andrmoel@gmail.com>",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.js",
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "test": "jest ./src",
-    "release": "git add . && standard-version --tag-prefix --commit-all",
+    "release": "standard-version --tag-prefix --commit-all",
     "release:push": "git push --follow-tags"
   },
   "devDependencies": {
