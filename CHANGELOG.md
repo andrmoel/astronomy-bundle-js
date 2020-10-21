@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.6.0 (2020-10-21)
+
+
+### Features
+
+* **time-of-interest:** add time of interest ([ff858b0](https://github.com/andrmoel/astronomy-bundle-js/commit/ff858b04a9c75586b850f85be0f327ba0330291a))
+
 ### 2.5.9 (2020-10-21)
 
 ### 2.5.8 (2020-10-21)
