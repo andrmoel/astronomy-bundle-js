@@ -5,4 +5,5 @@ import * as moonCalc from './moonCalc';
 import * as sunCalc from './sunCalc';
 import * as timeCalc from './timeCalc';
 
-export default {angleCalc, coordinateCalc, earthCalc, moonCalc, sunCalc, timeCalc};
+export default {angleCalc};
+export {angleCalc};
