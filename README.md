@@ -142,7 +142,7 @@ const distance = moon.getDistanceToEarth();
 
 The result should be between 363300 km and 405500 km.
 
-**Example 2**: Get the distance of the moon on 05 June 2017 at 20:50 UTC
+**Example 2**: Get the distance of the moon on 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
