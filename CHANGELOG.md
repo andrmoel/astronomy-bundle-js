@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.8.0 (2020-10-22)
+
+
+### Features
+
+* **astronomical-object:** use current time when creating astronomical object ([13d81f3](https://github.com/andrmoel/astronomy-bundle-js/commit/13d81f320ca98dc59cfe998ec683171ebc550382))
+
 ## 2.7.0 (2020-10-22)
 
 
