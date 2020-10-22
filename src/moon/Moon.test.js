@@ -1,6 +1,6 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
-import {createMoon} from './createMoon';
+import createMoon from './createMoon';
 
 it('tests getDistanceToEarth', () => {
     const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);

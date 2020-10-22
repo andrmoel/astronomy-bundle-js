@@ -1,11 +1,5 @@
 # Astronomy Bundle
 
-**-------------------------------------------------------**
-
-**⚠ WARNING: This library is currently work in progress ⚠**
-
-**-------------------------------------------------------**
-
 This library provides tools and methods for astronomical calculations.
 With this bundle it is possible to calculate the position of moon, sun and planets and several coordinate systems.
 For a higher accuracy, several corrections, like nutation and precision, were taken into account.
@@ -19,6 +13,9 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 2. [Angle Utils](#angle-utils)
 3. [Time of Interest](#toi)
     1. [Create Time Of Interest](#create-time-of-interest)
+4. [Astronomical Objects](#astronomical-objects)
+    1. [Moon](#moon)
+        1. [Distance to Earth](#moon-distance-to-earth)
 
 ## <a name="installation"></a>Installation
 
@@ -103,3 +100,58 @@ import {createTimeOfInterest} from 'astronomy-bundle/time';
 
 const toi = createTimeOfInterest.fromCurrentTime();
 ```
+
+## <a name="astronomical-objects"></a> Astronomical Objects
+
+An astronomical object should be initialized with the TOI. If you don't pass the TOI in the constructor, the
+**current** time is chosen.
+
+**Example 1**: Create an astronomical object with TOI
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromCurrentTime();
+
+const moon = createMoon(toi);
+```
+
+**Example 2**: Create an astronomical object without TOI. The chosen TOI corresponds to the current time
+
+```javascript
+import {createMoon} from 'astronomy-bundle/moon';
+
+const moon = createMoon();
+```
+
+### <a name="moon"></a> Moon
+
+
+#### <a name="moon-distance"></a> Distance of the moon to earth
+
+**Example 1**: The current distance of the moon in kilmometers can be calculated as follows:
+
+```javascript
+import {createMoon} from 'astronomy-bundle/moon';
+
+const moon = createMoon();
+
+const distance = moon.getDistanceToEarth();
+```
+
+The result should be between 363300 km and 405500 km.
+
+**Example 2**: Get the distance of the moon on 05 June 2017 at 20:50 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
+const moon = createMoon(toi);
+
+const distance = moon.getDistanceToEarth();
+```
+
+The result should be: *402937.61 km*

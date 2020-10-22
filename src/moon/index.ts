@@ -1,3 +1,3 @@
-import * as moon from './createMoon';
+import createMoon from './createMoon';
 
-export {moon};
+export {createMoon};
