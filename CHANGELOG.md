@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.7.0 (2020-10-22)
+
+
+### Features
+
+* **moon:** create moon object ([0a3cc34](https://github.com/andrmoel/astronomy-bundle-js/commit/0a3cc3432f608ae825b9414d04c5865533987e46))
+
 ### 2.6.1 (2020-10-21)
 
 ## 2.6.0 (2020-10-21)
