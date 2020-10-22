@@ -1,4 +1,4 @@
-export default interface Time {
+export default interface ITime {
     year: number,
     month: number,
     day: number,
