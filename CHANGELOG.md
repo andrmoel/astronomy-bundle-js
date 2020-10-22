@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.12.0 (2020-10-22)
+
+
+### Features
+
+* **sun:** add sun object ([e146123](https://github.com/andrmoel/astronomy-bundle-js/commit/e146123bc8e981d64f5264704b81756a36a4ab2f))
+
 ## 2.11.0 (2020-10-22)
 
 
