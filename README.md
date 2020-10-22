@@ -130,7 +130,7 @@ const moon = createMoon();
 
 #### <a name="moon-distance"></a> Distance of the moon to earth
 
-**Example 1**: The current distance of the moon in kilmometers can be calculated as follows:
+**Example 1**: Calculate the distance of the moon in kilometers for the current time
 
 ```javascript
 import {createMoon} from 'astronomy-bundle/moon';
