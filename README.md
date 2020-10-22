@@ -128,7 +128,7 @@ const moon = createMoon();
 ### <a name="moon"></a> Moon
 
 
-#### <a name="moon-distance"></a> Distance of the moon to earth
+#### <a name="moon-distance-to-earth"></a> Distance of the moon to earth
 
 **Example 1**: Calculate the distance of the moon in kilometers for the current time
 
