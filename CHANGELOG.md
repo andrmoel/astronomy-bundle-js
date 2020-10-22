@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.9.0 (2020-10-22)
+
+
+### Features
+
+* **time-of-interest:** create time of interest from default export ([990844f](https://github.com/andrmoel/astronomy-bundle-js/commit/990844fb9270c5f15549e1bd0ad07c47451131eb))
+
 ### 2.8.3 (2020-10-22)
 
 ### 2.8.2 (2020-10-22)
