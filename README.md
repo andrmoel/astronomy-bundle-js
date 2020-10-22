@@ -98,6 +98,7 @@ The result will be always: *2017-07-02 15:30:00*
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
 
+const toi = createTimeOfInterest();
 const toi = createTimeOfInterest.fromCurrentTime();
 ```
 

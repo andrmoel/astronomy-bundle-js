@@ -1,4 +1,4 @@
-import {
+import createTimeOfInterest, {
     fromCurrentTime,
     fromDate,
     fromJulianCenturiesJ2000,
@@ -7,7 +7,19 @@ import {
     fromYearOfDay,
 } from './createTimeOfInterest';
 
-jest.spyOn(global.Date, 'now').mockReturnValueOnce('2020-10-21 10:00:00');
+jest.spyOn(global.Date, 'now').mockReturnValue('2020-10-21 10:00:00');
+
+it('tests default export', () => {
+    const toi = createTimeOfInterest();
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
+});
+
+it('tests fromCurrentTime', () => {
+    const toi = fromCurrentTime();
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
+});
 
 it('tests fromTime', () => {
     const toi = fromTime(2015, 3, 15, 8, 30, 55);
@@ -19,12 +31,6 @@ it('tests fromDate', () => {
     const toi = fromDate(new Date('2016-07-08 12:34:56'));
 
     expect(toi.time).toEqual({year: 2016, month: 7, day: 8, hour: 12, min: 34, sec: 56});
-});
-
-it('tests fromCurrentTime', () => {
-    const toi = fromCurrentTime();
-
-    expect(toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
 });
 
 it('tests fromYearOfDay', () => {

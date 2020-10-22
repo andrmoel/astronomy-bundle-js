@@ -1,6 +1,23 @@
 import {timeCalc} from "../utils";
 import TimeOfInterest from './TimeOfInterest';
 
+export default function(): TimeOfInterest {
+    return fromCurrentTime();
+}
+
+export function fromCurrentTime() {
+    const date = new Date(Date.now());
+
+    return new TimeOfInterest({
+        year: date.getUTCFullYear(),
+        month: date.getUTCMonth() + 1,
+        day: date.getUTCDate(),
+        hour: date.getUTCHours(),
+        min: date.getUTCMinutes(),
+        sec: date.getUTCSeconds(),
+    });
+}
+
 export function fromTime(
     year: number,
     month: number,
@@ -13,19 +30,6 @@ export function fromTime(
 }
 
 export function fromDate(date: Date): TimeOfInterest {
-    return new TimeOfInterest({
-        year: date.getUTCFullYear(),
-        month: date.getUTCMonth() + 1,
-        day: date.getUTCDate(),
-        hour: date.getUTCHours(),
-        min: date.getUTCMinutes(),
-        sec: date.getUTCSeconds(),
-    });
-}
-
-export function fromCurrentTime() {
-    const date = new Date(Date.now());
-
     return new TimeOfInterest({
         year: date.getUTCFullYear(),
         month: date.getUTCMonth() + 1,
