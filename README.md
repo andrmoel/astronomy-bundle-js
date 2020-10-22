@@ -14,7 +14,9 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 3. [Time of Interest](#toi)
     1. [Create Time Of Interest](#create-time-of-interest)
 4. [Astronomical Objects](#astronomical-objects)
-    1. [Moon](#moon)
+    1. [Sun](#sun)
+        1. [Distance to Earth](#sun-distance-to-earth)
+    2. [Moon](#moon)
         1. [Distance to Earth](#moon-distance-to-earth)
 
 ## <a name="installation"></a>Installation
@@ -126,8 +128,37 @@ import {createMoon} from 'astronomy-bundle/moon';
 const moon = createMoon();
 ```
 
-### <a name="moon"></a> Moon
+### <a name="sun"></a> Sun
 
+#### <a name="sun-distance-to-earth"></a> Distance of the sun to earth
+
+**Example 1**: The current distance of the sun in kilometers can be calculated as follows:
+
+```javascript
+import {createSun} from 'astronomy-bundle/sun';
+
+const sun = createSun();
+
+const distance = sun.getDistanceToEarth();
+```
+
+The result should be between 147.1 mio and 152.1 mio kilometers.
+
+**Example 2**: Get the distance of the sun for 05 June 2017 at 20:30 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSun} from 'astronomy-bundle/createSun';
+
+const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
+const sun = createSun(toi);
+
+const distance = sun.getDistanceToEarth();
+```
+
+The result should be: *151797423.98 km*
+
+### <a name="moon"></a> Moon
 
 #### <a name="moon-distance-to-earth"></a> Distance of the moon to earth
 
