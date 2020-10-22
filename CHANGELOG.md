@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.11.0 (2020-10-22)
+
+
+### Features
+
+* **sun:** add calculations for right scension and declination ([9424c87](https://github.com/andrmoel/astronomy-bundle-js/commit/9424c871360efcbcc5b86146fff592cbffae9d0a))
+
 ## 2.10.0 (2020-10-22)
 
 
