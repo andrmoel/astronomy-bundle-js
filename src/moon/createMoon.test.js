@@ -1,5 +1,5 @@
-import {createMoon} from './createMoon';
 import {createTimeOfInterest} from '../time';
+import {createMoon} from './createMoon';
 import Moon from './Moon';
 
 it('tests createMoon', () => {
