@@ -2,6 +2,7 @@ import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {getMeanAnomaly as getMeanSunAnomaly} from './sunCalc';
 import {getNutationInLongitude} from './earthCalc';
+import {km2au} from "./distanceCalc";
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2
@@ -54,12 +55,6 @@ export function getEquatorialHorizontalParallax(T: number): number {
     return rad2deg(Math.asin(6378.14 / d));
 }
 
-export function getDistanceToEarth(T: number): number {
-    const sumR = _getSumR(T);
-
-    return 385000.56 + (sumR / 1000);
-}
-
 export function getLongitude(T: number): number {
     const L = getMeanLongitude(T);
     const sumL = _getSumL(T);
@@ -78,6 +73,16 @@ export function getLatitude(T: number): number {
     const sumB = _getSumB(T);
 
     return sumB / 1000000;
+}
+
+export function getRadiusVector(T: number): number {
+    return km2au(getDistanceToEarth(T));
+}
+
+export function getDistanceToEarth(T: number): number {
+    const sumR = _getSumR(T);
+
+    return 385000.56 + (sumR / 1000);
 }
 
 function _getSumR(T: number): number {

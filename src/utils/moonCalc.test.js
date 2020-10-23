@@ -8,6 +8,7 @@ import {
     getMeanAnomaly,
     getMeanElongation,
     getMeanLongitude,
+    getRadiusVector,
 } from './moonCalc';
 import {round} from './math';
 
@@ -41,12 +42,6 @@ it('tests getEquatorialHorizontalParallax', () => {
     expect(round(getEquatorialHorizontalParallax(T), 6)).toBe(0.991990);
 });
 
-it('tests getDistanceToEarth', () => {
-    const T = -0.077221081451;
-
-    expect(round(getDistanceToEarth(T), 1)).toBe(368409.7);
-});
-
 it('tests getLongitude', () => {
     const T = -0.077221081451;
 
@@ -63,4 +58,16 @@ it('tests getLatitude', () => {
     const T = -0.077221081451;
 
     expect(round(getLatitude(T), 6)).toBe(-3.229126);
+});
+
+it('tests getRadiusVector', () => {
+    const T = -0.077221081451;
+
+    expect(round(getRadiusVector(T), 6)).toBe(0.002463);
+});
+
+it('tests getDistanceToEarth', () => {
+    const T = -0.077221081451;
+
+    expect(round(getDistanceToEarth(T), 1)).toBe(368409.7);
 });
