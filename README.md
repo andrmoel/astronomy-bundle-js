@@ -189,7 +189,7 @@ Radius Vector: *0.002463*\
 \
 x: *-0.001682*\
 y: *-0.001701*\
-z: *0.000586*\
+z: *0.000586*
 
 #### <a name="moon-distance-to-earth"></a> Distance of the moon to earth
 
