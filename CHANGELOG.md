@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.13.0 (2020-10-23)
+
+
+### Features
+
+* **coordinates:** transform ecliptic to equatorial and vice versa ([fc29114](https://github.com/andrmoel/astronomy-bundle-js/commit/fc2911424cf32403b0e20a3885dda305b508c5ec))
+
 ### 2.12.1 (2020-10-23)
 
 ## 2.12.0 (2020-10-22)
