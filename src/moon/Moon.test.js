@@ -2,6 +2,39 @@ import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import createMoon from './createMoon';
 
+it('tests getGeocentricEclipticSphericalCoordinates', () => {
+    const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalCoordinates();
+
+    expect(round(lon, 6)).toBe(133.167265);
+    expect(round(lat, 6)).toBe(-3.229126);
+    expect(round(radiusVector, 6)).toBe(0.002463);
+});
+
+it('tests getGeocentricEquatorialSphericalCoordinates', () => {
+    const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalCoordinates();
+
+    expect(round(rightAscension, 6)).toBe(134.688469);
+    expect(round(declination, 6)).toBe(13.768367);
+    expect(round(radiusVector, 6)).toBe(0.002463);
+});
+
+it('tests getGeocentricEquatorialRectangularCoordinates', () => {
+    const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    const {x, y, z} = moon.getGeocentricEquatorialRectangularCoordinates();
+
+    expect(round(x, 6)).toBe(-0.001682);
+    expect(round(y, 6)).toBe(0.001701);
+    expect(round(z, 6)).toBe(0.000586);
+});
+
 it('tests getDistanceToEarth', () => {
     const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
     const moon = createMoon(toi);

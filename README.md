@@ -17,7 +17,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Sun](#sun)
         1. [Distance to Earth](#sun-distance-to-earth)
     2. [Moon](#moon)
-        1. [Distance to Earth](#moon-distance-to-earth)
+        1. [Position of the Moon](#moon-position)
+        2. [Distance to Earth](#moon-distance-to-earth)
 
 ## <a name="installation"></a>Installation
 
@@ -159,6 +160,36 @@ const distance = sun.getDistanceToEarth();
 The result should be: *151797423.98 km*
 
 ### <a name="moon"></a> Moon
+
+#### <a name="moon-position"></a> Position of the Moon
+
+**Example 1**: Calculate the geocentric spherical position of the moon for 12 April 1992 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = createMoon(toi);
+
+const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalCoordinates();
+const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalCoordinates();
+const {x, y, z} = moon.getGeocentricEquatorialRectangularCoordinates();
+```
+
+The result of the calculation should be:\
+\
+Longitude: *133.17°*\
+Latitude: *-3.23°*\
+Radius Vector: *0.002463*\
+\
+Right Ascension: *134.69°*\
+Declination: *13.77°*\
+Radius Vector: *0.002463*\
+\
+x: *-0.001682*\
+y: *-0.001701*\
+z: *0.000586*\
 
 #### <a name="moon-distance-to-earth"></a> Distance of the moon to earth
 
