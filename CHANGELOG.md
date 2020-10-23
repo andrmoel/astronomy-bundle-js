@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.15.0 (2020-10-23)
+
+
+### Features
+
+* **moon:** add coordinate function to moon object ([dd9a4c3](https://github.com/andrmoel/astronomy-bundle-js/commit/dd9a4c3b59d5ccd4e2d6f7a60288018831585d70))
+
 ## 2.14.0 (2020-10-23)
 
 
