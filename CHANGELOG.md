@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.14.0 (2020-10-23)
+
+
+### Features
+
+* **moon:** add calculation of radius vector ([3628726](https://github.com/andrmoel/astronomy-bundle-js/commit/3628726201617964616bf7f21b275f669583fd79))
+
 ## 2.13.0 (2020-10-23)
 
 
