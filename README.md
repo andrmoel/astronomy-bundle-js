@@ -163,7 +163,7 @@ The result should be: *151797423.98 km*
 
 #### <a name="moon-position"></a> Position of the Moon
 
-**Example 1**: Calculate the geocentric spherical position of the moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Calculate the geocentric position of the moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
