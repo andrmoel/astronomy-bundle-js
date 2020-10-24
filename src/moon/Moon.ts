@@ -19,8 +19,7 @@ export default class Moon extends AstronomicalObject {
         return coordinateCalc.eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
     }
 
-    public getGeocentricEquatorialRectangularCoordinates(): IRectangularCoordinates
-    {
+    public getGeocentricEquatorialRectangularCoordinates(): IRectangularCoordinates {
         const {rightAscension, declination, radiusVector} = this.getGeocentricEquatorialSphericalCoordinates();
 
         return coordinateCalc.spherical2rectangular(rightAscension, declination, radiusVector);
