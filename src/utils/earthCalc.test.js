@@ -1,7 +1,6 @@
 import {
     getEccentricity,
     getEquationOfTime,
-    getGreenwichMeanSiderealTime,
     getLongitudeOfPerihelionOfOrbit,
     getMeanAnomaly,
     getMeanObliquityOfEcliptic,
@@ -10,7 +9,7 @@ import {
     getTrueObliquityOfEcliptic,
 } from './earthCalc';
 import {round} from './math';
-import {deg2angle, deg2time} from './angleCalc';
+import {deg2angle} from './angleCalc';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;
@@ -56,24 +55,6 @@ it('tests getNutationInObliquity', () => {
     const sumEps = getNutationInObliquity(T);
 
     expect(deg2angle(sumEps)).toBe('0°0\'9.442"');
-});
-
-describe('test for getGreenwichMeanSiderealTime', () => {
-    it('test 1987-04-10 00:00:00', () => {
-        const T = -0.127296372348;
-
-        const GMST = getGreenwichMeanSiderealTime(T);
-
-        expect(deg2time(GMST)).toBe('13h10m46.366s');
-    });
-
-    it('tests 1987-04-10 19:21:00', () => {
-        const T = -0.12727429842574;
-
-        const GMST = getGreenwichMeanSiderealTime(T);
-
-        expect(deg2time(GMST)).toBe('8h34m57.09s');
-    });
 });
 
 it('tests getEquationOfTime', () => {

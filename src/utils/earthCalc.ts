@@ -1,6 +1,5 @@
 import {EARTH_ARGUMENTS_OF_NUTATION} from '../constants/earth';
 import {deg2rad, normalizeAngle} from './angleCalc';
-import {julianCenturiesJ20002julianDay} from "./timeCalc";
 import * as moonCalc from './moonCalc';
 import * as sunCalc from './sunCalc';
 
@@ -115,19 +114,6 @@ export function getNutationInObliquity(T: number): number {
     });
 
     return sumEps * 0.0001 / 3600;
-}
-
-
-export function getGreenwichMeanSiderealTime(T: number): number {
-    const jd = julianCenturiesJ20002julianDay(T);
-
-    // Meeus 12.4
-    const GMST = 280.46061837
-        + 360.98564736629 * (jd - 2451545)
-        + 0.000387933 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 38710000;
-
-    return normalizeAngle(GMST);
 }
 
 export function getEquationOfTime(T: number): number {

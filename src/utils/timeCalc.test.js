@@ -3,6 +3,9 @@ import {
     dayOfYear2time,
     getDayOfWeek,
     getDayOfYear,
+    getDeltaT,
+    getGreenwichApparentSiderealTime,
+    getGreenwichMeanSiderealTime,
     isLeapYear,
     julianCenturiesJ20002julianDay,
     julianDay2julianCenturiesJ2000,
@@ -14,6 +17,7 @@ import {
     time2julianDay,
 } from './timeCalc';
 import {round} from './math';
+import {deg2time} from './angleCalc';
 
 describe('test for time2julianDay', () => {
     it('has valid times', () => {
@@ -174,4 +178,66 @@ it('tests isLeapYear', () => {
     expect(isLeapYear(2020)).toBeTruthy();
     expect(isLeapYear(2040)).toBeTruthy();
     expect(isLeapYear(2048)).toBeTruthy();
+});
+
+it('tests getGreenwichMeanSiderealTime', () => {
+    const T = -0.127296372348;
+
+    const GMST = getGreenwichMeanSiderealTime(T);
+
+    expect(deg2time(GMST)).toBe('13h10m46.366s');
+});
+
+it('tests getGreenwichApparentSiderealTime', () => {
+    const T = -0.127296372348;
+
+    const GAST = getGreenwichApparentSiderealTime(T);
+
+    expect(deg2time(GAST)).toBe('13h10m46.134s');
+});
+
+it('tests getDeltaT', () => {
+    expect(round(getDeltaT(2050), 1)).toBe(149.2);
+    expect(round(getDeltaT(2018), 1)).toBe(70.5);
+    expect(round(getDeltaT(1996), 1)).toBe(61.6);
+    expect(round(getDeltaT(1990), 1)).toBe(56.9);
+    expect(round(getDeltaT(1986), 1)).toBe(54.9);
+    expect(round(getDeltaT(1980), 1)).toBe(50.5);
+    expect(round(getDeltaT(1970), 1)).toBe(40.2);
+    expect(round(getDeltaT(1960), 1)).toBe(33.1);
+    expect(round(getDeltaT(1950), 1)).toBe(29.1);
+    expect(round(getDeltaT(1940), 1)).toBe(24.4);
+    expect(round(getDeltaT(1930), 1)).toBe(24.1);
+    expect(round(getDeltaT(1920), 1)).toBe(21.2);
+    expect(round(getDeltaT(1910), 1)).toBe(10.3);
+    expect(round(getDeltaT(1900), 1)).toBe(-2.9);
+    expect(round(getDeltaT(1890), 1)).toBe(-6.1);
+    expect(round(getDeltaT(1880), 1)).toBe(-5.0);
+    expect(round(getDeltaT(1870), 1)).toBe(1.0);
+    expect(round(getDeltaT(1860), 1)).toBe(7.6);
+    expect(round(getDeltaT(1850), 1)).toBe(7.1);
+    expect(round(getDeltaT(1840), 1)).toBe(5.5);
+    expect(round(getDeltaT(1830), 1)).toBe(7.7);
+    expect(round(getDeltaT(1820), 1)).toBe(11.9);
+    expect(round(getDeltaT(1810), 1)).toBe(12.5);
+    expect(round(getDeltaT(1800), 1)).toBe(13.7);
+    expect(round(getDeltaT(1750), 1)).toBe(13.4);
+    expect(round(getDeltaT(1700), 1)).toBe(8.8);
+    expect(round(getDeltaT(1650), 1)).toBe(50.3);
+    expect(round(getDeltaT(1630), 1)).toBe(80.6);
+    expect(round(getDeltaT(1620), 1)).toBe(95.4);
+    expect(round(getDeltaT(1600), 1)).toBe(120);
+    expect(round(getDeltaT(1400), 1)).toBe(321.8);
+    expect(round(getDeltaT(1200), 1)).toBe(736.6);
+    expect(round(getDeltaT(1000), 1)).toBe(1574.4);
+    expect(round(getDeltaT(800), 1)).toBe(2956);
+    expect(round(getDeltaT(600), 1)).toBe(4739.6);
+    expect(round(getDeltaT(400), 1)).toBe(6699.6);
+    expect(round(getDeltaT(200), 1)).toBe(8641.1);
+    expect(round(getDeltaT(0), 1)).toBe(10584);
+    expect(round(getDeltaT(-200), 1)).toBe(12792.7);
+    expect(round(getDeltaT(-400), 1)).toBe(15531.6);
+    expect(round(getDeltaT(-600), 1)).toBe(18721.1);
+    expect(round(getDeltaT(-800), 1)).toBe(21946.8);
+    expect(round(getDeltaT(-1000), 1)).toBe(25428.4);
 });
