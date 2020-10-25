@@ -37,3 +37,21 @@ it('tests getJulianCenturiesJ2000', () => {
 
     expect(round(toi.getJulianCenturiesJ2000(), 6)).toBe(0.003835);
 });
+
+it('tests getGreenwichMeanSiderealTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(round(toi.getGreenwichMeanSiderealTime(), 6)).toBe(86.193665);
+});
+
+it('tests getGreenwichApparentSiderealTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(round(toi.getGreenwichApparentSiderealTime(), 6)).toBe(86.18946);
+});
+
+it('tests getDeltaT', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(round(toi.getDeltaT(), 1)).toBe(64);
+});

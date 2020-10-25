@@ -35,4 +35,18 @@ export default class TimeOfInterest {
     public getJulianCenturiesJ2000() {
         return this.T;
     }
+
+    public getGreenwichMeanSiderealTime() {
+        return timeCalc.getGreenwichMeanSiderealTime(this.T);
+    }
+
+    public getGreenwichApparentSiderealTime() {
+        return timeCalc.getGreenwichApparentSiderealTime(this.T);
+    }
+
+    public getDeltaT() {
+        const {year, month} = this.time;
+
+        return timeCalc.getDeltaT(year, month);
+    }
 }
