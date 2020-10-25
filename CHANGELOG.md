@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.17.0 (2020-10-25)
+
+
+### Features
+
+* **time:** add greenwich sidereal time and deltaT calculations ([9a5c5a9](https://github.com/andrmoel/astronomy-bundle-js/commit/9a5c5a9e2d2ed04035d07cd43f971858b5cd47fe))
+
 ## 2.16.0 (2020-10-25)
 
 
