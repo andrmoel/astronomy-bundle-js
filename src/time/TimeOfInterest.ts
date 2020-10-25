@@ -9,4 +9,18 @@ export default class TimeOfInterest {
         this.jd = timeCalc.time2julianDay(time);
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
     }
+
+    public getDate() {
+        const {year, month, day, hour, min, sec} = this.time;
+
+        return new Date(Date.UTC(year, month - 1, day, hour, min, sec));
+    }
+
+    public getJulianDay() {
+        return this.jd;
+    }
+
+    public getJulianCenturiesJ2000() {
+        return this.T;
+    }
 }
