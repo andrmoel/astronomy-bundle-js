@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.19.0 (2020-10-25)
+
+
+### Features
+
+* **time:** add calculations for LMST and LAST ([ee7d941](https://github.com/andrmoel/astronomy-bundle-js/commit/ee7d94147ad5665b291a91a3195aa0b23ba78e76))
+
 ## 2.18.0 (2020-10-25)
 
 
