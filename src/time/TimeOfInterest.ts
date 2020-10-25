@@ -16,6 +16,18 @@ export default class TimeOfInterest {
         return new Date(Date.UTC(year, month - 1, day, hour, min, sec));
     }
 
+    public getDayOfYear() {
+        return timeCalc.getDayOfYear(this.time);
+    }
+
+    public getDayOfWeek() {
+        return timeCalc.getDayOfWeek(this.time);
+    }
+
+    public isLeapYear() {
+        return timeCalc.isLeapYear(this.time.year);
+    }
+
     public getJulianDay() {
         return this.jd;
     }
