@@ -152,13 +152,31 @@ export function getGreenwichMeanSiderealTime(T: number): number {
 }
 
 export function getGreenwichApparentSiderealTime(T: number): number {
-    const t0 = getGreenwichMeanSiderealTime(T);
+    const GMST = getGreenwichMeanSiderealTime(T);
     const p = earthCalc.getNutationInLongitude(T);
     const e = earthCalc.getTrueObliquityOfEcliptic(T);
     const eRad = deg2rad(e);
 
     // Meeus 12
-    return t0 + p * Math.cos(eRad);
+    return GMST + p * Math.cos(eRad);
+}
+
+export function getLocalMeanSiderealTime(T: number, lon: number): number {
+    const GMST = getGreenwichMeanSiderealTime(T);
+
+    const LMST = GMST + lon;
+
+    return normalizeAngle(LMST);
+}
+
+export function getLocalApparentSiderealTime(T: number, lon: number): number {
+    const LMST = getLocalMeanSiderealTime(T, lon);
+    const p = earthCalc.getNutationInLongitude(T);
+    const e = earthCalc.getTrueObliquityOfEcliptic(T);
+    const eRad = deg2rad(e);
+
+    // Meeus 12
+    return LMST + p * Math.cos(eRad);
 }
 
 export function getDeltaT(year: number, month: number = 0): number {

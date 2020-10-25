@@ -6,6 +6,8 @@ import {
     getDeltaT,
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
+    getLocalApparentSiderealTime,
+    getLocalMeanSiderealTime,
     isLeapYear,
     julianCenturiesJ20002julianDay,
     julianDay2julianCenturiesJ2000,
@@ -194,6 +196,22 @@ it('tests getGreenwichApparentSiderealTime', () => {
     const GAST = getGreenwichApparentSiderealTime(T);
 
     expect(deg2time(GAST)).toBe('13h10m46.134s');
+});
+
+it('tests getLocalMeanSiderealTime', () => {
+    const T = -0.127296372348;
+
+    const GMST = getLocalMeanSiderealTime(T, 13.53);
+
+    expect(deg2time(GMST)).toBe('14h4m53.566s');
+});
+
+it('tests getLocalApparentSiderealTime', () => {
+    const T = -0.127296372348;
+
+    const GAST = getLocalApparentSiderealTime(T, 13.53);
+
+    expect(deg2time(GAST)).toBe('14h4m53.334s');
 });
 
 it('tests getDeltaT', () => {

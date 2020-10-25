@@ -44,6 +44,20 @@ it('tests getGreenwichMeanSiderealTime', () => {
     expect(round(toi.getGreenwichMeanSiderealTime(), 6)).toBe(86.193665);
 });
 
+it('tests getLocalMeanSiderealTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+    const location = {lat: 54.3, lon: 13.3};
+
+    expect(round(toi.getLocalMeanSiderealTime(location), 6)).toBe(99.493665);
+});
+
+it('tests getLocalApparentSiderealTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+    const location = {lat: 54.3, lon: 13.3};
+
+    expect(round(toi.getLocalApparentSiderealTime(location), 6)).toBe(99.48946);
+});
+
 it('tests getGreenwichApparentSiderealTime', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
