@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.20.0 (2020-10-26)
+
+
+### Features
+
+* **earth:** add earh object with nutation and obliquity calculations ([548bd68](https://github.com/andrmoel/astronomy-bundle-js/commit/548bd6864b1472428409ca39acee082297895c75))
+
 ### 2.19.5 (2020-10-26)
 
 ### 2.19.4 (2020-10-26)
