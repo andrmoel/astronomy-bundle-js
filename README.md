@@ -69,7 +69,7 @@ const angleInDeg = angleCalc.time2deg(timeStr);
 ```
 
 The result of the calculation should be:\
-*Angle: 132.6029292°*
+*Angle: 132.602929°*
 
 ## <a name="toi"></a> Time of Interest
 
@@ -261,8 +261,8 @@ const e = earth.getNutationInObliquity();
 
 The result of the calculation should be:\
 \
-Nutation in Longitude: *-0° 0' 15.807"*\
-Nutation in Obliquity: *0° 0' 0.395"*
+Nutation in Longitude: *-0° 00' 15.807"*\
+Nutation in Obliquity: *0° 00' 00.395"*
 
 ### <a name="earth-obliquity-of-ecliptic"></a> Obliquity of Ecliptic
 

@@ -187,7 +187,7 @@ it('tests getGreenwichMeanSiderealTime', () => {
 
     const GMST = getGreenwichMeanSiderealTime(T);
 
-    expect(deg2time(GMST)).toBe('13h10m46.366s');
+    expect(deg2time(GMST)).toBe('13h 10m 46.366s');
 });
 
 it('tests getGreenwichApparentSiderealTime', () => {
@@ -195,7 +195,7 @@ it('tests getGreenwichApparentSiderealTime', () => {
 
     const GAST = getGreenwichApparentSiderealTime(T);
 
-    expect(deg2time(GAST)).toBe('13h10m46.134s');
+    expect(deg2time(GAST)).toBe('13h 10m 46.134s');
 });
 
 it('tests getLocalMeanSiderealTime', () => {
@@ -203,7 +203,7 @@ it('tests getLocalMeanSiderealTime', () => {
 
     const GMST = getLocalMeanSiderealTime(T, 13.53);
 
-    expect(deg2time(GMST)).toBe('14h4m53.566s');
+    expect(deg2time(GMST)).toBe('14h 04m 53.566s');
 });
 
 it('tests getLocalApparentSiderealTime', () => {
@@ -211,7 +211,7 @@ it('tests getLocalApparentSiderealTime', () => {
 
     const GAST = getLocalApparentSiderealTime(T, 13.53);
 
-    expect(deg2time(GAST)).toBe('14h4m53.334s');
+    expect(deg2time(GAST)).toBe('14h 04m 53.334s');
 });
 
 it('tests getDeltaT', () => {

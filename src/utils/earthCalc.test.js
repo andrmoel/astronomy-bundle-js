@@ -46,7 +46,7 @@ it('tests getNutationInLongitude', () => {
 
     const sumPhi = getNutationInLongitude(T);
 
-    expect(deg2angle(sumPhi)).toBe('-0°0\'3.788"');
+    expect(deg2angle(sumPhi)).toBe('-0° 00\' 03.788"');
 });
 
 it('tests getNutationInObliquity', () => {
@@ -54,7 +54,7 @@ it('tests getNutationInObliquity', () => {
 
     const sumEps = getNutationInObliquity(T);
 
-    expect(deg2angle(sumEps)).toBe('0°0\'9.442"');
+    expect(deg2angle(sumEps)).toBe('0° 00\' 09.442"');
 });
 
 it('tests getEquationOfTime', () => {

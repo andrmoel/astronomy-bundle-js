@@ -1,4 +1,4 @@
-import {round} from './math';
+import {pad, round} from './math';
 
 export function deg2rad(degrees: number): number {
     return degrees * (Math.PI / 180);
@@ -13,10 +13,15 @@ export function deg2angle(deg: number): string {
     deg = Math.abs(deg);
 
     const degPart = Math.floor(deg);
-    const minPart = Math.floor((deg - degPart) * 60);
-    const secPart = round((deg - degPart - minPart / 60) * 3600, 3);
+    const min = Math.floor((deg - degPart) * 60);
+    const sec = round((deg - degPart - min / 60) * 3600, 3);
+    const secParts = sec.toString().split('.');
 
-    return sign + degPart + '°' + minPart + '\'' + secPart + '"';
+    const degString = sign + degPart;
+    const minString = pad(min, 2);
+    const secString = secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1];
+
+    return `${degString}° ${minString}\' ${secString}"`;
 }
 
 export function angle2deg(angle: string): number {
@@ -41,8 +46,13 @@ export function deg2time(angle: number): string {
     const hour = Math.floor(time);
     const min = Math.floor((time - hour) * 60);
     const sec = round((time - hour - min / 60) * 3600, 3);
+    const secParts = sec.toString().split('.');
 
-    return sign + hour + 'h' + min + 'm' + sec + 's';
+    const hourString = sign + hour;
+    const minString = pad(min, 2);
+    const secString = secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1];
+
+    return `${hourString}h ${minString}m ${secString}s`;
 }
 
 export function time2deg(timeAngle: string): number {

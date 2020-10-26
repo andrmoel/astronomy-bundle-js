@@ -28,11 +28,11 @@ it('tests rad2deg', () => {
 });
 
 it('tests deg2angle', () => {
-    expect(deg2angle(0.0)).toBe('0°0\'0"');
-    expect(deg2angle(45.2625)).toBe('45°15\'45"');
-    expect(deg2angle(270.5)).toBe('270°30\'0"');
-    expect(deg2angle(-0.00105222)).toBe('-0°0\'3.788"');
-    expect(deg2angle(-24.929312194388)).toBe('-24°55\'45.524"');
+    expect(deg2angle(0.0)).toBe('0° 00\' 00"');
+    expect(deg2angle(45.2625)).toBe('45° 15\' 45"');
+    expect(deg2angle(270.5)).toBe('270° 30\' 00"');
+    expect(deg2angle(-0.00105222)).toBe('-0° 00\' 03.788"');
+    expect(deg2angle(-24.929312194388)).toBe('-24° 55\' 45.524"');
 });
 
 it('tests angle2deg', () => {
@@ -44,15 +44,16 @@ it('tests angle2deg', () => {
 });
 
 it('tests deg2time', () => {
-    expect(deg2time(0.0)).toBe('0h0m0s');
-    expect(deg2time(45.4)).toBe('3h1m36s');
-    expect(deg2time(360)).toBe('24h0m0s');
-    expect(deg2time(-45.4)).toBe('-3h1m36s');
+    expect(deg2time(0.0)).toBe('0h 00m 00s');
+    expect(deg2time(45.4)).toBe('3h 01m 36s');
+    expect(deg2time(360)).toBe('24h 00m 00s');
+    expect(deg2time(-45.4)).toBe('-3h 01m 36s');
 });
 
 it('tests time2deg', () => {
     expect(round(time2deg('0h0m0s'), 6)).toBe(0);
     expect(round(time2deg('3h1m36s'), 6)).toBe(45.4);
+    expect(round(time2deg('03h01m36s'), 6)).toBe(45.4);
     expect(round(time2deg('3h 1m 36s'), 6)).toBe(45.4);
     expect(round(time2deg('24h0m0s'), 6)).toBe(360);
     expect(round(time2deg('-3h1m36s'), 6)).toBe(-45.4);
