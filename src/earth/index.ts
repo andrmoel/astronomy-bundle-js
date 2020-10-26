@@ -1,3 +1,4 @@
+import createEarth from './createEarth';
 import createLocation from './createLocation';
 
-export {createLocation};
+export {createEarth, createLocation};

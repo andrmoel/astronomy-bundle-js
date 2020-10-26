@@ -18,9 +18,12 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
-    1. [Sun](#sun)
+    1. [Earth](#earth)
+        1. [Nutation in Longitude and Obliquity](#earth-nutation)
+        2. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
+    2. [Sun](#sun)
         1. [Distance to Earth](#sun-distance-to-earth)
-    2. [Moon](#moon)
+    3. [Moon](#moon)
         1. [Position of the Moon](#moon-position)
         2. [Distance to Earth](#moon-distance-to-earth)
 
@@ -237,11 +240,58 @@ import {createMoon} from 'astronomy-bundle/moon';
 const moon = createMoon();
 ```
 
+### <a name="earth"></a> Earth
+
+#### <a name="earth-nutation"></a> Nutation in Longitude and Obliquity
+
+**Example**: Get nutation in Longitude and Obliquity for 01 August 2020 at 16:51:54 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createEarth} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2020, 8, 1, 16, 51, 54);
+const earth = createEarth(toi);
+
+const phi = earth.getNutationInLongitude();
+const e = earth.getNutationInObliquity();
+
+// To express the angle in string format use angleCalc.deg2angle(p)
+```
+
+The result of the calculation should be:\
+\
+Longitude: *-0° 0' 15.807"*\
+Latitude: *0° 0' 0.395"*
+
+#### <a name="earth-obliquity-of-ecliptic"></a> Obliquity of Ecliptic
+
+
+**Example**: Get Mean and True Obliquity of Ecliptic for 01 August 2020 at 16:51:54 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createEarth} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2020, 8, 1, 16, 51, 54);
+const earth = createEarth(toi);
+
+const eps0 = earth.getMeanObliquityOfEcliptic();
+const eps = earth.getTrueObliquityOfEcliptic();
+
+// To express the angle in string format use angleCalc.deg2angle(eps)
+```
+
+The result of the calculation should be:\
+\
+Mean Obliquity of Ecliptic: *23° 26' 11.813"*\
+True Obliquity of Ecliptic: *23° 26' 12.208"*
+
 ### <a name="sun"></a> Sun
 
 #### <a name="sun-distance-to-earth"></a> Distance of the sun to earth
 
-**Example 1**: The current distance of the sun in kilometers can be calculated as follows:
+**Example 1**: Get distance of the sun in kilometers
 
 ```javascript
 import {createSun} from 'astronomy-bundle/sun';
