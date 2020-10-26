@@ -172,7 +172,7 @@ const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
 const GMST = toi.getGreenwichMeanSiderealTime();
 const GAST = toi.getGreenwichApparentSiderealTime();
 
-// To express the angle in time fomat use angleCalc.deg2time(GMST)
+// To express the angle in time format use angleCalc.deg2time(GMST)
 ```
 
 The result of the calculation should be:\
@@ -191,7 +191,7 @@ const location = createLocation(52.52, 13.41);
 const LMST = toi.getLocalMeanSiderealTime(location);
 const LAST = toi.getLocalApparentSiderealTime(location);
 
-// To express the angle in time fomat use angleCalc.deg2time(GMST)
+// To express the angle in time format use angleCalc.deg2time(LMST)
 ```
 
 The result of the calculation should be:\
