@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.21.0 (2020-10-26)
+
+
+### Features
+
+* **angle:** format angle string with spaces ([7323dde](https://github.com/andrmoel/astronomy-bundle-js/commit/7323dde182042c9116873cbca59c1893cd6e6075))
+
 ### 2.20.2 (2020-10-26)
 
 ### 2.20.1 (2020-10-26)
