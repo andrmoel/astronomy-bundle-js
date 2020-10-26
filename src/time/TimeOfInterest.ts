@@ -1,5 +1,5 @@
 import ITime from './interfaces/ITime';
-import ILocation from '../earth/interfaces/ILocation';
+import Location from '../earth/Location';
 import {timeCalc} from '../utils';
 
 export default class TimeOfInterest {
@@ -53,16 +53,12 @@ export default class TimeOfInterest {
         return timeCalc.getGreenwichApparentSiderealTime(this.T);
     }
 
-    public getLocalMeanSiderealTime(location: ILocation): number {
-        const {lon} = location;
-
-        return timeCalc.getLocalMeanSiderealTime(this.T, lon);
+    public getLocalMeanSiderealTime(location: Location): number {
+        return timeCalc.getLocalMeanSiderealTime(this.T, location.lon);
     }
 
-    public getLocalApparentSiderealTime(location: ILocation): number {
-        const {lon} = location;
-
-        return timeCalc.getLocalApparentSiderealTime(this.T, lon);
+    public getLocalApparentSiderealTime(location: Location): number {
+        return timeCalc.getLocalApparentSiderealTime(this.T, location.lon);
     }
 
     public getDeltaT(): number {

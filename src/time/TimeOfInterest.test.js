@@ -1,7 +1,7 @@
 import TimeOfInterest from './TimeOfInterest';
 import {round} from '../utils/math';
 import {DAY_OF_WEEK_SATURDAY} from '../constants/dayOfWeek';
-import {createTimeOfInterest} from './index';
+import {createLocation} from '../earth';
 
 it('tests getDate', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
@@ -46,17 +46,9 @@ it('tests getJulianCenturiesJ2000', () => {
 });
 
 it('tests getJulianMillenniaJ2000', () => {
-    const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
-    const dayOfYear = toi.getDayOfYear();
-    const dayOfWeek = toi.getDayOfWeek();
-    const isLeapYear = toi.isLeapYear();
-
-    console.log(dayOfYear, dayOfWeek, isLeapYear);
-
-    // const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
-    //
-    // expect(round(toi.getJulianMillenniaJ2000(), 6)).toBe(0.000384);
+    expect(round(toi.getJulianMillenniaJ2000(), 6)).toBe(0.000384);
 });
 
 it('tests getGreenwichMeanSiderealTime', () => {
@@ -65,24 +57,24 @@ it('tests getGreenwichMeanSiderealTime', () => {
     expect(round(toi.getGreenwichMeanSiderealTime(), 6)).toBe(86.193665);
 });
 
+it('tests getGreenwichApparentSiderealTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(round(toi.getGreenwichApparentSiderealTime(), 6)).toBe(86.18946);
+});
+
 it('tests getLocalMeanSiderealTime', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
-    const location = {lat: 54.3, lon: 13.3};
+    const location = createLocation(54.3, 13.3);
 
     expect(round(toi.getLocalMeanSiderealTime(location), 6)).toBe(99.493665);
 });
 
 it('tests getLocalApparentSiderealTime', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
-    const location = {lat: 54.3, lon: 13.3};
+    const location = createLocation(54.3, 13.3);
 
     expect(round(toi.getLocalApparentSiderealTime(location), 6)).toBe(99.48946);
-});
-
-it('tests getGreenwichApparentSiderealTime', () => {
-    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
-
-    expect(round(toi.getGreenwichApparentSiderealTime(), 6)).toBe(86.18946);
 });
 
 it('tests getDeltaT', () => {

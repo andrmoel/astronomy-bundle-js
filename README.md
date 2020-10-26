@@ -15,6 +15,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Create Time Of Interest](#create-time-of-interest)
     2. [Calendar methods](#time-of-interest-calendar)
     3. [Julian Day, Centuries and Millennia](#time-of-interest-jd)
+    3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
+    3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
     1. [Sun](#sun)
         1. [Distance to Earth](#sun-distance-to-earth)
@@ -50,21 +52,21 @@ const timeStr = angleCalc.deg2time(angleInDeg);
 ```
 
 The result of the calculation should be:\
-*Angle: 132°36'10.542"*\
-*Time: 8h50m24.703s*
+*Angle: 132° 36' 10.542"*\
+*Time: 8h 50m 24.703s*
 
 **Example 2**: Convert time into decimal format
 
 ```javascript
 import {angleCalc} from 'astronomy-bundle/utils';
 
-const timeStr = '8h50m24.703s';
+const timeStr = '8h 50m 24.703s';
 
 const angleInDeg = angleCalc.time2deg(timeStr);
 ```
 
 The result of the calculation should be:\
-*Angle: 132.60292916667°*
+*Angle: 132.6029292°*
 
 ## <a name="toi"></a> Time of Interest
 
@@ -157,6 +159,59 @@ Julian Day: *2457937.0673611*\
 Julian Day 0: *2457936.5*\
 Julian Centuries J2000: *0.1750052666*\
 Julian Millennia J2000: *0.0175005267*
+
+### <a name="time-of-interest-gmst"></a> Greenwich Sidereal Time and Local Sidereal Time
+
+**Example 1**: Get Greenwich Sidereal Time for 02 July 2017 at 13:37 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
+
+const GMST = toi.getGreenwichMeanSiderealTime();
+const GAST = toi.getGreenwichApparentSiderealTime();
+
+// To express the angle in time fomat use angleCalc.deg2time(GMST)
+```
+
+The result of the calculation should be:\
+GMST: *5h 44m 46.48s*\
+GAST: *5h 44m 45.47s*
+
+**Example 2**: Get Local Sidereal Time for 02 July 2017 at 13:37 UTC in Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createLocation} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
+const location = createLocation(52.52, 13.41);
+
+const LMST = toi.getLocalMeanSiderealTime(location);
+const LAST = toi.getLocalApparentSiderealTime(location);
+
+// To express the angle in time fomat use angleCalc.deg2time(GMST)
+```
+
+The result of the calculation should be:\
+LMST: *9h 13m 46.798s*\
+LAST: *9h 13m 46.232s*
+
+### <a name="time-of-interest-deltat"></a> Delta T
+
+**Example**: Get Delta T for 20 May 2000 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+const toi = createTimeOfInterest.fromTime(2000, 5, 20, 0, 0, 0);
+
+const deltaT = toi.getDeltaT();
+```
+
+The result of the calculation should be:\
+Delta T: *64*
 
 ## <a name="astronomical-objects"></a> Astronomical Objects
 
