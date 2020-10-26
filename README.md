@@ -13,6 +13,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 2. [Angle Utils](#angle-utils)
 3. [Time of Interest](#toi)
     1. [Create Time Of Interest](#create-time-of-interest)
+    2. [Calendar methods](#time-of-interest-calendar)
+    3. [Julian Day, Centuries and Millennia](#time-of-interest-jd)
 4. [Astronomical Objects](#astronomical-objects)
     1. [Sun](#sun)
         1. [Distance to Earth](#sun-distance-to-earth)
@@ -101,9 +103,60 @@ The result will be always: *2017-07-02 15:30:00*
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
 
-const toi = createTimeOfInterest();
 const toi = createTimeOfInterest.fromCurrentTime();
 ```
+
+### <a name="time-of-interest-calendar"></a> Calendar methods
+
+Legend for day of the week:
+
+| Value | Day of week |
+| ----- | ----------- |
+| 0     | Saturday    |
+| 1     | Monday      |
+| 2     | Tuesday     |
+| 3     | Wednesday   |
+| 4     | Thursday    |
+| 5     | Friday      |
+| 6     | Saturday    |
+
+**Example**: Get day of year, day of week and leap year for 02 July 2017 at 13:37 UTC 
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
+
+const dayOfYear = toi.getDayOfYear();
+const dayOfWeek = toi.getDayOfWeek();
+const isLeapYear = toi.isLeapYear();
+```
+
+The result of the calculation should be:\
+Day of year: *183*\
+Day of week: *0 (Sunday)*\
+Is leap year: *false*
+
+### <a name="time-of-interest-jd"></a> Julian Day, Julian Centuries and Julian Millennia
+
+**Example**: Get Julian Day, Julian Centuries and Julian Millennia for 02 July 2017 at 13:37 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+
+const toi = createTimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
+
+const jd = toi.getJulianDay();
+const jd0 = toi.getJulianDay0();
+const T = toi.getJulianCenturiesJ2000();
+const t = toi.getJulianMillenniaJ2000();
+```
+
+The result of the calculation should be:\
+Julian Day: *2457937.0673611*\
+Julian Day 0: *2457936.5*\
+Julian Centuries J2000: *0.1750052666*\
+Julian Millennia J2000: *0.0175005267*
 
 ## <a name="astronomical-objects"></a> Astronomical Objects
 

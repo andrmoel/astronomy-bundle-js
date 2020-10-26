@@ -33,8 +33,16 @@ export default class TimeOfInterest {
         return this.jd;
     }
 
+    public getJulianDay0(): number {
+        return timeCalc.julianDay2julianDay0(this.jd);
+    }
+
     public getJulianCenturiesJ2000(): number {
         return this.T;
+    }
+
+    public getJulianMillenniaJ2000(): number {
+        return timeCalc.julianDay2julianMillenniaJ2000(this.jd);
     }
 
     public getGreenwichMeanSiderealTime(): number {
