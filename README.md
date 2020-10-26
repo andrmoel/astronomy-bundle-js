@@ -261,8 +261,8 @@ const e = earth.getNutationInObliquity();
 
 The result of the calculation should be:\
 \
-Longitude: *-0° 0' 15.807"*\
-Latitude: *0° 0' 0.395"*
+Nutation in Longitude: *-0° 0' 15.807"*\
+Nutation in Obliquity: *0° 0' 0.395"*
 
 #### <a name="earth-obliquity-of-ecliptic"></a> Obliquity of Ecliptic
 
