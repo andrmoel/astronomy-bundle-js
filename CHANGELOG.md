@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.23.0 (2020-11-01)
+
+
+### Features
+
+* **time-of-interest:** add function to get year in decimal ([e60f44d](https://github.com/andrmoel/astronomy-bundle-js/commit/e60f44d374459c4c15b9a7f7dc1bf9a9ffbd19dd))
+
 ### 2.22.1 (2020-11-01)
 
 ## 2.22.0 (2020-11-01)
