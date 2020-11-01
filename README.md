@@ -377,7 +377,7 @@ const distance = moon.getDistanceToEarth();
 
 The result should be: *402937.61 km*
 
-### <a name="moon-phases"> Phases
+### <a name="moon-phases"></a> Phases
 
 **Example 1**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
 
