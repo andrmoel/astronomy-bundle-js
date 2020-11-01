@@ -381,7 +381,6 @@ The result should be: *402937.61 km*
 
 **Example**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
 
-
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
 import {createMoon} from 'astronomy-bundle/moon';
