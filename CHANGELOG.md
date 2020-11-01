@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.24.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculations for upcoming moon phases ([3e63bd1](https://github.com/andrmoel/astronomy-bundle-js/commit/3e63bd17d4540a0593b6bb29173f8f64b0f2ad64))
+
 ## 2.23.0 (2020-11-01)
 
 
