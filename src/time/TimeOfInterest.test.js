@@ -9,6 +9,12 @@ it('tests getDate', () => {
     expect(toi.getDate()).toEqual(new Date('2000-05-20T13:50:40.000Z'));
 });
 
+it('tests getDecimalYear', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(round(toi.getDecimalYear(), 6)).toBe(2000.38409);
+});
+
 it('tests getDayOfYear', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
