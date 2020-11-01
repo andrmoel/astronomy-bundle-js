@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.22.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculation of phase angle and illumination ([23175c4](https://github.com/andrmoel/astronomy-bundle-js/commit/23175c41ab3af5413e5af407fbfc0b61ba62a9b4))
+
 ## 2.21.0 (2020-10-26)
 
 
