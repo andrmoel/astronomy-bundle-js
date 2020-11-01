@@ -28,4 +28,12 @@ export default class Moon extends AstronomicalObject {
     public getDistanceToEarth(): number {
         return moonCalc.getDistanceToEarth(this.T);
     }
+
+    public getPhaseAngle(): number {
+        return moonCalc.getPhaseAngle(this.T);
+    }
+
+    public getIllumination(): number {
+        return moonCalc.getIllumination(this.T);
+    }
 }

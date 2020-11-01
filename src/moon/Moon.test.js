@@ -41,3 +41,17 @@ it('tests getDistanceToEarth', () => {
 
     expect(round(moon.getDistanceToEarth(), 6)).toBe(378157.525065);
 });
+
+it('tests getPhaseAngle', () => {
+    const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    expect(round(moon.getPhaseAngle(), 6)).toBe(69.07545);
+});
+
+it('tests getIllumination', () => {
+    const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    expect(round(moon.getIllumination(), 3)).toBe(0.679);
+});

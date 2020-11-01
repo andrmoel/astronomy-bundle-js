@@ -26,6 +26,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth](#moon-distance-to-earth)
+    3. [Phases](#moon-phases)
 
 ## <a name="installation"></a>Installation
 
@@ -375,3 +376,23 @@ const distance = moon.getDistanceToEarth();
 ```
 
 The result should be: *402937.61 km*
+
+### <a name="moon-phases"> Phases
+
+**Example**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
+
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = createMoon(toi);
+
+const i = moon.getPhaseAngle();
+const k = moon.getIllumination();
+```
+
+The result of the calculation should be:\
+Phase angle: *69.07545°*\
+Illumination: *0.679 (67.9%)*

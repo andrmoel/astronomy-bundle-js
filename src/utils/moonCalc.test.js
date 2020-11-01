@@ -3,11 +3,13 @@ import {
     getArgumentOfLatitude,
     getDistanceToEarth,
     getEquatorialHorizontalParallax,
+    getIllumination,
     getLatitude,
     getLongitude,
     getMeanAnomaly,
     getMeanElongation,
     getMeanLongitude,
+    getPhaseAngle,
     getRadiusVector,
 } from './moonCalc';
 import {round} from './math';
@@ -70,4 +72,16 @@ it('tests getDistanceToEarth', () => {
     const T = -0.077221081451;
 
     expect(round(getDistanceToEarth(T), 1)).toBe(368409.7);
+});
+
+it('tests getPhaseAngle', () => {
+    const T = -0.077221081451;
+
+    expect(round(getPhaseAngle(T), 6)).toBe(69.07545);
+});
+
+it('tests getIllumination', () => {
+    const T = -0.077221081451;
+
+    expect(round(getIllumination(T), 3)).toBe(0.679);
 });
