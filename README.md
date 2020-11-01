@@ -379,7 +379,7 @@ The result should be: *402937.61 km*
 
 ### <a name="moon-phases"> Phases
 
-**Example**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
+**Example 1**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -395,3 +395,20 @@ const k = moon.getIllumination();
 The result of the calculation should be:\
 Phase angle: *69.07545°*\
 Illumination: *0.679 (67.9%)*
+
+**Example 2**: Get upcoming first quarter and next full moon in November 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 1, 0, 0, 0);
+const moon = createMoon(toi);
+
+const toiUpcomingFirstQuarter = moon.getUpcomingFirstQuarter();
+const toiUpcomingFullMoon = moon.getUpcomingFullMoon();
+```
+
+The result of the calculation should be:\
+Upcoming first quarter: *2020-11-22 04:46:35 UTC*\
+Upcoming full moon: *2020-11-30 09:31:22 UTC*
