@@ -3,13 +3,13 @@ import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
-import TimeOfInterest from "../time/TimeOfInterest";
+import TimeOfInterest from '../time/TimeOfInterest';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON
-} from "../constants/moonPhase";
+} from '../constants/moonPhase';
 
 export default class Moon extends AstronomicalObject {
     public getGeocentricEclipticSphericalCoordinates(): IEclipticSphericalCoordinates {
