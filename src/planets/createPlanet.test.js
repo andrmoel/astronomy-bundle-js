@@ -15,5 +15,4 @@ describe('test for createMercury', () => {
 
         expect(mercury).toBeInstanceOf(Mercury);
     });
-
 });

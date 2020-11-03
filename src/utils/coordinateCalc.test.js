@@ -2,6 +2,7 @@ import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     rectangular2spherical,
+    rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
 } from './coordinateCalc';
 import {round} from './math';
@@ -54,4 +55,15 @@ it('tests equatorialSpherical2eclipticSpherical', () => {
     expect(round(coords.lon, 6)).toBe(313.082894);
     expect(round(coords.lat, 6)).toBe(-2.084721);
     expect(round(coords.radiusVector, 6)).toBe(0.910845);
+});
+
+it('tests rectangularHeliocentric2rectangularGeocentric', () => {
+    const coordsPlanet = {x: 1.0, y: 2.0, z: 3.0};
+    const coordsEarth = {x: -1.0, y: 0.5, z: 1.3};
+
+    const coords = rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
+
+    expect(coords.x).toBe(2);
+    expect(coords.y).toBe(1.5);
+    expect(coords.z).toBe(1.7);
 });

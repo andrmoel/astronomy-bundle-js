@@ -1,3 +1,4 @@
+import {rectangularHeliocentric2rectangularGeocentric} from '../utils/coordinateCalc';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import Planet from './Planet';
 import IPlanet from './interfaces/IPlanet';
@@ -27,21 +28,13 @@ export default class Mercury extends Planet implements IPlanet {
         const coordsPlanet = await this.getHeliocentricRectangularJ2000Coordinates();
         const coordsEarth = await this.getEarthHeliocentricRectangularJ2000Coordinates();
 
-        return {
-            x: coordsPlanet.x - coordsEarth.x,
-            y: coordsPlanet.y - coordsEarth.y,
-            z: coordsPlanet.z - coordsEarth.z,
-        }
+        return rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
     }
 
     async getGeocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricRectangularDateCoordinates();
         const coordsEarth = await this.getEarthHeliocentricRectangularDateCoordinates();
 
-        return {
-            x: coordsPlanet.x - coordsEarth.x,
-            y: coordsPlanet.y - coordsEarth.y,
-            z: coordsPlanet.z - coordsEarth.z,
-        }
+        return rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
     }
 }
