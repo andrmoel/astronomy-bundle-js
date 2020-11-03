@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.24.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculations for upcoming moon phases ([3e63bd1](https://github.com/andrmoel/astronomy-bundle-js/commit/3e63bd17d4540a0593b6bb29173f8f64b0f2ad64))
+
+## 2.23.0 (2020-11-01)
+
+
+### Features
+
+* **time-of-interest:** add function to get year in decimal ([e60f44d](https://github.com/andrmoel/astronomy-bundle-js/commit/e60f44d374459c4c15b9a7f7dc1bf9a9ffbd19dd))
+
+### 2.22.1 (2020-11-01)
+
+## 2.22.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculation of phase angle and illumination ([23175c4](https://github.com/andrmoel/astronomy-bundle-js/commit/23175c41ab3af5413e5af407fbfc0b61ba62a9b4))
+
+## 2.21.0 (2020-10-26)
+
+
+### Features
+
+* **angle:** format angle string with spaces ([7323dde](https://github.com/andrmoel/astronomy-bundle-js/commit/7323dde182042c9116873cbca59c1893cd6e6075))
+
 ### 2.20.2 (2020-10-26)
 
 ### 2.20.1 (2020-10-26)

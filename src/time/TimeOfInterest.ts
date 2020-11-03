@@ -17,6 +17,10 @@ export default class TimeOfInterest {
         return new Date(Date.UTC(year, month - 1, day, hour, min, sec));
     }
 
+    public getDecimalYear(): number {
+        return timeCalc.getDecimalYear(this.time);
+    }
+
     public getDayOfYear(): number {
         return timeCalc.getDayOfYear(this.time);
     }

@@ -111,6 +111,16 @@ export function dayOfYear2time(year: number, dayOfYear: number): ITime {
     return {year, month, day, hour, min, sec};
 }
 
+export function getDecimalYear(time: ITime): number {
+    const daysInYear = isLeapYear(time.year) ? 366 : 365;
+    const dayOfYear = getDayOfYear(time) - 1
+        + time.hour / 24
+        + time.min / 1440
+        + time.sec / 86400;
+
+    return time.year + dayOfYear / daysInYear;
+}
+
 export function getDayOfYear(time: ITime): number {
     const K = isLeapYear(time.year) ? 1 : 2;
     const M = time.month;
