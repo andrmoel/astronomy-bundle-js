@@ -1,4 +1,4 @@
-import {timeCalc} from "../utils";
+import {timeCalc} from '../utils';
 import TimeOfInterest from './TimeOfInterest';
 
 export default function(): TimeOfInterest {
