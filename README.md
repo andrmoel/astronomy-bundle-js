@@ -424,6 +424,18 @@ All coordinate methods do return a **Promise**.
 
 ### <a name="planets-position"></a> Position of Planets
 
+Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
+```javascript
+getHeliocentricRectangularJ2000Coordinates()
+getHeliocentricRectangularDateCoordinates()
+getHeliocentricEclipticSphericalJ2000Coordinates()
+getHeliocentricEclipticSphericalDateCoordinates()
+getGeocentricRectangularJ2000Coordinates()
+getGeocentricRectangularDateCoordinates()
+getGeocentricEclipticSphericalJ2000Coordinates()
+getGeocentricEclipticSphericalDateCoordinates()
+```
+
 **Example 1**: Calculate the heliocentric position of Venus for 04 November 2020 at 00:00 UTC
 
 ```javascript
