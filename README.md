@@ -474,12 +474,12 @@ const coordsSphJ2000 = await venus.getGeocentricEclipticSphericalJ2000Coordinate
 ```
 The result of the calculation should be:\
 \
-Heliocentric Rectangular (J2000)\
+Geocentric Rectangular (J2000)\
 x: *1.94431267*\
 y: *-5.01496365*\
 z: *-0.04193732*\
 \
-Heliocentric Spherical (J2000)\
+Geocentric Spherical (J2000)\
 Longitude: *291° 11' 29.126"*\
 Latitude: *-0° 26' 48.204"*\
 Radius Vector: *5.37884475*
