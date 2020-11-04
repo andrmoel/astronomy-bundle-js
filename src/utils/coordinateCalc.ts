@@ -79,3 +79,14 @@ export function equatorialSpherical2eclipticSpherical(
 
     return {lon, lat, radiusVector};
 }
+
+export function rectangularHeliocentric2rectangularGeocentric(
+    coords: IRectangularCoordinates,
+    coordsEarth: IRectangularCoordinates
+): IRectangularCoordinates {
+    return {
+        x: coords.x - coordsEarth.x,
+        y: coords.y - coordsEarth.y,
+        z: coords.z - coordsEarth.z,
+    }
+}

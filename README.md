@@ -27,6 +27,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth](#moon-distance-to-earth)
     3. [Phases](#moon-phases)
+8. [Planets](#planets)
+    1. [Position of Planets](#planets-position)
 
 ## <a name="installation"></a>Installation
 
@@ -412,3 +414,85 @@ const toiUpcomingFullMoon = moon.getUpcomingFullMoon();
 The result of the calculation should be:\
 Upcoming first quarter: *2020-11-22 04:46:35 UTC*\
 Upcoming full moon: *2020-11-30 09:31:22 UTC*
+
+## <a name="planets"></a> Planets
+
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
+
+### <a name="planets-position"></a> Position of Planets
+
+Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
+
+```javascript
+getHeliocentricRectangularJ2000Coordinates()
+getHeliocentricRectangularDateCoordinates()
+getHeliocentricEclipticSphericalJ2000Coordinates()
+getHeliocentricEclipticSphericalDateCoordinates()
+getGeocentricRectangularJ2000Coordinates()
+getGeocentricRectangularDateCoordinates()
+getGeocentricEclipticSphericalJ2000Coordinates()
+getGeocentricEclipticSphericalDateCoordinates()
+```
+
+**Example 1**: Calculate the heliocentric position of Venus for 04 November 2020 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createVenus} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
+const venus = createVenus(toi);
+
+const coordsRecJ2000 = await venus.getHeliocentricRectangularJ2000Coordinates();
+const coordsRecDate = await venus.getHeliocentricRectangularDateCoordinates();
+const coordsSphJ2000 = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
+const coordsSphDate = await venus.getHeliocentricEclipticSphericalDateCoordinates();
+```
+The result of the calculation should be:\
+\
+Heliocentric Rectangular (J2000)\
+x: *-0.53523555*\
+y: *0.477793213*\
+z: *0.037443275*\
+\
+Heliocentric Rectangular (Date)\
+x: *-0.537656853*\
+y: *0.475065298*\
+z: *0.037463575*\
+\
+Heliocentric Spherical (J2000)\
+Longitude: *138° 14' 43.437"*\
+Latitude: *2° 59' 14.774"*\
+Radius Vector: *0.71844655*\
+\
+Heliocentric Spherical (Date)\
+Longitude: *138° 32' 12.055"*\
+Latitude: *2° 59' 20.61"*\
+Radius Vector: *0.71844655*
+
+**Example 2**: Calculate the geocentric position of Jupiter for 04 November 2020 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const coordsRecJ2000 = await jupiter.getGeocentricRectangularJ2000Coordinates();
+const coordsSphJ2000 = await venus.getGeocentricEclipticSphericalJ2000Coordinates();
+```
+The result of the calculation should be:\
+\
+Geocentric Rectangular (J2000)\
+x: *1.94431267*\
+y: *-5.01496365*\
+z: *-0.04193732*\
+\
+Geocentric Spherical (J2000)\
+Longitude: *291° 11' 29.126"*\
+Latitude: *-0° 26' 48.204"*\
+Radius Vector: *5.37884475*
