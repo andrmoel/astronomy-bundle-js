@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.25.0 (2020-11-04)
+
+
+### Features
+
+* **cache:** add calculation cache ([ad38ca7](https://github.com/andrmoel/astronomy-bundle-js/commit/ad38ca779b978877709d9cebb6109425a8357eff))
+
 ### 2.24.1 (2020-11-01)
 
 ## 2.24.0 (2020-11-01)
