@@ -425,6 +425,7 @@ All coordinate methods do return a **Promise**.
 ### <a name="planets-position"></a> Position of Planets
 
 Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
+
 ```javascript
 getHeliocentricRectangularJ2000Coordinates()
 getHeliocentricRectangularDateCoordinates()
