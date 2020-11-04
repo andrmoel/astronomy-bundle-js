@@ -1,7 +1,7 @@
-import TimeOfInterest from './TimeOfInterest';
 import {round} from '../utils/math';
 import {DAY_OF_WEEK_SATURDAY} from '../constants/dayOfWeek';
 import {createLocation} from '../earth';
+import TimeOfInterest from './TimeOfInterest';
 
 it('tests getDate', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
