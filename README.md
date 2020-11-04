@@ -483,7 +483,7 @@ const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
 const coordsRecJ2000 = await jupiter.getGeocentricRectangularJ2000Coordinates();
-const coordsSphJ2000 = await venus.getGeocentricEclipticSphericalJ2000Coordinates();
+const coordsSphJ2000 = await jupiter.getGeocentricEclipticSphericalJ2000Coordinates();
 ```
 The result of the calculation should be:\
 \
