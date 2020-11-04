@@ -458,7 +458,7 @@ radius vector: *0.71844655*\
 Heliocentric Spherical (Date)\
 lon: *138° 32' 12.055"*\
 lat: *2° 59' 20.61"*\
-radius vector: *0.71844655*\
+radius vector: *0.71844655*
 
 **Example 2**: Calculate the geocentric position for Jupiter on 04 November 2020 at 00:00 UTC
 
