@@ -4548,4 +4548,3 @@ function _calculateZ5(t: number): number {
     Z5 += 0.00000001081 * Math.cos(0.05498457769 + 515.46387109300 * t);
     return Z5 * t * t * t * t * t;
 }
-
