@@ -424,7 +424,7 @@ All coordinate methods do return a **Promise**.
 
 ### <a name="planets-position"></a> Position of Planets
 
-**Example 1**: Calculate the heliocentric position for Venus on 04 November 2020 at 00:00 UTC
+**Example 1**: Calculate the heliocentric position of Venus for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -460,7 +460,7 @@ Longitude: *138° 32' 12.055"*\
 Latitude: *2° 59' 20.61"*\
 Radius Vector: *0.71844655*
 
-**Example 2**: Calculate the geocentric position for Jupiter on 04 November 2020 at 00:00 UTC
+**Example 2**: Calculate the geocentric position of Jupiter for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
