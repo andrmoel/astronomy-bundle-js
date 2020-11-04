@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.26.0 (2020-11-04)
+
+
+### Features
+
+* **planets:** add VSOP87 theories to calculate geometric coordinates ([50b53b1](https://github.com/andrmoel/astronomy-bundle-js/commit/50b53b175f131f5179be673bca1118be0c6618b8))
+
 ## 2.25.0 (2020-11-04)
 
 
