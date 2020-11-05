@@ -1,6 +1,6 @@
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import Planet from './Planet';
-import {getAsyncCachedCalculation} from "../cache/calculationCache";
+import {getAsyncCachedCalculation} from '../cache/calculationCache';
 
 export default class Jupiter extends Planet {
     async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
