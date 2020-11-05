@@ -4,6 +4,7 @@ import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IPlanet from './interfaces/IPlanet';
+import {calculateVSOP87} from './calculations/vsop87Calc';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
@@ -41,9 +42,9 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             const vsop87 = await import('./vspo87/vsop87EarthRectangularJ2000');
 
             return {
-                x: vsop87.calculateX(this.t),
-                y: vsop87.calculateY(this.t),
-                z: vsop87.calculateZ(this.t),
+                x: calculateVSOP87(vsop87.VSOP87_X, this.t),
+                y: calculateVSOP87(vsop87.VSOP87_Y, this.t),
+                z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
     }
@@ -53,9 +54,9 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             const vsop87 = await import('./vspo87/vsop87EarthRectangularDate');
 
             return {
-                x: vsop87.calculateX(this.t),
-                y: vsop87.calculateY(this.t),
-                z: vsop87.calculateZ(this.t),
+                x: calculateVSOP87(vsop87.VSOP87_X, this.t),
+                y: calculateVSOP87(vsop87.VSOP87_Y, this.t),
+                z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
     }
