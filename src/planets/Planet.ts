@@ -3,8 +3,10 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IPlanet from './interfaces/IPlanet';
 import {calculateVSOP87} from './calculations/vsop87Calc';
+import {coordinateCalc, earthCalc} from '../utils';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
@@ -71,5 +73,17 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const coords = await this.getGeocentricRectangularDateCoordinates();
 
         return rectangular2spherical(coords.x, coords.y, coords.z);
+    }
+
+    async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
+        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const phi = earthCalc.getNutationInLongitude(this.T);
+
+        return coordinateCalc.eclipticSpherical2equatorialSpherical(
+            lon + phi,
+            lat,
+            radiusVector,
+            this.T
+        );
     }
 }
