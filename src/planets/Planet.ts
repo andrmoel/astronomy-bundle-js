@@ -6,7 +6,8 @@ import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSp
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IPlanet from './interfaces/IPlanet';
 import {calculateVSOP87} from './calculations/vsop87Calc';
-import {coordinateCalc, earthCalc} from '../utils';
+import {coordinateCalc, earthCalc, observationCalc} from '../utils';
+import {createSun} from '../sun';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
@@ -85,5 +86,19 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             radiusVector,
             this.T
         );
+    }
+
+    async getPhaseAngle(): Promise<number> {
+        const sun = createSun(this.toi);
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getPhaseAngle(coords, coordsSun);
+    }
+
+    async getIlluminatedFraction(): Promise<number> {
+        const i = await this.getPhaseAngle();
+
+        return observationCalc.getIlluminatedFraction(i);
     }
 }

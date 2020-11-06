@@ -76,3 +76,15 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.declination, 8)).toBe(-24.37930694);
     expect(round(coords.radiusVector, 8)).toBe(1.4131505);
 });
+
+it('tests getPhaseAngle', async () => {
+    const i = await mercury.getPhaseAngle();
+
+    expect(round(i, 2)).toBe(18.8);
+});
+
+it('tests getIlluminatedFraction', async () => {
+    const i = await mercury.getIlluminatedFraction();
+
+    expect(round(i, 2)).toBe(0.97);
+});

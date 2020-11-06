@@ -29,6 +29,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     3. [Phases](#moon-phases)
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
+    2. [Phases](#planets-phases)
 
 ## <a name="installation"></a>Installation
 
@@ -365,7 +366,7 @@ const distance = moon.getDistanceToEarth();
 
 The result should be between 363300 km and 405500 km.
 
-**Example 2**: Get the distance of the moon on 05 June 2017 at 20:30 UTC
+**Example 2**: Get the distance of the moon for 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -379,9 +380,9 @@ const distance = moon.getDistanceToEarth();
 
 The result should be: *402937.61 km*
 
-### <a name="moon-phases"></a> Phases
+### <a name="moon-phases"></a> Phases of the Moon
 
-**Example 1**: Get the phase angle and illumination of the moon on 12 April 1992 at 00:00 UTC
+**Example 1**: Get the phase angle and illumination of the moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -485,6 +486,7 @@ const jupiter = createJupiter(toi);
 const coordsRecJ2000 = await jupiter.getGeocentricRectangularJ2000Coordinates();
 const coordsSphJ2000 = await jupiter.getGeocentricEclipticSphericalJ2000Coordinates();
 ```
+
 The result of the calculation should be:\
 \
 Geocentric Rectangular (J2000)\
@@ -496,3 +498,22 @@ Geocentric Spherical (J2000)\
 Longitude: *291° 11' 29.126"*\
 Latitude: *-0° 26' 48.204"*\
 Radius Vector: *5.37884475*
+
+### <a name="planets-phases"></a> Phases of a Planet
+
+**Example**: Get the phase angle and illumination of the Mars for 20 Match 2019 at 02:55 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMars} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2019, 3, 20, 2, 55, 0);
+const mars = createMars(toi);
+
+const i = await mars.getPhaseAngle();
+const k = await mars.getIlluminatedFraction();
+```
+
+The result of the calculation should be:\
+Phase angle: *30.98°*\
+Illumination: *0.929 (92.9%)*
