@@ -30,3 +30,9 @@ export function getIlluminatedFraction(phaseAngle: number): number {
     // Meeus 48.1
     return (1 + Math.cos(iRad)) / 2;
 }
+
+export function getAngularDiameter(distance: number, trueDiameter: number): number {
+    const delta = 2 * Math.atan2(trueDiameter, 2 * distance);
+
+    return rad2deg(delta);
+}

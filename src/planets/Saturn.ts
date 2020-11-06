@@ -2,6 +2,8 @@ import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoord
 import Planet from './Planet';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87} from './calculations/vsop87Calc';
+import {observationCalc} from '../utils';
+import {DIAMETER_SATURN} from '../constants/diameters';
 
 export default class Saturn extends Planet {
     async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
@@ -26,5 +28,11 @@ export default class Saturn extends Planet {
                 z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
+    }
+
+    async getAngularDiameter(): Promise<number> {
+        const distance = await this.getDistanceToEarth();
+
+        return observationCalc.getAngularDiameter(distance, DIAMETER_SATURN);
     }
 }

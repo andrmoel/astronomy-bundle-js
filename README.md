@@ -30,6 +30,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Phases](#planets-phases)
+    3. [Distance and Diameter](#planets-distance-diameter)
 
 ## <a name="installation"></a>Installation
 
@@ -517,3 +518,22 @@ const k = await mars.getIlluminatedFraction();
 The result of the calculation should be:\
 Phase angle: *30.98°*\
 Illumination: *0.929 (92.9%)*
+
+### <a name="planets-distance-diameter"></a> Distance and Diameter
+
+**Example**: Get the distance and diameter of Venus for 02 October 2008 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createVenus} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2008, 10, 2, 0, 0, 0);
+const venus = createVenus(toi);
+
+const d = await venus.getDistanceToEarth();
+const delta = await venus.getAngularDiameter();
+```
+
+The result of the calculation should be:\
+Distance to Earth: *206 930 461.4 km*\
+Diameter: *0° 00' 12.065"*

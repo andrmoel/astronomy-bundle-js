@@ -2,6 +2,9 @@ import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoord
 import Planet from './Planet';
 import {calculateVSOP87} from './calculations/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
+import {au2km} from '../utils/distanceCalc';
+import {observationCalc} from '../utils';
+import {DIAMETER_NEPTUNE} from '../constants/diameters';
 
 export default class Neptune extends Planet {
     async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
@@ -26,5 +29,12 @@ export default class Neptune extends Planet {
                 z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
+    }
+
+    async getAngularDiameter(): Promise<number> {
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const distance = au2km(coords.radiusVector);
+
+        return observationCalc.getAngularDiameter(distance, DIAMETER_NEPTUNE);
     }
 }

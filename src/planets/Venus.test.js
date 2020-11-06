@@ -1,6 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import Venus from './Venus';
+import {deg2angle} from '../utils/angleCalc';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);
@@ -75,6 +76,18 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.rightAscension, 8)).toBe(239.27954533);
     expect(round(coords.declination, 8)).toBe(-18.3152113);
     expect(round(coords.radiusVector, 8)).toBe(1.13444337);
+});
+
+it('tests getDistanceToEarth', async () => {
+    const d = await venus.getDistanceToEarth();
+
+    expect(round(d, 2)).toBe(169710312.57);
+});
+
+it('tests getAngularDiameter', async () => {
+    const delta = await venus.getAngularDiameter();
+
+    expect(deg2angle(delta)).toBe('0° 00\' 14.711"');
 });
 
 it('tests getPhaseAngle', async () => {
