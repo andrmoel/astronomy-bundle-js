@@ -2,7 +2,6 @@ import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import Jupiter from './Jupiter';
 import {deg2angle} from '../utils/angleCalc';
-import {createVenus} from './index';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const jupiter = new Jupiter(toi);
@@ -102,13 +101,3 @@ it('tests getIlluminatedFraction', async () => {
 
     expect(round(i, 2)).toBe(0.99);
 });
-
-it('tests', async () => {
-    const toi = createTimeOfInterest.fromTime(2008, 10, 2, 0, 0, 0);
-    const venus = createVenus(toi);
-
-    const d = await venus.getDistanceToEarth();
-    const delta = await venus.getAngularDiameter();
-
-    console.log(d, deg2angle(delta));
-})
