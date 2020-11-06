@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.27.0 (2020-11-06)
+
+
+### Features
+
+* **planets:** add methods to calculate phase angle and illuminated fraction ([b3ad920](https://github.com/andrmoel/astronomy-bundle-js/commit/b3ad92086b134a4ba19eb4eabf573064576d5233))
+
 ### 2.26.1 (2020-11-06)
 
 ## 2.26.0 (2020-11-05)
