@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.28.0 (2020-11-06)
+
+
+### Features
+
+* **planets:** add methods to get distance to earth and angle diameter ([a56deb9](https://github.com/andrmoel/astronomy-bundle-js/commit/a56deb986ee71f52a9776551493380f935dfab62))
+
 ## 2.27.0 (2020-11-06)
 
 
