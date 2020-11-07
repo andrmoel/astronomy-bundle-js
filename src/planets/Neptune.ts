@@ -37,4 +37,13 @@ export default class Neptune extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_NEPTUNE);
     }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+        const year = this.toi.getDecimalYear();
+
+        return observationCalc.getApparentMagnitudeNeptune(coordsHelio.radiusVector, coordsGeo.radiusVector, i, year);
+    }
 }

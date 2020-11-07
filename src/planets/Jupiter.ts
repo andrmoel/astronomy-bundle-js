@@ -35,4 +35,12 @@ export default class Jupiter extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_JUPITER);
     }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return observationCalc.getApparentMagnitudeJupiter(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    }
 }
