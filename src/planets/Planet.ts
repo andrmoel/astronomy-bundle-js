@@ -11,49 +11,49 @@ import {createSun} from '../sun';
 import {au2km} from '../utils/distanceCalc';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
-    abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
+    public abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
 
     abstract async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
 
-    async getGeocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getGeocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricRectangularJ2000Coordinates();
         const coordsEarth = await this._getEarthHeliocentricRectangularJ2000Coordinates();
 
         return rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
     }
 
-    async getGeocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getGeocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricRectangularDateCoordinates();
         const coordsEarth = await this._getEarthHeliocentricRectangularDateCoordinates();
 
         return rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
     }
 
-    async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         const coords = await this.getHeliocentricRectangularJ2000Coordinates();
 
         return rectangular2spherical(coords.x, coords.y, coords.z);
     }
 
-    async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         const coords = await this.getHeliocentricRectangularDateCoordinates();
 
         return rectangular2spherical(coords.x, coords.y, coords.z);
     }
 
-    async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         const coords = await this.getGeocentricRectangularJ2000Coordinates();
 
         return rectangular2spherical(coords.x, coords.y, coords.z);
     }
 
-    async getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         const coords = await this.getGeocentricRectangularDateCoordinates();
 
         return rectangular2spherical(coords.x, coords.y, coords.z);
     }
 
-    async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
+    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
         const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
         const phi = earthCalc.getNutationInLongitude(this.T);
 
@@ -65,13 +65,13 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         );
     }
 
-    async getDistanceToEarth(): Promise<number> {
+    public async getDistanceToEarth(): Promise<number> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         return au2km(coords.radiusVector);
     }
 
-    async getPhaseAngle(): Promise<number> {
+    public async getPhaseAngle(): Promise<number> {
         const sun = createSun(this.toi);
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const coordsSun = sun.getApparentGeocentricEquatorialSphericalCoordinates();
@@ -79,7 +79,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return observationCalc.getPhaseAngle(coords, coordsSun);
     }
 
-    async getIlluminatedFraction(): Promise<number> {
+    public async getIlluminatedFraction(): Promise<number> {
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);

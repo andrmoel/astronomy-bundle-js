@@ -6,7 +6,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_MERCURY} from '../constants/diameters';
 
 export default class Mercury extends Planet {
-    async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('mercury_heliocentric_rectangular_j2000', this.t, async () => {
             const vsop87 = await import('./vspo87/vsop87MercuryRectangularJ2000');
 
@@ -18,7 +18,7 @@ export default class Mercury extends Planet {
         });
     }
 
-    async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('mercury_heliocentric_rectangular_date', this.t, async () => {
             const vsop87 = await import('./vspo87/vsop87MercuryRectangularDate');
 
@@ -30,7 +30,7 @@ export default class Mercury extends Planet {
         });
     }
 
-    async getAngularDiameter(): Promise<number> {
+    public async getAngularDiameter(): Promise<number> {
         const distance = await this.getDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_MERCURY);

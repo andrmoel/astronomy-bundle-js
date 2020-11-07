@@ -7,7 +7,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_NEPTUNE} from '../constants/diameters';
 
 export default class Neptune extends Planet {
-    async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('neptune_heliocentric_rectangular_j2000', this.t, async () => {
             const vsop87 = await import('./vspo87/vsop87NeptuneRectangularJ2000');
 
@@ -19,7 +19,7 @@ export default class Neptune extends Planet {
         });
     }
 
-    async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('neptune_heliocentric_rectangular_date', this.t, async () => {
             const vsop87 = await import('./vspo87/vsop87NeptuneRectangularDate');
 
@@ -31,7 +31,7 @@ export default class Neptune extends Planet {
         });
     }
 
-    async getAngularDiameter(): Promise<number> {
+    public async getAngularDiameter(): Promise<number> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const distance = au2km(coords.radiusVector);
 
