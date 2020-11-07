@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.2.0 (2020-11-07)
+
+
+### Features
+
+* **sun:** use VSOP87 theory to calculate position of the sun ([5d1d31b](https://github.com/andrmoel/astronomy-bundle-js/commit/5d1d31b83b0cdde410187b482ef70307c22910f9))
+
 ### 3.1.1 (2020-11-07)
 
 ## 3.1.0 (2020-11-07)
