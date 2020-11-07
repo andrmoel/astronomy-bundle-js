@@ -57,11 +57,11 @@ it('tests getPhaseAngle', () => {
     expect(round(moon.getPhaseAngle(), 6)).toBe(69.07545);
 });
 
-it('tests getIllumination', () => {
+it('tests getIlluminatedFraction', () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    expect(round(moon.getIllumination(), 3)).toBe(0.679);
+    expect(round(moon.getIlluminatedFraction(), 3)).toBe(0.679);
 });
 
 it('tests getUpcomingNewMoon', () => {

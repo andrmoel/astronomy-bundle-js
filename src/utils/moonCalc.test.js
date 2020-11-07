@@ -3,7 +3,7 @@ import {
     getArgumentOfLatitude,
     getDistanceToEarth,
     getEquatorialHorizontalParallax,
-    getIllumination,
+    getIlluminatedFraction,
     getLatitude,
     getLongitude,
     getMeanAnomaly,
@@ -80,8 +80,8 @@ it('tests getPhaseAngle', () => {
     expect(round(getPhaseAngle(T), 6)).toBe(69.07545);
 });
 
-it('tests getIllumination', () => {
+it('tests getIlluminatedFraction', () => {
     const T = -0.077221081451;
 
-    expect(round(getIllumination(T), 3)).toBe(0.679);
+    expect(round(getIlluminatedFraction(T), 3)).toBe(0.679);
 });

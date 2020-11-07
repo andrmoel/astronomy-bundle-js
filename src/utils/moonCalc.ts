@@ -246,7 +246,7 @@ export function getPhaseAngle(T: number): number {
     return normalizeAngle(rad2deg(i));
 }
 
-export function getIllumination(T: number): number {
+export function getIlluminatedFraction(T: number): number {
     const i = getPhaseAngle(T);
     const iRad = deg2rad(i);
 

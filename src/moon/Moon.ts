@@ -47,8 +47,8 @@ export default class Moon extends AstronomicalObject {
         return moonCalc.getPhaseAngle(this.T);
     }
 
-    public getIllumination(): number {
-        return moonCalc.getIllumination(this.T);
+    public getIlluminatedFraction(): number {
+        return moonCalc.getIlluminatedFraction(this.T);
     }
 
     public getUpcomingNewMoon(): TimeOfInterest {
