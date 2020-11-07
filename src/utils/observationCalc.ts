@@ -21,7 +21,7 @@ export function getPhaseAngle(
     // Meeus 48.3
     const i = Math.atan((distSun * Math.sin(phi)) / (distObj - distSun * Math.cos(phi)));
 
-    return normalizeAngle(rad2deg(i));
+    return normalizeAngle(rad2deg(i), 180);
 }
 
 export function getIlluminatedFraction(phaseAngle: number): number {
