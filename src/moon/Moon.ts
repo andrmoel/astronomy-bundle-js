@@ -1,4 +1,4 @@
-import {coordinateCalc, moonCalc, moonPhaseCalc} from '../utils';
+import {coordinateCalc, moonCalc, moonPhaseCalc, observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
@@ -10,6 +10,7 @@ import {
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON
 } from '../constants/moonPhase';
+import {DIAMETER_MOON} from '../constants/diameters';
 
 export default class Moon extends AstronomicalObject {
     public getGeocentricEclipticSphericalCoordinates(): IEclipticSphericalCoordinates {
@@ -34,6 +35,12 @@ export default class Moon extends AstronomicalObject {
 
     public getDistanceToEarth(): number {
         return moonCalc.getDistanceToEarth(this.T);
+    }
+
+    public getAngularDiameter(): number {
+        const distance = this.getDistanceToEarth();
+
+        return observationCalc.getAngularDiameter(distance, DIAMETER_MOON);
     }
 
     public getPhaseAngle(): number {

@@ -25,7 +25,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Distance to Earth](#sun-distance-to-earth)
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
-    2. [Distance to Earth](#moon-distance-to-earth)
+    2. [Distance to Earth and Diameter](#moon-distance-diameter)
     3. [Phases](#moon-phases)
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
@@ -353,7 +353,7 @@ x: *-0.001682*\
 y: *-0.001701*\
 z: *0.000586*
 
-### <a name="moon-distance-to-earth"></a> Distance of the moon to earth
+### <a name="moon-distance-diameter"></a> Distance to earth and diameter
 
 **Example 1**: Calculate the distance of the moon in kilometers for the current time
 
@@ -363,9 +363,11 @@ import {createMoon} from 'astronomy-bundle/moon';
 const moon = createMoon();
 
 const distance = moon.getDistanceToEarth();
+const delta = moon.getAngularDiameter();
 ```
 
-The result should be between 363300 km and 405500 km.
+The result should be between 363300 km and 405500 km.\
+The angular diameter is about 32'
 
 **Example 2**: Get the distance of the moon for 05 June 2017 at 20:30 UTC
 

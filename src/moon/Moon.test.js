@@ -1,6 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import createMoon from './createMoon';
+import {deg2angle} from '../utils/angleCalc';
 
 it('tests getGeocentricEclipticSphericalCoordinates', () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
@@ -40,6 +41,13 @@ it('tests getDistanceToEarth', () => {
     const moon = createMoon(toi);
 
     expect(round(moon.getDistanceToEarth(), 6)).toBe(378157.525065);
+});
+
+it('tests getAngularDiameter', () => {
+    const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
+    const moon = createMoon(toi);
+
+    expect(deg2angle(moon.getAngularDiameter())).toBe('0° 31\' 35.305"');
 });
 
 it('tests getPhaseAngle', () => {
