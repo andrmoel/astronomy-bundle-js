@@ -102,3 +102,19 @@ export function earthEclipticSpherical2sunEclipticSpherical(
         radiusVector: radiusVector,
     }
 }
+
+
+export function ecliptic2apparentEcliptic(
+    lon: number,
+    lat: number,
+    radiusVector: number,
+    T: number
+): IEclipticSphericalCoordinates {
+    const phi = earthCalc.getNutationInLongitude(T);
+
+    return {
+        lon: lon + phi,
+        lat: lat,
+        radiusVector: radiusVector,
+    };
+}

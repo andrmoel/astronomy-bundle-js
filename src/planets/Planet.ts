@@ -1,4 +1,5 @@
 import {
+    ecliptic2apparentEcliptic,
     eclipticSpherical2equatorialSpherical,
     rectangular2spherical,
     rectangularHeliocentric2rectangularGeocentric
@@ -8,7 +9,7 @@ import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoord
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IPlanet from './interfaces/IPlanet';
-import {earthCalc, observationCalc} from '../utils';
+import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {au2km} from '../utils/distanceCalc';
@@ -66,16 +67,16 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return rectangular2spherical(coords.x, coords.y, coords.z);
     }
 
-    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
+    public async getApparentGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const phi = earthCalc.getNutationInLongitude(this.T);
 
-        return eclipticSpherical2equatorialSpherical(
-            lon + phi,
-            lat,
-            radiusVector,
-            this.T
-        );
+        return ecliptic2apparentEcliptic(lon, lat, radiusVector, this.T);
+    }
+
+    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
+        const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalDateCoordinates();
+
+        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
     }
 
     public async getDistanceToEarth(): Promise<number> {
