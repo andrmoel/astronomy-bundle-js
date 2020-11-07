@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.1.0 (2020-11-07)
+
+
+### Features
+
+* **earth:** calculate earth position with VSOP87 instead of using planet calculation ([0058e28](https://github.com/andrmoel/astronomy-bundle-js/commit/0058e288ad6d4b7b30467baa2ff1c905250c7b67))
+
 ### 3.0.2 (2020-11-07)
 
 ### 3.0.1 (2020-11-07)
