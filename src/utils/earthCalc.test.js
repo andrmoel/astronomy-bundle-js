@@ -1,6 +1,5 @@
 import {
     getEccentricity,
-    getEquationOfTime,
     getLongitudeOfPerihelionOfOrbit,
     getMeanAnomaly,
     getMeanObliquityOfEcliptic,
@@ -55,10 +54,4 @@ it('tests getNutationInObliquity', () => {
     const sumEps = getNutationInObliquity(T);
 
     expect(deg2angle(sumEps)).toBe('0° 00\' 09.442"');
-});
-
-it('tests getEquationOfTime', () => {
-    const T = -0.072183436;
-
-    expect(round(getEquationOfTime(T), 6)).toBe(3.424707);
 });

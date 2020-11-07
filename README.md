@@ -23,7 +23,8 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     2. [Nutation in Longitude and Obliquity](#earth-nutation)
     3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
 6. [Sun](#sun)
-    1. [Distance to Earth](#sun-distance-to-earth)
+    1. [Position of the Sun](#sun-position)
+    2. [Distance to Earth and Diameter](#sun-distance-diameter)
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
@@ -324,21 +325,54 @@ True Obliquity of Ecliptic: *23° 26' 12.208"*
 
 ## <a name="sun"></a> Sun
 
-### <a name="sun-distance-to-earth"></a> Distance of the sun to earth
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
 
-**Example 1**: Get distance of the sun in kilometers
+### <a name="sun-position"></a> Position of the Sun
+
+**Example**: Get the position of the Sun (Date) for 10 October 2020 at 06:15 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSun} from 'astronomy-bundle/sun';
+
+const toi = createTimeOfInterest.fromTime(2020, 10, 10, 6, 15, 0);
+const sun = createSun(toi);
+
+const geoEclCoords = await sun.getGeocentricEclipticSphericalDateCoordinates();
+const geoAppEquCoords = await sun.getApparentGeocentricEquatorialSphericalCoordinates()
+```
+
+The result should be:\
+\
+Longitude: *209.31555315°*\
+Latitude: *-0.00014017°*\
+Radius Vector: *0.99514386*\
+\
+Right Ascension: *207.25282342°*\
+Declination: *-11.22796087°*\
+Right Ascension: *0.99514386*\
+
+### <a name="sun-distance-diameter"></a> Distance to Earth and diameter of the Sun
+
+**Example 1**: Get distance and diameter of the sun for the current date and time
 
 ```javascript
 import {createSun} from 'astronomy-bundle/sun';
 
 const sun = createSun();
 
-const distance = sun.getDistanceToEarth();
+const distance = await sun.getDistanceToEarth();
+const delta = await sun.getAngularDiameter();
 ```
 
-The result should be between 147.1 mio and 152.1 mio kilometers.
+The result should be:\
+The distance is between 147.1 mio and 152.1 mio kilometers.\
+The angular diameter is about 32'
 
-**Example 2**: Get the distance of the sun for 05 June 2017 at 20:30 UTC
+**Example 2**: Get the distance and diameter of the Sun for 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -347,10 +381,14 @@ import {createSun} from 'astronomy-bundle/createSun';
 const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
 const sun = createSun(toi);
 
-const distance = sun.getDistanceToEarth();
+const distance = await sun.getDistanceToEarth();
+const delta = await sun.getAngularDiameter();
 ```
 
-The result should be: *151797423.98 km*
+The result should be:\
+\
+Distance: *151797423.98 km*\
+Diameter: *0° 31' 32.43"*
 
 ## <a name="moon"></a> Moon
 
@@ -425,8 +463,8 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const i = moon.getPhaseAngle();
-const k = moon.getIllumination();
+const i = await moon.getPhaseAngle();
+const k = await moon.getIlluminatedFraction();
 ```
 
 The result of the calculation should be:\
@@ -533,7 +571,7 @@ Longitude: *291° 11' 29.126"*\
 Latitude: *-0° 26' 48.204"*\
 Radius Vector: *5.37884475*
 
-### <a name="planets-distance-diameter"></a> Distance to Earth and Diameter
+### <a name="planets-distance-diameter"></a> Distance to Earth and diameter
 
 **Example**: Get the distance and diameter of Venus for 02 October 2008 at 00:00 UTC
 

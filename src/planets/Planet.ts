@@ -88,7 +88,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     public async getPhaseAngle(): Promise<number> {
         const sun = createSun(this.toi);
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const coordsSun = sun.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return observationCalc.getPhaseAngle(coords, coordsSun);
     }

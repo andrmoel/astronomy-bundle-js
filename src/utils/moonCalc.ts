@@ -1,7 +1,7 @@
 import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {km2au} from './distanceCalc';
-import {coordinateCalc, earthCalc, sunCalc} from './index';
+import {sunCalc} from './index';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2
@@ -59,13 +59,6 @@ export function getLongitude(T: number): number {
     const sumL = _getSumL(T);
 
     return L + (sumL / 1000000);
-}
-
-export function getApparentLongitude(T: number): number {
-    const l = getLongitude(T);
-    const phi = earthCalc.getNutationInLongitude(T);
-
-    return l + phi;
 }
 
 export function getLatitude(T: number): number {
@@ -219,37 +212,4 @@ function _getSumB(T: number): number {
     });
 
     return sumB;
-}
-
-export function getPhaseAngle(T: number): number {
-    const raSun = sunCalc.getApparentRightAscension(T);
-    const dSun = sunCalc.getApparentDeclination(T);
-    const distSun = sunCalc.getDistanceToEarth(T);
-    const raSunRad = deg2rad(raSun);
-    const dSunRad = deg2rad(dSun);
-
-    const lon = getApparentLongitude(T);
-    const lat = getLatitude(T);
-    const distMoon = getDistanceToEarth(T);
-    const eqCoords = coordinateCalc.eclipticSpherical2equatorialSpherical(lon, lat, distMoon, T);
-    const raMoonRad = deg2rad(eqCoords.rightAscension);
-    const dMoonRad = deg2rad(eqCoords.declination);
-
-    // Meeus 48.2
-    const phi = Math.acos(
-        Math.sin(dSunRad) * Math.sin(dMoonRad) + Math.cos(dSunRad) * Math.cos(dMoonRad) * Math.cos(raSunRad - raMoonRad)
-    );
-
-    // Meeus 48.3
-    const i = Math.atan((distSun * Math.sin(phi)) / (distMoon - distSun * Math.cos(phi)));
-
-    return normalizeAngle(rad2deg(i));
-}
-
-export function getIlluminatedFraction(T: number): number {
-    const i = getPhaseAngle(T);
-    const iRad = deg2rad(i);
-
-    // Meeus 48.1
-    return (1 + Math.cos(iRad)) / 2;
 }

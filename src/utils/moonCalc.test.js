@@ -1,15 +1,12 @@
 import {
-    getApparentLongitude,
     getArgumentOfLatitude,
     getDistanceToEarth,
     getEquatorialHorizontalParallax,
-    getIlluminatedFraction,
     getLatitude,
     getLongitude,
     getMeanAnomaly,
     getMeanElongation,
     getMeanLongitude,
-    getPhaseAngle,
     getRadiusVector,
 } from './moonCalc';
 import {round} from './math';
@@ -50,12 +47,6 @@ it('tests getLongitude', () => {
     expect(round(getLongitude(T), 6)).toBe(133.162655);
 });
 
-it('tests getApparentLongitude', () => {
-    const T = -0.077221081451;
-
-    expect(round(getApparentLongitude(T), 6)).toBe(133.167265);
-});
-
 it('tests getLatitude', () => {
     const T = -0.077221081451;
 
@@ -72,16 +63,4 @@ it('tests getDistanceToEarth', () => {
     const T = -0.077221081451;
 
     expect(round(getDistanceToEarth(T), 1)).toBe(368409.7);
-});
-
-it('tests getPhaseAngle', () => {
-    const T = -0.077221081451;
-
-    expect(round(getPhaseAngle(T), 6)).toBe(69.07545);
-});
-
-it('tests getIlluminatedFraction', () => {
-    const T = -0.077221081451;
-
-    expect(round(getIlluminatedFraction(T), 3)).toBe(0.679);
 });
