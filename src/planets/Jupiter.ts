@@ -8,7 +8,7 @@ import {DIAMETER_JUPITER} from '../constants/diameters';
 export default class Jupiter extends Planet {
     public async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('jupiter_heliocentric_rectangular_j2000', this.t, async () => {
-            const vsop87 = await import('./vspo87/vsop87JupiterRectangularJ2000');
+            const vsop87 = await import('./vsop87/vsop87JupiterRectangularJ2000');
 
             return {
                 x: calculateVSOP87(vsop87.VSOP87_X, this.t),
@@ -20,7 +20,7 @@ export default class Jupiter extends Planet {
 
     public async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         return await getAsyncCachedCalculation('jupiter_heliocentric_rectangular_date', this.t, async () => {
-            const vsop87 = await import('./vspo87/vsop87JupiterRectangularDate');
+            const vsop87 = await import('./vsop87/vsop87JupiterRectangularDate');
 
             return {
                 x: calculateVSOP87(vsop87.VSOP87_X, this.t),
