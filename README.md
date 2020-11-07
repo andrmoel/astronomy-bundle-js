@@ -19,8 +19,9 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
 5. [Earth](#earth)
-    1. [Nutation in Longitude and Obliquity](#earth-nutation)
-    2. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
+    1. [Position of the Earth](#earth-position)
+    2. [Nutation in Longitude and Obliquity](#earth-nutation)
+    3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
 6. [Sun](#sun)
     1. [Distance to Earth](#sun-distance-to-earth)
 7. [Moon](#moon)
@@ -247,6 +248,36 @@ const moon = createMoon();
 
 ## <a name="earth"></a> Earth
 
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
+
+### <a name="earth-position"></a> Position of the Earth
+
+**Example**: Calculate the heliocentric position (J2000) of the Earth for 10 December 2017 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createEarth} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
+const earth = createEarth(toi);
+
+const {x, y, z} = await earth.getHeliocentricRectangularJ2000Coordinates();
+const {lon, lat, radiusVector} = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
+```
+
+The result of the calculation should be:\
+\
+x: *0.2070104*\
+y: *0.96282379*\
+z: *-0.00004247*\
+\
+Longitude: *77° 51' 57.357"*\
+Latitude: *-0° 00' 08.895"*\
+Radius Vector: *0.98482636*\
+
 ### <a name="earth-nutation"></a> Nutation in Longitude and Obliquity
 
 **Example**: Get nutation in Longitude and Obliquity for 01 August 2020 at 16:51:54 UTC
@@ -325,7 +356,7 @@ The result should be: *151797423.98 km*
 
 ### <a name="moon-position"></a> Position of the Moon
 
-**Example 1**: Calculate the geocentric position of the moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Calculate the geocentric position of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -355,7 +386,7 @@ z: *0.000586*
 
 ### <a name="moon-distance-diameter"></a> Distance to earth and diameter
 
-**Example 1**: Calculate the distance of the moon in kilometers for the current time
+**Example 1**: Calculate the distance of the Moon in kilometers for the current time
 
 ```javascript
 import {createMoon} from 'astronomy-bundle/moon';
@@ -369,7 +400,7 @@ const delta = moon.getAngularDiameter();
 The result should be between 363300 km and 405500 km.\
 The angular diameter is about 32'
 
-**Example 2**: Get the distance of the moon for 05 June 2017 at 20:30 UTC
+**Example 2**: Get the distance of the Moon for 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -385,7 +416,7 @@ The result should be: *402937.61 km*
 
 ### <a name="moon-phases"></a> Phases of the Moon
 
-**Example 1**: Get the phase angle and illumination of the moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Get the phase angle and illumination of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';

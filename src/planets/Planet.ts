@@ -12,15 +12,16 @@ import {earthCalc, observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {au2km} from '../utils/distanceCalc';
-import Earth from './Earth';
+import {createEarth} from '../earth';
+import Earth from '../earth/Earth';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;
 
-    constructor(public toi: TimeOfInterest) {
+    constructor(toi?: TimeOfInterest) {
         super(toi);
 
-        this.earth = new Earth(toi);
+        this.earth = createEarth(toi);
     }
 
     public abstract async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;

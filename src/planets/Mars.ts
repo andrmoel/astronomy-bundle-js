@@ -1,6 +1,6 @@
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import Planet from './Planet';
-import {calculateVSOP87} from './calculations/vsop87Calc';
+import {calculateVSOP87} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {observationCalc} from '../utils';
 import {DIAMETER_MARS} from '../constants/diameters';
