@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.29.0 (2020-11-07)
+
+
+### Features
+
+* **moon:** add method for angular diameter ([b3a1778](https://github.com/andrmoel/astronomy-bundle-js/commit/b3a1778e2799102b37a27f08928b68ccef8306f8))
+
 ### 2.28.1 (2020-11-06)
 
 ## 2.28.0 (2020-11-06)
