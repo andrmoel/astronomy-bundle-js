@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.3.0 (2020-11-07)
+
+
+### Features
+
+* **angle-calc:** allow short notation of angles ([4885d8f](https://github.com/andrmoel/astronomy-bundle-js/commit/4885d8fdb8319701eb522301e993c09f7af3abfb))
+
 ## 3.2.0 (2020-11-07)
 
 
