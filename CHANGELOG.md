@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.0.1 (2020-11-07)
+
+
+### Bug Fixes
+
+* **observation-calc:** phase angle must be normalized to base 180° ([81f7c50](https://github.com/andrmoel/astronomy-bundle-js/commit/81f7c506e189bab37d1bce833fcc14f48ac73b0a))
+
 ## 3.0.0 (2020-11-07)
 
 
