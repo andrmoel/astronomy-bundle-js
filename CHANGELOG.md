@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.0.0 (2020-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **moon:** Rename method
+
+* **moon:** rename getIllumination method to getIlluminatedFraction ([f35e761](https://github.com/andrmoel/astronomy-bundle-js/commit/f35e761acfe709483b1664ba80d45283bc9dcfaf))
+
 ## 2.29.0 (2020-11-07)
 
 
