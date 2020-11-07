@@ -90,3 +90,15 @@ export function rectangularHeliocentric2rectangularGeocentric(
         z: coords.z - coordsEarth.z,
     }
 }
+
+export function earthEclipticSpherical2sunEclipticSpherical(
+    coordsEarth: IEclipticSphericalCoordinates
+): IEclipticSphericalCoordinates {
+    const {lon, lat, radiusVector} = coordsEarth;
+
+    return {
+        lon: normalizeAngle(lon + 180),
+        lat: -1 * lat,
+        radiusVector: radiusVector,
+    }
+}

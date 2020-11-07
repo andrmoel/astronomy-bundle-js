@@ -2,6 +2,7 @@ import {createTimeOfInterest} from '../time';
 import {
     createJupiter,
     createMars,
+    createEarth,
     createMercury,
     createNeptune,
     createSaturn,
@@ -10,6 +11,7 @@ import {
 } from './createPlanet';
 import Mercury from './Mercury';
 import Venus from './Venus';
+import Earth from './Earth';
 import Jupiter from './Jupiter';
 import Mars from './Mars';
 import Saturn from './Saturn';
@@ -43,6 +45,21 @@ describe('test for createVenus', () => {
         const venus = createVenus();
 
         expect(venus).toBeInstanceOf(Venus);
+    });
+});
+
+describe('test for createEarth', () => {
+    it('tests with TOI', () => {
+        const toi = createTimeOfInterest.fromCurrentTime();
+        const earth = createEarth(toi);
+
+        expect(earth).toBeInstanceOf(Earth);
+    });
+
+    it('tests without TOI', () => {
+        const earth = createEarth();
+
+        expect(earth).toBeInstanceOf(Earth);
     });
 });
 

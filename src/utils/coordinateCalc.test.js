@@ -1,4 +1,5 @@
 import {
+    earthEclipticSpherical2sunEclipticSpherical,
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     rectangular2spherical,
@@ -66,4 +67,18 @@ it('tests rectangularHeliocentric2rectangularGeocentric', () => {
     expect(coords.x).toBe(2);
     expect(coords.y).toBe(1.5);
     expect(coords.z).toBe(1.7);
+});
+
+it('test earthEclipticSpherical2sunEclipticSpherical', () => {
+    const coordsEarth = {
+        lon: 56.45049,
+        lat: 0.00564,
+        radiusVector: 0.9848,
+    };
+
+    const coordsSun = earthEclipticSpherical2sunEclipticSpherical(coordsEarth);
+
+    expect(coordsSun.lon).toBe(236.45049);
+    expect(coordsSun.lat).toBe(-0.00564);
+    expect(coordsSun.radiusVector).toBe(0.9848);
 });
