@@ -6,7 +6,7 @@ For a higher accuracy, several corrections, like nutation and precision, were ta
 It is also possible to calculate rise, set and culmination events for celestial objects.
 For a detailed see the table of contents.
 
-Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
+Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
 
 ## Table of Contents  
 1.  [Installation](#installation)
@@ -33,6 +33,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
+9. [Solar Eclipse](#solar-eclipse)
 
 ## <a name="installation"></a>Installation
 
@@ -608,3 +609,27 @@ const k = await mars.getIlluminatedFraction();
 The result of the calculation should be:\
 Phase angle: *30.98°*\
 Illumination: *0.929 (92.9%)*
+
+## <a name="solar-eclipse"></a> Solar Eclipse
+
+**Example 1**: Check if there is a Solar Eclipse on 15 January 2019
+
+```javascript
+import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2019, 1, 15, 0, 0, 0);
+const exists = solarEclipseExists(toi);
+```
+
+Result of the calculation: *There is no solar eclipse*
+
+**Example 2**: Check if there is a Solar Eclipse on 21 August 2017
+
+```javascript
+import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2017, 8, 21, 0, 0, 0);
+const exists = solarEclipseExists(toi);
+```
+
+Result of the calculation: *Yes, there is a solar eclipse*
