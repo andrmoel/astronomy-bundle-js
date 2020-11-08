@@ -115,17 +115,3 @@ export function getNutationInObliquity(T: number): number {
 
     return sumEps * 0.0001 / 3600;
 }
-
-export function getEquationOfTime(T: number): number {
-    // TODO Use method with higher accuracy (Meeus p.166) 25.9
-
-    const L0 = sunCalc.getMeanLongitude(T);
-    const rightAscension = sunCalc.getApparentRightAscension(T);
-
-    const dPhi = getNutationInLongitude(T);
-    const e = getTrueObliquityOfEcliptic(T);
-    const eRad = deg2rad(e);
-
-    // Meeus 28.1
-    return L0 - 0.0057183 - rightAscension + dPhi * Math.cos(eRad);
-}

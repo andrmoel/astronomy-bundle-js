@@ -1,3 +1,11 @@
+import {rad2deg} from './angleCalc';
+
+export function calculateVSOP87Angle(terms: Array<Array<Array<number>>>, t: number): number {
+    const result = calculateVSOP87(terms, t);
+
+    return rad2deg(result);
+}
+
 export function calculateVSOP87(terms: Array<Array<Array<number>>>, t: number): number {
     let result = 0.0;
 

@@ -1,6 +1,4 @@
-import * as earthCalc from './earthCalc';
-import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
-import {au2km} from './distanceCalc';
+import {deg2rad, normalizeAngle} from './angleCalc';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
@@ -61,62 +59,4 @@ export function getEquationOfCenter(T: number): number {
     C += 0.000289 * Math.sin(3 * deg2rad(M));
 
     return C;
-}
-
-export function getRadiusVector(T: number): number {
-    const e = earthCalc.getEccentricity(T);
-    const v = getTrueAnomaly(T);
-    const vRad = deg2rad(v);
-
-    // Meeus 25.5
-    const R = (1000001018 * (1 - Math.pow(e, 2))) / (1 + e * Math.cos(vRad));
-
-    return R / 1000000000;
-}
-
-export function getDistanceToEarth(T: number): number {
-    const R = getRadiusVector(T);
-
-    return au2km(R);
-}
-
-
-export function getApparentRightAscension(T: number): number {
-    // TODO Use method with higher accuracy (Meeus p.166) 25.9
-
-    const lon = getApparentLongitude(T);
-    const lonRad = deg2rad(lon);
-
-    // Meeus 25.8 - Corrections
-    let e = earthCalc.getMeanObliquityOfEcliptic(T);
-    const O = 125.04 - 1934.136 * T;
-    const ORad = deg2rad(O);
-    e = e + 0.00256 * Math.cos(ORad);
-    const eRad = deg2rad(e);
-
-    // Meeus 25.6
-    const rightAscension = Math.atan2(Math.cos(eRad) * Math.sin(lonRad), Math.cos(lonRad));
-
-    return normalizeAngle(rad2deg(rightAscension));
-}
-
-export function getApparentDeclination(T: number): number
-{
-    // TODO Use method with higher accuracy (Meeus p.166) 25.9
-
-    const lon = getApparentLongitude(T);
-    const lonRad = deg2rad(lon);
-
-    // Meeus 25.8 - Corrections
-    let e = earthCalc.getMeanObliquityOfEcliptic(T);
-    const O = 125.04 - 1934.136 * T;
-    const ORad = deg2rad(O);
-
-    e = e + 0.00256 * Math.cos(ORad);
-    const eRad = deg2rad(e);
-
-    // Meeus 25.7
-    const declination = Math.asin(Math.sin(eRad) * Math.sin(lonRad));
-
-    return rad2deg(declination);
 }

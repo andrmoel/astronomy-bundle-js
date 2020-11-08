@@ -6,7 +6,7 @@ For a higher accuracy, several corrections, like nutation and precision, were ta
 It is also possible to calculate rise, set and culmination events for celestial objects.
 For a detailed see the table of contents.
 
-Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
+Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
 
 ## Table of Contents  
 1.  [Installation](#installation)
@@ -19,10 +19,12 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
 5. [Earth](#earth)
-    1. [Nutation in Longitude and Obliquity](#earth-nutation)
-    2. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
+    1. [Position of the Earth](#earth-position)
+    2. [Nutation in Longitude and Obliquity](#earth-nutation)
+    3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
 6. [Sun](#sun)
-    1. [Distance to Earth](#sun-distance-to-earth)
+    1. [Position of the Sun](#sun-position)
+    2. [Distance to Earth and Diameter](#sun-distance-diameter)
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
@@ -31,6 +33,7 @@ Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book 
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
+9. [Solar Eclipse](#solar-eclipse)
 
 ## <a name="installation"></a>Installation
 
@@ -247,6 +250,36 @@ const moon = createMoon();
 
 ## <a name="earth"></a> Earth
 
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
+
+### <a name="earth-position"></a> Position of the Earth
+
+**Example**: Calculate the heliocentric position (J2000) of the Earth for 10 December 2017 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createEarth} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
+const earth = createEarth(toi);
+
+const {x, y, z} = await earth.getHeliocentricRectangularJ2000Coordinates();
+const {lon, lat, radiusVector} = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
+```
+
+The result of the calculation should be:\
+\
+x: *0.2070104*\
+y: *0.96282379*\
+z: *-0.00004247*\
+\
+Longitude: *77° 51' 57.357"*\
+Latitude: *-0° 00' 08.895"*\
+Radius Vector: *0.98482636*\
+
 ### <a name="earth-nutation"></a> Nutation in Longitude and Obliquity
 
 **Example**: Get nutation in Longitude and Obliquity for 01 August 2020 at 16:51:54 UTC
@@ -293,21 +326,54 @@ True Obliquity of Ecliptic: *23° 26' 12.208"*
 
 ## <a name="sun"></a> Sun
 
-### <a name="sun-distance-to-earth"></a> Distance of the sun to earth
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
 
-**Example 1**: Get distance of the sun in kilometers
+### <a name="sun-position"></a> Position of the Sun
+
+**Example**: Get the position of the Sun (Date) for 10 October 2020 at 06:15 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSun} from 'astronomy-bundle/sun';
+
+const toi = createTimeOfInterest.fromTime(2020, 10, 10, 6, 15, 0);
+const sun = createSun(toi);
+
+const geoEclCoords = await sun.getGeocentricEclipticSphericalDateCoordinates();
+const geoAppEquCoords = await sun.getApparentGeocentricEquatorialSphericalCoordinates()
+```
+
+The result should be:\
+\
+Longitude: *209.31555315°*\
+Latitude: *-0.00014017°*\
+Radius Vector: *0.99514386*\
+\
+Right Ascension: *207.25282342°*\
+Declination: *-11.22796087°*\
+Right Ascension: *0.99514386*\
+
+### <a name="sun-distance-diameter"></a> Distance to Earth and diameter of the Sun
+
+**Example 1**: Get distance and diameter of the sun for the current date and time
 
 ```javascript
 import {createSun} from 'astronomy-bundle/sun';
 
 const sun = createSun();
 
-const distance = sun.getDistanceToEarth();
+const distance = await sun.getDistanceToEarth();
+const delta = await sun.getAngularDiameter();
 ```
 
-The result should be between 147.1 mio and 152.1 mio kilometers.
+The result should be:\
+The distance is between 147.1 mio and 152.1 mio kilometers.\
+The angular diameter is about 32'
 
-**Example 2**: Get the distance of the sun for 05 June 2017 at 20:30 UTC
+**Example 2**: Get the distance and diameter of the Sun for 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -316,16 +382,20 @@ import {createSun} from 'astronomy-bundle/createSun';
 const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
 const sun = createSun(toi);
 
-const distance = sun.getDistanceToEarth();
+const distance = await sun.getDistanceToEarth();
+const delta = await sun.getAngularDiameter();
 ```
 
-The result should be: *151797423.98 km*
+The result should be:\
+\
+Distance: *151797423.98 km*\
+Diameter: *0° 31' 32.43"*
 
 ## <a name="moon"></a> Moon
 
 ### <a name="moon-position"></a> Position of the Moon
 
-**Example 1**: Calculate the geocentric position of the moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Calculate the geocentric position of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -355,7 +425,7 @@ z: *0.000586*
 
 ### <a name="moon-distance-diameter"></a> Distance to earth and diameter
 
-**Example 1**: Calculate the distance of the moon in kilometers for the current time
+**Example 1**: Calculate the distance of the Moon in kilometers for the current time
 
 ```javascript
 import {createMoon} from 'astronomy-bundle/moon';
@@ -369,7 +439,7 @@ const delta = moon.getAngularDiameter();
 The result should be between 363300 km and 405500 km.\
 The angular diameter is about 32'
 
-**Example 2**: Get the distance of the moon for 05 June 2017 at 20:30 UTC
+**Example 2**: Get the distance of the Moon for 05 June 2017 at 20:30 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -385,7 +455,7 @@ The result should be: *402937.61 km*
 
 ### <a name="moon-phases"></a> Phases of the Moon
 
-**Example 1**: Get the phase angle and illumination of the moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Get the phase angle and illumination of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -394,8 +464,8 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const i = moon.getPhaseAngle();
-const k = moon.getIllumination();
+const i = await moon.getPhaseAngle();
+const k = await moon.getIlluminatedFraction();
 ```
 
 The result of the calculation should be:\
@@ -502,7 +572,7 @@ Longitude: *291° 11' 29.126"*\
 Latitude: *-0° 26' 48.204"*\
 Radius Vector: *5.37884475*
 
-### <a name="planets-distance-diameter"></a> Distance to Earth and Diameter
+### <a name="planets-distance-diameter"></a> Distance to Earth and diameter
 
 **Example**: Get the distance and diameter of Venus for 02 October 2008 at 00:00 UTC
 
@@ -539,3 +609,27 @@ const k = await mars.getIlluminatedFraction();
 The result of the calculation should be:\
 Phase angle: *30.98°*\
 Illumination: *0.929 (92.9%)*
+
+## <a name="solar-eclipse"></a> Solar Eclipse
+
+**Example 1**: Check if there is a Solar Eclipse on 15 January 2019
+
+```javascript
+import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2019, 1, 15, 0, 0, 0);
+const exists = solarEclipseExists(toi);
+```
+
+Result of the calculation: *There is no solar eclipse*
+
+**Example 2**: Check if there is a Solar Eclipse on 21 August 2017
+
+```javascript
+import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2017, 8, 21, 0, 0, 0);
+const exists = solarEclipseExists(toi);
+```
+
+Result of the calculation: *Yes, there is a solar eclipse*

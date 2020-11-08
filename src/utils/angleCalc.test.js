@@ -31,7 +31,14 @@ it('tests deg2angle', () => {
     expect(deg2angle(0.0)).toBe('0° 00\' 00"');
     expect(deg2angle(45.2625)).toBe('45° 15\' 45"');
     expect(deg2angle(270.5)).toBe('270° 30\' 00"');
+    expect(deg2angle(0.2625)).toBe('0° 15\' 45"');
+    expect(deg2angle(-0.2625)).toBe('-0° 15\' 45"');
+    expect(deg2angle(0.00105222)).toBe('0° 00\' 03.788"');
     expect(deg2angle(-0.00105222)).toBe('-0° 00\' 03.788"');
+    expect(deg2angle(0.2625, true)).toBe('15\' 45"');
+    expect(deg2angle(-0.2625, true)).toBe('-15\' 45"');
+    expect(deg2angle(0.00105222, true)).toBe('03.788"');
+    expect(deg2angle(-0.00105222, true)).toBe('-03.788"');
     expect(deg2angle(-24.929312194388)).toBe('-24° 55\' 45.524"');
 });
 

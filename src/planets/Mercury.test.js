@@ -70,6 +70,14 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(1.4131505);
 });
 
+it('tests getApparentGeocentricEclipticSphericalDateCoordinates', async () => {
+    const coords = await mercury.getApparentGeocentricEclipticSphericalDateCoordinates();
+
+    expect(round(coords.lon, 8)).toBe(271.12336622);
+    expect(round(coords.lat, 8)).toBe(-0.94642513);
+    expect(round(coords.radiusVector, 8)).toBe(1.4131505);
+});
+
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await mercury.getApparentGeocentricEquatorialSphericalCoordinates();
 
