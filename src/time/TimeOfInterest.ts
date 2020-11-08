@@ -1,6 +1,6 @@
-import ITime from './interfaces/ITime';
 import Location from '../earth/Location';
 import {timeCalc} from '../utils';
+import ITime from './interfaces/ITime';
 
 export default class TimeOfInterest {
     public jd: number = 0.0;
@@ -15,6 +15,10 @@ export default class TimeOfInterest {
         const {year, month, day, hour, min, sec} = this.time;
 
         return new Date(Date.UTC(year, month - 1, day, hour, min, sec));
+    }
+
+    public getDecimalYear(): number {
+        return timeCalc.getDecimalYear(this.time);
     }
 
     public getDayOfYear(): number {

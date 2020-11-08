@@ -8,7 +8,7 @@ export function rad2deg(radians: number): number {
     return radians * (180 / Math.PI);
 }
 
-export function deg2angle(deg: number): string {
+export function deg2angle(deg: number, short = false): string {
     const sign = deg < 0 ? '-' : '';
     deg = Math.abs(deg);
 
@@ -17,11 +17,19 @@ export function deg2angle(deg: number): string {
     const sec = round((deg - degPart - min / 60) * 3600, 3);
     const secParts = sec.toString().split('.');
 
-    const degString = sign + degPart;
-    const minString = pad(min, 2);
-    const secString = secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1];
+    const degString = degPart + '° ';
+    const minString = pad(min, 2) + '\' ';
+    const secString = (secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1]) + '"';
 
-    return `${degString}° ${minString}\' ${secString}"`;
+    if (short && degPart === 0.0 && min === 0.0) {
+        return sign + secString;
+    }
+
+    if (short && degPart === 0.0) {
+        return sign + minString + secString;
+    }
+
+    return sign + degString + minString + secString;
 }
 
 export function angle2deg(angle: string): number {

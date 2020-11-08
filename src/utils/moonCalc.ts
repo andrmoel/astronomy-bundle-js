@@ -1,8 +1,7 @@
 import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
-import {getMeanAnomaly as getMeanSunAnomaly} from './sunCalc';
-import {getNutationInLongitude} from './earthCalc';
-import {km2au} from "./distanceCalc";
+import {km2au} from './distanceCalc';
+import {sunCalc} from './index';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2
@@ -62,13 +61,6 @@ export function getLongitude(T: number): number {
     return L + (sumL / 1000000);
 }
 
-export function getApparentLongitude(T: number): number {
-    const l = getLongitude(T);
-    const phi = getNutationInLongitude(T);
-
-    return l + phi;
-}
-
 export function getLatitude(T: number): number {
     const sumB = _getSumB(T);
 
@@ -88,7 +80,7 @@ export function getDistanceToEarth(T: number): number {
 function _getSumR(T: number): number {
     // Meeus 47.b
     const D = getMeanElongation(T);
-    const Msun = getMeanSunAnomaly(T);
+    const Msun = sunCalc.getMeanAnomaly(T);
     const Mmoon = getMeanAnomaly(T);
     const F = getArgumentOfLatitude(T);
 
@@ -129,7 +121,7 @@ function _getSumL(T: number): number {
     // Meeus 47.b
     const L = getMeanLongitude(T);
     const D = getMeanElongation(T);
-    const Msun = getMeanSunAnomaly(T);
+    const Msun = sunCalc.getMeanAnomaly(T);
     const Mmoon = getMeanAnomaly(T);
     const F = getArgumentOfLatitude(T);
 
@@ -176,7 +168,7 @@ function _getSumB(T: number): number {
     // Meeus 47.B
     const L = getMeanLongitude(T);
     const D = getMeanElongation(T);
-    const Msun = getMeanSunAnomaly(T);
+    const Msun = sunCalc.getMeanAnomaly(T);
     const Mmoon = getMeanAnomaly(T);
     const F = getArgumentOfLatitude(T);
 

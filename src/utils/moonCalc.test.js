@@ -1,5 +1,4 @@
 import {
-    getApparentLongitude,
     getArgumentOfLatitude,
     getDistanceToEarth,
     getEquatorialHorizontalParallax,
@@ -46,12 +45,6 @@ it('tests getLongitude', () => {
     const T = -0.077221081451;
 
     expect(round(getLongitude(T), 6)).toBe(133.162655);
-});
-
-it('tests getApparentLongitude', () => {
-    const T = -0.077221081451;
-
-    expect(round(getApparentLongitude(T), 6)).toBe(133.167265);
 });
 
 it('tests getLatitude', () => {

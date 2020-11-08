@@ -5,7 +5,8 @@
     "outDir": "./",
     "strict": true,
     "declaration": true,
-    "removeComments": true
+    "removeComments": true,
+    "allowJs": true
   },
   "include": [
     "src/**/*"

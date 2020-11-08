@@ -2,6 +2,108 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.2.0 (2020-11-07)
+
+
+### Features
+
+* **sun:** use VSOP87 theory to calculate position of the sun ([5d1d31b](https://github.com/andrmoel/astronomy-bundle-js/commit/5d1d31b83b0cdde410187b482ef70307c22910f9))
+
+### 3.1.1 (2020-11-07)
+
+## 3.1.0 (2020-11-07)
+
+
+### Features
+
+* **earth:** calculate earth position with VSOP87 instead of using planet calculation ([0058e28](https://github.com/andrmoel/astronomy-bundle-js/commit/0058e288ad6d4b7b30467baa2ff1c905250c7b67))
+
+### 3.0.2 (2020-11-07)
+
+### 3.0.1 (2020-11-07)
+
+
+### Bug Fixes
+
+* **observation-calc:** phase angle must be normalized to base 180° ([81f7c50](https://github.com/andrmoel/astronomy-bundle-js/commit/81f7c506e189bab37d1bce833fcc14f48ac73b0a))
+
+## 3.0.0 (2020-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **moon:** Rename method
+
+* **moon:** rename getIllumination method to getIlluminatedFraction ([f35e761](https://github.com/andrmoel/astronomy-bundle-js/commit/f35e761acfe709483b1664ba80d45283bc9dcfaf))
+
+## 2.29.0 (2020-11-07)
+
+
+### Features
+
+* **moon:** add method for angular diameter ([b3a1778](https://github.com/andrmoel/astronomy-bundle-js/commit/b3a1778e2799102b37a27f08928b68ccef8306f8))
+
+### 2.28.1 (2020-11-06)
+
+## 2.28.0 (2020-11-06)
+
+
+### Features
+
+* **planets:** add methods to get distance to earth and angle diameter ([a56deb9](https://github.com/andrmoel/astronomy-bundle-js/commit/a56deb986ee71f52a9776551493380f935dfab62))
+
+## 2.27.0 (2020-11-06)
+
+
+### Features
+
+* **planets:** add methods to calculate phase angle and illuminated fraction ([b3ad920](https://github.com/andrmoel/astronomy-bundle-js/commit/b3ad92086b134a4ba19eb4eabf573064576d5233))
+
+### 2.26.1 (2020-11-06)
+
+## 2.26.0 (2020-11-05)
+
+
+### Features
+
+* **planets:** add new method to calculate apparent geocentric equatorial coordinates ([67b7492](https://github.com/andrmoel/astronomy-bundle-js/commit/67b7492582c4fb3d52c4804b8d2c0f594973b4f4))
+
+### 2.25.2 (2020-11-05)
+
+### 2.25.1 (2020-11-04)
+
+## 2.25.0 (2020-11-04)
+
+
+### Features
+
+* **cache:** add calculation cache ([ad38ca7](https://github.com/andrmoel/astronomy-bundle-js/commit/ad38ca779b978877709d9cebb6109425a8357eff))
+
+### 2.24.1 (2020-11-01)
+
+## 2.24.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculations for upcoming moon phases ([3e63bd1](https://github.com/andrmoel/astronomy-bundle-js/commit/3e63bd17d4540a0593b6bb29173f8f64b0f2ad64))
+
+## 2.23.0 (2020-11-01)
+
+
+### Features
+
+* **time-of-interest:** add function to get year in decimal ([e60f44d](https://github.com/andrmoel/astronomy-bundle-js/commit/e60f44d374459c4c15b9a7f7dc1bf9a9ffbd19dd))
+
+### 2.22.1 (2020-11-01)
+
+## 2.22.0 (2020-11-01)
+
+
+### Features
+
+* **moon:** add calculation of phase angle and illumination ([23175c4](https://github.com/andrmoel/astronomy-bundle-js/commit/23175c41ab3af5413e5af407fbfc0b61ba62a9b4))
+
 ## 2.21.0 (2020-10-26)
 
 

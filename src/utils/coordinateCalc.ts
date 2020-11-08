@@ -79,3 +79,42 @@ export function equatorialSpherical2eclipticSpherical(
 
     return {lon, lat, radiusVector};
 }
+
+export function rectangularHeliocentric2rectangularGeocentric(
+    coords: IRectangularCoordinates,
+    coordsEarth: IRectangularCoordinates
+): IRectangularCoordinates {
+    return {
+        x: coords.x - coordsEarth.x,
+        y: coords.y - coordsEarth.y,
+        z: coords.z - coordsEarth.z,
+    }
+}
+
+export function earthEclipticSpherical2sunEclipticSpherical(
+    coordsEarth: IEclipticSphericalCoordinates
+): IEclipticSphericalCoordinates {
+    const {lon, lat, radiusVector} = coordsEarth;
+
+    return {
+        lon: normalizeAngle(lon + 180),
+        lat: -1 * lat,
+        radiusVector: radiusVector,
+    }
+}
+
+
+export function ecliptic2apparentEcliptic(
+    lon: number,
+    lat: number,
+    radiusVector: number,
+    T: number
+): IEclipticSphericalCoordinates {
+    const phi = earthCalc.getNutationInLongitude(T);
+
+    return {
+        lon: lon + phi,
+        lat: lat,
+        radiusVector: radiusVector,
+    };
+}

@@ -2,7 +2,7 @@ import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek'
 import {
     dayOfYear2time,
     getDayOfWeek,
-    getDayOfYear,
+    getDayOfYear, getDecimalYear,
     getDeltaT,
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
@@ -145,6 +145,15 @@ it('tests dayOfYear2time', () => {
     expect(dayOfYear2time(2011, 321)).toEqual({year: 2011, month: 11, day: 17, hour: 0, min: 0, sec: 0});
     expect(dayOfYear2time(2011, 321.5)).toEqual({year: 2011, month: 11, day: 17, hour: 12, min: 0, sec: 0});
     expect(dayOfYear2time(2011, 321.87654)).toEqual({year: 2011, month: 11, day: 17, hour: 21, min: 2, sec: 13});
+});
+
+it('tests getDecimalYear', () => {
+    expect(round(getDecimalYear({year: 2000, month: 1, day: 1, hour: 0, min: 0, sec: 0}), 6)).toBe(2000);
+    expect(round(getDecimalYear({year: 2000, month: 6, day: 20, hour: 12, min: 50, sec: 0}), 6)).toBe(2000.468674);
+    expect(round(getDecimalYear({year: 2000, month: 12, day: 31, hour: 23, min: 59, sec: 59}), 6)).toBe(2001);
+    expect(round(getDecimalYear({year: 2001, month: 1, day: 1, hour: 0, min: 0, sec: 0}), 6)).toBe(2001.0);
+    expect(round(getDecimalYear({year: 2001, month: 10, day: 4, hour: 5, min: 0, sec: 23}), 6)).toBe(2001.756736);
+    expect(round(getDecimalYear({year: 2001, month: 12, day: 31, hour: 23, min: 59, sec: 59}), 6)).toBe(2002);
 });
 
 it('tests getDayOfYear', () => {
