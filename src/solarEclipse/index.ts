@@ -1,3 +1,4 @@
 import createSolarEclipse from './createSolarEclipse';
+import solarEclipseExists from './solarEclipseExists';
 
-export {createSolarEclipse};
+export {createSolarEclipse, solarEclipseExists};
