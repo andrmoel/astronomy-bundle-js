@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.4.0 (2020-11-08)
+
+
+### Features
+
+* **solar-eclipse:** check if solar eclipse exists ([0ad149a](https://github.com/andrmoel/astronomy-bundle-js/commit/0ad149aa03ae8e892e5f0a816f132545ee6e8b23))
+
 ## 3.3.0 (2020-11-07)
 
 
