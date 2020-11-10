@@ -35,4 +35,8 @@ export default class Mars extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_MARS);
     }
+
+    public async getCentralMeridian(): Promise<number> {
+        return 0.0;
+    }
 }
