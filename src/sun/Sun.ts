@@ -72,7 +72,9 @@ export default class Sun extends AstronomicalObject {
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
     }
 
-    public getApparentMagnitude(): number {
-        return -26.74;
+    public getApparentMagnitude(): Promise<number> {
+        return new Promise((resolve) => {
+            resolve(-26.74);
+        });
     }
 }

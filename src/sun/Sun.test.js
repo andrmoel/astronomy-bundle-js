@@ -66,6 +66,6 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 32\' 09.582"');
 });
 
-it('getApparentMagnitude', () => {
-    expect(sun.getApparentMagnitude()).toBe(-26.74);
+it('getApparentMagnitude', async () => {
+    expect(await sun.getApparentMagnitude()).toBe(-26.74);
 });
