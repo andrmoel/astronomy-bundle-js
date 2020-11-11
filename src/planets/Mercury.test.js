@@ -2,6 +2,7 @@ import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import Mercury from './Mercury';
 import {deg2angle} from '../utils/angleCalc';
+import Venus from './Venus';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const mercury = new Mercury(toi);
@@ -108,4 +109,13 @@ it('tests getIlluminatedFraction', async () => {
     const i = await mercury.getIlluminatedFraction();
 
     expect(round(i, 2)).toBe(0.97);
+});
+
+it('tests getConjunctionTo', async () => {
+    const toiConjunction0 = createTimeOfInterest.fromTime(2020, 5, 22, 0, 0, 0);
+    const mercury = new Mercury(toiConjunction0);
+
+    const toiConjunction = await mercury.getConjunctionTo(Venus);
+
+    expect(toiConjunction.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 47, sec: 14});
 });
