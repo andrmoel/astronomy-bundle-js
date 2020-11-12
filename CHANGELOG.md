@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0 (2020-11-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **moon:** Moon methods will return a Promise
+
+* **moon:** return Promise when calculating position ([943a7f1](https://github.com/andrmoel/astronomy-bundle-js/commit/943a7f19adafaee1b24b9591aed1803e0a7fa8d0))
+
 ### 3.4.1 (2020-11-11)
 
 ## 3.4.0 (2020-11-08)
