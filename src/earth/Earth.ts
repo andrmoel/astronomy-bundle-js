@@ -5,6 +5,7 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 
 export default class Earth extends AstronomicalObject {
     public async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
@@ -69,5 +70,9 @@ export default class Earth extends AstronomicalObject {
 
     public getTrueObliquityOfEcliptic() {
         return earthCalc.getTrueObliquityOfEcliptic(this.T);
+    }
+
+    async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
+        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
     }
 }

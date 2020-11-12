@@ -1,10 +1,9 @@
 import {createTimeOfInterest} from '../time';
 import {tabularInterpolation5} from './math';
-import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
 
 export async function getConjunctionInRightAscension(
-    obj1Constructor: new(...args: any[]) => IAstronomicalObject,
-    obj2Constructor: new(...args: any[]) => IAstronomicalObject,
+    obj1Constructor: any,
+    obj2Constructor: any,
     jd0: number,
 ): Promise<number> {
     const ephemerisObj1 = await _getRightAscensionEphemeris(obj1Constructor, jd0);
@@ -28,7 +27,7 @@ function _isConjunctionPossible(rightAscensionDiffArray: Array<number>): boolean
 }
 
 async function _getRightAscensionEphemeris(
-    objConstructor: new(...args: any[]) => IAstronomicalObject,
+    objConstructor: any,
     jd0: number
 ): Promise<Array<number>> {
     const result = [];
@@ -50,5 +49,5 @@ function _getRightAscensionDiff(
     rightAscensionEphemeris1: Array<number>,
     rightAscensionEphemeris2: Array<number>,
 ): Array<number> {
-    return rightAscensionEphemeris1.map((ra1, key) =>  rightAscensionEphemeris2[key] - ra1);
+    return rightAscensionEphemeris1.map((ra1, key) => rightAscensionEphemeris2[key] - ra1);
 }
