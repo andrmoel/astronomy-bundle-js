@@ -640,7 +640,7 @@ const toiConjunction = await jupiter.getConjunctionTo(Saturn); // Result is of t
 ```
 
 Result of the calculation:\
-*There is a conjunction on 21 December 2020 at 13:23:32 UTC*
+*There is a conjunction on 21 December 2020 at 13:24 UTC*
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 
