@@ -1,7 +1,8 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
-import Venus from './Venus';
 import {deg2angle} from '../utils/angleCalc';
+import Venus from './Venus';
+import Neptune from './Neptune';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);
@@ -108,4 +109,13 @@ it('tests getIlluminatedFraction', async () => {
     const i = await venus.getIlluminatedFraction();
 
     expect(round(i, 2)).toBe(0.76);
+});
+
+it('tests getConjunctionInRightAscensionTo', async () => {
+    const toiConjunction0 = createTimeOfInterest.fromTime(2020, 1, 27, 0, 0, 0);
+    const venus = new Venus(toiConjunction0);
+
+    const toiConjunction = await venus.getConjunctionInRightAscensionTo(Neptune);
+
+    expect(toiConjunction.time).toEqual({year: 2020, month: 1, day: 27, hour: 19, min: 23, sec: 8});
 });
