@@ -410,9 +410,9 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalCoordinates();
+const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalDateCoordinates();
 const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalCoordinates();
-const {x, y, z} = await moon.getGeocentricEquatorialRectangularCoordinates();
+const {x, y, z} = await moon.getGeocentricRectangularDateCoordinates();
 ```
 
 The result of the calculation should be:\
