@@ -33,6 +33,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
+    4. [Conjunction](#planets-conjunction)
 9. [Solar Eclipse](#solar-eclipse)
 
 ## <a name="installation"></a>Installation
@@ -609,6 +610,37 @@ const k = await mars.getIlluminatedFraction();
 The result of the calculation should be:\
 Phase angle: *30.98°*\
 Illumination: *0.929 (92.9%)*
+
+### <a name="planets-conjunction"></a> Conjunction of two Planets
+
+**Example 1**: Check if there is a conjunction between Jupiter and Saturn on 04 June 2018
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter, Saturn} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2018, 6, 4, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const toiConjunction = await jupiter.getConjunctionTo(Saturn);
+```
+
+This code will throw an error: *No conjunction possible for given objects at 2458273.5*
+
+**Example 2**: Check if there is a conjunction between Jupiter and Saturn on 21 December 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter, Saturn} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const toiConjunction = await jupiter.getConjunctionTo(Saturn); // Result is of type TimeOfInterest
+```
+
+Result of the calculation:\
+*There is a conjunction on 21 December 2020 at 13:23:32 UTC*
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 
