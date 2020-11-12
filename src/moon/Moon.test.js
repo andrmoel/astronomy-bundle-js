@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
-import createMoon from './createMoon';
 import {deg2angle} from '../utils/angleCalc';
+import createMoon from './createMoon';
 
 it('tests getGeocentricEquatorialRectangularCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);

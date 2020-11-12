@@ -1,7 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
-import Jupiter from './Jupiter';
 import {deg2angle} from '../utils/angleCalc';
+import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);

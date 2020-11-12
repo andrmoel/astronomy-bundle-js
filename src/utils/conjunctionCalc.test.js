@@ -1,8 +1,8 @@
-import {getConjunctionInRightAscension} from './conjunctionCalc';
-import {round} from './math';
 import Jupiter from '../planets/Jupiter';
 import Saturn from '../planets/Saturn';
 import Venus from '../planets/Venus';
+import {getConjunctionInRightAscension} from './conjunctionCalc';
+import {round} from './math';
 
 it('tests getConjunctionInRightAscension for jupiter and saturn in 2020', async () => {
     const jd0 = 2459204.5;
