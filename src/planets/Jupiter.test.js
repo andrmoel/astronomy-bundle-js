@@ -111,11 +111,11 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(i, 2)).toBe(0.99);
 });
 
-it('tests getConjunctionTo', async () => {
+it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
     const jupiter = new Jupiter(toiConjunction0);
 
-    const toiConjunction = await jupiter.getConjunctionTo(Saturn);
+    const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 
     expect(toiConjunction.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 23, sec: 32});
 });

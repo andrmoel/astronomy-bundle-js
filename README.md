@@ -627,7 +627,7 @@ import {createJupiter, Saturn} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2018, 6, 4, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const toiConjunction = await jupiter.getConjunctionTo(Saturn);
+const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 ```
 
 This code will throw an error: *No conjunction possible for given objects at 2458273.5*
@@ -641,7 +641,7 @@ import {createJupiter, Saturn} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const toiConjunction = await jupiter.getConjunctionTo(Saturn); // Result is of type TimeOfInterest
+const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn); // Result is of type TimeOfInterest
 ```
 
 Result of the calculation:\

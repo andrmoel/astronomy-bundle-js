@@ -19,7 +19,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
 
     abstract getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
 
-    public async getConjunctionTo(astronomicalObjectConstructor: Function): Promise<TimeOfInterest> {
+    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: Function): Promise<TimeOfInterest> {
         const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
