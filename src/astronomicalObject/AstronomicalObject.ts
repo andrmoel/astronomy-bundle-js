@@ -1,6 +1,8 @@
 import TimeOfInterest from '../time/TimeOfInterest';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 import {createTimeOfInterest} from '../time';
+import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected jd: number = 0.0;
@@ -13,5 +15,13 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.jd0 = toi.getJulianDay0();
         this.T = toi.getJulianCenturiesJ2000();
         this.t = toi.getJulianMillenniaJ2000();
+    }
+
+    abstract getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
+
+    public async getConjunctionTo(astronomicalObjectConstructor: Function): Promise<TimeOfInterest> {
+        const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
     }
 }

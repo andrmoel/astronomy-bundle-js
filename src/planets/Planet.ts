@@ -15,8 +15,6 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import {au2km} from '../utils/distanceCalc';
 import {createEarth} from '../earth';
 import Earth from '../earth/Earth';
-import {createTimeOfInterest} from '../time';
-import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;
@@ -99,11 +97,5 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
-    }
-
-    public async getConjunctionTo(astronomicalObjectConstructor: Function): Promise<TimeOfInterest> {
-        const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
-
-        return createTimeOfInterest.fromJulianDay(jd);
     }
 }
