@@ -393,6 +393,11 @@ Diameter: *0° 31' 32.43"*
 
 ## <a name="moon"></a> Moon
 
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
+
 ### <a name="moon-position"></a> Position of the Moon
 
 **Example 1**: Calculate the geocentric position of the Moon for 12 April 1992 at 00:00 UTC
@@ -404,9 +409,9 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalCoordinates();
-const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalCoordinates();
-const {x, y, z} = moon.getGeocentricEquatorialRectangularCoordinates();
+const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalCoordinates();
+const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalCoordinates();
+const {x, y, z} = await moon.getGeocentricEquatorialRectangularCoordinates();
 ```
 
 The result of the calculation should be:\
@@ -432,8 +437,8 @@ import {createMoon} from 'astronomy-bundle/moon';
 
 const moon = createMoon();
 
-const distance = moon.getDistanceToEarth();
-const delta = moon.getAngularDiameter();
+const distance = await moon.getDistanceToEarth();
+const delta = await moon.getAngularDiameter();
 ```
 
 The result should be between 363300 km and 405500 km.\
@@ -448,7 +453,7 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
 const moon = createMoon(toi);
 
-const distance = moon.getDistanceToEarth();
+const distance = await moon.getDistanceToEarth();
 ```
 
 The result should be: *402937.61 km*
