@@ -3,73 +3,78 @@ import {round} from '../utils/math';
 import createMoon from './createMoon';
 import {deg2angle} from '../utils/angleCalc';
 
-it('tests getGeocentricEquatorialRectangularCoordinates', () => {
+it('tests getGeocentricEquatorialRectangularCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    const {x, y, z} = moon.getGeocentricEquatorialRectangularCoordinates();
+    const {x, y, z} = await moon.getGeocentricEquatorialRectangularCoordinates();
 
     expect(round(x, 6)).toBe(-0.001682);
     expect(round(y, 6)).toBe(0.001701);
     expect(round(z, 6)).toBe(0.000586);
 });
 
-it('tests getGeocentricEclipticSphericalCoordinates', () => {
+it('tests getGeocentricEclipticSphericalCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalCoordinates();
+    const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalCoordinates();
 
     expect(round(lon, 6)).toBe(133.162655);
     expect(round(lat, 6)).toBe(-3.229126);
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
-it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
+it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    const {lon, lat, radiusVector} = moon.getApparentGeocentricEclipticSphericalCoordinates();
+    const {lon, lat, radiusVector} = await moon.getApparentGeocentricEclipticSphericalCoordinates();
 
     expect(round(lon, 6)).toBe(133.167265);
     expect(round(lat, 6)).toBe(-3.229126);
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
-it('tests getGeocentricEquatorialSphericalCoordinates', () => {
+it('tests getGeocentricEquatorialSphericalCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalCoordinates();
+    const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalCoordinates();
 
     expect(round(rightAscension, 6)).toBe(134.68392);
     expect(round(declination, 6)).toBe(13.769656);
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
-it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
+it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
     const moon = createMoon(toi);
 
-    const {rightAscension, declination, radiusVector} = moon.getApparentGeocentricEquatorialSphericalCoordinates();
+    const {rightAscension, declination, radiusVector}
+        = await moon.getApparentGeocentricEquatorialSphericalCoordinates();
 
     expect(round(rightAscension, 6)).toBe(134.688469);
     expect(round(declination, 6)).toBe(13.768367);
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
-it('tests getDistanceToEarth', () => {
+it('tests getDistanceToEarth', async () => {
     const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
     const moon = createMoon(toi);
 
-    expect(round(moon.getDistanceToEarth(), 6)).toBe(378157.525065);
+    const d = await moon.getDistanceToEarth();
+
+    expect(round(d, 6)).toBe(378157.525065);
 });
 
-it('tests getAngularDiameter', () => {
+it('tests getAngularDiameter', async () => {
     const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
     const moon = createMoon(toi);
 
-    expect(deg2angle(moon.getAngularDiameter())).toBe('0° 31\' 35.305"');
+    const delta = await moon.getAngularDiameter();
+
+    expect(deg2angle(delta)).toBe('0° 31\' 35.305"');
 });
 
 it('tests getPhaseAngle', async () => {
