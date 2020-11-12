@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.1.0 (2020-11-12)
+
+
+### Features
+
+* **conjunction:** calculate conjunction in right ascension ([01a0e05](https://github.com/andrmoel/astronomy-bundle-js/commit/01a0e050812f7e8e40aa4ae08fb545bbb3a50274))
+
 ## 4.0.0 (2020-11-12)
 
 
