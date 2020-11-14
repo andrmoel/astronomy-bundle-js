@@ -1,6 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import {deg2angle} from '../utils/angleCalc';
+import {sec2string} from '../utils/timeCalc';
 import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 
@@ -90,23 +91,29 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
 it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
     const coords = await jupiter.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(round(coords.lon, 8)).toBe(25.23421322);
-    expect(round(coords.lat, 8)).toBe(-1.26462517);
-    expect(round(coords.radiusVector, 8)).toBe(4.61337387);
+    expect(round(coords.lon, 8)).toBe(25.23316591);
+    expect(round(coords.lat, 8)).toBe(-1.26476328);
+    expect(round(coords.radiusVector, 8)).toBe(4.61341068);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await jupiter.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(round(coords.rightAscension, 8)).toBe(23.8509756);
-    expect(round(coords.declination, 8)).toBe(8.58513342);
-    expect(round(coords.radiusVector, 8)).toBe(4.61337387);
+    expect(round(coords.rightAscension, 8)).toBe(23.85004009);
+    expect(round(coords.declination, 8)).toBe(8.58462378);
+    expect(round(coords.radiusVector, 8)).toBe(4.61341068);
 });
 
 it('tests getDistanceToEarth', async () => {
     const d = await jupiter.getDistanceToEarth();
 
     expect(round(d, 2)).toBe(690150907.85);
+});
+
+it('tests getLightTime', async () => {
+    const lt = await jupiter.getLightTime();
+
+    expect(sec2string(lt)).toBe('0h 38m 22.1s');
 });
 
 it('tests getAngularDiameter', async () => {
@@ -133,5 +140,5 @@ it('tests getConjunctionInRightAscensionTo', async () => {
 
     const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 
-    expect(toiConjunction.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 23, sec: 32});
+    expect(toiConjunction.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
 });

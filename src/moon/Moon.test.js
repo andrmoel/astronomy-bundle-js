@@ -1,6 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
+import {sec2string} from '../utils/timeCalc';
 import createMoon from './createMoon';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
@@ -78,6 +79,12 @@ it('tests getDistanceToEarth', async () => {
 });
 
 it('tests getAngularDiameter', async () => {
+    const lt = await moon.getLightTime();
+
+    expect(sec2string(lt)).toBe('0h 0m 1.23s');
+});
+
+it('tests getAngularDiameter', async () => {
     const delta = await moon.getAngularDiameter();
 
     expect(deg2angle(delta)).toBe('0° 32\' 25.453"');
@@ -86,7 +93,7 @@ it('tests getAngularDiameter', async () => {
 it('tests getPhaseAngle', async () => {
     const i = await moon.getPhaseAngle();
 
-    expect(round(i, 6)).toBe(69.081341);
+    expect(round(i, 6)).toBe(69.075679);
 });
 
 it('tests getIlluminatedFraction', async () => {

@@ -5,7 +5,9 @@ import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatori
 import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import {ecliptic2apparentEcliptic, eclipticSpherical2equatorialSpherical} from '../utils/coordinateCalc';
+import {eclipticSpherical2equatorialSpherical} from '../utils/coordinateCalc';
+import {au2km} from '../utils/distanceCalc';
+import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected jd: number = 0.0;
@@ -40,16 +42,18 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
     }
 
-    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
-
-        return ecliptic2apparentEcliptic(lon, lat, radiusVector, this.T);
-    }
+    abstract async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
     public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
         const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalCoordinates();
 
         return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+    }
+
+    public async getLightTime(): Promise<number> {
+        const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
     public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {

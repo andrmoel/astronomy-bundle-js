@@ -9,7 +9,7 @@ it('tests getConjunctionInRightAscension for jupiter and saturn in 2020', async 
 
     const jd = await getConjunctionInRightAscension(Jupiter, Saturn, jd0);
 
-    expect(round(jd, 6)).toBe(2459205.058011);
+    expect(round(jd, 6)).toBe(2459205.064841);
 });
 
 it('test getConjunctionInRightAscension for a date where no conjunction happens', async () => {

@@ -44,20 +44,24 @@ export default class Earth extends AstronomicalObject {
         });
     }
 
-    getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
-        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
-    }
-
     getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
-        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
+        return Promise.reject({x: 0, y: 0, z: 0});
     }
 
-    getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
-        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
+    getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+        return Promise.reject({x: 0, y: 0, z: 0});
     }
 
     getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
-        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
+        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
+    }
+
+    getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
+    }
+
+    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
     }
 
     public getNutationInLongitude() {

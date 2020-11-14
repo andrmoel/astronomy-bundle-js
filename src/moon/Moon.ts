@@ -1,7 +1,6 @@
 import {moonCalc, moonPhaseCalc, observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {
@@ -14,11 +13,8 @@ import {DIAMETER_MOON} from '../constants/diameters';
 import {getPhaseAngle} from '../utils/observationCalc';
 import {createSun} from '../sun';
 import Sun from '../sun/Sun';
-import {
-    ecliptic2apparentEcliptic,
-    eclipticSpherical2equatorialSpherical,
-    spherical2rectangular
-} from '../utils/coordinateCalc';
+import {spherical2rectangular} from '../utils/coordinateCalc';
+import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
@@ -49,6 +45,12 @@ export default class Moon extends AstronomicalObject {
         const radiusVector = moonCalc.getRadiusVector(this.T);
 
         return Promise.resolve({lon, lat, radiusVector});
+    }
+
+    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return correctEffectOfNutation(coords, this.T);
     }
 
     public async getDistanceToEarth(): Promise<number> {

@@ -1,0 +1,1 @@
+export const LIGHT_SPEED_KM_PER_SEC = 299792.458;

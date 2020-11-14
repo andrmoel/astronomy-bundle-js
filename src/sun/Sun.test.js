@@ -1,6 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
+import {sec2string} from '../utils/timeCalc';
 import Sun from './Sun';
 
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
@@ -57,7 +58,7 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
 it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
     const coords = await sun.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(round(coords.lon, 8)).toBe(209.31051523);
+    expect(round(coords.lon, 8)).toBe(209.30479579);
     expect(round(coords.lat, 8)).toBe(-0.00014017);
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
@@ -65,8 +66,8 @@ it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(round(coords.rightAscension, 8)).toBe(207.25282342);
-    expect(round(coords.declination, 8)).toBe(-11.22796087);
+    expect(round(coords.rightAscension, 8)).toBe(207.2473691);
+    expect(round(coords.declination, 8)).toBe(-11.22593849);
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
@@ -74,6 +75,12 @@ it('tests getDistanceToEarth', async () => {
     const d = await sun.getDistanceToEarth();
 
     expect(round(d, 6)).toBe(148871402.777339);
+});
+
+it('getLightTime', async () => {
+    const lt = await sun.getLightTime();
+
+    expect(sec2string(lt)).toBe('0h 8m 16.58s');
 });
 
 it('tests getAngularDiameter', async () => {

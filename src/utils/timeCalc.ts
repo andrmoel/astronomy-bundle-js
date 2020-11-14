@@ -3,6 +3,25 @@ import {round} from './math';
 import {deg2rad, normalizeAngle} from './angleCalc';
 import {earthCalc} from './index';
 
+export function sec2string(sec: number, short = false): string {
+    const sign = sec < 0 ? '-' : '';
+    sec = Math.abs(sec);
+
+    const hour = Math.floor(sec / 3660);
+    const min = Math.floor((sec - hour * 3600) / 60);
+    const secPart = round(sec - hour * 3600 - min * 60, 2);
+
+    if (short && hour === 0.0 && min === 0.0) {
+        return sign + secPart + 's';
+    }
+
+    if (short && hour === 0.0) {
+        return sign + min + 'm ' + secPart + 's';
+    }
+
+    return sign + hour + 'h ' + min + 'm ' + secPart + 's';
+}
+
 export function time2julianDay(time: ITime): number {
     const tmpYear = parseFloat(time.year + '.' + getDayOfYear(time));
 

@@ -13,6 +13,19 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import {au2km} from '../utils/distanceCalc';
 import {createEarth} from '../earth';
 import Earth from '../earth/Earth';
+import {
+    correctEffectOfAberration,
+    correctEffectOfNutation,
+    getLightTimeCorrectedJulianDay
+} from '../utils/apparentCoordinateCalc';
+import {createTimeOfInterest} from '../time';
+import Mercury from './Mercury';
+import Venus from './Venus';
+import Mars from './Mars';
+import Jupiter from './Jupiter';
+import Saturn from './Saturn';
+import Uranus from './Uranus';
+import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;
@@ -65,6 +78,15 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return rectangular2spherical(x, y, z);
     }
 
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        let coords = await this.getLightTimeCorrectedEclipticSphericalCoordinates();
+
+        coords = correctEffectOfAberration(coords, this.T);
+        coords = correctEffectOfNutation(coords, this.T);
+
+        return coords;
+    }
+
     public async getDistanceToEarth(): Promise<number> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
@@ -83,5 +105,29 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    private async getLightTimeCorrectedEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        const jd = getLightTimeCorrectedJulianDay(this.jd, radiusVector);
+        const toi = createTimeOfInterest.fromJulianDay(jd);
+        const planet = new (<
+            typeof Mercury
+            | typeof Venus
+            | typeof Earth
+            | typeof Mars
+            | typeof Jupiter
+            | typeof Saturn
+            | typeof Uranus
+            | typeof Neptune
+        >this.constructor)(toi);
+
+        const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
+        const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();
+
+        const {x, y, z} = rectangularHeliocentric2rectangularGeocentric(helRecPlanetCoords, helRecEarthCoords);
+
+        return rectangular2spherical(x, y, z);
     }
 }
