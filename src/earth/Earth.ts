@@ -60,6 +60,10 @@ export default class Earth extends AstronomicalObject {
         return Promise.reject('Cannot obtain geocentric coordinates from Earth');
     }
 
+    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.reject('Cannot obtain geocentric coordinates from Earth');
+    }
+
     public getNutationInLongitude() {
         return earthCalc.getNutationInLongitude(this.T);
     }

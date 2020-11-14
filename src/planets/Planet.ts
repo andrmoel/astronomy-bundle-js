@@ -19,6 +19,13 @@ import {
     getLightTimeCorrectedJulianDay
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
+import Mercury from './Mercury';
+import Venus from './Venus';
+import Mars from './Mars';
+import Jupiter from './Jupiter';
+import Saturn from './Saturn';
+import Uranus from './Uranus';
+import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;
@@ -105,7 +112,16 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
         const jd = getLightTimeCorrectedJulianDay(this.jd, radiusVector);
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const planet = new this.constructor(toi);
+        const planet = new (<
+            typeof Mercury
+            | typeof Venus
+            | typeof Earth
+            | typeof Mars
+            | typeof Jupiter
+            | typeof Saturn
+            | typeof Uranus
+            | typeof Neptune
+        >this.constructor)(toi);
 
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();
