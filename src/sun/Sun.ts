@@ -19,6 +19,22 @@ export default class Sun extends AstronomicalObject {
         this.earth = createEarth(toi);
     }
 
+    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+        return Promise.resolve({x: 0, y: 0, z: 0});
+    }
+
+    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+        return Promise.resolve({x: 0, y: 0, z: 0});
+    }
+
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+    }
+
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+    }
+
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
