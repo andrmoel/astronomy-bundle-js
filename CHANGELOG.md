@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.2.0 (2020-11-14)
+
+
+### Features
+
+* **sun:** return zero values for heliocentric position of sun ([c72ce61](https://github.com/andrmoel/astronomy-bundle-js/commit/c72ce61c85055b567004ab2722799ad36f3460cf))
+
 ## 5.1.0 (2020-11-14)
 
 
