@@ -6,16 +6,16 @@ import Sun from './Sun';
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = new Sun(toi);
 
-it('tests getGeocentricRectangularJ2000Coordinates', async () => {
-    const coords = await sun.getGeocentricRectangularJ2000Coordinates();
+it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await sun.getGeocentricEclipticRectangularJ2000Coordinates();
 
     expect(round(coords.x, 8)).toBe(-0.87016292);
     expect(round(coords.y, 8)).toBe(-0.4828331);
     expect(round(coords.z, 8)).toBe(0.00002408);
 });
 
-it('tests getGeocentricRectangularDateCoordinates', async () => {
-    const coords = await sun.getGeocentricRectangularDateCoordinates();
+it('tests getGeocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await sun.getGeocentricEclipticRectangularDateCoordinates();
 
     expect(round(coords.x, 8)).toBe(-0.86770215);
     expect(round(coords.y, 8)).toBe(-0.4872415);
@@ -38,8 +38,24 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
-it('tests getApparentGeocentricEclipticSphericalDateCoordinates', async () => {
-    const coords = await sun.getApparentGeocentricEclipticSphericalDateCoordinates();
+it('tests getGeocentricEquatorialSphericalJ2000Coordinates', async () => {
+    const coords = await sun.getGeocentricEquatorialSphericalJ2000Coordinates();
+
+    expect(round(coords.rightAscension, 8)).toBe(206.9810651);
+    expect(round(coords.declination, 8)).toBe(-11.1254097);
+    expect(round(coords.radiusVector, 8)).toBe(0.99514386);
+});
+
+it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
+    const coords = await sun.getGeocentricEquatorialSphericalDateCoordinates();
+
+    expect(round(coords.rightAscension, 8)).toBe(207.25762788);
+    expect(round(coords.declination, 8)).toBe(-11.22974218);
+    expect(round(coords.radiusVector, 8)).toBe(0.99514386);
+});
+
+it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
+    const coords = await sun.getApparentGeocentricEclipticSphericalCoordinates();
 
     expect(round(coords.lon, 8)).toBe(209.31051523);
     expect(round(coords.lat, 8)).toBe(-0.00014017);

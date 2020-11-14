@@ -103,7 +103,6 @@ export function earthEclipticSpherical2sunEclipticSpherical(
     }
 }
 
-
 export function ecliptic2apparentEcliptic(
     lon: number,
     lat: number,

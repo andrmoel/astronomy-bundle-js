@@ -7,16 +7,16 @@ import Neptune from './Neptune';
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);
 
-it('tests getHeliocentricRectangularJ2000Coordinates', async () => {
-    const coords = await venus.getHeliocentricRectangularJ2000Coordinates();
+it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
 
     expect(round(coords.x, 8)).toBe(-0.7186302);
-    expect(round(coords.y, 8)).toBe(-0.02250409);
+    expect(round(coords.y, 8)).toBe(-0.0225041);
     expect(round(coords.z, 8)).toBe(0.04117196);
 });
 
-it('tests getHeliocentricRectangularDateCoordinates', async () => {
-    const coords = await venus.getHeliocentricRectangularDateCoordinates();
+it('tests getHeliocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await venus.getHeliocentricEclipticRectangularDateCoordinates();
 
     expect(round(coords.x, 8)).toBe(-0.71863021);
     expect(round(coords.y, 8)).toBe(-0.02250385);
@@ -26,71 +26,87 @@ it('tests getHeliocentricRectangularDateCoordinates', async () => {
 it('tests getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
     const coords = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(round(coords.lon, 8)).toBe(181.79364626);
-    expect(round(coords.lat, 8)).toBe(3.27741784);
+    expect(round(coords.lon, 8)).toBe(181.79364677);
+    expect(round(coords.lat, 8)).toBe(3.27741778);
     expect(round(coords.radiusVector, 8)).toBe(0.72016035);
 });
 
 it('tests getHeliocentricEclipticSphericalDateCoordinates', async () => {
     const coords = await venus.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(round(coords.lon, 8)).toBe(181.79362696);
-    expect(round(coords.lat, 8)).toBe(3.27741787);
+    expect(round(coords.lon, 8)).toBe(181.79362719);
+    expect(round(coords.lat, 8)).toBe(3.2774178);
     expect(round(coords.radiusVector, 8)).toBe(0.72016035);
 });
 
-it('tests getGeocentricRectangularJ2000Coordinates', async () => {
-    const coords = await venus.getGeocentricRectangularJ2000Coordinates();
+it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await venus.getGeocentricEclipticRectangularJ2000Coordinates();
 
     expect(round(coords.x, 8)).toBe(-0.5501052);
-    expect(round(coords.y, 8)).toBe(-0.99128734);
+    expect(round(coords.y, 8)).toBe(-0.99128735);
     expect(round(coords.z, 8)).toBe(0.04117589);
 });
 
-it('tests getGeocentricRectangularDateCoordinates', async () => {
-    const coords = await venus.getGeocentricRectangularDateCoordinates();
+it('tests getGeocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await venus.getGeocentricEclipticRectangularDateCoordinates();
 
-    expect(round(coords.x, 8)).toBe(-0.55010552);
-    expect(round(coords.y, 8)).toBe(-0.99128715);
+    expect(round(coords.x, 8)).toBe(-0.55010553);
+    expect(round(coords.y, 8)).toBe(-0.99128716);
     expect(round(coords.z, 8)).toBe(0.0411759);
 });
 
 it('tests getGeocentricEclipticSphericalJ2000Coordinates', async () => {
     const coords = await venus.getGeocentricEclipticSphericalJ2000Coordinates();
 
-    expect(round(coords.lon, 8)).toBe(240.97234473);
-    expect(round(coords.lat, 8)).toBe(2.08007147);
-    expect(round(coords.radiusVector, 8)).toBe(1.13444337);
+    expect(round(coords.lon, 8)).toBe(240.97234462);
+    expect(round(coords.lat, 8)).toBe(2.08007137);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444339);
 });
 
 it('tests getGeocentricEclipticSphericalDateCoordinates', async () => {
     const coords = await venus.getGeocentricEclipticSphericalDateCoordinates();
 
-    expect(round(coords.lon, 8)).toBe(240.97232569);
-    expect(round(coords.lat, 8)).toBe(2.08007164);
-    expect(round(coords.radiusVector, 8)).toBe(1.13444337);
+    expect(round(coords.lon, 8)).toBe(240.97232547);
+    expect(round(coords.lat, 8)).toBe(2.08007155);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444338);
 });
 
-it('tests getApparentGeocentricEclipticSphericalDateCoordinates', async () => {
-    const coords = await venus.getApparentGeocentricEclipticSphericalDateCoordinates();
+it('tests getGeocentricEquatorialSphericalJ2000Coordinates', async () => {
+    const coords = await venus.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(round(coords.lon, 8)).toBe(240.96845814);
-    expect(round(coords.lat, 8)).toBe(2.08007164);
-    expect(round(coords.radiusVector, 8)).toBe(1.13444337);
+    expect(round(coords.rightAscension, 8)).toBe(239.283551);
+    expect(round(coords.declination, 8)).toBe(-18.31600121);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444339);
+});
+
+it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
+    const coords = await venus.getGeocentricEquatorialSphericalDateCoordinates();
+
+    expect(round(coords.rightAscension, 8)).toBe(239.2835313);
+    expect(round(coords.declination, 8)).toBe(-18.31599715);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444338);
+});
+
+it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
+    const coords = await venus.getApparentGeocentricEclipticSphericalCoordinates();
+
+    expect(round(coords.lon, 8)).toBe(240.96845792);
+    expect(round(coords.lat, 8)).toBe(2.08007155);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444338);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await venus.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(round(coords.rightAscension, 8)).toBe(239.27954533);
-    expect(round(coords.declination, 8)).toBe(-18.3152113);
-    expect(round(coords.radiusVector, 8)).toBe(1.13444337);
+    expect(round(coords.rightAscension, 8)).toBe(239.27954509);
+    expect(round(coords.declination, 8)).toBe(-18.31521134);
+    expect(round(coords.radiusVector, 8)).toBe(1.13444338);
 });
 
 it('tests getDistanceToEarth', async () => {
     const d = await venus.getDistanceToEarth();
 
-    expect(round(d, 2)).toBe(169710312.57);
+    expect(round(d, 2)).toBe(169710313.77);
 });
 
 it('tests getAngularDiameter', async () => {
