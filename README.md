@@ -267,7 +267,7 @@ import {createEarth} from 'astronomy-bundle/earth';
 const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = createEarth(toi);
 
-const {x, y, z} = await earth.getHeliocentricRectangularJ2000Coordinates();
+const {x, y, z} = await earth.getHeliocentricEclipticRectangularJ2000Coordinates();
 const {lon, lat, radiusVector} = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 ```
 
@@ -410,12 +410,16 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
+const {x, y, z} = await moon.getGeocentricEclipticRectangularDateCoordinates();
 const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalDateCoordinates();
-const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalCoordinates();
-const {x, y, z} = await moon.getGeocentricRectangularDateCoordinates();
+const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
+\
+x: *-0.001682*\
+y: *-0.001701*\
+z: *0.000586*\
 \
 Longitude: *133.17°*\
 Latitude: *-3.23°*\
@@ -423,11 +427,7 @@ Radius Vector: *0.002463*\
 \
 Right Ascension: *134.69°*\
 Declination: *13.77°*\
-Radius Vector: *0.002463*\
-\
-x: *-0.001682*\
-y: *-0.001701*\
-z: *0.000586*
+Radius Vector: *0.002463*
 
 ### <a name="moon-distance-diameter"></a> Distance to earth and diameter
 
@@ -507,17 +507,21 @@ All coordinate methods do return a **Promise**.
 Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
 
 ```javascript
-getHeliocentricRectangularJ2000Coordinates()
-getHeliocentricRectangularDateCoordinates()
+getHeliocentricEclipticRectangularJ2000Coordinates()
+getHeliocentricEclipticRectangularDateCoordinates()
 getHeliocentricEclipticSphericalJ2000Coordinates()
 getHeliocentricEclipticSphericalDateCoordinates()
-getGeocentricRectangularJ2000Coordinates()
-getGeocentricRectangularDateCoordinates()
+getGeocentricEclipticRectangularJ2000Coordinates()
+getGeocentricEclipticRectangularDateCoordinates()
 getGeocentricEclipticSphericalJ2000Coordinates()
 getGeocentricEclipticSphericalDateCoordinates()
+getGeocentricEquatorialSphericalJ2000Coordinates()
+getGeocentricEquatorialSphericalDateCoordinates()
+getApparentGeocentricEclipticSphericalCoordinates()
+getApparentGeocentricEquatorialSphericalCoordinates()
 ```
 
-**Example 1**: Calculate the heliocentric position of Venus for 04 November 2020 at 00:00 UTC
+**Example 1**: Calculate the heliocentric position for equinox J2000 of Venus for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -526,10 +530,8 @@ import {createVenus} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
 const venus = createVenus(toi);
 
-const coordsRecJ2000 = await venus.getHeliocentricRectangularJ2000Coordinates();
-const coordsRecDate = await venus.getHeliocentricRectangularDateCoordinates();
-const coordsSphJ2000 = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
-const coordsSphDate = await venus.getHeliocentricEclipticSphericalDateCoordinates();
+const coordsRec = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
+const coordsSph = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
 ```
 The result of the calculation should be:\
 \
@@ -538,22 +540,12 @@ x: *-0.53523555*\
 y: *0.477793213*\
 z: *0.037443275*\
 \
-Heliocentric Rectangular (Date)\
-x: *-0.537656853*\
-y: *0.475065298*\
-z: *0.037463575*\
-\
 Heliocentric Spherical (J2000)\
 Longitude: *138° 14' 43.437"*\
 Latitude: *2° 59' 14.774"*\
 Radius Vector: *0.71844655*\
-\
-Heliocentric Spherical (Date)\
-Longitude: *138° 32' 12.055"*\
-Latitude: *2° 59' 20.61"*\
-Radius Vector: *0.71844655*
 
-**Example 2**: Calculate the geocentric position of Jupiter for 04 November 2020 at 00:00 UTC
+**Example 2**: Calculate the geocentric position for current date of Jupiter for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -562,21 +554,21 @@ import {createJupiter} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const coordsRecJ2000 = await jupiter.getGeocentricRectangularJ2000Coordinates();
-const coordsSphJ2000 = await jupiter.getGeocentricEclipticSphericalJ2000Coordinates();
+const coordsRec = await jupiter.getGeocentricEclipticRectangularDateCoordinates();
+const coordsSph = await jupiter.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
 \
-Geocentric Rectangular (J2000)\
-x: *1.94431267*\
-y: *-5.01496365*\
-z: *-0.04193732*\
+Geocentric Rectangular\
+x: *4.1719826*\
+y: *1.966573890*\
+z: *-0.101817535*\
 \
-Geocentric Spherical (J2000)\
-Longitude: *291° 11' 29.126"*\
-Latitude: *-0° 26' 48.204"*\
-Radius Vector: *5.37884475*
+Geocentric Spherical\
+Longitude: *25° 14' 17.091"*\
+Latitude: *-1° 15' 52.651"*\
+Radius Vector: *4.613373871*
 
 ### <a name="planets-distance-diameter"></a> Distance to Earth and diameter
 
