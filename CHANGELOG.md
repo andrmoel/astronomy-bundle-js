@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.0.0 (2020-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **planets:** Rename existing coordinate methods for planets, moon and sun
+
+### Features
+
+* **planets:** add more coordinate methods and rename existing methods ([7a2f3ed](https://github.com/andrmoel/astronomy-bundle-js/commit/7a2f3edf9d2c6341fc50c801f0f7e4e576ae2dc9))
+
 ### 4.1.2 (2020-11-12)
 
 ### 4.1.1 (2020-11-12)
