@@ -7,6 +7,7 @@ import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoord
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {eclipticSpherical2equatorialSpherical} from '../utils/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
+import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected jd: number = 0.0;
@@ -52,7 +53,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     public async getLightTime(): Promise<number> {
         const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return au2km(radiusVector) / 299792.458;
+        return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
     public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {
