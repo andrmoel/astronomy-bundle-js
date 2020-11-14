@@ -103,21 +103,6 @@ export function earthEclipticSpherical2sunEclipticSpherical(
     }
 }
 
-export function ecliptic2apparentEcliptic(
-    lon: number,
-    lat: number,
-    radiusVector: number,
-    T: number
-): IEclipticSphericalCoordinates {
-    const phi = earthCalc.getNutationInLongitude(T);
-
-    return {
-        lon: lon + phi,
-        lat: lat,
-        radiusVector: radiusVector,
-    };
-}
-
 export function eclipticJ20002eclipticDate(
     lon: number,
     lat: number,

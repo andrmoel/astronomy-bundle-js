@@ -1,6 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import {deg2angle} from '../utils/angleCalc';
+import {sec2string} from '../utils/timeCalc';
 import Mercury from './Mercury';
 import Venus from './Venus';
 
@@ -90,23 +91,29 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
 it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
     const coords = await mercury.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(round(coords.lon, 8)).toBe(271.12336582);
-    expect(round(coords.lat, 8)).toBe(-0.94642515);
-    expect(round(coords.radiusVector, 8)).toBe(1.4131505);
+    expect(round(coords.lon, 8)).toBe(271.11067857);
+    expect(round(coords.lat, 8)).toBe(-0.94561583);
+    expect(round(coords.radiusVector, 8)).toBe(1.41308874);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await mercury.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(round(coords.rightAscension, 8)).toBe(271.23318717);
-    expect(round(coords.declination, 8)).toBe(-24.37930696);
-    expect(round(coords.radiusVector, 8)).toBe(1.4131505);
+    expect(round(coords.rightAscension, 8)).toBe(271.21925277);
+    expect(round(coords.declination, 8)).toBe(-24.37860566);
+    expect(round(coords.radiusVector, 8)).toBe(1.41308874);
 });
 
 it('tests getDistanceToEarth', async () => {
     const d = await mercury.getDistanceToEarth();
 
     expect(round(d, 2)).toBe(211404305.97);
+});
+
+it('tests getLightTime', async () => {
+    const lt = await mercury.getLightTime();
+
+    expect(sec2string(lt)).toBe('0h 11m 45.17s');
 });
 
 it('tests getAngularDiameter', async () => {
@@ -118,7 +125,7 @@ it('tests getAngularDiameter', async () => {
 it('tests getPhaseAngle', async () => {
     const i = await mercury.getPhaseAngle();
 
-    expect(round(i, 2)).toBe(18.8);
+    expect(round(i, 2)).toBe(18.82);
 });
 
 it('tests getIlluminatedFraction', async () => {
@@ -133,5 +140,5 @@ it('tests getConjunctionInRightAscensionTo', async () => {
 
     const toiConjunction = await mercury.getConjunctionInRightAscensionTo(Venus);
 
-    expect(toiConjunction.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 47, sec: 14});
+    expect(toiConjunction.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 55, sec: 13});
 });
