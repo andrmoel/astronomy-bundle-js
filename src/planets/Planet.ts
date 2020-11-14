@@ -17,8 +17,8 @@ import {
     correctEffectOfAberration,
     correctEffectOfNutation,
     getLightTimeCorrectedJulianDay
-} from "../utils/apparentCoordinateCalc";
-import {createTimeOfInterest} from "../time";
+} from '../utils/apparentCoordinateCalc';
+import {createTimeOfInterest} from '../time';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;

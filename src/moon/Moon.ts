@@ -14,7 +14,7 @@ import {getPhaseAngle} from '../utils/observationCalc';
 import {createSun} from '../sun';
 import Sun from '../sun/Sun';
 import {spherical2rectangular} from '../utils/coordinateCalc';
-import {correctEffectOfNutation} from "../utils/apparentCoordinateCalc";
+import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
