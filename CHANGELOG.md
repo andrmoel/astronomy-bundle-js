@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.1.0 (2020-11-14)
+
+
+### Features
+
+* calculate apparent position of moon, sun and planets ([243c400](https://github.com/andrmoel/astronomy-bundle-js/commit/243c400855ec729a0f66949b479669de762cb1ff))
+
 ## 5.0.0 (2020-11-14)
 
 
