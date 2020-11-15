@@ -1,21 +1,22 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
+import {sec2string} from '../utils/timeCalc';
 import Sun from './Sun';
 
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = new Sun(toi);
 
-it('tests getGeocentricRectangularJ2000Coordinates', async () => {
-    const coords = await sun.getGeocentricRectangularJ2000Coordinates();
+it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await sun.getGeocentricEclipticRectangularJ2000Coordinates();
 
     expect(round(coords.x, 8)).toBe(-0.87016292);
     expect(round(coords.y, 8)).toBe(-0.4828331);
     expect(round(coords.z, 8)).toBe(0.00002408);
 });
 
-it('tests getGeocentricRectangularDateCoordinates', async () => {
-    const coords = await sun.getGeocentricRectangularDateCoordinates();
+it('tests getGeocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await sun.getGeocentricEclipticRectangularDateCoordinates();
 
     expect(round(coords.x, 8)).toBe(-0.86770215);
     expect(round(coords.y, 8)).toBe(-0.4872415);
@@ -38,10 +39,34 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
-it('tests getApparentGeocentricEclipticSphericalDateCoordinates', async () => {
-    const coords = await sun.getApparentGeocentricEclipticSphericalDateCoordinates();
+it('tests getGeocentricEquatorialSphericalJ2000Coordinates', async () => {
+    const coords = await sun.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(round(coords.lon, 8)).toBe(209.31051523);
+    expect(round(coords.rightAscension, 8)).toBe(206.9810651);
+    expect(round(coords.declination, 8)).toBe(-11.1254097);
+    expect(round(coords.radiusVector, 8)).toBe(0.99514386);
+});
+
+it('tests getGeocentricEquatorialSphericalDateCoordinates', async () => {
+    const coords = await sun.getGeocentricEquatorialSphericalDateCoordinates();
+
+    expect(round(coords.rightAscension, 8)).toBe(207.25762788);
+    expect(round(coords.declination, 8)).toBe(-11.22974218);
+    expect(round(coords.radiusVector, 8)).toBe(0.99514386);
+});
+
+it('tests getApparentGeocentricEclipticRectangularCoordinates', async () => {
+    const {x, y, z} = await sun.getApparentGeocentricEclipticRectangularCoordinates();
+
+    expect(round(x, 8)).toBe(-0.86779362);
+    expect(round(y, 8)).toBe(-0.48707858);
+    expect(round(z, 8)).toBe(-0.00000243);
+});
+
+it('tests getApparentGeocentricEclipticSphericalCoordinates', async () => {
+    const coords = await sun.getApparentGeocentricEclipticSphericalCoordinates();
+
+    expect(round(coords.lon, 8)).toBe(209.30479579);
     expect(round(coords.lat, 8)).toBe(-0.00014017);
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
@@ -49,8 +74,8 @@ it('tests getApparentGeocentricEclipticSphericalDateCoordinates', async () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     const coords = await sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(round(coords.rightAscension, 8)).toBe(207.25282342);
-    expect(round(coords.declination, 8)).toBe(-11.22796087);
+    expect(round(coords.rightAscension, 8)).toBe(207.2473691);
+    expect(round(coords.declination, 8)).toBe(-11.22593849);
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
@@ -60,12 +85,20 @@ it('tests getDistanceToEarth', async () => {
     expect(round(d, 6)).toBe(148871402.777339);
 });
 
+it('getLightTime', async () => {
+    const lt = await sun.getLightTime();
+
+    expect(sec2string(lt)).toBe('0h 8m 16.58s');
+});
+
 it('tests getAngularDiameter', async () => {
     const delta = await sun.getAngularDiameter();
 
     expect(deg2angle(delta)).toBe('0° 32\' 09.582"');
 });
 
-it('getApparentMagnitude', () => {
-    expect(sun.getApparentMagnitude()).toBe(-26.74);
+it('tests getApparentMagnitude', async () => {
+    const V = await sun.getApparentMagnitude();
+
+    expect(V).toBe(-26.74);
 });

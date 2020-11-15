@@ -89,3 +89,7 @@ export function normalizeAngle(degrees: number, baseAngle = 360.0): number {
 
     return angle;
 }
+
+export function sec2deg(seconds: number): number {
+    return seconds / 3600;
+}

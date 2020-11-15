@@ -1,7 +1,7 @@
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
-import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
+import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {earthCalc} from './index';
 
 export function rectangular2spherical(x: number, y: number, z: number): IEclipticSphericalCoordinates {
@@ -103,18 +103,33 @@ export function earthEclipticSpherical2sunEclipticSpherical(
     }
 }
 
-
-export function ecliptic2apparentEcliptic(
+export function eclipticJ20002eclipticDate(
     lon: number,
     lat: number,
     radiusVector: number,
-    T: number
+    t: number,
 ): IEclipticSphericalCoordinates {
-    const phi = earthCalc.getNutationInLongitude(T);
+    const lonRad = deg2rad(lon);
+    const latRad = deg2rad(lat);
+
+    const eta = sec2deg(47.0029) * t - sec2deg(0.03302) * Math.pow(t, 2) + sec2deg(0.00006) * Math.pow(t, 3);
+    const Pi = 174.876384 - sec2deg(869.8089) * t + sec2deg(0.03536) * Math.pow(t, 2);
+    const p = sec2deg(5029.0966) * t + sec2deg(1.11113) * Math.pow(t, 2) + sec2deg(0.000006) * Math.pow(t, 3);
+
+    const etaRad = deg2rad(eta);
+    const PiRad = deg2rad(Pi);
+
+    // Meeus 21.7
+    const A = Math.cos(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad) - Math.sin(etaRad) * Math.sin(latRad);
+    const B = Math.cos(latRad) * Math.cos(PiRad - lonRad);
+    const C = Math.cos(etaRad) * Math.sin(latRad) + Math.sin(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad);
+
+    const lonDate = p + Pi - rad2deg(Math.atan2(A, B));
+    const latDate = rad2deg(Math.asin(C));
 
     return {
-        lon: lon + phi,
-        lat: lat,
+        lon: normalizeAngle(lonDate),
+        lat: latDate,
         radiusVector: radiusVector,
-    };
+    }
 }

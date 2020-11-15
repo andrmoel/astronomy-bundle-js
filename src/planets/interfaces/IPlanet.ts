@@ -3,21 +3,27 @@ import IEclipticSphericalCoordinates from '../../coordinates/interfaces/IEclipti
 import IEquatorialSphericalCoordinates from '../../coordinates/interfaces/IEquatorialSphericalCoordinates';
 
 export default interface IPlanet {
-    getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
+    getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
 
-    getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
+    getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
 
     getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
 
     getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
-    getGeocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
+    getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
 
-    getGeocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
+    getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
 
     getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
 
     getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
+
+    getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<IEquatorialSphericalCoordinates>;
+
+    getGeocentricEquatorialSphericalDateCoordinates(): Promise<IEquatorialSphericalCoordinates>;
+
+    getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
     getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
 }

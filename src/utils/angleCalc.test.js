@@ -1,4 +1,4 @@
-import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, time2deg} from './angleCalc';
+import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, sec2deg, time2deg} from './angleCalc';
 import {round} from './math';
 
 it('tests deg2rad', () => {
@@ -75,4 +75,13 @@ it('tests normalizeAngle', () => {
     expect(round(normalizeAngle(5964.3), 2)).toBe(204.3);
     expect(round(normalizeAngle(-45), 2)).toBe(315);
     expect(round(normalizeAngle(259, 180), 2)).toBe(79);
+});
+
+it('tests sec2deg', () => {
+    expect(round(sec2deg(3600), 8)).toBe(1);
+    expect(round(sec2deg(180), 8)).toBe(0.05);
+    expect(round(sec2deg(90), 8)).toBe(0.025);
+    expect(round(sec2deg(15.5), 8)).toBe(0.00430556);
+    expect(round(sec2deg(0.04), 8)).toBe(0.00001111);
+    expect(round(sec2deg(-5.40), 8)).toBe(-0.0015);
 });

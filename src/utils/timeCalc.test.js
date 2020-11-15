@@ -2,7 +2,8 @@ import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek'
 import {
     dayOfYear2time,
     getDayOfWeek,
-    getDayOfYear, getDecimalYear,
+    getDayOfYear,
+    getDecimalYear,
     getDeltaT,
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
@@ -16,10 +17,15 @@ import {
     julianDay2ModifiedJulianDay,
     julianDay2time,
     julianMillenniaJ20002julianDay,
+    sec2string,
     time2julianDay,
 } from './timeCalc';
 import {round} from './math';
 import {deg2time} from './angleCalc';
+
+it('tests sec2string', () => {
+    expect(sec2string(9434.3570044)).toBe('2h 37m 14.36s');
+});
 
 describe('test for time2julianDay', () => {
     it('has valid times', () => {
