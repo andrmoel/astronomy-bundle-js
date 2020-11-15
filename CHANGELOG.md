@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.3.0 (2020-11-15)
+
+
+### Features
+
+* **astronomical-object:** add new method getApparentGeocentricEclipticRectangularCoordinates ([ecf0e55](https://github.com/andrmoel/astronomy-bundle-js/commit/ecf0e55eaea97ad978832e0477f02c7c18232a82))
+
 ## 5.2.0 (2020-11-14)
 
 

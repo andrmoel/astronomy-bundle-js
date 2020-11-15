@@ -1,7 +1,6 @@
 import Planet from './Planet';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {au2km} from '../utils/distanceCalc';
 import {observationCalc} from '../utils';
 import {DIAMETER_NEPTUNE} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
@@ -33,8 +32,7 @@ export default class Neptune extends Planet {
     }
 
     public async getAngularDiameter(): Promise<number> {
-        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const distance = au2km(coords.radiusVector);
+        const distance = await this.getApparentDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_NEPTUNE);
     }

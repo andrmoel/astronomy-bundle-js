@@ -87,12 +87,6 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return coords;
     }
 
-    public async getDistanceToEarth(): Promise<number> {
-        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
-
-        return au2km(coords.radiusVector);
-    }
-
     public async getPhaseAngle(): Promise<number> {
         const sun = createSun(this.toi);
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();

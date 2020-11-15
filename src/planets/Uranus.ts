@@ -32,7 +32,7 @@ export default class Uranus extends Planet {
     }
 
     public async getAngularDiameter(): Promise<number> {
-        const distance = await this.getDistanceToEarth();
+        const distance = await this.getApparentDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_URANUS);
     }
