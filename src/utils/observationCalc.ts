@@ -37,6 +37,35 @@ export function getAngularDiameter(distance: number, trueDiameter: number): numb
     return rad2deg(delta);
 }
 
+export function getApparentMagnitudeMoon(phaseAngle: number): number {
+    // Numeric formula by. Dr. Elmar Schmidt (Arbeitskreis Meteore e.V.)
+    if (phaseAngle > 160) {
+        return 999.9; // TODO
+    }
+
+    if (phaseAngle > 40 && phaseAngle <= 160) {
+        return -12.1403476570688
+            + 0.001738320564904 * phaseAngle
+            + 0.000316498712258 * Math.pow(phaseAngle, 2)
+            - 1.774220712176E-7 * Math.pow(phaseAngle, 3)
+            - 1.242650664787E-8 * Math.pow(phaseAngle, 4)
+            + 4.26316588854E-12 * Math.pow(phaseAngle, 5)
+            + 4.60259928102E-13 * Math.pow(phaseAngle, 6);
+    }
+
+    if (phaseAngle > 1.5 && phaseAngle <= 40) {
+        return -12.83142219
+            + 0.042069743 * phaseAngle
+            - 0.000769001 * Math.pow(phaseAngle, 2)
+            + 1.799823E-5 * Math.pow(phaseAngle, 3)
+            - 1.965025E-7 * Math.pow(phaseAngle, 4);
+    }
+
+    if (phaseAngle <= 1.5) {
+        return 999.9; // TODO lunar eclipse
+    }
+}
+
 export function getApparentMagnitudeMercury(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
     let V = 5 * Math.log10(distanceSun * distanceEarth);
 
@@ -88,7 +117,9 @@ export function getApparentMagnitudeJupiter(distanceSun: number, distanceEarth: 
 }
 
 export function getApparentMagnitudeSaturn(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    return 0.0; // TODO
+    let V = 5 * Math.log10(distanceSun * distanceEarth);
+
+    return 999.9; // TODO
 }
 
 export function getApparentMagnitudeUranus(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
