@@ -127,7 +127,7 @@ it('tests getLightTime', async () => {
 it('tests getAngularDiameter', async () => {
     const delta = await jupiter.getAngularDiameter();
 
-    expect(deg2angle(delta)).toBe('0° 00\' 42.734"');
+    expect(deg2angle(delta)).toBe('0° 00\' 42.733"');
 });
 
 it('tests getPhaseAngle', async () => {

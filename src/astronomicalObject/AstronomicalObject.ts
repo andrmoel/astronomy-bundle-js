@@ -56,6 +56,18 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
     }
 
+    public async getDistanceToEarth(): Promise<number> {
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return au2km(coords.radiusVector);
+    }
+
+    public async getApparentDistanceToEarth(): Promise<number> {
+        const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();
+
+        return au2km(coords.radiusVector);
+    }
+
     public async getLightTime(): Promise<number> {
         const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
 

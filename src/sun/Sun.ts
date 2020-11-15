@@ -68,19 +68,13 @@ export default class Sun extends AstronomicalObject {
         return coords;
     }
 
-    public async getDistanceToEarth(): Promise<number> {
-        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
-
-        return au2km(coords.radiusVector);
-    }
-
     public async getAngularDiameter(): Promise<number> {
-        const distance = await this.getDistanceToEarth();
+        const distance = await this.getApparentDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
     }
 
-    public getApparentMagnitude(): number {
-        return -26.74;
+    public async getApparentMagnitude(): Promise<number> {
+        return Promise.resolve(-26.74);
     }
 }
