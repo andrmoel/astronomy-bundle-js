@@ -1,7 +1,6 @@
 import {moonCalc, moonPhaseCalc, observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {
@@ -14,11 +13,8 @@ import {DIAMETER_MOON} from '../constants/diameters';
 import {getPhaseAngle} from '../utils/observationCalc';
 import {createSun} from '../sun';
 import Sun from '../sun/Sun';
-import {
-    ecliptic2apparentEcliptic,
-    eclipticSpherical2equatorialSpherical,
-    spherical2rectangular
-} from "../utils/coordinateCalc";
+import {spherical2rectangular} from '../utils/coordinateCalc';
+import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
@@ -29,50 +25,48 @@ export default class Moon extends AstronomicalObject {
         this.sun = createSun(toi);
     }
 
-    public getGeocentricEquatorialRectangularCoordinates(): IRectangularCoordinates {
-        const {rightAscension, declination, radiusVector} = this.getGeocentricEquatorialSphericalCoordinates();
-
-        return spherical2rectangular(rightAscension, declination, radiusVector);
+    public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+        return await this.getGeocentricEclipticRectangularDateCoordinates();
     }
 
-    public getGeocentricEclipticSphericalCoordinates(): IEclipticSphericalCoordinates {
+    public async getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return spherical2rectangular(lon, lat, radiusVector);
+    }
+
+    public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+        return await this.getGeocentricEclipticSphericalDateCoordinates();
+    }
+
+    public async getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         const lon = moonCalc.getLongitude(this.T);
         const lat = moonCalc.getLatitude(this.T);
         const radiusVector = moonCalc.getRadiusVector(this.T);
 
-        return {lon, lat, radiusVector};
+        return Promise.resolve({lon, lat, radiusVector});
     }
 
-    public getApparentGeocentricEclipticSphericalCoordinates(): IEclipticSphericalCoordinates {
-        const {lon, lat, radiusVector} = this.getGeocentricEclipticSphericalCoordinates();
+    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return ecliptic2apparentEcliptic(lon, lat, radiusVector, this.T);
+        return correctEffectOfNutation(coords, this.T);
     }
 
-    public getGeocentricEquatorialSphericalCoordinates(): IEquatorialSphericalCoordinates {
-        const {lon, lat, radiusVector} = this.getGeocentricEclipticSphericalCoordinates();
+    public async getDistanceToEarth(): Promise<number> {
+        const d = moonCalc.getDistanceToEarth(this.T);
 
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+        return Promise.resolve(d);
     }
 
-    public getApparentGeocentricEquatorialSphericalCoordinates(): IEquatorialSphericalCoordinates {
-        const {lon, lat, radiusVector} = this.getApparentGeocentricEclipticSphericalCoordinates();
-
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
-    }
-
-    public getDistanceToEarth(): number {
-        return moonCalc.getDistanceToEarth(this.T);
-    }
-
-    public getAngularDiameter(): number {
-        const distance = this.getDistanceToEarth();
+    public async getAngularDiameter(): Promise<number> {
+        const distance = await this.getDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_MOON);
     }
 
     public async getPhaseAngle(): Promise<number> {
-        const coordsMoon = this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return getPhaseAngle(coordsMoon, coordsSun);

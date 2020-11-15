@@ -1259,7 +1259,6 @@ const VSOP87_X4 = [
 
 const VSOP87_X5 = [
     [0.00000000000],
-
 ];
 
 const VSOP87_Y0 = [
@@ -2488,7 +2487,6 @@ const VSOP87_Y4 = [
 
 const VSOP87_Y5 = [
     [0.00000000000],
-
 ];
 
 const VSOP87_Z0 = [

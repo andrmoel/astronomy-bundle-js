@@ -1,32 +1,33 @@
-import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import Planet from './Planet';
-import {calculateVSOP87} from '../utils/vsop87Calc';
+import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {au2km} from '../utils/distanceCalc';
 import {observationCalc} from '../utils';
 import {DIAMETER_NEPTUNE} from '../constants/diameters';
+import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {normalizeAngle} from '../utils/angleCalc';
 
 export default class Neptune extends Planet {
-    public async getHeliocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
-        return await getAsyncCachedCalculation('neptune_heliocentric_rectangular_j2000', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87NeptuneRectangularJ2000');
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+        return await getAsyncCachedCalculation('neptune_heliocentric_spherical_j2000', this.t, async () => {
+            const vsop87 = await import('./vsop87/vsop87NeptuneSphericalJ2000');
 
             return {
-                x: calculateVSOP87(vsop87.VSOP87_X, this.t),
-                y: calculateVSOP87(vsop87.VSOP87_Y, this.t),
-                z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
     }
 
-    public async getHeliocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
-        return await getAsyncCachedCalculation('neptune_heliocentric_rectangular_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87NeptuneRectangularDate');
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return await getAsyncCachedCalculation('neptune_heliocentric_spherical_date', this.t, async () => {
+            const vsop87 = await import('./vsop87/vsop87NeptuneSphericalDate');
 
             return {
-                x: calculateVSOP87(vsop87.VSOP87_X, this.t),
-                y: calculateVSOP87(vsop87.VSOP87_Y, this.t),
-                z: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             }
         });
     }

@@ -1,19 +1,14 @@
 import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {au2km} from '../utils/distanceCalc';
 import {DIAMETER_SUN} from '../constants/diameters';
-import {
-    earthEclipticSpherical2sunEclipticSpherical,
-    ecliptic2apparentEcliptic,
-    eclipticSpherical2equatorialSpherical,
-    spherical2rectangular
-} from '../utils/coordinateCalc';
+import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
+import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 
 export default class Sun extends AstronomicalObject {
     private earth: Earth;
@@ -24,13 +19,29 @@ export default class Sun extends AstronomicalObject {
         this.earth = createEarth(toi);
     }
 
-    public async getGeocentricRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+        return Promise.resolve({x: 0, y: 0, z: 0});
+    }
+
+    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+        return Promise.resolve({x: 0, y: 0, z: 0});
+    }
+
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+    }
+
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+    }
+
+    public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
         return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
     }
 
-    public async getGeocentricRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
@@ -48,16 +59,13 @@ export default class Sun extends AstronomicalObject {
         return earthEclipticSpherical2sunEclipticSpherical(coords);
     }
 
-    public async getApparentGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        let coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return ecliptic2apparentEcliptic(lon, lat, radiusVector, this.T);
-    }
+        coords = correctEffectOfAberration(coords, this.T);
+        coords = correctEffectOfNutation(coords, this.T);
 
-    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalDateCoordinates();
-
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+        return coords;
     }
 
     public async getDistanceToEarth(): Promise<number> {

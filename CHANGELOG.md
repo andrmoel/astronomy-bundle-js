@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.2.0 (2020-11-14)
+
+
+### Features
+
+* **sun:** return zero values for heliocentric position of sun ([c72ce61](https://github.com/andrmoel/astronomy-bundle-js/commit/c72ce61c85055b567004ab2722799ad36f3460cf))
+
+## 5.1.0 (2020-11-14)
+
+
+### Features
+
+* calculate apparent position of moon, sun and planets ([243c400](https://github.com/andrmoel/astronomy-bundle-js/commit/243c400855ec729a0f66949b479669de762cb1ff))
+
+## 5.0.0 (2020-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **planets:** Rename existing coordinate methods for planets, moon and sun
+
+### Features
+
+* **planets:** add more coordinate methods and rename existing methods ([7a2f3ed](https://github.com/andrmoel/astronomy-bundle-js/commit/7a2f3edf9d2c6341fc50c801f0f7e4e576ae2dc9))
+
+### 4.1.2 (2020-11-12)
+
+### 4.1.1 (2020-11-12)
+
+## 4.1.0 (2020-11-12)
+
+
+### Features
+
+* **conjunction:** calculate conjunction in right ascension ([01a0e05](https://github.com/andrmoel/astronomy-bundle-js/commit/01a0e050812f7e8e40aa4ae08fb545bbb3a50274))
+
+## 4.0.0 (2020-11-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **moon:** Moon methods will return a Promise
+
+* **moon:** return Promise when calculating position ([943a7f1](https://github.com/andrmoel/astronomy-bundle-js/commit/943a7f19adafaee1b24b9591aed1803e0a7fa8d0))
+
+### 3.4.1 (2020-11-11)
+
+## 3.4.0 (2020-11-08)
+
+
+### Features
+
+* **solar-eclipse:** check if solar eclipse exists ([0ad149a](https://github.com/andrmoel/astronomy-bundle-js/commit/0ad149aa03ae8e892e5f0a816f132545ee6e8b23))
+
 ## 3.3.0 (2020-11-07)
 
 
