@@ -4,25 +4,25 @@ import ILocation from '../earth/interfaces/ILocation';
 import {normalizeAngle} from './angleCalc';
 
 export function getTransit(
-    geoEquCoords: IEquatorialSphericalCoordinates,
+    appGeoEquCoords: IEquatorialSphericalCoordinates,
     location: ILocation,
     jd0: number,
 ): number {
-    const m0 = _getApproximatedMTransit(geoEquCoords, location, jd0);
+    const m0 = _getApproximatedMTransit(appGeoEquCoords, location, jd0);
     const m = 0.0; // TODO Corrections
 
     return jd0 + m0 + m;
 }
 
 function _getApproximatedMTransit(
-    geoEquCoords: IEquatorialSphericalCoordinates,
+    appGeoEquCoords: IEquatorialSphericalCoordinates,
     location: ILocation,
     jd0: number,
 ): number {
     const T = julianDay2julianCenturiesJ2000(jd0);
     const GAST = getGreenwichApparentSiderealTime(T);
 
-    const m0 = (geoEquCoords.rightAscension - location.lon - GAST) / 360;
+    const m0 = (appGeoEquCoords.rightAscension - location.lon - GAST) / 360;
 
     return normalizeAngle(m0, 1);
 }
