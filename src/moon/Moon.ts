@@ -10,7 +10,7 @@ import {
     MOON_PHASE_NEW_MOON
 } from '../constants/moonPhase';
 import {DIAMETER_MOON} from '../constants/diameters';
-import {getPhaseAngle} from '../utils/observationCalc';
+import {getApparentMagnitudeMoon, getPhaseAngle} from '../utils/observationCalc';
 import {createSun} from '../sun';
 import Sun from '../sun/Sun';
 import {spherical2rectangular} from '../utils/coordinateCalc';
@@ -76,6 +76,14 @@ export default class Moon extends AstronomicalObject {
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    public async getApparentMagnitudeMoon(): Promise<number> {
+        const coordsHelio = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 
     public getUpcomingNewMoon(): TimeOfInterest {

@@ -110,6 +110,12 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(k, 3)).toBe(0.679);
 });
 
+it('tests getApparentMagnitudeMoon', async () => {
+    const V = await moon.getApparentMagnitudeMoon();
+
+    expect(round(V, 2)).toBe(-10.79);
+});
+
 it('tests getUpcomingNewMoon', () => {
     const toiNewMoon = moon.getUpcomingNewMoon();
 
