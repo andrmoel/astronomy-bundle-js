@@ -517,6 +517,7 @@ getGeocentricEclipticSphericalJ2000Coordinates()
 getGeocentricEclipticSphericalDateCoordinates()
 getGeocentricEquatorialSphericalJ2000Coordinates()
 getGeocentricEquatorialSphericalDateCoordinates()
+getApparentGeocentricRectangularCoordinates()
 getApparentGeocentricEclipticSphericalCoordinates()
 getApparentGeocentricEquatorialSphericalCoordinates()
 ```
