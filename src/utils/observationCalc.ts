@@ -1,5 +1,6 @@
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
+import {au2km} from './distanceCalc';
 
 export function getPhaseAngle(
     equCoordsObj: IEquatorialSphericalCoordinates,
@@ -38,33 +39,50 @@ export function getAngularDiameter(distance: number, trueDiameter: number): numb
 }
 
 export function getApparentMagnitudeMoon(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    let V = 5 * Math.log10(distanceSun * distanceEarth);
+    const phaseAngleAbs = Math.abs(phaseAngle);
+    let V = 5 * Math.log10(distanceSun * (384400 / au2km(distanceEarth)));
 
     // Numeric formula by. Dr. Elmar Schmidt (Arbeitskreis Meteore e.V.)
-    if (phaseAngle > 160) {
-        return 999.9; // TODO
+    if (phaseAngleAbs > 160) {
+        V += -279.45
+            + 4.3336 * phaseAngleAbs
+            - 0.022743 * Math.pow(phaseAngleAbs, 2)
+            + 0.00004 * Math.pow(phaseAngleAbs, 3);
     }
 
-    if (phaseAngle > 40 && phaseAngle <= 160) {
-        V += -12.1403476570688
-            + 0.001738320564904 * phaseAngle
-            + 0.000316498712258 * Math.pow(phaseAngle, 2)
-            - 1.774220712176E-7 * Math.pow(phaseAngle, 3)
-            - 1.242650664787E-8 * Math.pow(phaseAngle, 4)
-            + 4.26316588854E-12 * Math.pow(phaseAngle, 5)
-            + 4.60259928102E-13 * Math.pow(phaseAngle, 6);
+    if (phaseAngleAbs > 40 && phaseAngleAbs <= 160) {
+        V += -12.14
+            + 0.0017383 * phaseAngle
+            + 0.0003165 * Math.pow(phaseAngle, 2)
+            - 0.00000017742 * Math.pow(phaseAngle, 3)
+            - 0.0000000124265 * Math.pow(phaseAngle, 4)
+            + 0.0000000000042631 * Math.pow(phaseAngle, 5)
+            + 0.00000000000046026 * Math.pow(phaseAngle, 6);
+    }
+
+    if (phaseAngle > -40 && phaseAngle <= -1.5) {
+        V += -12.91
+            - 0.0441 * phaseAngle
+            - 0.000769 * Math.pow(phaseAngle, 2)
+            - 0.000017998 * Math.pow(phaseAngle, 3)
+            - 0.0000001965 * Math.pow(phaseAngle, 4);
     }
 
     if (phaseAngle > 1.5 && phaseAngle <= 40) {
-        V += -12.83142219
-            + 0.042069743 * phaseAngle
-            - 0.000769001 * Math.pow(phaseAngle, 2)
-            + 1.799823E-5 * Math.pow(phaseAngle, 3)
-            - 1.965025E-7 * Math.pow(phaseAngle, 4);
+        V += -12.92
+            + 0.0475 * phaseAngle
+            - 0.000769 * Math.pow(phaseAngle, 2)
+            + 0.000017998 * Math.pow(phaseAngle, 3)
+            - 0.0000001965 * Math.pow(phaseAngle, 4);
     }
 
-    if (phaseAngle <= 1.5) {
-        return 999.9; // TODO lunar eclipse
+    if (phaseAngleAbs <= 1.5) {
+        // TODO opposition and lunar eclipse. Use optimized formula
+        V += -12.92
+            + 0.0475 * phaseAngleAbs
+            - 0.000769 * Math.pow(phaseAngleAbs, 2)
+            + 0.000017998 * Math.pow(phaseAngleAbs, 3)
+            - 0.0000001965 * Math.pow(phaseAngleAbs, 4);
     }
 
     return V;
@@ -121,8 +139,6 @@ export function getApparentMagnitudeJupiter(distanceSun: number, distanceEarth: 
 }
 
 export function getApparentMagnitudeSaturn(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    let V = 5 * Math.log10(distanceSun * distanceEarth);
-
     return 999.9; // TODO
 }
 

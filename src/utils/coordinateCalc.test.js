@@ -4,6 +4,7 @@ import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     rectangular2spherical,
+    rectangularGeocentric2rectangularHeliocentric,
     rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
 } from './coordinateCalc';
@@ -63,11 +64,22 @@ it('tests rectangularHeliocentric2rectangularGeocentric', () => {
     const coordsPlanet = {x: 1.0, y: 2.0, z: 3.0};
     const coordsEarth = {x: -1.0, y: 0.5, z: 1.3};
 
-    const coords = rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
+    const {x, y, z} = rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
 
-    expect(coords.x).toBe(2);
-    expect(coords.y).toBe(1.5);
-    expect(coords.z).toBe(1.7);
+    expect(x).toBe(2);
+    expect(y).toBe(1.5);
+    expect(z).toBe(1.7);
+});
+
+it('tests rectangularGeocentric2rectangularHeliocentric', () => {
+    const coordsPlanet = {x: 2.0, y: 1.5, z: 1.7};
+    const coordsEarth = {x: -1.0, y: 0.5, z: 1.3};
+
+    const {x, y, z} = rectangularGeocentric2rectangularHeliocentric(coordsPlanet, coordsEarth);
+
+    expect(x).toBe(1);
+    expect(y).toBe(2);
+    expect(z).toBe(3);
 });
 
 it('tests earthEclipticSpherical2sunEclipticSpherical', () => {

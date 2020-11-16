@@ -81,13 +81,24 @@ export function equatorialSpherical2eclipticSpherical(
 }
 
 export function rectangularHeliocentric2rectangularGeocentric(
-    coords: IRectangularCoordinates,
-    coordsEarth: IRectangularCoordinates
+    heliocentricCoords: IRectangularCoordinates,
+    heliocentricCoordsEarth: IRectangularCoordinates
 ): IRectangularCoordinates {
     return {
-        x: coords.x - coordsEarth.x,
-        y: coords.y - coordsEarth.y,
-        z: coords.z - coordsEarth.z,
+        x: heliocentricCoords.x - heliocentricCoordsEarth.x,
+        y: heliocentricCoords.y - heliocentricCoordsEarth.y,
+        z: heliocentricCoords.z - heliocentricCoordsEarth.z,
+    }
+}
+
+export function rectangularGeocentric2rectangularHeliocentric(
+    geocentricCoords: IRectangularCoordinates,
+    heliocentricCoordsEarth: IRectangularCoordinates
+): IRectangularCoordinates {
+    return {
+        x: geocentricCoords.x + heliocentricCoordsEarth.x,
+        y: geocentricCoords.y + heliocentricCoordsEarth.y,
+        z: geocentricCoords.z + heliocentricCoordsEarth.z,
     }
 }
 
