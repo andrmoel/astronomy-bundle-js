@@ -142,8 +142,8 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(k, 3)).toBe(0.679);
 });
 
-it('tests getApparentMagnitudeMoon', async () => {
-    const V = await moon.getApparentMagnitudeMoon();
+it('tests getApparentMagnitude', async () => {
+    const V = await moon.getApparentMagnitude();
 
     expect(round(V, 2)).toBe(-10.69);
 });

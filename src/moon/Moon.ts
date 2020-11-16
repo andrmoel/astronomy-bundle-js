@@ -101,7 +101,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getIlluminatedFraction(i);
     }
 
-    public async getApparentMagnitudeMoon(): Promise<number> {
+    public async getApparentMagnitude(): Promise<number> {
         const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
