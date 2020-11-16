@@ -142,6 +142,12 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(i, 2)).toBe(0.97);
 });
 
+it('tests getApparentMagnitude', async () => {
+    const V = await mercury.getApparentMagnitude();
+
+    expect(round(V, 2)).toBe(-0.72);
+});
+
 it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 5, 22, 0, 0, 0);
     const mercury = new Mercury(toiConjunction0);

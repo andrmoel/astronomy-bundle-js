@@ -36,4 +36,12 @@ export default class Saturn extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_SATURN);
     }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return observationCalc.getApparentMagnitudeSaturn(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    }
 }

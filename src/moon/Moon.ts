@@ -10,19 +10,48 @@ import {
     MOON_PHASE_NEW_MOON
 } from '../constants/moonPhase';
 import {DIAMETER_MOON} from '../constants/diameters';
-import {getPhaseAngle} from '../utils/observationCalc';
-import {createSun} from '../sun';
-import Sun from '../sun/Sun';
-import {spherical2rectangular} from '../utils/coordinateCalc';
+import {getApparentMagnitudeMoon, getPhaseAngle} from '../utils/observationCalc';
+import {
+    rectangular2spherical,
+    rectangularGeocentric2rectangularHeliocentric,
+    spherical2rectangular
+} from '../utils/coordinateCalc';
 import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+import Sun from '../sun/Sun';
+import Earth from '../earth/Earth';
+import createSun from '../sun/createSun';
+import createEarth from '../earth/createEarth';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
+    private earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
         super(toi);
 
         this.sun = createSun(toi);
+        this.earth = createEarth(toi);
+    }
+
+    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+        return await this.getHeliocentricEclipticRectangularDateCoordinates();
+    }
+
+    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+        const geocentricCoords = await this.getGeocentricEclipticRectangularDateCoordinates();
+        const heliocentricCoordsEarth = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
+
+        return rectangularGeocentric2rectangularHeliocentric(geocentricCoords, heliocentricCoordsEarth);
+    }
+
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+        return await this.getHeliocentricEclipticSphericalDateCoordinates();
+    }
+
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+        const {x, y, z} = await this.getHeliocentricEclipticRectangularDateCoordinates();
+
+        return rectangular2spherical(x, y, z);
     }
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
@@ -70,6 +99,14 @@ export default class Moon extends AstronomicalObject {
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    public async getApparentMagnitudeMoon(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 
     public getUpcomingNewMoon(): TimeOfInterest {

@@ -36,4 +36,12 @@ export default class Uranus extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_URANUS);
     }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return observationCalc.getApparentMagnitudeUranus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    }
 }

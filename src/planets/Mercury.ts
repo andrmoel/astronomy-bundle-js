@@ -36,4 +36,12 @@ export default class Mercury extends Planet {
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_MERCURY);
     }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return observationCalc.getApparentMagnitudeMercury(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    }
 }
