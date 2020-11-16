@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.4.1 (2020-11-16)
+
+
+### Bug Fixes
+
+* **moon:** fix false method name for getApparentMagnitude ([8af2e6a](https://github.com/andrmoel/astronomy-bundle-js/commit/8af2e6a42f78d901eded67a26b83a0d53a46ab89))
+
 ## 5.4.0 (2020-11-16)
 
 
