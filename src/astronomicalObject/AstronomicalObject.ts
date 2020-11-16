@@ -2,7 +2,7 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 import {createTimeOfInterest} from '../time';
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {eclipticSpherical2equatorialSpherical, spherical2rectangular} from '../utils/coordinateCalc';
@@ -76,6 +76,12 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
 
     public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {
         const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {
+        const jd = await getConjunctionInLongitude(this.constructor, astronomicalObjectConstructor, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
