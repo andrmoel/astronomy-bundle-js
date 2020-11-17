@@ -118,6 +118,17 @@ it('tests getDistanceToEarth', async () => {
     expect(round(d, 2)).toBe(211404305.97);
 });
 
+it('tests getTransit', async () => {
+    const location = {
+        lat: 52.519,
+        lon: 13.408,
+    };
+
+    const toi = await mercury.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 10, min: 32, sec: 39});
+});
+
 it('tests getLightTime', async () => {
     const lt = await mercury.getLightTime();
 

@@ -118,6 +118,17 @@ it('tests getDistanceToEarth', async () => {
     expect(round(d, 2)).toBe(690150907.85);
 });
 
+it('tests getTransit', async () => {
+    const location = {
+        lat: 52.519,
+        lon: 13.408,
+    };
+
+    const toi = await jupiter.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 17, min: 59, sec: 3});
+});
+
 it('tests getLightTime', async () => {
     const lt = await jupiter.getLightTime();
 

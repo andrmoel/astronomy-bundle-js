@@ -85,7 +85,18 @@ it('tests getDistanceToEarth', async () => {
     expect(round(d, 6)).toBe(148871402.777339);
 });
 
-it('getLightTime', async () => {
+it('tests getTransit', async () => {
+    const location = {
+        lat: 52.519,
+        lon: 13.408,
+    };
+
+    const toi = await sun.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
+});
+
+it('tests getLightTime', async () => {
     const lt = await sun.getLightTime();
 
     expect(sec2string(lt)).toBe('0h 8m 16.58s');

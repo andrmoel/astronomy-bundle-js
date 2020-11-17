@@ -18,6 +18,8 @@ import {
     getLightTimeCorrectedJulianDay
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
+import {getTransit} from '../utils/riseSetTransitCalc';
+import ILocation from '../earth/interfaces/ILocation';
 import Mercury from './Mercury';
 import Venus from './Venus';
 import Mars from './Mars';
@@ -84,6 +86,12 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         coords = correctEffectOfNutation(coords, this.T);
 
         return coords;
+    }
+
+    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getPhaseAngle(): Promise<number> {

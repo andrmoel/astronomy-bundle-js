@@ -124,6 +124,17 @@ it('tests getLightTime', async () => {
     expect(sec2string(lt)).toBe('0h 9m 26.09s');
 });
 
+it('tests getTransit', async () => {
+    const location = {
+        lat: 52.519,
+        lon: 13.408,
+    };
+
+    const toi = await venus.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 8, min: 23, sec: 57});
+});
+
 it('tests getAngularDiameter', async () => {
     const delta = await venus.getAngularDiameter();
 
