@@ -1,30 +1,59 @@
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import {getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2000} from './timeCalc';
 import ILocation from '../earth/interfaces/ILocation';
+import {createTimeOfInterest} from '../time';
+import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
+import {getDeltaT, getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2000} from './timeCalc';
+import {getRightAscensionInterpolationArray, tabularInterpolation3} from './interpolationCalc';
 import {normalizeAngle} from './angleCalc';
 
-export function getTransit(
-    appGeoEquCoords: IEquatorialSphericalCoordinates,
+export async function getTransit(
+    objConstructor: any,
     location: ILocation,
     jd0: number,
-): number {
-    const m0 = _getApproximatedMTransit(appGeoEquCoords, location, jd0);
-    const m = 0.0; // TODO Corrections
+): Promise<number> {
+    const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
+    const m = await _getCorrections(objConstructor, location, jd0, m0);
 
     return jd0 + m0 + m;
 }
 
-function _getApproximatedMTransit(
-    appGeoEquCoords: IEquatorialSphericalCoordinates,
+async function _getApproximatedMTransit(
+    objConstructor: any,
     location: ILocation,
     jd0: number,
-): number {
+): Promise<number> {
+    const object = _createAstronomicalObject(objConstructor, jd0);
+    const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
+
     const T = julianDay2julianCenturiesJ2000(jd0);
     const GAST = getGreenwichApparentSiderealTime(T);
 
-    const m0 = (appGeoEquCoords.rightAscension - location.lon - GAST) / 360;
+    // Meeus 15.2
+    const m0 = (rightAscension - location.lon - GAST) / 360;
 
     return normalizeAngle(m0, 1);
+}
+
+
+async function _getCorrections(
+    objConstructor: any,
+    location: ILocation,
+    jd0: number,
+    m0: number,
+): Promise<number> {
+    const rightAscensionArray = await getRightAscensionInterpolationArray(objConstructor, jd0, 1);
+
+    const dT = getDeltaT(1988, 3);
+    const n0 = m0 + dT / 86400;
+
+    const raInterpolated = tabularInterpolation3(rightAscensionArray, n0);
+
+    const T = julianDay2julianCenturiesJ2000(jd0);
+    const GAST = getGreenwichApparentSiderealTime(T);
+    const theta0 = normalizeAngle(GAST + 360.985647 * m0);
+    const H = theta0 + location.lon - raInterpolated;
+
+    return -H / 360;
 }
 
 function _getApproximatedMRise(
@@ -47,4 +76,10 @@ function _getApproximatedMRise(
 
 function _getStandardAltitude() {
     return -0.5667; // TODO
+}
+
+function _createAstronomicalObject(objConstructor: any, jd: number): IAstronomicalObject {
+    const toi = createTimeOfInterest.fromJulianDay(jd);
+
+    return new objConstructor(toi);
 }
