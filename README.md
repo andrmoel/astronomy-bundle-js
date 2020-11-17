@@ -511,7 +511,7 @@ const moon = createMoon(toi);
 const V = await moon.getApparentMagnitude();
 ```
 
-The result of the calculation should be: *-10.71m*\
+The result of the calculation should be: *-10.71m*
 
 ## <a name="planets"></a> Planets
 
