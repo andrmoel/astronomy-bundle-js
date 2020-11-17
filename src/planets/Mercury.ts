@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_MERCURY} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getApparentMagnitudeMercury} from '../utils/magnitudeCalc';
 
 export default class Mercury extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -42,6 +43,6 @@ export default class Mercury extends Planet {
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
 
-        return observationCalc.getApparentMagnitudeMercury(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return getApparentMagnitudeMercury(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 }

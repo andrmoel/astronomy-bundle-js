@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_URANUS} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 
 export default class Uranus extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -42,6 +43,6 @@ export default class Uranus extends Planet {
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
 
-        return observationCalc.getApparentMagnitudeUranus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return getApparentMagnitudeUranus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 }

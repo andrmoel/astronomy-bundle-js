@@ -10,7 +10,7 @@ import {
     MOON_PHASE_NEW_MOON
 } from '../constants/moonPhase';
 import {DIAMETER_MOON} from '../constants/diameters';
-import {getPhaseAngle, getApparentMagnitudeMoon, getPositionAngleOfBrightLimb, isWaxing} from '../utils/observationCalc';
+import {getApparentMagnitudeMoon} from '../utils/magnitudeCalc';
 import {
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
@@ -92,7 +92,7 @@ export default class Moon extends AstronomicalObject {
         const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return getPhaseAngle(coordsMoon, coordsSun);
+        return observationCalc.getPhaseAngle(coordsMoon, coordsSun);
     }
 
     public async getIlluminatedFraction(): Promise<number> {
@@ -105,7 +105,7 @@ export default class Moon extends AstronomicalObject {
         const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
+        return observationCalc.getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
     }
 
     public async isWaxing(): Promise<boolean> {
@@ -118,8 +118,9 @@ export default class Moon extends AstronomicalObject {
         const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
+        const isWaxing = await this.isWaxing();
 
-        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i, isWaxing);
     }
 
     public getUpcomingNewMoon(): TimeOfInterest {

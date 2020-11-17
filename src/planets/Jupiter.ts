@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_JUPITER} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getApparentMagnitudeJupiter} from '../utils/magnitudeCalc';
 
 export default class Jupiter extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -42,6 +43,6 @@ export default class Jupiter extends Planet {
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
 
-        return observationCalc.getApparentMagnitudeJupiter(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return getApparentMagnitudeJupiter(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 }

@@ -157,7 +157,7 @@ it('tests isWaxing', async () => {
 it('tests getApparentMagnitude', async () => {
     const V = await moon.getApparentMagnitude();
 
-    expect(round(V, 2)).toBe(-10.69);
+    expect(round(V, 2)).toBe(-11.02);
 });
 
 it('tests getUpcomingNewMoon', () => {

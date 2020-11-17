@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_VENUS} from '../constants/diameters';
 import {normalizeAngle} from '../utils/angleCalc';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 
 export default class Venus extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -42,6 +43,6 @@ export default class Venus extends Planet {
         const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
         const i = await this.getPhaseAngle();
 
-        return observationCalc.getApparentMagnitudeVenus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return getApparentMagnitudeVenus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 }

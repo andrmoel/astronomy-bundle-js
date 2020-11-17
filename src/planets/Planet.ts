@@ -10,7 +10,6 @@ import IPlanet from './interfaces/IPlanet';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
-import {au2km} from '../utils/distanceCalc';
 import {createEarth} from '../earth';
 import Earth from '../earth/Earth';
 import {
@@ -115,7 +114,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             | typeof Saturn
             | typeof Uranus
             | typeof Neptune
-        >this.constructor)(toi);
+            >this.constructor)(toi);
 
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();

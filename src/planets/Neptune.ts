@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_NEPTUNE} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
 
 export default class Neptune extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -43,6 +44,6 @@ export default class Neptune extends Planet {
         const i = await this.getPhaseAngle();
         const year = this.toi.getDecimalYear();
 
-        return observationCalc.getApparentMagnitudeNeptune(coordsHelio.radiusVector, coordsGeo.radiusVector, i, year);
+        return getApparentMagnitudeNeptune(coordsHelio.radiusVector, coordsGeo.radiusVector, i, year);
     }
 }
