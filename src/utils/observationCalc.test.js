@@ -1,5 +1,12 @@
 import {round} from './math';
-import {getAngularDiameter, getApparentMagnitudeMoon, getIlluminatedFraction, getPhaseAngle} from './observationCalc';
+import {
+    getAngularDiameter,
+    getApparentMagnitudeMoon,
+    getIlluminatedFraction,
+    getPhaseAngle,
+    getPositionAngleOfBrightLimb,
+    isWaxing,
+} from './observationCalc';
 import {deg2angle} from './angleCalc';
 import {km2au} from './distanceCalc';
 
@@ -25,6 +32,34 @@ it('tests getIlluminatedFraction', () => {
     const k = getIlluminatedFraction(43.9);
 
     expect(round(k, 2)).toBe(0.86);
+});
+
+it('tests getPositionAngleOfBrightLimb', () => {
+    const equCoordsObj = {
+        rightAscension: 134.6885,
+        declination: 13.7648,
+        radiusVector: 1.13444337,
+    };
+
+    const equCoordsSun = {
+        rightAscension: 20.6579,
+        declination: 8.6964,
+        radiusVector: 0.99162271,
+    };
+
+    const chi = getPositionAngleOfBrightLimb(equCoordsObj, equCoordsSun);
+
+    expect(round(chi, 2)).toBe(285.04);
+});
+
+it('tests isWaxing', () => {
+    expect(isWaxing(0)).toBeFalsy();
+    expect(isWaxing(90)).toBeFalsy();
+    expect(isWaxing(179.99)).toBeFalsy();
+    expect(isWaxing(180)).toBeTruthy();
+    expect(isWaxing(180.01)).toBeTruthy();
+    expect(isWaxing(270)).toBeTruthy();
+    expect(isWaxing(360)).toBeTruthy();
 });
 
 it('test getAngularDiameter', () => {

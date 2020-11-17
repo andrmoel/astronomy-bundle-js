@@ -15,14 +15,14 @@ export function getPhaseAngle(
     const distSun = equCoordsSun.radiusVector;
 
     // Meeus 48.2
-    const phi = Math.acos(
+    let phiRad = Math.acos(
         Math.sin(dSunRad) * Math.sin(dObjRad) + Math.cos(dSunRad) * Math.cos(dObjRad) * Math.cos(raSunRad - raObjRad)
     );
 
     // Meeus 48.3
-    const i = Math.atan((distSun * Math.sin(phi)) / (distObj - distSun * Math.cos(phi)));
+    const i = Math.atan2(distSun * Math.sin(phiRad), distObj - distSun * Math.cos(phiRad));
 
-    return normalizeAngle(rad2deg(i), 180);
+    return rad2deg(i);
 }
 
 export function getIlluminatedFraction(phaseAngle: number): number {
@@ -30,6 +30,28 @@ export function getIlluminatedFraction(phaseAngle: number): number {
 
     // Meeus 48.1
     return (1 + Math.cos(iRad)) / 2;
+}
+
+export function getPositionAngleOfBrightLimb(
+    equCoordsObj: IEquatorialSphericalCoordinates,
+    equCoordsSun: IEquatorialSphericalCoordinates
+): number {
+    const raObjRad = deg2rad(equCoordsObj.rightAscension);
+    const dObjRad = deg2rad(equCoordsObj.declination);
+    const raSunRad = deg2rad(equCoordsSun.rightAscension);
+    const dSunRad = deg2rad(equCoordsSun.declination);
+
+    const numerator = Math.cos(dSunRad) * Math.sin(raSunRad - raObjRad);
+    const denominator = Math.sin(dSunRad) * Math.cos(dObjRad)
+        - Math.cos(dSunRad) * Math.sin(dObjRad) *Math.cos(raSunRad - raObjRad);
+
+    const chiRad = Math.atan2(numerator, denominator);
+
+    return normalizeAngle(rad2deg(chiRad));
+}
+
+export function isWaxing(chi: number): boolean {
+    return chi >= 180;
 }
 
 export function getAngularDiameter(distance: number, trueDiameter: number): number {

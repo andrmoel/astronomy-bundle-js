@@ -142,6 +142,18 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(k, 3)).toBe(0.679);
 });
 
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await moon.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 3)).toBe(285.044);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await moon.isWaxing();
+
+    expect(isWaxing).toBeTruthy();
+});
+
 it('tests getApparentMagnitude', async () => {
     const V = await moon.getApparentMagnitude();
 

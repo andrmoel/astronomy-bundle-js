@@ -10,7 +10,7 @@ import {
     MOON_PHASE_NEW_MOON
 } from '../constants/moonPhase';
 import {DIAMETER_MOON} from '../constants/diameters';
-import {getApparentMagnitudeMoon, getPhaseAngle} from '../utils/observationCalc';
+import {getPhaseAngle, getApparentMagnitudeMoon, getPositionAngleOfBrightLimb, isWaxing} from '../utils/observationCalc';
 import {
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
@@ -99,6 +99,19 @@ export default class Moon extends AstronomicalObject {
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    public async getPositionAngleOfBrightLimb(): Promise<number> {
+        const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
+    }
+
+    public async isWaxing(): Promise<boolean> {
+        const chi = await this.getPositionAngleOfBrightLimb();
+
+        return observationCalc.isWaxing(chi);
     }
 
     public async getApparentMagnitude(): Promise<number> {
