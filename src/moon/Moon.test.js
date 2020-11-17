@@ -7,6 +7,38 @@ import createMoon from './createMoon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
+it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
+    const {x, y, z} = await moon.getHeliocentricEclipticRectangularJ2000Coordinates();
+
+    expect(round(x, 6)).toBe(-0.928931);
+    expect(round(y, 6)).toBe(-0.379272);
+    expect(round(z, 6)).toBe(-0.000136);
+});
+
+it('tests getHeliocentricEclipticRectangularDateCoordinates', async () => {
+    const {x, y, z} = await moon.getHeliocentricEclipticRectangularDateCoordinates();
+
+    expect(round(x, 6)).toBe(-0.928931);
+    expect(round(y, 6)).toBe(-0.379272);
+    expect(round(z, 6)).toBe(-0.000136);
+});
+
+it('tests getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
+    const {lon, lat, radiusVector} = await moon.getHeliocentricEclipticSphericalJ2000Coordinates();
+
+    expect(round(lon, 6)).toBe(202.209632);
+    expect(round(lat, 6)).toBe(-0.007744);
+    expect(round(radiusVector, 6)).toBe(1.003374);
+});
+
+it('tests getHeliocentricEclipticSphericalDateCoordinates', async () => {
+    const {lon, lat, radiusVector} = await moon.getHeliocentricEclipticSphericalDateCoordinates();
+
+    expect(round(lon, 6)).toBe(202.209632);
+    expect(round(lat, 6)).toBe(-0.007744);
+    expect(round(radiusVector, 6)).toBe(1.003374);
+});
+
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
     const {x, y, z} = await moon.getGeocentricEclipticRectangularJ2000Coordinates();
 
@@ -108,6 +140,24 @@ it('tests getIlluminatedFraction', async () => {
     const k = await moon.getIlluminatedFraction();
 
     expect(round(k, 3)).toBe(0.679);
+});
+
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await moon.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 3)).toBe(285.044);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await moon.isWaxing();
+
+    expect(isWaxing).toBeTruthy();
+});
+
+it('tests getApparentMagnitude', async () => {
+    const V = await moon.getApparentMagnitude();
+
+    expect(round(V, 2)).toBe(-11.02);
 });
 
 it('tests getUpcomingNewMoon', () => {

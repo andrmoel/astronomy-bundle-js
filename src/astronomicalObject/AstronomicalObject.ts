@@ -22,6 +22,14 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.t = toi.getJulianMillenniaJ2000();
     }
 
+    abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
+
+    abstract getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
+
+    abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
+
+    abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
+
     abstract getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
 
     abstract getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;

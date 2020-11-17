@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.5.0 (2020-11-17)
+
+
+### Features
+
+* **moon:** get position angle of bright limb and check if moon is waxing ([72c74c0](https://github.com/andrmoel/astronomy-bundle-js/commit/72c74c069a6e78c5a16dc58b1990f83d28633882))
+
+### 5.4.1 (2020-11-16)
+
+
+### Bug Fixes
+
+* **moon:** fix false method name for getApparentMagnitude ([8af2e6a](https://github.com/andrmoel/astronomy-bundle-js/commit/8af2e6a42f78d901eded67a26b83a0d53a46ab89))
+
+## 5.4.0 (2020-11-16)
+
+
+### Features
+
+* **magnitude:** calculate apparent magnitude of moon and planets ([277d974](https://github.com/andrmoel/astronomy-bundle-js/commit/277d97426a20646450e966d106f4ef4f1f909bf6))
+
+### 5.3.1 (2020-11-15)
+
 ## 5.3.0 (2020-11-15)
 
 
