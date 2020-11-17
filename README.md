@@ -29,11 +29,13 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
     3. [Phases](#moon-phases)
+    4. [Apparent Magnitude](#moon-magnitude)
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
-    4. [Conjunction](#planets-conjunction)
+    4. [Apparent Magnitude](#planets-magnitude)
+    5. [Conjunction](#planets-conjunction)
 9. [Solar Eclipse](#solar-eclipse)
 
 ## <a name="installation"></a>Installation
@@ -494,6 +496,22 @@ const toiUpcomingFullMoon = moon.getUpcomingFullMoon();
 The result of the calculation should be:\
 Upcoming first quarter: *2020-11-22 04:46:35 UTC*\
 Upcoming full moon: *2020-11-30 09:31:22 UTC*
+
+### <a name="moon-magnitude"></a> Apparent magnitude of the Moon
+
+**Example**: Get the apparent Magnitude of the Moon for 07 November 2020 at 01:20 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const V = await moon.getApparentMagnitude();
+```
+
+The result of the calculation should be: *-10.71m*\
 
 ## <a name="planets"></a> Planets
 
