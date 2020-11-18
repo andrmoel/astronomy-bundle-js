@@ -21,6 +21,9 @@ import Sun from '../sun/Sun';
 import Earth from '../earth/Earth';
 import createSun from '../sun/createSun';
 import createEarth from '../earth/createEarth';
+import ILocation from '../earth/interfaces/ILocation';
+import {getTransit} from '../utils/riseSetTransitCalc';
+import {createTimeOfInterest} from '../time';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
@@ -76,10 +79,16 @@ export default class Moon extends AstronomicalObject {
         return Promise.resolve({lon, lat, radiusVector});
     }
 
-    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         return correctEffectOfNutation(coords, this.T);
+    }
+
+    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getAngularDiameter(): Promise<number> {
