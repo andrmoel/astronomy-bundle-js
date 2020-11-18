@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.6.0 (2020-11-18)
+
+
+### Features
+
+* **rise-set:** calculate transit of sun, moon and planets ([608e464](https://github.com/andrmoel/astronomy-bundle-js/commit/608e464ad5390aca3ef9b0f8c44eb9c0914d89ca))
+
 ### 5.5.3 (2020-11-17)
 
 ### 5.5.2 (2020-11-17)
