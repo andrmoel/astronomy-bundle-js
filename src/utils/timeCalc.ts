@@ -341,3 +341,19 @@ export function getDeltaT(year: number, month: number = 0): number {
 
     return deltaT;
 }
+
+export function shortYear2longYear(shortYearString: string): number {
+    const currentDate = new Date(Date.now());
+    const currentYear = currentDate.getFullYear();
+    const currentYearStr = currentYear.toString();
+
+    const currentYearFirstDigitsStr = currentYearStr.substr(0, currentYearStr.length - 2);
+    const currentYearFirstDigits = parseInt(currentYearFirstDigitsStr);
+
+    const year1Str = currentYearFirstDigits + shortYearString;
+    const year1 = parseInt(year1Str);
+    const year2Str = (currentYearFirstDigits - 1).toString() + shortYearString;
+    const year2 = parseInt(year2Str);
+
+    return year1 <= currentYear ? year1 : year2;
+}

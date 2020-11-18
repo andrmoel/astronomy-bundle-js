@@ -18,6 +18,7 @@ import {
     julianDay2time,
     julianMillenniaJ20002julianDay,
     sec2string,
+    shortYear2longYear,
     time2julianDay,
 } from './timeCalc';
 import {round} from './math';
@@ -273,4 +274,34 @@ it('tests getDeltaT', () => {
     expect(round(getDeltaT(-600), 1)).toBe(18721.1);
     expect(round(getDeltaT(-800), 1)).toBe(21946.8);
     expect(round(getDeltaT(-1000), 1)).toBe(25428.4);
+});
+
+describe('test for shortYear2longYear', () => {
+    it('tests shortYear2longYear for current year 2020', () => {
+        jest.spyOn(global.Date, 'now').mockReturnValue('2020-01-01');
+
+        expect(shortYear2longYear('75')).toBe(1975);
+        expect(shortYear2longYear('85')).toBe(1985);
+        expect(shortYear2longYear('90')).toBe(1990);
+        expect(shortYear2longYear('00')).toBe(2000);
+        expect(shortYear2longYear('05')).toBe(2005);
+        expect(shortYear2longYear('20')).toBe(2020);
+        expect(shortYear2longYear('30')).toBe(1930);
+        expect(shortYear2longYear('40')).toBe(1940);
+        expect(shortYear2longYear('50')).toBe(1950);
+    });
+
+    it('tests shortYear2longYear for current year 2090', () => {
+        jest.spyOn(global.Date, 'now').mockReturnValue('2090-01-01');
+
+        expect(shortYear2longYear('75')).toBe(2075);
+        expect(shortYear2longYear('85')).toBe(2085);
+        expect(shortYear2longYear('90')).toBe(2090);
+        expect(shortYear2longYear('00')).toBe(2000);
+        expect(shortYear2longYear('05')).toBe(2005);
+        expect(shortYear2longYear('20')).toBe(2020);
+        expect(shortYear2longYear('30')).toBe(2030);
+        expect(shortYear2longYear('40')).toBe(2040);
+        expect(shortYear2longYear('50')).toBe(2050);
+    });
 });
