@@ -40,7 +40,7 @@ export function tabularInterpolation5(values: Array<number>, n: number = 0.0): n
 export async function getRightAscensionInterpolationArray(
     objConstructor: any,
     jd0: number,
-    nMax: 1,
+    nMax: number = 1.0,
 ): Promise<Array<number>> {
     const result = [];
 
