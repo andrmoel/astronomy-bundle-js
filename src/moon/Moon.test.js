@@ -112,6 +112,17 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
+it('tests getTransit', async () => {
+    const location = {
+        lat: 52.519,
+        lon: -122.4108,
+    };
+
+    const toi = await moon.getTransit(location);
+
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 54, sec: 42});
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await moon.getDistanceToEarth();
 

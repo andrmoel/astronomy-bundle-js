@@ -2,13 +2,15 @@ import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import {au2km} from '../utils/distanceCalc';
 import {DIAMETER_SUN} from '../constants/diameters';
 import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+import ILocation from '../earth/interfaces/ILocation';
+import {createTimeOfInterest} from '../time';
+import {getTransit} from '../utils/riseSetTransitCalc';
 
 export default class Sun extends AstronomicalObject {
     private earth: Earth;
@@ -66,6 +68,12 @@ export default class Sun extends AstronomicalObject {
         coords = correctEffectOfNutation(coords, this.T);
 
         return coords;
+    }
+
+    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getAngularDiameter(): Promise<number> {

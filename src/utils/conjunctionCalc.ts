@@ -1,13 +1,12 @@
-import {createTimeOfInterest} from '../time';
-import {tabularInterpolation5} from './math';
+import {getRightAscensionInterpolationArray, tabularInterpolation5} from './interpolationCalc';
 
 export async function getConjunctionInRightAscension(
     obj1Constructor: any,
     obj2Constructor: any,
     jd0: number,
 ): Promise<number> {
-    const ephemerisObj1 = await _getRightAscensionEphemeris(obj1Constructor, jd0);
-    const ephemerisObj2 = await _getRightAscensionEphemeris(obj2Constructor, jd0);
+    const ephemerisObj1 = await getRightAscensionInterpolationArray(obj1Constructor, jd0, 2);
+    const ephemerisObj2 = await getRightAscensionInterpolationArray(obj2Constructor, jd0, 2);
     const ephemerisDiff = _getRightAscensionDiff(ephemerisObj1, ephemerisObj2);
 
     if (!_isConjunctionPossible(ephemerisDiff)) {
@@ -24,25 +23,6 @@ function _isConjunctionPossible(rightAscensionDiffArray: Array<number>): boolean
     const ra2 = rightAscensionDiffArray[3];
 
     return ra1 < 0 && ra2 >= 0 || ra1 >= 0 && ra2 < 0;
-}
-
-async function _getRightAscensionEphemeris(
-    objConstructor: any,
-    jd0: number
-): Promise<Array<number>> {
-    const result = [];
-
-    for (let n = -2; n <= 2; n++) {
-        const jd = jd0 + n;
-        const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi);
-
-        const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
-
-        result.push(rightAscension);
-    }
-
-    return result;
 }
 
 function _getRightAscensionDiff(
