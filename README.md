@@ -398,8 +398,9 @@ Diameter: *0° 31' 32.43"*
 
 ### <a name="sun-rise-set"></a> Sunrise, Sunset and Transit
 
-The used standard altitude for sunset and sunrise is -0.833 which refers to the upper limb of the sun
-and considers the effect of atmospheric refraction.
+The used standard altitudes for sunset and sunrise consider the effect of atmospheric refraction and are given as:
+* Sun's center: -0.583°
+* Sun's upper limb: -0.833°
 
 **Example**: Get the rise, set and transit of the Sun on 20. November 2020 in Berlin, Germany
 
@@ -415,16 +416,20 @@ const location = {
 const toi = createTimeOfInterest.fromTime(2020, 11, 20, 0, 0, 0);
 const sun = createSun(toi);
 
-const toiRise = await sun.getRise(location);
+const toiRiseUpperLimb = await sun.getRiseUpperLimb(location);
+const toiRiseCenter = await sun.getRise(location);
 const toiTransit = await sun.getTransit(location);
-const toiSet = await sun.getSet(location);
+const toiSetCenter = await sun.getSet(location);
+const toiSetUpperLimb = await sun.getSetUpperLimb(location);
 ```
 
 The result should be:\
 \
-Sunrise: *06:37:31 UTC*\
+Sunrise (upper limb): *06:37:31 UTC*\
+Sunrise (disk's center): *06:39:28 UTC*\
 Transit: *11:52:04 UTC*\
-Sunset: *15:06:07 UTC*
+Sunset (disk's center): *15:04:10 UTC*\
+Sunset (upper limb): *15:06:07 UTC*
 
 ## <a name="moon"></a> Moon
 
