@@ -1,8 +1,10 @@
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
+import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {earthCalc} from './index';
+import {getLocalHourAngle} from './timeCalc';
 
 export function rectangular2spherical(x: number, y: number, z: number): IEclipticSphericalCoordinates {
     // Meeus 33.2
@@ -26,6 +28,34 @@ export function spherical2rectangular(lon: number, lat: number, radiusVector: nu
     const z = radiusVector * Math.sin(latRad);
 
     return {x, y, z};
+}
+
+export function equatorialSpherical2localHorizontal(
+    rightAscension: number,
+    declination: number,
+    lat: number,
+    lon: number,
+    T: number
+): ILocalHorizontalCoordinates {
+    const dRad = deg2rad(declination);
+    const latRad = deg2rad(lat);
+
+    const H = getLocalHourAngle(T, lon, rightAscension);
+    const HRad = deg2rad(H);
+
+    // Meeus 13.5
+    const ARad = Math.atan2(
+        Math.sin(HRad),
+        Math.cos(HRad) * Math.sin(latRad) - Math.tan(dRad) * Math.cos(latRad)
+    );
+
+    // Meeus 13.6
+    const hRad = Math.asin(Math.sin(latRad) * Math.sin(dRad) + Math.cos(latRad) * Math.cos(dRad) * Math.cos(HRad));
+
+    return {
+        azimuth: normalizeAngle(rad2deg(ARad)),
+        altitude: rad2deg(hRad),
+    }
 }
 
 export function eclipticSpherical2equatorialSpherical(

@@ -3,6 +3,7 @@ import {
     eclipticJ20002eclipticDate,
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
+    equatorialSpherical2localHorizontal,
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     rectangularHeliocentric2rectangularGeocentric,
@@ -32,6 +33,19 @@ it('tests spherical2rectangular', () => {
     expect(round(rectangular.x, 6)).toBe(0.621746);
     expect(round(rectangular.y, 6)).toBe(-0.66481);
     expect(round(rectangular.z, 6)).toBe(-0.033134);
+});
+
+it('tests equatorialSpherical2localHorizontal', () => {
+    const T = -0.12727429842573834;
+    const rightAscension = 347.3193375;
+    const declination = -6.71989167;
+    const lat = 38.921417;
+    const lon = -77.065415;
+
+    const {azimuth, altitude} = equatorialSpherical2localHorizontal(rightAscension, declination, lat, lon, T);
+
+    expect(round(azimuth, 6)).toBe(68.033688);
+    expect(round(altitude, 6)).toBe(15.124862);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {
