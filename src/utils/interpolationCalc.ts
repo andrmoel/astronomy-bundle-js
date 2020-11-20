@@ -1,6 +1,4 @@
 import {createTimeOfInterest} from '../time';
-import {julianDay2julianCenturiesJ2000} from './timeCalc';
-import {eclipticSpherical2equatorialSpherical} from './coordinateCalc';
 
 export function tabularInterpolation3(values: Array<number>, n: number = 0.0): number {
     // Meeus 3.3
@@ -48,22 +46,15 @@ export async function getRightAscensionInterpolationArray(
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
-        const T = julianDay2julianCenturiesJ2000(jd);
         const toi = createTimeOfInterest.fromJulianDay(jd);
         const object = new objConstructor(toi);
 
-        /*
-         * Important: Do get normalized right ascension angle. See Meeus 3 Remark 2
-         * This can cause an error during interpolation when angles cross 360° line.
-         * e.g. [356, 358, 359.5, 0.5, 2]
-         */
-        const {lon, lat, radiusVector} = await object.getApparentGeocentricEclipticSphericalCoordinates();
-        const {rightAscension} = eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, T, false);
+        const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
         result.push(rightAscension);
     }
 
-    return result;
+    return _fixRightAscension360Crossing(result);
 }
 
 export async function getDeclinationInterpolationArray(
@@ -81,6 +72,34 @@ export async function getDeclinationInterpolationArray(
         const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
         result.push(declination);
+    }
+
+    return result;
+}
+
+function _fixRightAscension360Crossing(raArray: Array<number>): Array<number> {
+    const result = [];
+
+    let add = 0;
+    let previousValue = 0;
+
+    for (let i = 0; i < raArray.length; i++) {
+        const currentValue = raArray[i];
+
+        if (i > 0 && previousValue - currentValue > 270) {
+            add += 360;
+        }
+
+        if (i > 0 && currentValue - previousValue > 270) {
+            add -= 360;
+        }
+
+        result.push(currentValue + add);
+        previousValue = currentValue;
+    }
+
+    if (add < 0) {
+        return result.map((entry) => entry + 360);
     }
 
     return result;

@@ -120,7 +120,7 @@ async function _getCorrectionsTransit(
 
     const n0 = _getN0(jd0, m);
 
-    const raInterpolated = tabularInterpolation3(rightAscensionArray, n0);
+    const raInterpolated = normalizeAngle(tabularInterpolation3(rightAscensionArray, n0));
     const H = _getLocalHourAngle(raInterpolated, location.lon, jd0, m);
 
     return -H / 360;
@@ -141,7 +141,7 @@ async function _getCorrectionsRiseSet(
 
     const n0 = _getN0(jd0, m);
 
-    const raInterpolated = tabularInterpolation3(rightAscensionArray, n0);
+    const raInterpolated = normalizeAngle(tabularInterpolation3(rightAscensionArray, n0));
     const decInterpolated = tabularInterpolation3(declinationArray, n0);
     const dRad = deg2rad(decInterpolated);
 
@@ -163,9 +163,7 @@ function _getLocalHourAngle(
     const GAST = getGreenwichApparentSiderealTime(T);
     const theta0 = normalizeAngle(GAST + 360.985647 * m);
 
-    const H = theta0 + longitude - raInterpolated;
-
-    return normalizeAngle(H + 180) - 180;
+    return theta0 + longitude - raInterpolated;
 }
 
 async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0: number): Promise<number> {
