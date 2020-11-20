@@ -11,7 +11,7 @@ import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/appar
 import ILocation from '../earth/interfaces/ILocation';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {STANDARD_ALTITUDE_SUN_CENTER_REFRACTION} from '../constants/standardAltitude';
+import {STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION} from '../constants/standardAltitude';
 
 export default class Sun extends AstronomicalObject {
     private earth: Earth;
@@ -79,7 +79,7 @@ export default class Sun extends AstronomicalObject {
 
     public async getRise(
         location: ILocation,
-        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
 
@@ -88,7 +88,7 @@ export default class Sun extends AstronomicalObject {
 
     public async getSet(
         location: ILocation,
-        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
 

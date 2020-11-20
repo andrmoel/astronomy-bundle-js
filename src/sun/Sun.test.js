@@ -99,13 +99,13 @@ it('tests getTransit', async () => {
 it('tests getRise', async () => {
     const toi = await sun.getRise(location);
 
-    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 44});
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
 });
 
 it('tests getSet', async () => {
     const toi = await sun.getSet(location);
 
-    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 59});
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
 });
 
 it('tests getLightTime', async () => {
