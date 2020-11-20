@@ -15,10 +15,15 @@ export async function getTransit(
     location: ILocation,
     jd0: number,
 ): Promise<number> {
-    const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
-    let m = await _getCorrectionsTransit(objConstructor, location, jd0, m0);
+    let m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
+    let dm = 0;
 
-    return jd0 + m0 + m;
+    do {
+        dm = await _getCorrectionsTransit(objConstructor, location, jd0, m0);
+        m0 += dm;
+    } while (Math.abs(dm) > 0.00001);
+
+    return jd0 + m0;
 }
 
 export async function getRise(

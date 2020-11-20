@@ -120,7 +120,7 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
 it('tests getTransit', async () => {
     const toi = await moon.getTransit(location);
 
-    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 54, sec: 42});
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 55, sec: 0});
 });
 
 it('tests getRise', async () => {
