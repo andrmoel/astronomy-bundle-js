@@ -8,6 +8,11 @@ import Saturn from './Saturn';
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const jupiter = new Jupiter(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await jupiter.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -119,14 +124,21 @@ it('tests getDistanceToEarth', async () => {
 });
 
 it('tests getTransit', async () => {
-    const location = {
-        lat: 52.519,
-        lon: 13.408,
-    };
-
     const toi = await jupiter.getTransit(location);
 
     expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 17, min: 59, sec: 3});
+});
+
+it('tests getRise', async () => {
+    const toi = await jupiter.getRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 10, sec: 49});
+});
+
+it('tests getSet', async () => {
+    const toi = await jupiter.getSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 0, min: 51, sec: 2});
 });
 
 it('tests getLightTime', async () => {
