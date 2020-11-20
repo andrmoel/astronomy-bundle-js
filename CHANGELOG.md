@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.7.0 (2020-11-20)
+
+
+### Features
+
+* **rise-set:** calculate set and rise of sun, moon and planets ([4b21e3f](https://github.com/andrmoel/astronomy-bundle-js/commit/4b21e3fc1a6fbf43037bfed8f7dd34131de6de03))
+
 ### 5.6.2 (2020-11-20)
 
 ### 5.6.1 (2020-11-20)
