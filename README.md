@@ -25,9 +25,11 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 6. [Sun](#sun)
     1. [Position of the Sun](#sun-position)
     2. [Distance to Earth and Diameter](#sun-distance-diameter)
+    3. [Sunrise, Sunset and Transit](#sun-rise-set)
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
+    3. [Moonrise, Moonset and Transit](#moon-rise-set)
     3. [Phases](#moon-phases)
     4. [Apparent Magnitude](#moon-magnitude)
 8. [Planets](#planets)
@@ -394,6 +396,36 @@ The result should be:\
 Distance: *151797423.98 km*\
 Diameter: *0° 31' 32.43"*
 
+### <a name="sun-rise-set"></a> Sunrise, Sunset and Transit
+
+The used standard altitude for sunset and sunrise is -0.833 which refers to the upper limb of the sun
+and considers the effect of atmospheric refraction.
+
+**Example**: Get the rise, set and transit of the Sun on 20. November 2020 in Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSun} from 'astronomy-bundle/sun';
+
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 20, 0, 0, 0);
+const sun = createSun(toi);
+
+const toiRise = await sun.getRise(location);
+const toiTransit = await sun.getTransit(location);
+const toiSet = await sun.getSet(location);
+```
+
+The result should be:\
+\
+Sunrise: *06:37:31 UTC*\
+Transit: *11:52:04 UTC*\
+Sunset: *15:06:07 UTC*
+
 ## <a name="moon"></a> Moon
 
 This library uses the VSOP87 theory to calculate precise planetary positions.
@@ -460,6 +492,35 @@ const distance = await moon.getDistanceToEarth();
 ```
 
 The result should be: *402937.61 km*
+
+### <a name="moon-rise-set"></a> Moonrise, Moonset and Transit
+
+The used standard altitude for moonset and moonrise is 0.125 which considers the effect of atmospheric refraction.
+
+**Example**: Get the rise, set and transit of the Moon on 20. November 2020 in Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 20, 0, 0, 0);
+const moon = createMoon(toi);
+
+const toiRise = await moon.getRise(location);
+const toiTransit = await moon.getTransit(location);
+const toiSet = await moon.getSet(location);
+```
+
+The result should be:\
+\
+Moonrise: *12:02:52 UTC*\
+Transit: *16:03:43 UTC*\
+Moonset: *20:11:42 UTC*
 
 ### <a name="moon-phases"></a> Phases of the Moon
 

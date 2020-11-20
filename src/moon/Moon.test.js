@@ -7,6 +7,11 @@ import createMoon from './createMoon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
+const location = {
+    lat: 52.519,
+    lon: -122.4108,
+};
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const {x, y, z} = await moon.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -113,14 +118,21 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
 });
 
 it('tests getTransit', async () => {
-    const location = {
-        lat: 52.519,
-        lon: -122.4108,
-    };
-
     const toi = await moon.getTransit(location);
 
-    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 54, sec: 42});
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 55, sec: 0});
+});
+
+it('tests getRise', async () => {
+    const toi = await moon.getRise(location);
+
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 45, sec: 30});
+});
+
+it('tests getSet', async () => {
+    const toi = await moon.getSet(location);
+
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 10, sec: 31});
 });
 
 it('tests getDistanceToEarth', async () => {

@@ -37,11 +37,19 @@ export function equatorialSpherical2localHorizontal(
     lon: number,
     T: number
 ): ILocalHorizontalCoordinates {
+    const H = getLocalHourAngle(T, lon, rightAscension);
+
+    return equatorialSpherical2localHorizontalByLocalHourAngle(H, declination, lat);
+}
+
+export function equatorialSpherical2localHorizontalByLocalHourAngle(
+    localHourAngle: number,
+    declination: number,
+    lat: number,
+): ILocalHorizontalCoordinates {
+    const HRad = deg2rad(localHourAngle);
     const dRad = deg2rad(declination);
     const latRad = deg2rad(lat);
-
-    const H = getLocalHourAngle(T, lon, rightAscension);
-    const HRad = deg2rad(H);
 
     // Meeus 13.5
     const ARad = Math.atan2(

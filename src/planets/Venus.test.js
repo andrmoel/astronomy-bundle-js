@@ -8,6 +8,11 @@ import Neptune from './Neptune';
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -125,14 +130,21 @@ it('tests getLightTime', async () => {
 });
 
 it('tests getTransit', async () => {
-    const location = {
-        lat: 52.519,
-        lon: 13.408,
-    };
-
     const toi = await venus.getTransit(location);
 
     expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 8, min: 23, sec: 57});
+});
+
+it('tests getRise', async () => {
+    const toi = await venus.getRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 4, min: 2, sec: 1});
+});
+
+it('tests getSet', async () => {
+    const toi = await venus.getSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 12, min: 45, sec: 16});
 });
 
 it('tests getAngularDiameter', async () => {
