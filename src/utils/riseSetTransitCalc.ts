@@ -47,6 +47,10 @@ export async function getRise(
         m1 += dm;
     } while (Math.abs(dm) > 0.00001);
 
+    if (m1 < 0) {
+        throw new Error(`Astronomical object cannot rise on given day ${jd0}. Rise happens the day before.`);
+    }
+
     if (m1 >= 1) {
         throw new Error(`Astronomical object cannot rise on given day ${jd0}. Rise happens the next day.`);
     }
@@ -74,6 +78,10 @@ export async function getSet(
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m2);
         m2 += dm;
     } while (Math.abs(dm) > 0.00001);
+
+    if (m2 < 0) {
+        throw new Error(`Astronomical object cannot set on given day ${jd0}. Set happens the day before.`);
+    }
 
     if (m2 >= 1) {
         throw new Error(`Astronomical object cannot set on given day ${jd0}. Set happens the next day.`);

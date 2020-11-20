@@ -1,6 +1,6 @@
+import Moon from '../moon/Moon';
 import {getRightAscensionInterpolationArray, tabularInterpolation3, tabularInterpolation5} from './interpolationCalc';
 import {round} from './math';
-import Moon from '../moon/Moon';
 
 it('tests tabularInterpolation3', () => {
     const values = [1, 3, 7];
