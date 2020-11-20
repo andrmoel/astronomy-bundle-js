@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.7.1 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** fix interpolation when right ascension crosses 360° angle ([7461ebd](https://github.com/andrmoel/astronomy-bundle-js/commit/7461ebd2da53e6ddaf221a89ef19d7864b71de8d))
+
 ## 5.7.0 (2020-11-20)
 
 
