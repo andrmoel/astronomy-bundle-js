@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.7.4 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** consider when rise or set happens the day before ([dff7e19](https://github.com/andrmoel/astronomy-bundle-js/commit/dff7e19e0003366fd11951c99e87cca281210776))
+
 ### 5.7.3 (2020-11-20)
 
 
