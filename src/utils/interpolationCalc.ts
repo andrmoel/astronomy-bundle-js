@@ -1,4 +1,6 @@
 import {createTimeOfInterest} from '../time';
+import {julianDay2julianCenturiesJ2000} from './timeCalc';
+import {eclipticSpherical2equatorialSpherical} from './coordinateCalc';
 
 export function tabularInterpolation3(values: Array<number>, n: number = 0.0): number {
     // Meeus 3.3
@@ -46,10 +48,17 @@ export async function getRightAscensionInterpolationArray(
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
+        const T = julianDay2julianCenturiesJ2000(jd);
         const toi = createTimeOfInterest.fromJulianDay(jd);
         const object = new objConstructor(toi);
 
-        const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
+        /*
+         * Important: Do get normalized right ascension angle. See Meeus 3 Remark 2
+         * This can cause an error during interpolation when angles cross 360° line.
+         * e.g. [356, 358, 359.5, 0.5, 2]
+         */
+        const {lon, lat, radiusVector} = await object.getApparentGeocentricEclipticSphericalCoordinates();
+        const {rightAscension} = eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, T, false);
 
         result.push(rightAscension);
     }

@@ -15,9 +15,6 @@ it('tests getTransit', async () => {
 
     const jd = await getTransit(Venus, location, jd0);
 
-    const toiTransit = createTimeOfInterest.fromJulianDay(jd);
-    console.log(toiTransit.time);
-
     expect(round(jd, 6)).toBe(2447241.319796);
 });
 

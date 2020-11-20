@@ -71,6 +71,7 @@ export function eclipticSpherical2equatorialSpherical(
     lat: number,
     radiusVector: number,
     T: number,
+    normalize: boolean = true,
 ): IEquatorialSphericalCoordinates {
     const eps = earthCalc.getTrueObliquityOfEcliptic(T);
     const epsRad = deg2rad(eps);
@@ -81,7 +82,7 @@ export function eclipticSpherical2equatorialSpherical(
     const n = Math.sin(lonRad) * Math.cos(epsRad) - (Math.sin(latRad) / Math.cos(latRad)) * Math.sin(epsRad);
     const d = Math.cos(lonRad);
     const rightAscensionRad = Math.atan2(n, d);
-    const rightAscension = normalizeAngle(rad2deg(rightAscensionRad));
+    const rightAscension = normalize ? normalizeAngle(rad2deg(rightAscensionRad)) : rad2deg(rightAscensionRad);
 
     // Meeus 13.4
     const declinationRad = Math.asin(
