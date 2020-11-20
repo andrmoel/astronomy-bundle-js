@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.8.0 (2020-11-20)
+
+
+### Features
+
+* **sun:** calculate rise and set for upper limb ([d390a08](https://github.com/andrmoel/astronomy-bundle-js/commit/d390a08a31a79daffd6f66d7b5fe942645609396))
+
 ### 5.7.4 (2020-11-20)
 
 
