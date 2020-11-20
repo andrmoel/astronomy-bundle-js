@@ -18,7 +18,7 @@ import {
     getLightTimeCorrectedJulianDay
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
-import {getTransit} from '../utils/riseSetTransitCalc';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import ILocation from '../earth/interfaces/ILocation';
 import Mercury from './Mercury';
 import Venus from './Venus';
@@ -27,6 +27,7 @@ import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
 import Neptune from './Neptune';
+import {STANDARD_ALTITUDE_PLANET_REFRACTION} from "../constants/standardAltitude";
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private earth: Earth;
@@ -90,6 +91,18 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
     public async getTransit(location: ILocation): Promise<TimeOfInterest> {
         const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getRise(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getSet(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }

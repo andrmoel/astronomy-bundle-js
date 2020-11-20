@@ -56,3 +56,23 @@ export async function getRightAscensionInterpolationArray(
 
     return result;
 }
+
+export async function getDeclinationInterpolationArray(
+    objConstructor: any,
+    jd0: number,
+    nMax: number = 1.0,
+): Promise<Array<number>> {
+    const result = [];
+
+    for (let n = -1 * nMax; n <= nMax; n++) {
+        const jd = jd0 + n;
+        const toi = createTimeOfInterest.fromJulianDay(jd);
+        const object = new objConstructor(toi);
+
+        const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        result.push(declination);
+    }
+
+    return result;
+}

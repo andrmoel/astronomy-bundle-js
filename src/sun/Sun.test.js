@@ -7,6 +7,11 @@ import Sun from './Sun';
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = new Sun(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await sun.getGeocentricEclipticRectangularJ2000Coordinates();
 
@@ -86,14 +91,21 @@ it('tests getDistanceToEarth', async () => {
 });
 
 it('tests getTransit', async () => {
-    const location = {
-        lat: 52.519,
-        lon: 13.408,
-    };
-
     const toi = await sun.getTransit(location);
 
     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
+});
+
+it('tests getRise', async () => {
+    const toi = await sun.getRise(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 44});
+});
+
+it('tests getSet', async () => {
+    const toi = await sun.getSet(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 59});
 });
 
 it('tests getLightTime', async () => {

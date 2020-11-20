@@ -22,8 +22,9 @@ import Earth from '../earth/Earth';
 import createSun from '../sun/createSun';
 import createEarth from '../earth/createEarth';
 import ILocation from '../earth/interfaces/ILocation';
-import {getTransit} from '../utils/riseSetTransitCalc';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
+import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
 
 export default class Moon extends AstronomicalObject {
     private sun: Sun;
@@ -87,6 +88,18 @@ export default class Moon extends AstronomicalObject {
 
     public async getTransit(location: ILocation): Promise<TimeOfInterest> {
         const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getRise(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getSet(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
