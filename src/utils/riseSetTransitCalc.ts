@@ -36,7 +36,7 @@ export async function getRise(
     const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
 
     if (isNaN(mH)) {
-        throw new Error('Astronomical object cannot rise on given day ' + jd0);
+        throw new Error(`Astronomical object cannot rise on given day ${jd0}.`);
     }
 
     let m1 = normalizeAngle(m0 - mH, 1);
@@ -46,6 +46,10 @@ export async function getRise(
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m1);
         m1 += dm;
     } while (Math.abs(dm) > 0.00001);
+
+    if (m1 >= 1) {
+        throw new Error(`Astronomical object cannot rise on given day ${jd0}. Rise happens the next day.`);
+    }
 
     return jd0 + m1;
 }
@@ -60,7 +64,7 @@ export async function getSet(
     const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
 
     if (isNaN(mH)) {
-        throw new Error('Astronomical object cannot set on given day ' + jd0);
+        throw new Error(`Astronomical object cannot set on given day ${jd0}.`);
     }
 
     let m2 = normalizeAngle(m0 + mH, 1);
@@ -71,7 +75,11 @@ export async function getSet(
         m2 += dm;
     } while (Math.abs(dm) > 0.00001);
 
-    return jd0 + m2 + dm;
+    if (m2 >= 1) {
+        throw new Error(`Astronomical object cannot set on given day ${jd0}. Set happens the next day.`);
+    }
+
+    return jd0 + m2;
 }
 
 async function _getApproximatedMTransit(

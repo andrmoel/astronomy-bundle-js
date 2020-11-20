@@ -138,7 +138,7 @@ it('tests getRise', async () => {
 it('tests getSet', async () => {
     const toi = await mercury.getSet(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 14, min: 12, sec: 51});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 14, min: 12, sec: 52});
 });
 
 it('tests getLightTime', async () => {
