@@ -30,6 +30,10 @@ export async function getRise(
     const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
     const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
 
+    if (isNaN(mH)) {
+        throw new Error('Astronomical object cannot rise on given day ' + jd0);
+    }
+
     let m1 = normalizeAngle(m0 - mH, 1);
     let dm = 0;
 
@@ -49,6 +53,10 @@ export async function getSet(
 ): Promise<number> {
     const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
     const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
+
+    if (isNaN(mH)) {
+        throw new Error('Astronomical object cannot set on given day ' + jd0);
+    }
 
     let m2 = normalizeAngle(m0 + mH, 1);
     let dm = 0;
