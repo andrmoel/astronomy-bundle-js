@@ -117,6 +117,40 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(radiusVector, 6)).toBe(0.002463);
 });
 
+it('tests getTopocentricSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector} = await moon.getTopocentricSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(135.211802);
+    expect(round(declination, 6)).toBe(13.079873);
+    expect(round(radiusVector, 6)).toBe(0.002441);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await moon.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(288.968405);
+    expect(round(altitude, 6)).toBe(30.91398);
+    expect(round(radiusVector, 6)).toBe(0.002441);
+});
+
+it('tests getDistanceToEarth', async () => {
+    const d = await moon.getDistanceToEarth();
+
+    expect(round(d, 6)).toBe(368409.684816);
+});
+
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await moon.getApparentDistanceToEarth();
+
+    expect(round(d, 6)).toBe(368409.684816);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await moon.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 6)).toBe(365174.894771);
+});
+
 it('tests getTransit', async () => {
     const toi = await moon.getTransit(location);
 
@@ -133,12 +167,6 @@ it('tests getSet', async () => {
     const toi = await moon.getSet(location);
 
     expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 10, sec: 31});
-});
-
-it('tests getDistanceToEarth', async () => {
-    const d = await moon.getDistanceToEarth();
-
-    expect(round(d, 6)).toBe(368409.684816);
 });
 
 it('tests getAngularDiameter', async () => {

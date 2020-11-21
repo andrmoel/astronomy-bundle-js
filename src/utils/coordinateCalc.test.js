@@ -47,13 +47,13 @@ it('tests equatorialSpherical2topocentricSpherical', () => {
     const T = 0.03654036428626374;
 
     const coords = equatorialSpherical2topocentricSpherical(
+        T,
         rightAscension,
         declination,
         radiusVector,
         lat,
         lon,
         elevation,
-        T,
     );
 
     expect(round(coords.rightAscension, 6)).toBe(339.5356);
@@ -71,13 +71,13 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
     const elevation = 100;
 
     const coords = equatorialSpherical2topocentricHorizontal(
+        T,
         rightAscension,
         declination,
         radiusVector,
         lat,
         lon,
         elevation,
-        T,
     );
 
     expect(round(coords.azimuth, 6)).toBe(68.033688);

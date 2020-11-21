@@ -84,10 +84,38 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
+it('tests getTopocentricSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector} = await sun.getTopocentricSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(207.248793);
+    expect(round(declination, 6)).toBe(-11.227945);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await sun.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(293.50076);
+    expect(round(altitude, 6)).toBe(3.433893);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await sun.getDistanceToEarth();
 
     expect(round(d, 6)).toBe(148871402.777339);
+});
+
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await sun.getApparentDistanceToEarth();
+
+    expect(round(d, 6)).toBe(148871402.777339);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await sun.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 6)).toBe(148871013.470823);
 });
 
 it('tests getTransit', async () => {

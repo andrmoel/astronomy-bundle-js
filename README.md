@@ -604,6 +604,8 @@ getGeocentricEquatorialSphericalDateCoordinates()
 getApparentGeocentricRectangularCoordinates()
 getApparentGeocentricEclipticSphericalCoordinates()
 getApparentGeocentricEquatorialSphericalCoordinates()
+getTopocentricSphericalCoordinates(location)
+getTopocentricHorizontalCoordinates(location)
 ```
 
 **Example 1**: Calculate the heliocentric position for equinox J2000 of Venus for 04 November 2020 at 00:00 UTC

@@ -117,10 +117,38 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(1.13432864);
 });
 
+it('tests getTopocentricSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector} = await venus.getTopocentricSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(239.27254);
+    expect(round(declination, 6)).toBe(-18.314798);
+    expect(round(radiusVector, 6)).toBe(1.134354);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await venus.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(251.954681);
+    expect(round(altitude, 6)).toBe(-36.020532);
+    expect(round(radiusVector, 6)).toBe(1.134354);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await venus.getDistanceToEarth();
 
     expect(round(d, 2)).toBe(169710313.77);
+});
+
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await venus.getApparentDistanceToEarth();
+
+    expect(round(d, 2)).toBe(169693148.52);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await venus.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 2)).toBe(169696896.62);
 });
 
 it('tests getLightTime', async () => {

@@ -31,16 +31,17 @@ export function spherical2rectangular(lon: number, lat: number, radiusVector: nu
 }
 
 export function equatorialSpherical2topocentricSpherical(
+    T: number,
     rightAscension: number,
     declination: number,
     radiusVector: number,
     lat: number,
     lon: number,
-    elevation: number,
-    T: number,
+    elevation?: number,
 ): IEquatorialSphericalCoordinates {
     const dRad = deg2rad(declination);
 
+    elevation = elevation || 0.0;
     const pSinLat = getPSinLat(lat, elevation);
     const pCosLat = getPCosLat(lat, elevation);
 
@@ -70,22 +71,22 @@ export function equatorialSpherical2topocentricSpherical(
 }
 
 export function equatorialSpherical2topocentricHorizontal(
+    T: number,
     rightAscension: number,
     declination: number,
     radiusVector: number,
     lat: number,
     lon: number,
-    elevation: number,
-    T: number
+    elevation?: number
 ): ILocalHorizontalCoordinates {
     const coords = equatorialSpherical2topocentricSpherical(
+        T,
         rightAscension,
         declination,
         radiusVector,
         lat,
         lon,
         elevation,
-        T
     );
     const H = getLocalHourAngle(T, lon, rightAscension);
 
