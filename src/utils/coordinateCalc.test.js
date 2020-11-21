@@ -80,7 +80,7 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
         elevation,
     );
 
-    expect(round(coords.azimuth, 6)).toBe(68.033688);
+    expect(round(coords.azimuth, 6)).toBe(248.033688);
     expect(round(coords.altitude, 6)).toBe(15.124862);
     expect(round(coords.radiusVector, 6)).toBe(0.372749);
 });

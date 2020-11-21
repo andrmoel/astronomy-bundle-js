@@ -128,7 +128,7 @@ it('tests getTopocentricSphericalCoordinates', async () => {
 it('tests getTopocentricHorizontalCoordinates', async () => {
     const {azimuth, altitude, radiusVector} = await moon.getTopocentricHorizontalCoordinates(location);
 
-    expect(round(azimuth, 6)).toBe(288.968405);
+    expect(round(azimuth, 6)).toBe(108.968405);
     expect(round(altitude, 6)).toBe(30.91398);
     expect(round(radiusVector, 6)).toBe(0.002441);
 });
@@ -136,7 +136,7 @@ it('tests getTopocentricHorizontalCoordinates', async () => {
 it('tests getApparentTopocentricHorizontalCoordinates', async () => {
     const {azimuth, altitude, radiusVector} = await moon.getApparentTopocentricHorizontalCoordinates(location);
 
-    expect(round(azimuth, 6)).toBe(288.968405);
+    expect(round(azimuth, 6)).toBe(108.968405);
     expect(round(altitude, 6)).toBe(30.94205);
     expect(round(radiusVector, 6)).toBe(0.002441);
 });

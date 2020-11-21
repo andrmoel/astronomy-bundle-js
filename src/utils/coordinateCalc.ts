@@ -113,7 +113,7 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     const hRad = Math.asin(Math.sin(latRad) * Math.sin(dRad) + Math.cos(latRad) * Math.cos(dRad) * Math.cos(HRad));
 
     return {
-        azimuth: normalizeAngle(rad2deg(ARad)),
+        azimuth: normalizeAngle(rad2deg(ARad) + 180),
         altitude: rad2deg(hRad),
         radiusVector: radiusVector,
     }
