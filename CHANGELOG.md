@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.9.0 (2020-11-21)
+
+
+### Features
+
+* provide methods to get topocentric coordinates ([961c516](https://github.com/andrmoel/astronomy-bundle-js/commit/961c516a83c51b889a8aaee5fd4c1f6c44947fb6))
+
 ### 5.8.1 (2020-11-21)
 
 ## 5.8.0 (2020-11-20)
