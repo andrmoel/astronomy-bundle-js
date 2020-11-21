@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.10.1 (2020-11-21)
+
+
+### Bug Fixes
+
+* **coordinate-calc:** azimuth is measured from north instead of south ([56b84d1](https://github.com/andrmoel/astronomy-bundle-js/commit/56b84d1aa62b5cb0c080e0c00437a933524a95f9))
+
 ## 5.10.0 (2020-11-21)
 
 
