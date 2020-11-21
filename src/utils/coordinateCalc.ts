@@ -3,8 +3,8 @@ import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSp
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
+import {getLocalApparentSiderealTime, getLocalHourAngle} from './timeCalc';
 import {earthCalc} from './index';
-import {getLocalHourAngle} from './timeCalc';
 
 export function rectangular2spherical(x: number, y: number, z: number): IEclipticSphericalCoordinates {
     // Meeus 33.2
@@ -30,22 +30,73 @@ export function spherical2rectangular(lon: number, lat: number, radiusVector: nu
     return {x, y, z};
 }
 
-export function equatorialSpherical2localHorizontal(
+export function equatorialSpherical2topocentricSpherical(
     rightAscension: number,
     declination: number,
+    radiusVector: number,
     lat: number,
     lon: number,
-    T: number
-): ILocalHorizontalCoordinates {
-    const H = getLocalHourAngle(T, lon, rightAscension);
+    elevation: number,
+    T: number,
+): IEquatorialSphericalCoordinates {
+    const dRad = deg2rad(declination);
 
-    return equatorialSpherical2localHorizontalByLocalHourAngle(H, declination, lat);
+    const pSinLat = getPSinLat(lat, elevation);
+    const pCosLat = getPCosLat(lat, elevation);
+
+    const pi = getEquatorialParallax(radiusVector);
+    const piRad = deg2rad(pi);
+
+    const LAST = getLocalApparentSiderealTime(T, lon);
+    const H = getLocalHourAngle(T, lon, rightAscension);
+    const HRad = deg2rad(H);
+
+    // Meeus 40.6
+    const A = Math.cos(dRad) * Math.sin(HRad);
+    const B = Math.cos(dRad) * Math.cos(HRad) - pCosLat * Math.sin(piRad);
+    const C = Math.sin(dRad) - pSinLat * Math.sin(piRad);
+
+    // Meeus 40.7
+    const q = Math.sqrt(A * A + B * B + C * C);
+
+    const HTopo = rad2deg(Math.atan2(A, B));
+    const dTopoRad = Math.asin(C / q);
+
+    return {
+        rightAscension: normalizeAngle(LAST - HTopo),
+        declination: rad2deg(dTopoRad),
+        radiusVector: q * radiusVector,
+    }
 }
 
-export function equatorialSpherical2localHorizontalByLocalHourAngle(
+export function equatorialSpherical2topocentricHorizontal(
+    rightAscension: number,
+    declination: number,
+    radiusVector: number,
+    lat: number,
+    lon: number,
+    elevation: number,
+    T: number
+): ILocalHorizontalCoordinates {
+    const coords = equatorialSpherical2topocentricSpherical(
+        rightAscension,
+        declination,
+        radiusVector,
+        lat,
+        lon,
+        elevation,
+        T
+    );
+    const H = getLocalHourAngle(T, lon, rightAscension);
+
+    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, coords.radiusVector);
+}
+
+export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     localHourAngle: number,
     declination: number,
     lat: number,
+    radiusVector: number = 0,
 ): ILocalHorizontalCoordinates {
     const HRad = deg2rad(localHourAngle);
     const dRad = deg2rad(declination);
@@ -63,6 +114,7 @@ export function equatorialSpherical2localHorizontalByLocalHourAngle(
     return {
         azimuth: normalizeAngle(rad2deg(ARad)),
         altitude: rad2deg(hRad),
+        radiusVector: radiusVector,
     }
 }
 
@@ -182,4 +234,38 @@ export function eclipticJ20002eclipticDate(
         lat: latDate,
         radiusVector: radiusVector,
     }
+}
+
+export function getEquatorialParallax(d: number): number {
+    // Meeus 40.1
+    const angle = deg2rad(sec2deg(8.794));
+    const piRad = Math.asin(Math.sin(angle) / d);
+
+    return rad2deg(piRad);
+}
+
+export function getPSinLat(lat: number, elevation: number): number {
+    const latRad = deg2rad(lat);
+
+    const a = 6378.14;
+    const f = 1 / 298.257;
+    const b = a * (1 - f);
+
+    // Meeus 11
+    const uRad = Math.atan(b / a * Math.tan(latRad));
+
+    return b / a * Math.sin(uRad) + elevation / 6378140 * Math.sin(latRad);
+}
+
+export function getPCosLat(lat: number, elevation: number): number {
+    const latRad = deg2rad(lat);
+
+    const a = 6378.14;
+    const f = 1 / 298.257;
+    const b = a * (1 - f);
+
+    // Meeus 11
+    const uRad = Math.atan(b / a * Math.tan(latRad));
+
+    return Math.cos(uRad) + elevation / 6378140 * Math.cos(latRad);
 }

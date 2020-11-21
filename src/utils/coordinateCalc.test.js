@@ -3,7 +3,9 @@ import {
     eclipticJ20002eclipticDate,
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
-    equatorialSpherical2localHorizontal,
+    equatorialSpherical2topocentricHorizontal,
+    equatorialSpherical2topocentricSpherical,
+    getEquatorialParallax,
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     rectangularHeliocentric2rectangularGeocentric,
@@ -35,17 +37,52 @@ it('tests spherical2rectangular', () => {
     expect(round(rectangular.z, 6)).toBe(-0.033134);
 });
 
-it('tests equatorialSpherical2localHorizontal', () => {
+it('tests equatorialSpherical2topocentricSpherical', () => {
+    const rightAscension = 339.530208;
+    const declination = -15.771083;
+    const radiusVector = 0.37276;
+    const lat = 33.356111;
+    const lon = -116.8625;
+    const elevation = 1705;
+    const T = 0.03654036428626374;
+
+    const coords = equatorialSpherical2topocentricSpherical(
+        rightAscension,
+        declination,
+        radiusVector,
+        lat,
+        lon,
+        elevation,
+        T,
+    );
+
+    expect(round(coords.rightAscension, 6)).toBe(339.5356);
+    expect(round(coords.declination, 6)).toBe(-15.775012);
+    expect(round(coords.radiusVector, 6)).toBe(0.372755);
+});
+
+it('tests equatorialSpherical2topocentricHorizontal', () => {
     const T = -0.12727429842573834;
     const rightAscension = 347.3193375;
     const declination = -6.71989167;
+    const radiusVector = 0.37276;
     const lat = 38.921417;
     const lon = -77.065415;
+    const elevation = 100;
 
-    const {azimuth, altitude} = equatorialSpherical2localHorizontal(rightAscension, declination, lat, lon, T);
+    const coords = equatorialSpherical2topocentricHorizontal(
+        rightAscension,
+        declination,
+        radiusVector,
+        lat,
+        lon,
+        elevation,
+        T,
+    );
 
-    expect(round(azimuth, 6)).toBe(68.033688);
-    expect(round(altitude, 6)).toBe(15.124862);
+    expect(round(coords.azimuth, 6)).toBe(68.033688);
+    expect(round(coords.altitude, 6)).toBe(15.124862);
+    expect(round(coords.radiusVector, 6)).toBe(0.372749);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {
@@ -121,4 +158,10 @@ it('tests eclipticJ20002eclipticDate', () => {
     expect(round(coords.lon, 8)).toBe(118.70413153);
     expect(round(coords.lat, 8)).toBe(1.61533201);
     expect(round(coords.radiusVector, 8)).toBe(1);
+});
+
+it('tests getEquatorialParallax', () => {
+    const pi = getEquatorialParallax(0.37276);
+
+    expect(round(pi, 6)).toBe(0.006553);
 });

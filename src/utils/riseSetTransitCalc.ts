@@ -8,7 +8,7 @@ import {
     tabularInterpolation3
 } from './interpolationCalc';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
-import {equatorialSpherical2localHorizontalByLocalHourAngle} from './coordinateCalc';
+import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from './coordinateCalc';
 
 export async function getTransit(
     objConstructor: any,
@@ -156,7 +156,7 @@ async function _getCorrectionsRiseSet(
     const H = await _getLocalHourAngle(raInterpolated, location.lon, jd0, m);
     const HRad = deg2rad(H);
 
-    const {altitude} = equatorialSpherical2localHorizontalByLocalHourAngle(H, decInterpolated, lat);
+    const {altitude} = equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, decInterpolated, lat);
 
     return (altitude - h0) / (360 * Math.cos(dRad) * Math.cos(latRad) * Math.sin(HRad));
 }
