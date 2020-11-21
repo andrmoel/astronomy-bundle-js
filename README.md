@@ -601,11 +601,12 @@ getGeocentricEclipticSphericalJ2000Coordinates()
 getGeocentricEclipticSphericalDateCoordinates()
 getGeocentricEquatorialSphericalJ2000Coordinates()
 getGeocentricEquatorialSphericalDateCoordinates()
-getApparentGeocentricRectangularCoordinates()
-getApparentGeocentricEclipticSphericalCoordinates()
-getApparentGeocentricEquatorialSphericalCoordinates()
+getApparentGeocentricRectangularCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEclipticSphericalCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEquatorialSphericalCoordinates() // Corrected by light time, abberation & nutation
 getTopocentricSphericalCoordinates(location)
 getTopocentricHorizontalCoordinates(location)
+getApparentTopocentricHorizontalCoordinates(location) // Corrected by atmospheric refraction
 ```
 
 **Example 1**: Calculate the heliocentric position for equinox J2000 of Venus for 04 November 2020 at 00:00 UTC

@@ -15,6 +15,7 @@ import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import ILocation from '../earth/interfaces/ILocation';
 import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
+import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected jd: number = 0.0;
@@ -101,6 +102,18 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
             lon,
             elevation,
         );
+    }
+
+    public async getApparentTopocentricHorizontalCoordinates(
+        location: ILocation
+    ): Promise<ILocalHorizontalCoordinates> {
+        const {azimuth, altitude, radiusVector} = await this.getTopocentricHorizontalCoordinates(location);
+
+        return {
+            azimuth: azimuth,
+            altitude: correctEffectOfRefraction(altitude),
+            radiusVector: radiusVector,
+        }
     }
 
     public async getDistanceToEarth(): Promise<number> {

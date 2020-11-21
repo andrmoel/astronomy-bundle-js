@@ -133,6 +133,14 @@ it('tests getTopocentricHorizontalCoordinates', async () => {
     expect(round(radiusVector, 6)).toBe(1.413125);
 });
 
+it('tests getApparentTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await mercury.getApparentTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(219.390453);
+    expect(round(altitude, 6)).toBe(-57.233213);
+    expect(round(radiusVector, 6)).toBe(1.413125);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await mercury.getDistanceToEarth();
 

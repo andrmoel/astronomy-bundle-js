@@ -100,6 +100,14 @@ it('tests getTopocentricHorizontalCoordinates', async () => {
     expect(round(radiusVector, 6)).toBe(0.995141);
 });
 
+it('tests getApparentTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await sun.getApparentTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(293.50076);
+    expect(round(altitude, 6)).toBe(3.643379);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await sun.getDistanceToEarth();
 
