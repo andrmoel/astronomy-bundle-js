@@ -177,7 +177,7 @@ it('tests getSet', async () => {
     expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 10, sec: 31});
 });
 
-it('tests getAngularDiameter', async () => {
+it('tests getLightTime', async () => {
     const lt = await moon.getLightTime();
 
     expect(sec2string(lt)).toBe('0h 0m 1.23s');
@@ -189,10 +189,22 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 32\' 25.453"');
 });
 
+it('tests getTopocentricAngularDiameter', async () => {
+    const delta = await moon.getTopocentricAngularDiameter(location);
+
+    expect(deg2angle(delta)).toBe('0° 32\' 42.686"');
+});
+
 it('tests getPhaseAngle', async () => {
     const i = await moon.getPhaseAngle();
 
     expect(round(i, 6)).toBe(69.075679);
+});
+
+it('tests getTopocentricPhaseAngle', async () => {
+    const i = await moon.getTopocentricPhaseAngle(location);
+
+    expect(round(i, 6)).toBe(68.407512);
 });
 
 it('tests getIlluminatedFraction', async () => {
@@ -201,10 +213,22 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(k, 3)).toBe(0.679);
 });
 
+it('tests getTopocentricIlluminatedFraction', async () => {
+    const k = await moon.getTopocentricIlluminatedFraction(location);
+
+    expect(round(k, 3)).toBe(0.684);
+});
+
 it('tests getPositionAngleOfBrightLimb', async () => {
     const chi = await moon.getPositionAngleOfBrightLimb();
 
     expect(round(chi, 3)).toBe(285.044);
+});
+
+it('tests getTopocentricPositionAngleOfBrightLimb', async () => {
+    const chi = await moon.getTopocentricPositionAngleOfBrightLimb(location);
+
+    expect(round(chi, 3)).toBe(284.96);
 });
 
 it('tests isWaxing', async () => {
@@ -213,10 +237,22 @@ it('tests isWaxing', async () => {
     expect(isWaxing).toBeTruthy();
 });
 
+it('tests isTopocentricWaxing', async () => {
+    const isWaxing = await moon.isTopocentricWaxing(location);
+
+    expect(isWaxing).toBeTruthy();
+});
+
 it('tests getApparentMagnitude', async () => {
     const V = await moon.getApparentMagnitude();
 
     expect(round(V, 2)).toBe(-11.02);
+});
+
+it('tests getTopocentricApparentMagnitude', async () => {
+    const V = await moon.getTopocentricApparentMagnitude(location);
+
+    expect(round(V, 2)).toBe(-11.06);
 });
 
 it('tests getUpcomingNewMoon', () => {
