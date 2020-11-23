@@ -12,6 +12,7 @@ import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {createEarth} from '../earth';
 import Earth from '../earth/Earth';
+import Sun from '../sun/Sun';
 import {
     correctEffectOfAberration,
     correctEffectOfNutation,
@@ -20,6 +21,7 @@ import {
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import ILocation from '../earth/interfaces/ILocation';
+import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import Mercury from './Mercury';
 import Venus from './Venus';
 import Mars from './Mars';
@@ -27,14 +29,15 @@ import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
 import Neptune from './Neptune';
-import {STANDARD_ALTITUDE_PLANET_REFRACTION} from "../constants/standardAltitude";
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
+    private sun: Sun;
     private earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
         super(toi);
 
+        this.sun = createSun(toi);
         this.earth = createEarth(toi);
     }
 
@@ -119,6 +122,19 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    public async getPositionAngleOfBrightLimb(): Promise<number> {
+        const coordsPlanet = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getPositionAngleOfBrightLimb(coordsPlanet, coordsSun);
+    }
+
+    public async isWaxing(): Promise<boolean> {
+        const chi = await this.getPositionAngleOfBrightLimb();
+
+        return observationCalc.isWaxing(chi);
     }
 
     private async getLightTimeCorrectedEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {

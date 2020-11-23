@@ -202,6 +202,18 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(i, 2)).toBe(0.97);
 });
 
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await mercury.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 2)).toBe(83.39);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await mercury.isWaxing();
+
+    expect(isWaxing).toBeFalsy();
+});
+
 it('tests getApparentMagnitude', async () => {
     const V = await mercury.getApparentMagnitude();
 

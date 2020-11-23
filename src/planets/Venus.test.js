@@ -202,6 +202,18 @@ it('tests getIlluminatedFraction', async () => {
     expect(round(i, 2)).toBe(0.76);
 });
 
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await venus.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 2)).toBe(104.31);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await venus.isWaxing();
+
+    expect(isWaxing).toBeFalsy();
+});
+
 it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 1, 27, 0, 0, 0);
     const venus = new Venus(toiConjunction0);
