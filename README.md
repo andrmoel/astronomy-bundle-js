@@ -33,11 +33,13 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     3. [Moonrise, Moonset and Transit](#moon-rise-set)
     3. [Phases](#moon-phases)
     4. [Apparent Magnitude](#moon-magnitude)
+    5. [Physical Observation](#moon-observation)
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
     4. [Apparent Magnitude](#planets-magnitude)
+    5. [Physical Observation](#planets-observation)
     5. [Conjunction](#planets-conjunction)
 9. [Solar Eclipse](#solar-eclipse)
 
@@ -576,7 +578,7 @@ Moonset: *20:11:42 UTC*
 
 ### <a name="moon-phases"></a> Phases of the Moon
 
-**Example 1**: Get the phase angle and illumination of the Moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Get the illuminated fraction of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -585,13 +587,13 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const i = await moon.getPhaseAngle();
 const k = await moon.getIlluminatedFraction();
+const isWaxing = await moon.isWaxing();
 ```
 
 The result of the calculation should be:\
-Phase angle: *69.07545°*\
-Illumination: *0.679 (67.9%)*
+Illumination: *0.679 (67.9%)*\
+Is waxing: *true*
 
 **Example 2**: Get upcoming first quarter and next full moon in November 2020
 
@@ -625,6 +627,27 @@ const V = await moon.getApparentMagnitude();
 ```
 
 The result of the calculation should be: *-10.71m*
+
+### <a name="moon-observation"></a> Physical Observation of the Moon
+
+**Example**: Get the geocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const phi = await moon.getElongation();
+const i = await moon.getPhaseAngle();
+const chi = await moon.getPositionAngleOfBrightLimb();
+```
+
+The result of the calculation should be:\
+Elongation to Sun: *108.26°*\
+Phase Angle: *71.6°*\
+Position Angle of bright Limb: *100.29°*
 
 ## <a name="planets"></a> Planets
 
@@ -705,7 +728,7 @@ Diameter: *0° 00' 12.065"*
 
 ### <a name="planets-phases"></a> Phases of a Planet
 
-**Example**: Get the phase angle and illumination of the Mars for 20 Match 2019 at 02:55 UTC
+**Example**: Get the illumination of the Mars for 20 Match 2019 at 02:55 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -714,13 +737,50 @@ import {createMars} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2019, 3, 20, 2, 55, 0);
 const mars = createMars(toi);
 
-const i = await mars.getPhaseAngle();
 const k = await mars.getIlluminatedFraction();
+const isWaxing = await mars.isWaxing();
 ```
 
 The result of the calculation should be:\
-Phase angle: *30.98°*\
-Illumination: *0.929 (92.9%)*
+Illumination: *0.929 (92.9%)*\
+Is waxing: *true*
+
+### <a name="planets-magnitude"></a> Apparent magnitude of a Planet
+
+**Example**: Get the apparent magnitude of Jupiter for 05 January 2012 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2012, 1, 5, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const V = await jupiter.getApparentMagnitude();
+```
+
+The result of the calculation should be: *-2.52m*
+
+### <a name="planets-observation"></a> Physical Observation of Planets
+
+**Example**: Get the geocentric Physical Observation of Venus for 30 July 2020 at 22:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createVenus} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 7, 30, 22, 0, 0);
+const venus = createVenus(toi);
+
+const phi = await venus.getElongation();
+const i = await venus.getPhaseAngle();
+const chi = await venus.getPositionAngleOfBrightLimb();
+```
+
+The result of the calculation should be:\
+Elongation to Sun: *45.09°*\
+Phase Angle: *98.85°*\
+Position Angle of bright Limb: *83.08°*
 
 ### <a name="planets-conjunction"></a> Conjunction of two Planets
 
