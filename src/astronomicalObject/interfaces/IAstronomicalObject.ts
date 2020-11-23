@@ -24,7 +24,7 @@ export default interface IAstronomicalObject {
 
     getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
 
-    getTopocentricEclipticSphericalCoordinates(location: ILocation): Promise<IEquatorialSphericalCoordinates>;
+    getTopocentricEquatorialSphericalCoordinates(location: ILocation): Promise<IEquatorialSphericalCoordinates>;
 
     getTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates>;
 

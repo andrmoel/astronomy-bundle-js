@@ -124,7 +124,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getTopocentricPhaseAngle(location: ILocation): Promise<number> {
-        const coordsMoon = await this.getTopocentricEclipticSphericalCoordinates(location);
+        const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return observationCalc.getPhaseAngle(coordsMoon, coordsSun);
@@ -150,7 +150,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getTopocentricPositionAngleOfBrightLimb(location: ILocation): Promise<number> {
-        const coordsMoon = await this.getTopocentricEclipticSphericalCoordinates(location);
+        const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return observationCalc.getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
@@ -179,7 +179,7 @@ export default class Moon extends AstronomicalObject {
 
     public async getTopocentricApparentMagnitude(location: ILocation): Promise<number> {
         const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getTopocentricEclipticSphericalCoordinates(location);
+        const coordsGeo = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const i = await this.getTopocentricPhaseAngle(location);
         const isWaxing = await this.isTopocentricWaxing(location);
 

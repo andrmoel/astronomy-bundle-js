@@ -295,7 +295,7 @@ getApparentGeocentricEquatorialSphericalCoordinates() // Corrected by light time
 
 ##### Topocentric coordinates
 ```javascript
-getTopocentricEclipticSphericalCoordinates(location)
+getTopocentricEquatorialSphericalCoordinates(location)
 getTopocentricHorizontalCoordinates(location)
 getApparentTopocentricHorizontalCoordinates(location) // Corrected by atmospheric refraction
 ```
