@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.12.0 (2020-11-23)
+
+
+### Features
+
+* **sun:** add method to get topocentric angular diameter ([c3dee28](https://github.com/andrmoel/astronomy-bundle-js/commit/c3dee28c472227fc7056a2c35d497d235c6e7bf4))
+
 ### 5.11.1 (2020-11-23)
 
 ## 5.11.0 (2020-11-23)
