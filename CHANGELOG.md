@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.14.0 (2020-11-23)
+
+
+### Features
+
+* calculate elongation ([b09fe61](https://github.com/andrmoel/astronomy-bundle-js/commit/b09fe61396b9bb07288685ac35fd4f8dba12ab64))
+
 ## 5.13.0 (2020-11-23)
 
 
