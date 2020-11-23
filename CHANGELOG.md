@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.13.0 (2020-11-23)
+
+
+### Features
+
+* **planets:** add methods getPositionAngleOfBrightLimb and isWaxing ([ffb1aaa](https://github.com/andrmoel/astronomy-bundle-js/commit/ffb1aaac181f843dad09bce5a7b0db106cf49681))
+
 ### 5.12.1 (2020-11-23)
 
 
