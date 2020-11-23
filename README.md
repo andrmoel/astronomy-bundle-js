@@ -645,7 +645,7 @@ const chi = await moon.getPositionAngleOfBrightLimb();
 ```
 
 The result of the calculation should be:\
-Elongation to Sun: *108.26°*\
+Elongation from Sun: *108.26°*\
 Phase Angle: *71.6°*\
 Position Angle of bright Limb: *100.29°*
 
@@ -778,7 +778,7 @@ const chi = await venus.getPositionAngleOfBrightLimb();
 ```
 
 The result of the calculation should be:\
-Elongation to Sun: *45.09°*\
+Elongation from Sun: *45.09°*\
 Phase Angle: *98.85°*\
 Position Angle of bright Limb: *83.08°*
 
