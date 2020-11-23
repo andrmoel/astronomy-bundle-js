@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.11.0 (2020-11-23)
+
+
+### Features
+
+* **moon:** add physical observation data for topocentric observer ([465f048](https://github.com/andrmoel/astronomy-bundle-js/commit/465f048c6f77b88d6de707e193df1f2b50f88423))
+
 ### 5.10.1 (2020-11-21)
 
 
