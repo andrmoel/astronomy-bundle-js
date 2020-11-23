@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.12.1 (2020-11-23)
+
+
+### Bug Fixes
+
+* rename getTopocentricEclipticSphericalCoordinates to getTopocentricEquatorialSphericalCoordinates ([23fa824](https://github.com/andrmoel/astronomy-bundle-js/commit/23fa824bb5a14acbc9be186fbe42a45435a85fd9))
+
 ## 5.12.0 (2020-11-23)
 
 
