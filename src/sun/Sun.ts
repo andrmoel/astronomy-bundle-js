@@ -110,7 +110,17 @@ export default class Sun extends AstronomicalObject {
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
     }
 
+    public async getTopocentricAngularDiameter(location: ILocation): Promise<number> {
+        const distance = await this.getTopocentricDistanceToEarth(location);
+
+        return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
+    }
+
     public async getApparentMagnitude(): Promise<number> {
+        return Promise.resolve(-26.74);
+    }
+
+    public async getTopocentricApparentMagnitude(): Promise<number> {
         return Promise.resolve(-26.74);
     }
 }

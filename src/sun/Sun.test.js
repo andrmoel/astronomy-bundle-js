@@ -168,8 +168,20 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 32\' 09.582"');
 });
 
+it('tests getTopocentricAngularDiameter', async () => {
+    const delta = await sun.getTopocentricAngularDiameter(location);
+
+    expect(deg2angle(delta)).toBe('0° 32\' 09.587"');
+});
+
 it('tests getApparentMagnitude', async () => {
     const V = await sun.getApparentMagnitude();
+
+    expect(V).toBe(-26.74);
+});
+
+it('tests getTopocentricApparentMagnitude', async () => {
+    const V = await sun.getTopocentricApparentMagnitude();
 
     expect(V).toBe(-26.74);
 });
