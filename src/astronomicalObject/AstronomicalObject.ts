@@ -72,7 +72,9 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
     }
 
-    public async getTopocentricSphericalCoordinates(location: ILocation): Promise<IEquatorialSphericalCoordinates> {
+    public async getTopocentricEclipticSphericalCoordinates(
+        location: ILocation
+    ): Promise<IEquatorialSphericalCoordinates> {
         const {rightAscension, declination, radiusVector}
             = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const {lat, lon, elevation} = location;
@@ -129,7 +131,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     }
 
     public async getTopocentricDistanceToEarth(location: ILocation): Promise<number> {
-        const coords = await this.getTopocentricSphericalCoordinates(location);
+        const coords = await this.getTopocentricEclipticSphericalCoordinates(location);
 
         return au2km(coords.radiusVector);
     }

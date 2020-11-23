@@ -18,6 +18,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
+    1. [Coordinates](#astronomical-object-coordinates)
 5. [Earth](#earth)
     1. [Position of the Earth](#earth-position)
     2. [Nutation in Longitude and Obliquity](#earth-nutation)
@@ -251,6 +252,52 @@ const moon = createMoon(toi);
 import {createMoon} from 'astronomy-bundle/moon';
 
 const moon = createMoon();
+```
+
+### <a name="astronomical-objects-coordinates"></a> Coordinates of Astronomical Objects
+
+#### Explanation of different Coordinate Systems used
+Center of coordinate system
+* Heliocentric (Sun is center of coordinate system)
+* Geocentric (Earth is center of coordinate system)
+* Topocentric (Observer's location is center of coordinate system)
+
+Coordinate system type
+* Ecliptic Rectangular (x, y, z)
+* Ecliptic Spherical (lon, lat, radiusVector)
+* Equatorial Spherical (rightAscension, declination, radiusVector)
+* Horizontal (azimuth, altitude, radiusVector)
+
+#### Usable Methods in objects 
+
+Each object (e.g. Moon, Sun, Venus, Jupiter, ...) provides the following methods to get their coordinates in space:
+
+##### Heliocentric coordinates
+```javascript
+getHeliocentricEclipticRectangularJ2000Coordinates()
+getHeliocentricEclipticRectangularDateCoordinates()
+getHeliocentricEclipticSphericalJ2000Coordinates()
+getHeliocentricEclipticSphericalDateCoordinates()
+```
+
+##### Geocentric coordinates
+```javascript
+getGeocentricEclipticRectangularJ2000Coordinates()
+getGeocentricEclipticRectangularDateCoordinates()
+getGeocentricEclipticSphericalJ2000Coordinates()
+getGeocentricEclipticSphericalDateCoordinates()
+getGeocentricEquatorialSphericalJ2000Coordinates()
+getGeocentricEquatorialSphericalDateCoordinates()
+getApparentGeocentricRectangularCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEclipticSphericalCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEquatorialSphericalCoordinates() // Corrected by light time, abberation & nutation
+```
+
+##### Topocentric coordinates
+```javascript
+getTopocentricEclipticSphericalCoordinates(location)
+getTopocentricHorizontalCoordinates(location)
+getApparentTopocentricHorizontalCoordinates(location) // Corrected by atmospheric refraction
 ```
 
 ## <a name="earth"></a> Earth
@@ -587,27 +634,6 @@ For that reason all VSOP87 calculations will **load asynchronous** and only when
 All coordinate methods do return a **Promise**.
 
 ### <a name="planets-position"></a> Position of Planets
-
-Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
-
-```javascript
-getHeliocentricEclipticRectangularJ2000Coordinates()
-getHeliocentricEclipticRectangularDateCoordinates()
-getHeliocentricEclipticSphericalJ2000Coordinates()
-getHeliocentricEclipticSphericalDateCoordinates()
-getGeocentricEclipticRectangularJ2000Coordinates()
-getGeocentricEclipticRectangularDateCoordinates()
-getGeocentricEclipticSphericalJ2000Coordinates()
-getGeocentricEclipticSphericalDateCoordinates()
-getGeocentricEquatorialSphericalJ2000Coordinates()
-getGeocentricEquatorialSphericalDateCoordinates()
-getApparentGeocentricRectangularCoordinates() // Corrected by light time, abberation & nutation
-getApparentGeocentricEclipticSphericalCoordinates() // Corrected by light time, abberation & nutation
-getApparentGeocentricEquatorialSphericalCoordinates() // Corrected by light time, abberation & nutation
-getTopocentricSphericalCoordinates(location)
-getTopocentricHorizontalCoordinates(location)
-getApparentTopocentricHorizontalCoordinates(location) // Corrected by atmospheric refraction
-```
 
 **Example 1**: Calculate the heliocentric position for equinox J2000 of Venus for 04 November 2020 at 00:00 UTC
 

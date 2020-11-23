@@ -117,8 +117,9 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(4.61341068);
 });
 
-it('tests getTopocentricSphericalCoordinates', async () => {
-    const {rightAscension, declination, radiusVector} = await jupiter.getTopocentricSphericalCoordinates(location);
+it('tests getTopocentricEclipticSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector}
+        = await jupiter.getTopocentricEclipticSphericalCoordinates(location);
 
     expect(round(rightAscension, 6)).toBe(23.849714);
     expect(round(declination, 6)).toBe(8.584211);
