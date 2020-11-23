@@ -190,6 +190,12 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 00\' 42.733"');
 });
 
+it('tests getElongation', async () => {
+    const phi = await jupiter.getElongation();
+
+    expect(round(phi, 2)).toBe(105.37);
+});
+
 it('tests getPhaseAngle', async () => {
     const i = await jupiter.getPhaseAngle();
 

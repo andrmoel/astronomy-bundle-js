@@ -1,22 +1,33 @@
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
-export function getPhaseAngle(
+export function getElongation(
     equCoordsObj: IEquatorialSphericalCoordinates,
     equCoordsSun: IEquatorialSphericalCoordinates
 ): number {
     const raObjRad = deg2rad(equCoordsObj.rightAscension);
     const dObjRad = deg2rad(equCoordsObj.declination);
-    const distObj = equCoordsObj.radiusVector;
 
     const raSunRad = deg2rad(equCoordsSun.rightAscension);
     const dSunRad = deg2rad(equCoordsSun.declination);
-    const distSun = equCoordsSun.radiusVector;
 
     // Meeus 48.2
-    let phiRad = Math.acos(
+    const phiRad = Math.acos(
         Math.sin(dSunRad) * Math.sin(dObjRad) + Math.cos(dSunRad) * Math.cos(dObjRad) * Math.cos(raSunRad - raObjRad)
     );
+
+    return rad2deg(phiRad);
+}
+
+export function getPhaseAngle(
+    equCoordsObj: IEquatorialSphericalCoordinates,
+    equCoordsSun: IEquatorialSphericalCoordinates
+): number {
+    const distObj = equCoordsObj.radiusVector;
+    const distSun = equCoordsSun.radiusVector;
+
+    const phi = getElongation(equCoordsObj, equCoordsSun);
+    const phiRad = deg2rad(phi);
 
     // Meeus 48.3
     const i = Math.atan2(distSun * Math.sin(phiRad), distObj - distSun * Math.cos(phiRad));
@@ -42,7 +53,7 @@ export function getPositionAngleOfBrightLimb(
 
     const numerator = Math.cos(dSunRad) * Math.sin(raSunRad - raObjRad);
     const denominator = Math.sin(dSunRad) * Math.cos(dObjRad)
-        - Math.cos(dSunRad) * Math.sin(dObjRad) *Math.cos(raSunRad - raObjRad);
+        - Math.cos(dSunRad) * Math.sin(dObjRad) * Math.cos(raSunRad - raObjRad);
 
     const chiRad = Math.atan2(numerator, denominator);
 

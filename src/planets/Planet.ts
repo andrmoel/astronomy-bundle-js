@@ -110,10 +110,16 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getPhaseAngle(): Promise<number> {
-        const sun = createSun(this.toi);
+    public async getElongation(): Promise<number> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const coordsSun = await sun.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getElongation(coords, coordsSun);
+    }
+
+    public async getPhaseAngle(): Promise<number> {
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return observationCalc.getPhaseAngle(coords, coordsSun);
     }

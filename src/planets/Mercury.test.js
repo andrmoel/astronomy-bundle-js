@@ -190,6 +190,12 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 00\' 04.761"');
 });
 
+it('tests getElongation', async () => {
+    const phi = await mercury.getElongation();
+
+    expect(round(phi, 2)).toBe(8.8);
+});
+
 it('tests getPhaseAngle', async () => {
     const i = await mercury.getPhaseAngle();
 

@@ -196,6 +196,18 @@ it('tests getTopocentricAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 32\' 42.686"');
 });
 
+it('tests getElongation', async () => {
+    const phi = await moon.getElongation();
+
+    expect(round(phi, 6)).toBe(110.792854);
+});
+
+it('tests getTopocentricElongation', async () => {
+    const phi = await moon.getTopocentricElongation(location);
+
+    expect(round(phi, 6)).toBe(111.462765);
+});
+
 it('tests getPhaseAngle', async () => {
     const i = await moon.getPhaseAngle();
 

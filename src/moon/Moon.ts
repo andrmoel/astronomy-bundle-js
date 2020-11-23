@@ -116,6 +116,20 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getAngularDiameter(distance, DIAMETER_MOON);
     }
 
+    public async getElongation(): Promise<number> {
+        const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getElongation(coordsMoon, coordsSun);
+    }
+
+    public async getTopocentricElongation(location: ILocation): Promise<number> {
+        const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getElongation(coordsMoon, coordsSun);
+    }
+
     public async getPhaseAngle(): Promise<number> {
         const coordsMoon = await this.getApparentGeocentricEquatorialSphericalCoordinates();
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
