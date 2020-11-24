@@ -630,7 +630,7 @@ The result of the calculation should be: *-10.71m*
 
 ### <a name="moon-observation"></a> Physical Observation of the Moon
 
-**Example**: Get the geocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC
+**Example 1**: Get the geocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -648,6 +648,27 @@ The result of the calculation should be:\
 Elongation from Sun: *108.26°*\
 Phase Angle: *71.6°*\
 Position Angle of bright Limb: *100.29°*
+
+**Example 2**: Get the topocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC for Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const location = createLocation(52.52, 13.41, 30);
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const phi = await moon.getTopocentricElongation(location);
+const i = await moon.getTopocentricPhaseAngle(location);
+const chi = await moon.getTopocentricPositionAngleOfBrightLimb(location);
+```
+
+The result of the calculation should be:\
+Elongation from Sun: *107.81°*\
+Phase Angle: *72.05°*\
+Position Angle of bright Limb: *100.58°*
 
 ## <a name="planets"></a> Planets
 
