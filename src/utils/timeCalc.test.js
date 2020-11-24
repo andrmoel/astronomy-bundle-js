@@ -8,6 +8,7 @@ import {
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
     getLocalApparentSiderealTime,
+    getLocalHourAngle,
     getLocalMeanSiderealTime,
     isLeapYear,
     julianCenturiesJ20002julianDay,
@@ -228,6 +229,16 @@ it('tests getLocalApparentSiderealTime', () => {
     const GAST = getLocalApparentSiderealTime(T, 13.53);
 
     expect(deg2time(GAST)).toBe('14h 04m 53.334s');
+});
+
+it('tests getLocalHourAngle', () => {
+    const T = -0.12727429842573834;
+    const lon = -77.065415;
+    const rightAscension = 347.3193375;
+
+    const H = getLocalHourAngle(T, lon, rightAscension);
+
+    expect(round(H, 6)).toBe(64.352135);
 });
 
 it('tests getDeltaT', () => {

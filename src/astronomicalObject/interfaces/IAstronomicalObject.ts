@@ -2,6 +2,8 @@ import TimeOfInterest from '../../time/TimeOfInterest';
 import IRectangularCoordinates from '../../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../../coordinates/interfaces/IEclipticSphericalCoordinates';
 import IEquatorialSphericalCoordinates from '../../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import ILocalHorizontalCoordinates from '../../coordinates/interfaces/ILocalHorizontalCoordinates';
+import ILocation from '../../earth/interfaces/ILocation';
 
 export default interface IAstronomicalObject {
     toi: TimeOfInterest,
@@ -21,4 +23,10 @@ export default interface IAstronomicalObject {
     getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
     getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
+
+    getTopocentricEquatorialSphericalCoordinates(location: ILocation): Promise<IEquatorialSphericalCoordinates>;
+
+    getTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates>;
+
+    getApparentTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates>;
 }

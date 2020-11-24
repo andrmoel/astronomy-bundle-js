@@ -47,3 +47,14 @@ export function correctEffectOfAberration(
         radiusVector: coords.radiusVector,
     }
 }
+
+export function correctEffectOfRefraction(altitude: number): number {
+    if (altitude < -5) {
+        return altitude;
+    }
+
+    // Meeus 16.4
+    const R = 1.02 / Math.tan(deg2rad(altitude + (10.3 / (altitude + 5.11))));
+
+    return altitude + R / 60;
+}

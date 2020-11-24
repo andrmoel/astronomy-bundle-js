@@ -199,13 +199,16 @@ export function getLocalMeanSiderealTime(T: number, lon: number): number {
 }
 
 export function getLocalApparentSiderealTime(T: number, lon: number): number {
-    const LMST = getLocalMeanSiderealTime(T, lon);
-    const p = earthCalc.getNutationInLongitude(T);
-    const e = earthCalc.getTrueObliquityOfEcliptic(T);
-    const eRad = deg2rad(e);
+    const GAST = getGreenwichApparentSiderealTime(T);
 
     // Meeus 12
-    return LMST + p * Math.cos(eRad);
+    return GAST + lon;
+}
+
+export function getLocalHourAngle(T: number, lon: number, rightAscension: number): number {
+    const LAST = getLocalApparentSiderealTime(T, lon);
+
+    return normalizeAngle(LAST - rightAscension);
 }
 
 export function getDeltaT(year: number, month: number = 0): number {

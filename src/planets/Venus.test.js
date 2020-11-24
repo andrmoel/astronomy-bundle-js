@@ -8,6 +8,11 @@ import Neptune from './Neptune';
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -112,10 +117,47 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(1.13432864);
 });
 
+it('tests getTopocentricEquatorialSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector}
+        = await venus.getTopocentricEquatorialSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(239.27254);
+    expect(round(declination, 6)).toBe(-18.314798);
+    expect(round(radiusVector, 6)).toBe(1.134354);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await venus.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(71.954681);
+    expect(round(altitude, 6)).toBe(-36.020532);
+    expect(round(radiusVector, 6)).toBe(1.134354);
+});
+
+it('tests getApparentTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await venus.getApparentTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(71.954681);
+    expect(round(altitude, 6)).toBe(-36.020532);
+    expect(round(radiusVector, 6)).toBe(1.134354);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await venus.getDistanceToEarth();
 
     expect(round(d, 2)).toBe(169710313.77);
+});
+
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await venus.getApparentDistanceToEarth();
+
+    expect(round(d, 2)).toBe(169693148.52);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await venus.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 2)).toBe(169696896.62);
 });
 
 it('tests getLightTime', async () => {
@@ -125,20 +167,33 @@ it('tests getLightTime', async () => {
 });
 
 it('tests getTransit', async () => {
-    const location = {
-        lat: 52.519,
-        lon: 13.408,
-    };
-
     const toi = await venus.getTransit(location);
 
     expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 8, min: 23, sec: 57});
+});
+
+it('tests getRise', async () => {
+    const toi = await venus.getRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 4, min: 2, sec: 1});
+});
+
+it('tests getSet', async () => {
+    const toi = await venus.getSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 12, min: 45, sec: 16});
 });
 
 it('tests getAngularDiameter', async () => {
     const delta = await venus.getAngularDiameter();
 
     expect(deg2angle(delta)).toBe('0° 00\' 14.712"');
+});
+
+it('tests getElongation', async () => {
+    const phi = await venus.getElongation();
+
+    expect(round(phi, 2)).toBe(38.94);
 });
 
 it('tests getPhaseAngle', async () => {
@@ -151,6 +206,18 @@ it('tests getIlluminatedFraction', async () => {
     const i = await venus.getIlluminatedFraction();
 
     expect(round(i, 2)).toBe(0.76);
+});
+
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await venus.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 2)).toBe(104.31);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await venus.isWaxing();
+
+    expect(isWaxing).toBeFalsy();
 });
 
 it('tests getConjunctionInRightAscensionTo', async () => {

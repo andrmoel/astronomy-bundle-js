@@ -54,5 +54,53 @@ export async function getRightAscensionInterpolationArray(
         result.push(rightAscension);
     }
 
+    return _fixRightAscension360Crossing(result);
+}
+
+export async function getDeclinationInterpolationArray(
+    objConstructor: any,
+    jd0: number,
+    nMax: number = 1.0,
+): Promise<Array<number>> {
+    const result = [];
+
+    for (let n = -1 * nMax; n <= nMax; n++) {
+        const jd = jd0 + n;
+        const toi = createTimeOfInterest.fromJulianDay(jd);
+        const object = new objConstructor(toi);
+
+        const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        result.push(declination);
+    }
+
+    return result;
+}
+
+function _fixRightAscension360Crossing(raArray: Array<number>): Array<number> {
+    const result = [];
+
+    let add = 0;
+    let previousValue = 0;
+
+    for (let i = 0; i < raArray.length; i++) {
+        const currentValue = raArray[i];
+
+        if (i > 0 && previousValue - currentValue > 270) {
+            add += 360;
+        }
+
+        if (i > 0 && currentValue - previousValue > 270) {
+            add -= 360;
+        }
+
+        result.push(currentValue + add);
+        previousValue = currentValue;
+    }
+
+    if (add < 0) {
+        return result.map((entry) => entry + 360);
+    }
+
     return result;
 }
