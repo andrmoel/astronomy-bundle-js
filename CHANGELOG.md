@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.16.0 (2020-11-25)
+
+
+### Features
+
+* **conjunction:** add calculation for conjunction in longitude ([a28de85](https://github.com/andrmoel/astronomy-bundle-js/commit/a28de85b367ec09fae35e24b389f9960c942de44))
+
 ## 5.15.0 (2020-11-25)
 
 
