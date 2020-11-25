@@ -22,7 +22,9 @@ export default class Neptune extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('neptune_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87NeptuneSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87NeptuneSphericalDateShort')
+                : await import('./vsop87/vsop87NeptuneSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),

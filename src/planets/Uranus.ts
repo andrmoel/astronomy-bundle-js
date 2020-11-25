@@ -22,7 +22,9 @@ export default class Uranus extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('uranus_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87UranusSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87UranusSphericalDateShort')
+                : await import('./vsop87/vsop87UranusSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),

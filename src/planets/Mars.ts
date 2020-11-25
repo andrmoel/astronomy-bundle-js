@@ -22,7 +22,9 @@ export default class Mars extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mars_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87MarsSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87MarsSphericalDateShort')
+                : await import('./vsop87/vsop87MarsSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),

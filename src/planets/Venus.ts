@@ -22,7 +22,9 @@ export default class Venus extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('venus_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87VenusSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87VenusSphericalDateShort')
+                : await import('./vsop87/vsop87VenusSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),

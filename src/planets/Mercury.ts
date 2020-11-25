@@ -22,7 +22,9 @@ export default class Mercury extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mercury_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87MercurySphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87MercurySphericalDateShort')
+                : await import('./vsop87/vsop87MercurySphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),

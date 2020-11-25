@@ -22,7 +22,9 @@ export default class Saturn extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('saturn_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87SaturnSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87SaturnSphericalDateShort')
+                : await import('./vsop87/vsop87SaturnSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
