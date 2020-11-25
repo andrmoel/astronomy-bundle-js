@@ -10,6 +10,7 @@ it('tests parseTwoLineElementsString', () => {
     const tle = parseTwoLineElement(tleString);
 
     expect(tle).toEqual({
+        name: 'ISS(ZARYA)',
         noradNr: 25544,
         classification: 'U',
         internationalDesignator: '98067A',

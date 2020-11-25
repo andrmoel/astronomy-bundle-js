@@ -17,8 +17,12 @@ export default function parseTwoLineElement(tleString: string): object {
 
 function _parseRow(row: string): object {
     row = row.trim();
-    const matches = row.match(/^([1|2]) /);
 
+    if (row.match(/^[A-Za-z]/)) {
+        return _parseName(row);
+    }
+
+    const matches = row.match(/^([1|2]) /);
     if (matches) {
         switch (matches[1]) {
             case '1':
@@ -29,6 +33,12 @@ function _parseRow(row: string): object {
     }
 
     return {};
+}
+
+function _parseName(row: string): object {
+    return {
+        name: row.trim(),
+    }
 }
 
 function _parseRow1(row: string): object {
