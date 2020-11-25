@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.15.0 (2020-11-25)
+
+
+### Features
+
+* **vsop87:** add short theory for faster calculations ([47c729f](https://github.com/andrmoel/astronomy-bundle-js/commit/47c729f4420b637d037268388ca66c9987e8ce68))
+
 ### 5.14.3 (2020-11-24)
 
 ### 5.14.2 (2020-11-23)
