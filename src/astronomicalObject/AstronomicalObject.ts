@@ -2,7 +2,7 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 import {createTimeOfInterest} from '../time';
 import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {
@@ -16,6 +16,7 @@ import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import ILocation from '../earth/interfaces/ILocation';
 import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
+import IConjunction from '../planets/interfaces/IConjunction';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected jd: number = 0.0;
@@ -142,9 +143,11 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
-    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {
-        const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<IConjunction> {
+        return await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+    }
 
-        return createTimeOfInterest.fromJulianDay(jd);
+    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<IConjunction> {
+        return await getConjunctionInLongitude(this.constructor, astronomicalObjectConstructor, this.jd0);
     }
 }

@@ -224,7 +224,8 @@ it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 1, 27, 0, 0, 0);
     const venus = new Venus(toiConjunction0);
 
-    const toiConjunction = await venus.getConjunctionInRightAscensionTo(Neptune);
+    const conjunction = await venus.getConjunctionInRightAscensionTo(Neptune);
 
-    expect(toiConjunction.time).toEqual({year: 2020, month: 1, day: 27, hour: 19, min: 25, sec: 49});
+    expect(conjunction.toi.time).toEqual({year: 2020, month: 1, day: 27, hour: 19, min: 25, sec: 49});
+    expect(round(conjunction.angularDistance, 6)).toBe(-0.075012);
 });
