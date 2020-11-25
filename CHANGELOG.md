@@ -2,6 +2,154 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.14.3 (2020-11-24)
+
+### 5.14.2 (2020-11-23)
+
+### 5.14.1 (2020-11-23)
+
+## 5.14.0 (2020-11-23)
+
+
+### Features
+
+* calculate elongation ([b09fe61](https://github.com/andrmoel/astronomy-bundle-js/commit/b09fe61396b9bb07288685ac35fd4f8dba12ab64))
+
+## 5.13.0 (2020-11-23)
+
+
+### Features
+
+* **planets:** add methods getPositionAngleOfBrightLimb and isWaxing ([ffb1aaa](https://github.com/andrmoel/astronomy-bundle-js/commit/ffb1aaac181f843dad09bce5a7b0db106cf49681))
+
+### 5.12.1 (2020-11-23)
+
+
+### Bug Fixes
+
+* rename getTopocentricEclipticSphericalCoordinates to getTopocentricEquatorialSphericalCoordinates ([23fa824](https://github.com/andrmoel/astronomy-bundle-js/commit/23fa824bb5a14acbc9be186fbe42a45435a85fd9))
+
+## 5.12.0 (2020-11-23)
+
+
+### Features
+
+* **sun:** add method to get topocentric angular diameter ([c3dee28](https://github.com/andrmoel/astronomy-bundle-js/commit/c3dee28c472227fc7056a2c35d497d235c6e7bf4))
+
+### 5.11.1 (2020-11-23)
+
+## 5.11.0 (2020-11-23)
+
+
+### Features
+
+* **moon:** add physical observation data for topocentric observer ([465f048](https://github.com/andrmoel/astronomy-bundle-js/commit/465f048c6f77b88d6de707e193df1f2b50f88423))
+
+### 5.10.1 (2020-11-21)
+
+
+### Bug Fixes
+
+* **coordinate-calc:** azimuth is measured from north instead of south ([56b84d1](https://github.com/andrmoel/astronomy-bundle-js/commit/56b84d1aa62b5cb0c080e0c00437a933524a95f9))
+
+## 5.10.0 (2020-11-21)
+
+
+### Features
+
+* add method to get apparent topocentric coordinates ([f5e4cc3](https://github.com/andrmoel/astronomy-bundle-js/commit/f5e4cc36ceb59e03ddc9fbedc06404ed7166952f))
+
+## 5.9.0 (2020-11-21)
+
+
+### Features
+
+* provide methods to get topocentric coordinates ([961c516](https://github.com/andrmoel/astronomy-bundle-js/commit/961c516a83c51b889a8aaee5fd4c1f6c44947fb6))
+
+### 5.8.1 (2020-11-21)
+
+## 5.8.0 (2020-11-20)
+
+
+### Features
+
+* **sun:** calculate rise and set for upper limb ([d390a08](https://github.com/andrmoel/astronomy-bundle-js/commit/d390a08a31a79daffd6f66d7b5fe942645609396))
+
+### 5.7.4 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** consider when rise or set happens the day before ([dff7e19](https://github.com/andrmoel/astronomy-bundle-js/commit/dff7e19e0003366fd11951c99e87cca281210776))
+
+### 5.7.3 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** fix 360 crossing in interpolating right ascension ([dc73a34](https://github.com/andrmoel/astronomy-bundle-js/commit/dc73a341379e1caab1690c6456d599a97daa2533))
+
+### 5.7.2 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** consider when rise or set happens the next day ([8dd179f](https://github.com/andrmoel/astronomy-bundle-js/commit/8dd179f26f99bda8df99af2813a057da23fa0bc2))
+
+### 5.7.1 (2020-11-20)
+
+
+### Bug Fixes
+
+* **rise-set:** fix interpolation when right ascension crosses 360° angle ([7461ebd](https://github.com/andrmoel/astronomy-bundle-js/commit/7461ebd2da53e6ddaf221a89ef19d7864b71de8d))
+
+## 5.7.0 (2020-11-20)
+
+
+### Features
+
+* **rise-set:** calculate set and rise of sun, moon and planets ([4b21e3f](https://github.com/andrmoel/astronomy-bundle-js/commit/4b21e3fc1a6fbf43037bfed8f7dd34131de6de03))
+
+### 5.6.2 (2020-11-20)
+
+### 5.6.1 (2020-11-20)
+
+## 5.6.0 (2020-11-18)
+
+
+### Features
+
+* **rise-set:** calculate transit of sun, moon and planets ([608e464](https://github.com/andrmoel/astronomy-bundle-js/commit/608e464ad5390aca3ef9b0f8c44eb9c0914d89ca))
+
+### 5.5.3 (2020-11-17)
+
+### 5.5.2 (2020-11-17)
+
+### 5.5.1 (2020-11-17)
+
+## 5.5.0 (2020-11-17)
+
+
+### Features
+
+* **moon:** get position angle of bright limb and check if moon is waxing ([72c74c0](https://github.com/andrmoel/astronomy-bundle-js/commit/72c74c069a6e78c5a16dc58b1990f83d28633882))
+
+### 5.4.1 (2020-11-16)
+
+
+### Bug Fixes
+
+* **moon:** fix false method name for getApparentMagnitude ([8af2e6a](https://github.com/andrmoel/astronomy-bundle-js/commit/8af2e6a42f78d901eded67a26b83a0d53a46ab89))
+
+## 5.4.0 (2020-11-16)
+
+
+### Features
+
+* **magnitude:** calculate apparent magnitude of moon and planets ([277d974](https://github.com/andrmoel/astronomy-bundle-js/commit/277d97426a20646450e966d106f4ef4f1f909bf6))
+
+### 5.3.1 (2020-11-15)
+
 ## 5.3.0 (2020-11-15)
 
 

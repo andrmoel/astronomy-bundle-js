@@ -10,15 +10,18 @@ import IPlanet from './interfaces/IPlanet';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
-import {au2km} from '../utils/distanceCalc';
 import {createEarth} from '../earth';
 import Earth from '../earth/Earth';
+import Sun from '../sun/Sun';
 import {
     correctEffectOfAberration,
     correctEffectOfNutation,
     getLightTimeCorrectedJulianDay
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
+import ILocation from '../earth/interfaces/ILocation';
+import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import Mercury from './Mercury';
 import Venus from './Venus';
 import Mars from './Mars';
@@ -28,11 +31,13 @@ import Uranus from './Uranus';
 import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
+    private sun: Sun;
     private earth: Earth;
 
-    constructor(toi?: TimeOfInterest) {
+    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
         super(toi);
 
+        this.sun = createSun(toi);
         this.earth = createEarth(toi);
     }
 
@@ -87,10 +92,34 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return coords;
     }
 
-    public async getPhaseAngle(): Promise<number> {
-        const sun = createSun(this.toi);
+    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getRise(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getSet(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getElongation(): Promise<number> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const coordsSun = await sun.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getElongation(coords, coordsSun);
+    }
+
+    public async getPhaseAngle(): Promise<number> {
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return observationCalc.getPhaseAngle(coords, coordsSun);
     }
@@ -99,6 +128,19 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const i = await this.getPhaseAngle();
 
         return observationCalc.getIlluminatedFraction(i);
+    }
+
+    public async getPositionAngleOfBrightLimb(): Promise<number> {
+        const coordsPlanet = await this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return observationCalc.getPositionAngleOfBrightLimb(coordsPlanet, coordsSun);
+    }
+
+    public async isWaxing(): Promise<boolean> {
+        const chi = await this.getPositionAngleOfBrightLimb();
+
+        return observationCalc.isWaxing(chi);
     }
 
     private async getLightTimeCorrectedEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -115,7 +157,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             | typeof Saturn
             | typeof Uranus
             | typeof Neptune
-        >this.constructor)(toi);
+            >this.constructor)(toi);
 
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();

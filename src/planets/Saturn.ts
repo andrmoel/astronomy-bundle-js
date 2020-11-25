@@ -5,6 +5,7 @@ import {observationCalc} from '../utils';
 import {DIAMETER_SATURN} from '../constants/diameters';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
 
 export default class Saturn extends Planet {
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
@@ -21,7 +22,9 @@ export default class Saturn extends Planet {
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('saturn_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87SaturnSphericalDate');
+            const vsop87 = this.useVsop87Short
+                ? await import('./vsop87/vsop87SaturnSphericalDateShort')
+                : await import('./vsop87/vsop87SaturnSphericalDate');
 
             return {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
@@ -35,5 +38,13 @@ export default class Saturn extends Planet {
         const distance = await this.getApparentDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_SATURN);
+    }
+
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = await this.getPhaseAngle();
+
+        return getApparentMagnitudeSaturn(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
     }
 }

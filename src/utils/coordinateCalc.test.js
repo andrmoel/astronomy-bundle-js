@@ -3,7 +3,11 @@ import {
     eclipticJ20002eclipticDate,
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
+    equatorialSpherical2topocentricHorizontal,
+    equatorialSpherical2topocentricSpherical,
+    getEquatorialParallax,
     rectangular2spherical,
+    rectangularGeocentric2rectangularHeliocentric,
     rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
 } from './coordinateCalc';
@@ -31,6 +35,54 @@ it('tests spherical2rectangular', () => {
     expect(round(rectangular.x, 6)).toBe(0.621746);
     expect(round(rectangular.y, 6)).toBe(-0.66481);
     expect(round(rectangular.z, 6)).toBe(-0.033134);
+});
+
+it('tests equatorialSpherical2topocentricSpherical', () => {
+    const rightAscension = 339.530208;
+    const declination = -15.771083;
+    const radiusVector = 0.37276;
+    const lat = 33.356111;
+    const lon = -116.8625;
+    const elevation = 1705;
+    const T = 0.03654036428626374;
+
+    const coords = equatorialSpherical2topocentricSpherical(
+        T,
+        rightAscension,
+        declination,
+        radiusVector,
+        lat,
+        lon,
+        elevation,
+    );
+
+    expect(round(coords.rightAscension, 6)).toBe(339.5356);
+    expect(round(coords.declination, 6)).toBe(-15.775012);
+    expect(round(coords.radiusVector, 6)).toBe(0.372755);
+});
+
+it('tests equatorialSpherical2topocentricHorizontal', () => {
+    const T = -0.12727429842573834;
+    const rightAscension = 347.3193375;
+    const declination = -6.71989167;
+    const radiusVector = 0.37276;
+    const lat = 38.921417;
+    const lon = -77.065415;
+    const elevation = 100;
+
+    const coords = equatorialSpherical2topocentricHorizontal(
+        T,
+        rightAscension,
+        declination,
+        radiusVector,
+        lat,
+        lon,
+        elevation,
+    );
+
+    expect(round(coords.azimuth, 6)).toBe(248.033688);
+    expect(round(coords.altitude, 6)).toBe(15.124862);
+    expect(round(coords.radiusVector, 6)).toBe(0.372749);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {
@@ -63,11 +115,22 @@ it('tests rectangularHeliocentric2rectangularGeocentric', () => {
     const coordsPlanet = {x: 1.0, y: 2.0, z: 3.0};
     const coordsEarth = {x: -1.0, y: 0.5, z: 1.3};
 
-    const coords = rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
+    const {x, y, z} = rectangularHeliocentric2rectangularGeocentric(coordsPlanet, coordsEarth);
 
-    expect(coords.x).toBe(2);
-    expect(coords.y).toBe(1.5);
-    expect(coords.z).toBe(1.7);
+    expect(x).toBe(2);
+    expect(y).toBe(1.5);
+    expect(z).toBe(1.7);
+});
+
+it('tests rectangularGeocentric2rectangularHeliocentric', () => {
+    const coordsPlanet = {x: 2.0, y: 1.5, z: 1.7};
+    const coordsEarth = {x: -1.0, y: 0.5, z: 1.3};
+
+    const {x, y, z} = rectangularGeocentric2rectangularHeliocentric(coordsPlanet, coordsEarth);
+
+    expect(x).toBe(1);
+    expect(y).toBe(2);
+    expect(z).toBe(3);
 });
 
 it('tests earthEclipticSpherical2sunEclipticSpherical', () => {
@@ -95,4 +158,10 @@ it('tests eclipticJ20002eclipticDate', () => {
     expect(round(coords.lon, 8)).toBe(118.70413153);
     expect(round(coords.lat, 8)).toBe(1.61533201);
     expect(round(coords.radiusVector, 8)).toBe(1);
+});
+
+it('tests getEquatorialParallax', () => {
+    const pi = getEquatorialParallax(0.37276);
+
+    expect(round(pi, 6)).toBe(0.006553);
 });

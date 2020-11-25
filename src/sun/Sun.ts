@@ -2,13 +2,19 @@ import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import {au2km} from '../utils/distanceCalc';
 import {DIAMETER_SUN} from '../constants/diameters';
 import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+import ILocation from '../earth/interfaces/ILocation';
+import {createTimeOfInterest} from '../time';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
+import {
+    STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
+    STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION
+} from '../constants/standardAltitude';
 
 export default class Sun extends AstronomicalObject {
     private earth: Earth;
@@ -68,13 +74,53 @@ export default class Sun extends AstronomicalObject {
         return coords;
     }
 
+    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getTransit(this.constructor, location, this.jd0);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getRise(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_CENTER_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getRiseUpperLimb(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getSet(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_CENTER_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
+    public async getSetUpperLimb(location: ILocation): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
+
     public async getAngularDiameter(): Promise<number> {
         const distance = await this.getApparentDistanceToEarth();
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
     }
 
+    public async getTopocentricAngularDiameter(location: ILocation): Promise<number> {
+        const distance = await this.getTopocentricDistanceToEarth(location);
+
+        return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
+    }
+
     public async getApparentMagnitude(): Promise<number> {
+        return Promise.resolve(-26.74);
+    }
+
+    public async getTopocentricApparentMagnitude(): Promise<number> {
         return Promise.resolve(-26.74);
     }
 }

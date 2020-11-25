@@ -8,6 +8,11 @@ import Saturn from './Saturn';
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const jupiter = new Jupiter(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await jupiter.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -112,10 +117,65 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(4.61341068);
 });
 
+it('tests getTopocentricEquatorialSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector}
+        = await jupiter.getTopocentricEquatorialSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(23.849714);
+    expect(round(declination, 6)).toBe(8.584211);
+    expect(round(radiusVector, 6)).toBe(4.613405);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await jupiter.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(274.872411);
+    expect(round(altitude, 6)).toBe(7.092488);
+    expect(round(radiusVector, 6)).toBe(4.613405);
+});
+
+it('tests getApparentTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await jupiter.getApparentTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(274.872411);
+    expect(round(altitude, 6)).toBe(7.214429);
+    expect(round(radiusVector, 6)).toBe(4.613405);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await jupiter.getDistanceToEarth();
 
     expect(round(d, 2)).toBe(690150907.85);
+});
+
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await jupiter.getApparentDistanceToEarth();
+
+    expect(round(d, 2)).toBe(690156414.96);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await jupiter.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 2)).toBe(690155630.89);
+});
+
+it('tests getTransit', async () => {
+    const toi = await jupiter.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 17, min: 59, sec: 3});
+});
+
+it('tests getRise', async () => {
+    const toi = await jupiter.getRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 10, sec: 49});
+});
+
+it('tests getSet', async () => {
+    const toi = await jupiter.getSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 0, min: 51, sec: 2});
 });
 
 it('tests getLightTime', async () => {
@@ -130,6 +190,12 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 00\' 42.733"');
 });
 
+it('tests getElongation', async () => {
+    const phi = await jupiter.getElongation();
+
+    expect(round(phi, 2)).toBe(105.37);
+});
+
 it('tests getPhaseAngle', async () => {
     const i = await jupiter.getPhaseAngle();
 
@@ -140,6 +206,18 @@ it('tests getIlluminatedFraction', async () => {
     const i = await jupiter.getIlluminatedFraction();
 
     expect(round(i, 2)).toBe(0.99);
+});
+
+it('tests getPositionAngleOfBrightLimb', async () => {
+    const chi = await jupiter.getPositionAngleOfBrightLimb();
+
+    expect(round(chi, 2)).toBe(248.31);
+});
+
+it('tests isWaxing', async () => {
+    const isWaxing = await jupiter.isWaxing();
+
+    expect(isWaxing).toBeTruthy();
 });
 
 it('tests getConjunctionInRightAscensionTo', async () => {

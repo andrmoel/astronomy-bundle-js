@@ -7,6 +7,11 @@ import Sun from './Sun';
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = new Sun(toi);
 
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await sun.getGeocentricEclipticRectangularJ2000Coordinates();
 
@@ -79,13 +84,80 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(0.99514386);
 });
 
+it('tests getTopocentricEquatorialSphericalCoordinates', async () => {
+    const {rightAscension, declination, radiusVector}
+        = await sun.getTopocentricEquatorialSphericalCoordinates(location);
+
+    expect(round(rightAscension, 6)).toBe(207.248793);
+    expect(round(declination, 6)).toBe(-11.227945);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
+it('tests getTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await sun.getTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(113.50076);
+    expect(round(altitude, 6)).toBe(3.433893);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
+it('tests getApparentTopocentricHorizontalCoordinates', async () => {
+    const {azimuth, altitude, radiusVector} = await sun.getApparentTopocentricHorizontalCoordinates(location);
+
+    expect(round(azimuth, 6)).toBe(113.50076);
+    expect(round(altitude, 6)).toBe(3.643379);
+    expect(round(radiusVector, 6)).toBe(0.995141);
+});
+
 it('tests getDistanceToEarth', async () => {
     const d = await sun.getDistanceToEarth();
 
     expect(round(d, 6)).toBe(148871402.777339);
 });
 
-it('getLightTime', async () => {
+it('tests getApparentDistanceToEarth', async () => {
+    const d = await sun.getApparentDistanceToEarth();
+
+    expect(round(d, 6)).toBe(148871402.777339);
+});
+
+it('tests getTopocentricDistanceToEarth', async () => {
+    const d = await sun.getTopocentricDistanceToEarth(location);
+
+    expect(round(d, 6)).toBe(148871013.470823);
+});
+
+it('tests getTransit', async () => {
+    const toi = await sun.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
+});
+
+it('tests getRise', async () => {
+    const toi = await sun.getRise(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 44});
+});
+
+it('tests getRiseUpperLimb', async () => {
+    const toi = await sun.getRiseUpperLimb(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
+});
+
+it('tests getSet', async () => {
+    const toi = await sun.getSet(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 59});
+});
+
+it('tests getSetUpperLimb', async () => {
+    const toi = await sun.getSetUpperLimb(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
+});
+
+it('tests getLightTime', async () => {
     const lt = await sun.getLightTime();
 
     expect(sec2string(lt)).toBe('0h 8m 16.58s');
@@ -97,8 +169,20 @@ it('tests getAngularDiameter', async () => {
     expect(deg2angle(delta)).toBe('0° 32\' 09.582"');
 });
 
+it('tests getTopocentricAngularDiameter', async () => {
+    const delta = await sun.getTopocentricAngularDiameter(location);
+
+    expect(deg2angle(delta)).toBe('0° 32\' 09.587"');
+});
+
 it('tests getApparentMagnitude', async () => {
     const V = await sun.getApparentMagnitude();
+
+    expect(V).toBe(-26.74);
+});
+
+it('tests getTopocentricApparentMagnitude', async () => {
+    const V = await sun.getTopocentricApparentMagnitude();
 
     expect(V).toBe(-26.74);
 });
