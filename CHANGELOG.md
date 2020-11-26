@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.17.0 (2020-11-26)
+
+
+### Features
+
+* **astronomical-object:** add method getName() ([3cb99ae](https://github.com/andrmoel/astronomy-bundle-js/commit/3cb99aecf0da586f301bf1f84f0693eb8837d7cb))
+
 ## 5.16.0 (2020-11-25)
 
 
