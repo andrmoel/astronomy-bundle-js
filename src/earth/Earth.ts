@@ -8,6 +8,8 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {spherical2rectangular} from '../utils/coordinateCalc';
 
 export default class Earth extends AstronomicalObject {
+    protected name = 'earth';
+
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         const {lon, lat, radiusVector} = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
 

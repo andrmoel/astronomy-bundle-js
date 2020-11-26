@@ -13,6 +13,10 @@ const location = {
     lon: 13.408,
 };
 
+it('tests getName', () => {
+    expect(mercury.getName()).toBe('mercury');
+});
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await mercury.getHeliocentricEclipticRectangularJ2000Coordinates();
 

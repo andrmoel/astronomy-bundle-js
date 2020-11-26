@@ -8,6 +8,8 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
 
 export default class Neptune extends Planet {
+    protected name = 'neptune';
+
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('neptune_heliocentric_spherical_j2000', this.t, async () => {
             const vsop87 = await import('./vsop87/vsop87NeptuneSphericalJ2000');

@@ -8,6 +8,8 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
 
 export default class Saturn extends Planet {
+    protected name = 'saturn';
+
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('saturn_heliocentric_spherical_j2000', this.t, async () => {
             const vsop87 = await import('./vsop87/vsop87SaturnSphericalJ2000');

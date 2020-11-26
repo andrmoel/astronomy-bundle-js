@@ -13,6 +13,10 @@ const location = {
     lon: 13.408,
 };
 
+it('tests getName', () => {
+    expect(venus.getName()).toBe('venus');
+});
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
 

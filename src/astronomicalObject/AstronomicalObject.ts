@@ -19,6 +19,8 @@ import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
 import IConjunction from '../planets/interfaces/IConjunction';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
+    protected name = 'astronomical object';
+
     protected jd: number = 0.0;
     protected jd0: number = 0.0;
     protected T: number = 0.0;
@@ -29,6 +31,10 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.jd0 = toi.getJulianDay0();
         this.T = toi.getJulianCenturiesJ2000();
         this.t = toi.getJulianMillenniaJ2000();
+    }
+
+    public getName() {
+        return this.name;
     }
 
     abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;

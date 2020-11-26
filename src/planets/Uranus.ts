@@ -8,6 +8,8 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 
 export default class Uranus extends Planet {
+    protected name = 'uranus';
+
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('uranus_heliocentric_spherical_j2000', this.t, async () => {
             const vsop87 = await import('./vsop87/vsop87UranusSphericalJ2000');

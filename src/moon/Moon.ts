@@ -27,6 +27,8 @@ import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
 
 export default class Moon extends AstronomicalObject {
+    protected name = 'moon';
+
     private sun: Sun;
     private earth: Earth;
 

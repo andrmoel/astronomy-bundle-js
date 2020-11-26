@@ -8,6 +8,8 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
 
 export default class Mars extends Planet {
+    protected name = 'mars';
+
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mars_heliocentric_spherical_j2000', this.t, async () => {
             const vsop87 = await import('./vsop87/vsop87MarsSphericalJ2000');
