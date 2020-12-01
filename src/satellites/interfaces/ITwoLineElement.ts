@@ -2,7 +2,7 @@ export default interface IEclipticSphericalCoordinates {
     noradNr: number,
     classification: string,
     internationalDesignator: string,
-    epochDay: number,
+    epochYear: number,
     epochDayOfYear: number,
     firstDerivativeMeanMotion: number,
     secondDerivativeMeanMotion: number,
@@ -15,5 +15,6 @@ export default interface IEclipticSphericalCoordinates {
     eccentricity: number,
     argumentOfPerigee: number,
     meanAnomaly: number,
+    meanMotion: number,
     revolution: number,
 }

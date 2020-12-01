@@ -46,7 +46,7 @@ function _parseRow1(row: string): object {
         noradNr: parseInt(row.substr(2, 5)),
         classification: row.substr(7, 1).trim(),
         internationalDesignator: row.substr(9, 8).trim(),
-        epoch: shortYear2longYear(row.substr(18, 2)),
+        epochYear: shortYear2longYear(row.substr(18, 2)),
         epochDayOfYear: parseFloat(row.substr(20, 12)),
         firstDerivativeMeanMotion: parseFloat(row.substr(33, 10)),
         secondDerivativeMeanMotion: _parseExpString(row.substr(44, 8)),
@@ -63,7 +63,8 @@ function _parseRow2(row: string): object {
         rightAscension: parseFloat(row.substr(17, 8)),
         eccentricity: parseFloat('0.' + row.substr(26, 7)),
         argumentOfPerigee: parseFloat(row.substr(34, 8)),
-        meanAnomaly: parseFloat(row.substr(52, 11)),
+        meanAnomaly: parseFloat(row.substr(43, 8)),
+        meanMotion: parseFloat(row.substr(52, 11)),
         revolution: parseInt(row.substr(63, 5)),
     }
 }

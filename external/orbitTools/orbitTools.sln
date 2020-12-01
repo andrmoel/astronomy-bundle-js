@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{876EF50C-EB48-4A30-9A06-63F82FD20832}"
+	ProjectSection(SolutionItems) = preProject
+		readme.txt = readme.txt
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core.vcxproj", "{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "orbit", "orbit\orbit.vcxproj", "{E7D39150-D44F-426D-B0E2-5ACFA19042DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Debug|Win32.Build.0 = Debug|Win32
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Debug|x64.ActiveCfg = Debug|x64
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Debug|x64.Build.0 = Debug|x64
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Release|Win32.ActiveCfg = Release|Win32
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Release|Win32.Build.0 = Release|Win32
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Release|x64.ActiveCfg = Release|x64
+		{F3067B0D-4F1E-457A-AE9C-AAB6CCD5C1A3}.Release|x64.Build.0 = Release|x64
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Debug|Win32.Build.0 = Debug|Win32
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Debug|x64.ActiveCfg = Debug|x64
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Debug|x64.Build.0 = Debug|x64
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Release|Win32.ActiveCfg = Release|Win32
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Release|Win32.Build.0 = Release|Win32
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Release|x64.ActiveCfg = Release|x64
+		{E7D39150-D44F-426D-B0E2-5ACFA19042DE}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
