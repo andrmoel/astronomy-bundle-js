@@ -1,7 +1,7 @@
 import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {km2au} from './distanceCalc';
-import {sunCalc} from './index';
+import {earthCalc, sunCalc} from './index';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2
@@ -45,6 +45,14 @@ export function getMeanLongitude(T: number): number {
         - Math.pow(T, 4) / 65194000;
 
     return normalizeAngle(L);
+}
+
+export function getMeanLongitudeOfAscendingNode(T: number): number {
+    return 125.0445479
+        - 1934.1362891 * T
+        + 0.0020754 * Math.pow(T, 2)
+        + Math.pow(T, 3) / 467441
+        - Math.pow(T, 4) / 60616000;
 }
 
 export function getEquatorialHorizontalParallax(T: number): number {
@@ -212,4 +220,47 @@ function _getSumB(T: number): number {
     });
 
     return sumB;
+}
+
+export function getOpticalLiberationInLongitude(longitude: number, latitude: number, T: number): number {
+    const latRad = deg2rad(latitude);
+
+    const i = 1.54242;
+    const iRad = deg2rad(i);
+
+    const phi = earthCalc.getNutationInLongitude(T);
+    const F = getArgumentOfLatitude(T);
+    const Omega = getMeanLongitudeOfAscendingNode(T);
+
+    // Meeus 53.1
+    const W = normalizeAngle(longitude - phi - Omega);
+    const WRad = deg2rad(W);
+
+    const ARad = Math.atan2(
+        Math.sin(WRad) * Math.cos(latRad) * Math.cos(iRad) - Math.sin(latRad) * Math.sin(iRad),
+        Math.cos(WRad) * Math.cos(latRad)
+    );
+    const A = normalizeAngle(rad2deg(ARad));
+
+    return A - F;
+}
+
+export function getOpticalLiberationInLatitude(longitude: number, latitude: number, T: number): number {
+    const latRad = deg2rad(latitude);
+
+    const i = 1.54242;
+    const iRad = deg2rad(i);
+
+    const phi = earthCalc.getNutationInLongitude(T);
+    const Omega = getMeanLongitudeOfAscendingNode(T);
+
+    // Meeus 53.1
+    const W = normalizeAngle(longitude - phi - Omega);
+    const WRad = deg2rad(W);
+
+    const bRad = Math.asin(
+        -1 * Math.sin(WRad) * Math.cos(latRad) * Math.sin(iRad) - Math.sin(latRad) * Math.cos(iRad)
+    );
+
+    return rad2deg(bRad);
 }
