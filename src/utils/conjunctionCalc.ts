@@ -1,8 +1,8 @@
-import IConjunction from '../planets/interfaces/IConjunction';
+import IConjunction, {Position} from '../planets/interfaces/IConjunction';
 import {createTimeOfInterest} from '../time';
 import {
-    getInterpolateValue5,
     getDeclinationInterpolationArray,
+    getInterpolateValue5,
     getLatitudeInterpolationArray,
     getLongitudeInterpolationArray,
     getRightAscensionInterpolationArray,
@@ -31,7 +31,8 @@ export async function getConjunctionInRightAscension(
 
     return {
         toi: createTimeOfInterest.fromJulianDay(jd0 + n),
-        angularDistance: declination,
+        position: declination >= 0 ? Position.north : Position.south,
+        angularDistance: Math.abs(declination),
     };
 }
 
@@ -57,7 +58,8 @@ export async function getConjunctionInLongitude(
 
     return {
         toi: createTimeOfInterest.fromJulianDay(jd0 + n),
-        angularDistance: latitude,
+        position: latitude >= 0 ? Position.north : Position.south,
+        angularDistance: Math.abs(latitude),
     };
 }
 

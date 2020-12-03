@@ -8,10 +8,11 @@ describe('test for getConjunctionInRightAscension', () => {
     it('gets the conjunction of jupiter and saturn in 2020', async () => {
         const jd0 = 2459204.5;
 
-        const conjunction = await getConjunctionInRightAscension(Jupiter, Saturn, jd0);
+        const {toi, position, angularDistance} = await getConjunctionInRightAscension(Jupiter, Saturn, jd0);
 
-        expect(conjunction.toi.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
-        expect(round(conjunction.angularDistance, 6)).toBe(-0.104212);
+        expect(toi.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
+        expect(position).toBe(1);
+        expect(round(angularDistance, 6)).toBe(0.104212);
     });
 
     it('is no conjunction possible for the given date', async () => {

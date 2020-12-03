@@ -18,7 +18,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
-    1. [Coordinates](#astronomical-object-coordinates)
+    1. [Coordinates](#astronomical-objects-coordinates)
 5. [Earth](#earth)
     1. [Position of the Earth](#earth-position)
     2. [Nutation in Longitude and Obliquity](#earth-nutation)
@@ -814,7 +814,7 @@ import {createJupiter, Saturn} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2018, 6, 4, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn);
+const {toi} = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 ```
 
 This code will throw an error: *No conjunction possible for given objects at 2458273.5*
@@ -828,11 +828,12 @@ import {createJupiter, Saturn} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn); // Result is of type TimeOfInterest
+const {toi, position, angularDistance} = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 ```
 
 Result of the calculation:\
-*There is a conjunction on 21 December 2020 at 13:24 UTC*
+*There is a conjunction on 21 December 2020 at 13:24 UTC*\
+*And Jupiter is 06' 15.164" north of Saturn* 
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 
