@@ -94,14 +94,20 @@ export default class Moon extends AstronomicalObject {
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getRise(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
+    public async getRise(
+        location: ILocation,
+        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
+    ): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getSet(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
+    public async getSet(
+        location: ILocation,
+        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
+    ): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }

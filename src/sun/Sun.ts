@@ -82,28 +82,30 @@ export default class Sun extends AstronomicalObject {
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getRise(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_CENTER_REFRACTION);
+    public async getRise(
+        location: ILocation,
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+    ): Promise<TimeOfInterest> {
+        const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getRiseUpperLimb(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
-
-        return createTimeOfInterest.fromJulianDay(jd);
+        return await this.getRise(location, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
     }
 
-    public async getSet(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_CENTER_REFRACTION);
+    public async getSet(
+        location: ILocation,
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+    ): Promise<TimeOfInterest> {
+        const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getSetUpperLimb(location: ILocation): Promise<TimeOfInterest> {
-        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
-
-        return createTimeOfInterest.fromJulianDay(jd);
+        return await this.getSet(location, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
     }
 
     public async getAngularDiameter(): Promise<number> {
