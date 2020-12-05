@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.17.5 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** throw error when no transit on given day is possible ([b7db39f](https://github.com/andrmoel/astronomy-bundle-js/commit/b7db39fdd11c9a06621396fe4d1382fc4e0e1d93))
+
 ### 5.17.4 (2020-12-05)
 
 ### 5.17.3 (2020-12-04)
