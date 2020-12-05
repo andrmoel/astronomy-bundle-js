@@ -18,9 +18,14 @@ export async function getTransit(
     let m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsTransit(objConstructor, location, jd0, m0);
         m0 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error('While loop overflow in transit calc. Please contact the developer.');
+        }
     } while (Math.abs(dm) > 0.00001);
 
     return jd0 + m0;
@@ -42,9 +47,14 @@ export async function getRise(
     let m1 = normalizeAngle(m0 - mH, 1);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m1);
         m1 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error('While loop overflow in rise calc. Please contact the developer.');
+        }
     } while (Math.abs(dm) > 0.00001);
 
     if (m1 < 0) {
@@ -74,9 +84,14 @@ export async function getSet(
     let m2 = normalizeAngle(m0 + mH, 1);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m2);
         m2 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error('While loop overflow in set calc. Please contact the developer.');
+        }
     } while (Math.abs(dm) > 0.00001);
 
     if (m2 < 0) {
