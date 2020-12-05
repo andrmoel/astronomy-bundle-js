@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.17.6 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** local hour angle must be between -180 and 180 deg ([25818ab](https://github.com/andrmoel/astronomy-bundle-js/commit/25818aba0bc29727f809a673240b52e9641f5eca))
+
 ### 5.17.5 (2020-12-05)
 
 
