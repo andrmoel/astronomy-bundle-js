@@ -28,6 +28,10 @@ export async function getTransit(
         }
     } while (Math.abs(dm) > 0.00001);
 
+    if (m0 < 0 || m0 >= 1) {
+        throw new Error(`Astronomical object has no transit on given day ${jd0}.`);
+    }
+
     return jd0 + m0;
 }
 

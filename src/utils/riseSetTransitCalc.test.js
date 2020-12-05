@@ -13,15 +13,33 @@ import {round} from './math';
 const toi = createTimeOfInterest.fromTime(1988, 3, 20, 0, 0, 0);
 const jd0 = toi.getJulianDay0();
 
-it('tests getTransit', async () => {
-    const location = {
-        lat: 42.3333,
-        lon: -71.0833,
-    };
+describe('test for getTransit', () => {
+    it('gets the transit for given day', async () => {
+        const location = {
+            lat: 42.3333,
+            lon: -71.0833,
+        };
 
-    const jd = await getTransit(Venus, location, jd0);
+        const jd = await getTransit(Venus, location, jd0);
 
-    expect(round(jd, 6)).toBe(2447241.319796);
+        expect(round(jd, 6)).toBe(2447241.319796);
+    });
+
+    it('is no transit possible', async () => {
+        const jd0 = 2459214.5;
+        const location = {
+            lat: 52.519,
+            lon: 13.408,
+        };
+
+        try {
+            await getTransit(Moon, location, jd0);
+
+            fail('Expected error was not thrown');
+        } catch (error) {
+            expect(error.message).toBe('Astronomical object has no transit on given day 2459214.5.');
+        }
+    });
 });
 
 describe('test for getRise', () => {
