@@ -25,6 +25,18 @@ describe('test for getTransit', () => {
         expect(round(jd, 6)).toBe(2447241.319796);
     });
 
+    it('gets the transit when right ascension crosses 360°', async () => {
+        const jd0 = 2459232.5;
+        const location = {
+            lat: 52.519,
+            lon: 13.408,
+        };
+
+        const jd = await getTransit(Moon, location, jd0);
+
+        expect(round(jd, 6)).toBe(2459233.15087);
+    });
+
     it('is no transit possible', async () => {
         const jd0 = 2459214.5;
         const location = {

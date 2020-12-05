@@ -188,9 +188,11 @@ function _getLocalHourAngle(
 ) {
     const T = julianDay2julianCenturiesJ2000(jd0);
     const GAST = getGreenwichApparentSiderealTime(T);
-    const theta0 = normalizeAngle(GAST + 360.985647 * m);
+    const theta0 = GAST + 360.985647 * m;
 
-    return theta0 + longitude - raInterpolated;
+    const H = theta0 + longitude - raInterpolated;
+
+    return normalizeAngle(H + 180) - 180;
 }
 
 async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0: number): Promise<number> {
