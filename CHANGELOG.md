@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.17.7 (2020-12-06)
+
+
+### Bug Fixes
+
+* **rise-set:** calculate case when rise and transit are very close ([fce58fd](https://github.com/andrmoel/astronomy-bundle-js/commit/fce58fdc706dac2197a13ac3f2560a62cf26953b))
+
 ### 5.17.6 (2020-12-05)
 
 
