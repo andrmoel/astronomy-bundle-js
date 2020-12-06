@@ -24,7 +24,7 @@ export async function getTransit(
         m0 += dm;
 
         if (cnt++ > 100) {
-            throw new Error('While loop overflow in transit calc. Please contact the developer.');
+            throw new Error(`While loop overflow. Astronomical object has no transit on given day ${jd0}.`);
         }
     } while (Math.abs(dm) > 0.00001);
 
@@ -57,7 +57,7 @@ export async function getRise(
         m1 += dm;
 
         if (cnt++ > 100) {
-            throw new Error('While loop overflow in rise calc. Please contact the developer.');
+            throw new Error(`While loop overflow. Astronomical object cannot rise on given day ${jd0}.`);
         }
     } while (Math.abs(dm) > 0.00001);
 
@@ -94,7 +94,7 @@ export async function getSet(
         m2 += dm;
 
         if (cnt++ > 100) {
-            throw new Error('While loop overflow in set calc. Please contact the developer.');
+            throw new Error(`While loop overflow. Astronomical object cannot set on given day ${jd0}.`);
         }
     } while (Math.abs(dm) > 0.00001);
 
@@ -205,6 +205,10 @@ async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0:
 
     // Meeus 15.1
     const cosH0 = (Math.sin(h0Rad) - Math.sin(latRad) * Math.sin(dRad)) / (Math.cos(latRad) * Math.cos(dRad));
+
+    if (Math.abs(cosH0) > 1 && Math.abs(cosH0) <= 1.1) {
+        return 0;
+    }
 
     return rad2deg(Math.acos(cosH0));
 }

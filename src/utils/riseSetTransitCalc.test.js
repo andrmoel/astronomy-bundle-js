@@ -66,6 +66,18 @@ describe('test for getRise', () => {
         expect(round(jd, 6)).toBe(2447241.017517);
     });
 
+    it('has a rise where approximated m is NAN, which is false', async () => {
+        const jd0 = 2459210.5;
+        const location = {
+            lat: 52.519,
+            lon: 13.408,
+        };
+
+        const jd = await getRise(Moon, location, jd0, 57.8);
+
+        expect(round(jd, 6)).toBe(2459211.359435);
+    });
+
     it('is not possible to rise sun because of midnight sun', async () => {
         const jd0 = 2459001.5;
         const location = {
