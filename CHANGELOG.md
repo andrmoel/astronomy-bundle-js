@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 5.17.8 (2020-12-28)
+
+
+### Bug Fixes
+
+* **typescript:** async cannot be used in abstract functions ([74ade1f](https://github.com/andrmoel/astronomy-bundle-js/commit/74ade1fd27e16d2462c80a85a86ba98ae86158b2))
+
 ### 5.17.7 (2020-12-06)
 
 
