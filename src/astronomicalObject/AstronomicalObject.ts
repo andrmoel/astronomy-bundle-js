@@ -71,7 +71,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return spherical2rectangular(lon, lat, radiusVector);
     }
 
-    abstract async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
+    abstract getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
     public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
         const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalCoordinates();

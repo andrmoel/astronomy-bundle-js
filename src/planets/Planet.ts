@@ -53,9 +53,9 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return spherical2rectangular(lon, lat, radiusVector);
     }
 
-    public abstract async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
+    public abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
 
-    public abstract async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
+    public abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricEclipticRectangularJ2000Coordinates();
