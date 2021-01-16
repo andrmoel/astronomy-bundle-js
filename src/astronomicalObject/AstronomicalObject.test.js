@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import AstronomicalObject from './AstronomicalObject';
 
-jest.spyOn(global.Date, 'now').mockReturnValueOnce('2020-10-21 10:00:00');
+jest.spyOn(global.Date, 'now').mockReturnValueOnce('2020-10-21 10:00:00Z');
 
 class TestClass extends AstronomicalObject {
 }
