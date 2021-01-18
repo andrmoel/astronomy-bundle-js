@@ -218,7 +218,7 @@ export function eclipticJ20002eclipticDate(
 ): IEclipticSphericalCoordinates {
     const jd = julianCenturiesJ20002julianDay(T);
 
-    return correctPrecessionForEclipticCoordinates(lon, lat, radiusVector, jd);
+    return correctPrecessionForEclipticCoordinates({lon, lat, radiusVector}, jd);
 }
 
 export function getEquatorialParallax(d: number): number {

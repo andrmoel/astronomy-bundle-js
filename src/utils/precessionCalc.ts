@@ -5,14 +5,12 @@ import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getEpochInterval, getEpochIntervalToJ2000} from './timeCalc';
 
 export function correctPrecessionForEclipticCoordinates(
-    lon0: number,
-    lat0: number,
-    radiusVector: number,
+    coords: IEclipticSphericalCoordinates,
     jd: number,
     startingEpoch: number = EPOCH_J2000,
 ): IEclipticSphericalCoordinates {
-    const lonRad0 = deg2rad(lon0);
-    const latRad0 = deg2rad(lat0);
+    const lonRad = deg2rad(coords.lon);
+    const latRad = deg2rad(coords.lat);
 
     const T = getEpochIntervalToJ2000(startingEpoch);
     const t = getEpochInterval(jd, startingEpoch);
@@ -33,9 +31,9 @@ export function correctPrecessionForEclipticCoordinates(
     const PiRad = deg2rad(Pi);
 
     // Meeus 21.7
-    const A = Math.cos(etaRad) * Math.cos(latRad0) * Math.sin(PiRad - lonRad0) - Math.sin(etaRad) * Math.sin(latRad0);
-    const B = Math.cos(latRad0) * Math.cos(PiRad - lonRad0);
-    const C = Math.cos(etaRad) * Math.sin(latRad0) + Math.sin(etaRad) * Math.cos(latRad0) * Math.sin(PiRad - lonRad0);
+    const A = Math.cos(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad) - Math.sin(etaRad) * Math.sin(latRad);
+    const B = Math.cos(latRad) * Math.cos(PiRad - lonRad);
+    const C = Math.cos(etaRad) * Math.sin(latRad) + Math.sin(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad);
 
     const lon = p + Pi - rad2deg(Math.atan2(A, B));
     const lat = rad2deg(Math.asin(C));
@@ -43,19 +41,17 @@ export function correctPrecessionForEclipticCoordinates(
     return {
         lon: normalizeAngle(lon),
         lat: lat,
-        radiusVector: radiusVector,
+        radiusVector: coords.radiusVector,
     }
 }
 
 export function correctPrecessionForEquatorialCoordinates(
-    rightAscension0: number,
-    declination0: number,
-    radiusVector: number,
+    coords: IEquatorialSphericalCoordinates,
     jd: number,
     startingEpoch: number = EPOCH_J2000,
 ): IEquatorialSphericalCoordinates {
-    const raRad0 = deg2rad(rightAscension0);
-    const dRad0 = deg2rad(declination0);
+    const raRad = deg2rad(coords.rightAscension);
+    const dRad = deg2rad(coords.declination);
 
     const T = getEpochIntervalToJ2000(startingEpoch);
     const t = getEpochInterval(jd, startingEpoch);
@@ -76,9 +72,9 @@ export function correctPrecessionForEquatorialCoordinates(
     const thetaRad = deg2rad(theta);
 
     // Meeus 21.4
-    const A = Math.cos(dRad0) * Math.sin(raRad0 + xiRad);
-    const B = Math.cos(thetaRad) * Math.cos(dRad0) * Math.cos(raRad0 + xiRad) - Math.sin(thetaRad) * Math.sin(dRad0);
-    const C = Math.sin(thetaRad) * Math.cos(dRad0) * Math.cos(raRad0 + xiRad) + Math.cos(thetaRad) * Math.sin(dRad0);
+    const A = Math.cos(dRad) * Math.sin(raRad + xiRad);
+    const B = Math.cos(thetaRad) * Math.cos(dRad) * Math.cos(raRad + xiRad) - Math.sin(thetaRad) * Math.sin(dRad);
+    const C = Math.sin(thetaRad) * Math.cos(dRad) * Math.cos(raRad + xiRad) + Math.cos(thetaRad) * Math.sin(dRad);
 
     const rightAscension = rad2deg(Math.atan2(A, B)) + zeta;
     const declination = rad2deg(Math.asin(C));
@@ -86,6 +82,6 @@ export function correctPrecessionForEquatorialCoordinates(
     return {
         rightAscension: normalizeAngle(rightAscension),
         declination: declination,
-        radiusVector: radiusVector,
+        radiusVector: coords.radiusVector,
     }
 }
