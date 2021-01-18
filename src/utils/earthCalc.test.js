@@ -9,6 +9,7 @@ import {
 } from './earthCalc';
 import {round} from './math';
 import {deg2angle} from './angleCalc';
+import {getAngularSeparation} from './distanceCalc';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;
@@ -54,4 +55,22 @@ it('tests getNutationInObliquity', () => {
     const sumEps = getNutationInObliquity(T);
 
     expect(deg2angle(sumEps)).toBe('0° 00\' 09.442"');
+});
+
+it('tests getAngularSeparation', () => {
+    const coords1 = {
+        rightAscension: 213.9154,
+        declination: 19.1825,
+        radiusVector: 1,
+    };
+
+    const coords2 = {
+        rightAscension: 201.2983,
+        declination: -11.1614,
+        radiusVector: 1,
+    };
+
+    const d = getAngularSeparation(coords1, coords2);
+
+    expect(round(d, 4)).toBe(32.7930);
 });
