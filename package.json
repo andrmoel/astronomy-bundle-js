@@ -31,7 +31,7 @@
     "build": "tsc",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "test": "TZ=UTC jest ./src",
+    "test": "jest ./src",
     "release": "standard-version --tag-prefix --commit-all",
     "release:push": "git push --follow-tags"
   },
