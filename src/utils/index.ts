@@ -6,6 +6,7 @@ import * as moonCalc from './moonCalc';
 import * as moonPhaseCalc from './moonPhaseCalc';
 import * as observationCalc from './observationCalc';
 import * as precession from './precessionCalc';
+import * as starCalc from './starCalc';
 import * as sunCalc from './sunCalc';
 import * as timeCalc from './timeCalc';
 
@@ -18,6 +19,7 @@ export {
     moonPhaseCalc,
     observationCalc,
     precession,
+    starCalc,
     sunCalc,
     timeCalc
 };
