@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.18.0 (2021-01-18)
+
+
+### Features
+
+* **precession:** add functions to calculate precession ([fca422a](https://github.com/andrmoel/astronomy-bundle-js/commit/fca422ae6b84636ba77853bb60566a57ee66e99b))
+
 ### 5.17.10 (2021-01-18)
 
 ### 5.17.9 (2021-01-18)
