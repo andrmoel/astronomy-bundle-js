@@ -1,27 +1,44 @@
-import {deg2rad} from './angleCalc';
-import {round} from './math';
 import {createTimeOfInterest} from '../time';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
-    MOON_PHASE_NEW_MOON
+    MOON_PHASE_NEW_MOON,
 } from '../constants/moonPhase';
-
+import {round} from './math';
+import {deg2rad} from './angleCalc';
 
 export function getTimeOfInterestOfUpcomingPhase(decimalYear: number, moonPhase: number): TimeOfInterest {
-    const k = round((decimalYear - 2000) * 12.3685) + moonPhase;
-    const T = k / 1236.85;
+    let k = round((decimalYear - 2000) * 12.3685) + moonPhase;
+    let toi = _getTimeOfInterestOfPhase(k);
+    // ensure toi is not in history
+    while (toi.getDecimalYear() < decimalYear) {
+        k = k + 1;
+        toi = _getTimeOfInterestOfPhase(k);
+    }
+    // check if event is the upcoming first one(not second) event
+    let curToi = createTimeOfInterest.fromJulianDay(toi.jd);
+    while (toi.getDecimalYear() >= decimalYear) {
+        curToi = createTimeOfInterest.fromJulianDay(toi.jd);
+        k = k - 1;
+        toi = _getTimeOfInterestOfPhase(k);
+    }
 
-    const JDE = _getJulianEphemerisDays(k, T);
-    const corrections = _getPeriodicTermCorrections(k, T, moonPhase);
-    const wCorrections = _getQuarterPhaseCorrections(k, T, moonPhase);
-    const pCorrections = _getPlanetaryCorrections(k, T);
+    return curToi;
 
-    const jd = JDE + corrections + wCorrections + pCorrections;
+    function _getTimeOfInterestOfPhase(k: number) {
+        const T = k / 1236.85;
 
-    return createTimeOfInterest.fromJulianDay(jd);
+        const JDE = _getJulianEphemerisDays(k, T);
+        const corrections = _getPeriodicTermCorrections(k, T, moonPhase);
+        const wCorrections = _getQuarterPhaseCorrections(k, T, moonPhase);
+        const pCorrections = _getPlanetaryCorrections(k, T);
+
+        const jd = JDE + corrections + wCorrections + pCorrections;
+
+        return createTimeOfInterest.fromJulianDay(jd);
+    }
 }
 
 function _getPeriodicTermCorrections(k: number, T: number, moonPhase: number): number {
@@ -231,7 +248,7 @@ function _getMeanAnomalyMoon(k: number, T: number): number {
         + 385.81693528 * k
         + 0.0107582 * Math.pow(T, 2)
         + 0.00001238 * Math.pow(T, 3)
-        + 0.000000058 * Math.pow(T, 4)
+        + 0.000000058 * Math.pow(T, 4);
 }
 
 function _getArgumentOfLatitudeMoon(k: number, T: number): number {
