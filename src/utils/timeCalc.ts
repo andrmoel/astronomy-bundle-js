@@ -1,4 +1,5 @@
 import ITime from '../time/interfaces/ITime';
+import {EPOCH_J2000} from '../constants/epoch';
 import {round} from './math';
 import {deg2rad, normalizeAngle} from './angleCalc';
 import {earthCalc} from './index';
@@ -113,6 +114,14 @@ export function julianMillenniaJ20002julianDay(t: number): number {
     const T = t * 10;
 
     return julianCenturiesJ20002julianDay(T);
+}
+
+export function getEpochInterval(jd: number, startingEpoch: number): number {
+    return (jd - startingEpoch) / 36525;
+}
+
+export function getEpochIntervalToJ2000(startingEpoch: number) {
+    return getEpochInterval(startingEpoch, EPOCH_J2000);
 }
 
 export function dayOfYear2time(year: number, dayOfYear: number): ITime {

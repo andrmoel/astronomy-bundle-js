@@ -1,10 +1,13 @@
 import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
+import {EPOCH_J1950, EPOCH_J2000} from '../constants/epoch';
 import {
     dayOfYear2time,
     getDayOfWeek,
     getDayOfYear,
     getDecimalYear,
     getDeltaT,
+    getEpochInterval,
+    getEpochIntervalToJ2000,
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
     getLocalApparentSiderealTime,
@@ -136,6 +139,18 @@ it('tests julianDay2julianMillenniaJ2000', () => {
 
 it('tests julianMillenniaJ20002julianDay', () => {
     expect(round(julianMillenniaJ20002julianDay(-0.012729637235), 1)).toBe(2446895.5);
+});
+
+it('tests getEpochInterval', () => {
+    expect(getEpochInterval(2451545, EPOCH_J2000)).toBe(0);
+    expect(getEpochInterval(2451545, EPOCH_J1950)).toBe(0.5);
+    expect(round(getEpochInterval(2452049.29, EPOCH_J2000), 8)).toBe(0.01380671);
+    expect(round(getEpochInterval(2452049.29, EPOCH_J1950), 8)).toBe(0.51380671);
+});
+
+it('tests getEpochIntervalToJ2000', () => {
+    expect(getEpochIntervalToJ2000(2451545)).toBe(0);
+    expect(round(getEpochIntervalToJ2000(2452049.29), 8)).toBe(0.01380671);
 });
 
 it('tests dayOfYear2time', () => {
