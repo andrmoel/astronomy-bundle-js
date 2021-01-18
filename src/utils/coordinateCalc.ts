@@ -3,7 +3,8 @@ import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSp
 import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
 import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
-import {getLocalApparentSiderealTime, getLocalHourAngle} from './timeCalc';
+import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
+import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 import {earthCalc} from './index';
 
 export function rectangular2spherical(x: number, y: number, z: number): IEclipticSphericalCoordinates {
@@ -206,35 +207,18 @@ export function earthEclipticSpherical2sunEclipticSpherical(
     }
 }
 
+/**
+ * @deprecated Use correctPrecessionForEclipticCoordinates()
+ */
 export function eclipticJ20002eclipticDate(
     lon: number,
     lat: number,
     radiusVector: number,
-    t: number,
+    T: number,
 ): IEclipticSphericalCoordinates {
-    const lonRad = deg2rad(lon);
-    const latRad = deg2rad(lat);
+    const jd = julianCenturiesJ20002julianDay(T);
 
-    const eta = sec2deg(47.0029) * t - sec2deg(0.03302) * Math.pow(t, 2) + sec2deg(0.00006) * Math.pow(t, 3);
-    const Pi = 174.876384 - sec2deg(869.8089) * t + sec2deg(0.03536) * Math.pow(t, 2);
-    const p = sec2deg(5029.0966) * t + sec2deg(1.11113) * Math.pow(t, 2) + sec2deg(0.000006) * Math.pow(t, 3);
-
-    const etaRad = deg2rad(eta);
-    const PiRad = deg2rad(Pi);
-
-    // Meeus 21.7
-    const A = Math.cos(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad) - Math.sin(etaRad) * Math.sin(latRad);
-    const B = Math.cos(latRad) * Math.cos(PiRad - lonRad);
-    const C = Math.cos(etaRad) * Math.sin(latRad) + Math.sin(etaRad) * Math.cos(latRad) * Math.sin(PiRad - lonRad);
-
-    const lonDate = p + Pi - rad2deg(Math.atan2(A, B));
-    const latDate = rad2deg(Math.asin(C));
-
-    return {
-        lon: normalizeAngle(lonDate),
-        lat: latDate,
-        radiusVector: radiusVector,
-    }
+    return correctPrecessionForEclipticCoordinates(lon, lat, radiusVector, jd);
 }
 
 export function getEquatorialParallax(d: number): number {
