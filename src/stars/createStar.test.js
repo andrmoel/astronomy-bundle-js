@@ -1,16 +1,16 @@
 import {createTimeOfInterest} from '../time';
-import {byGeocentricEquatorialCoordinates} from './createStar';
+import {byEquatorialCoordinates} from './createStar';
 import Star from './Star';
 
 it('tests createStar', () => {
     const toi = createTimeOfInterest.fromCurrentTime();
-    const start = byGeocentricEquatorialCoordinates(toi);
+    const start = byEquatorialCoordinates(toi);
 
     expect(start).toBeInstanceOf(Star);
 });
 
 it('tests createStar without TOI', () => {
-    const start = byGeocentricEquatorialCoordinates();
+    const start = byEquatorialCoordinates();
 
     expect(start).toBeInstanceOf(Star);
 });
