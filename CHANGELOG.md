@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 5.19.0 (2021-01-19)
+
+
+### Features
+
+* **star:** add coordinate calculations for stars ([47ff8e3](https://github.com/andrmoel/astronomy-bundle-js/commit/47ff8e37403cd293a6f03316c64a950631b99f6d))
+
 ### 5.18.2 (2021-01-18)
 
 ### 5.18.1 (2021-01-18)
