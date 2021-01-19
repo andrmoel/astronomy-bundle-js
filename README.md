@@ -41,7 +41,9 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     4. [Apparent Magnitude](#planets-magnitude)
     5. [Physical Observation](#planets-observation)
     5. [Conjunction](#planets-conjunction)
-9. [Solar Eclipse](#solar-eclipse)
+9. [Stars](#stars)
+    1. [Position of Stars](#stars-position)
+10. [Solar Eclipse](#solar-eclipse)
 
 ## <a name="installation"></a>Installation
 
@@ -834,6 +836,67 @@ const {toi, position, angularDistance} = await jupiter.getConjunctionInRightAsce
 Result of the calculation:\
 *There is a conjunction on 21 December 2020 at 13:24 UTC*\
 *And Jupiter is 06' 15.164" north of Saturn* 
+
+## <a name="stars"></a> Stars
+
+### <a name="stars-position"></a> Position of Stars
+
+**Example 1**: Given are the equatorial coordinates of epoch J2000.\
+Right Ascension: 2h 44m 11.986s\
+Declination: 49° 13' 42.48"\
+Proper motion in Right Ascension: 0.03425"\
+Proper motion in Declination: -0.0895"\
+Calculate the apparent position for 04 November 2028 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createStar} from 'astronomy-bundle/stars';
+
+const toi = createTimeOfInterest.fromTime(2028, 11, 13, 0, 0, 0);
+
+const coordsJ2000 = {
+    rightAscension: 41.04994167,
+    declination: 49.22846667,
+    radiusVector: 1,
+};
+
+const properMotion = {
+    rightAscension: 0.0001427083,
+    declination: -0.000024861,
+};
+
+const star = createStar.byEquatorialCoordinates(coordsJ2000, toi, properMotion);
+
+const coords = await star.getApparentGeocentricEquatorialSphericalCoordinates();
+```
+
+The result of the calculation should be:\
+\
+Right Ascension: 2h 46m 14.548s\
+Declination: 49° 21' 05.617"
+
+**Example 2**: You may pass the epoch in Julian Days to the constructor,
+in case the coordinates of a star are given for another epoch than J2000.
+
+```javascript
+import {createTimeOfInterest, EPOCH_J1950} from 'astronomy-bundle/time';
+import {createStar} from 'astronomy-bundle/stars';
+
+const toi = createTimeOfInterest.fromTime(2028, 11, 13, 0, 0, 0);
+
+const coordsJ1950 = {
+    rightAscension: 41.04994167,
+    declination: 49.22846667,
+    radiusVector: 1,
+};
+
+const properMotion = {
+    rightAscension: 0.0001427083,
+    declination: -0.000024861,
+};
+
+const star = createStar.byEquatorialCoordinates(coordsJ1950, toi, properMotion, EPOCH_J1950);
+```
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 

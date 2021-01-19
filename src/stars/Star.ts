@@ -17,7 +17,7 @@ import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/appar
 export default class Star extends AstronomicalObject {
     public constructor(
         private equatorialCoords: IEquatorialSphericalCoordinates,
-        public toi?: TimeOfInterest,
+        toi?: TimeOfInterest,
         private properMotion: IProperMotion = {rightAscension: 0, declination: 0},
         private referenceEpoch: number = EPOCH_J2000,
     ) {
