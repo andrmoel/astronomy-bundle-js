@@ -1,4 +1,4 @@
-import ITime from '../time/interfaces/ITime';
+import {Time} from '../time/timeTypes';
 import {EPOCH_J2000} from '../constants/epoch';
 import {round} from './math';
 import {deg2rad, normalizeAngle} from './angleCalc';
@@ -23,7 +23,7 @@ export function sec2string(sec: number, short = false): string {
     return sign + hour + 'h ' + min + 'm ' + secPart + 's';
 }
 
-export function time2julianDay(time: ITime): number {
+export function time2julianDay(time: Time): number {
     const tmpYear = parseFloat(time.year + '.' + getDayOfYear(time));
 
     let Y;
@@ -54,7 +54,7 @@ export function time2julianDay(time: ITime): number {
     return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + H + B - 1524.5;
 }
 
-export function julianDay2time(jd: number): ITime {
+export function julianDay2time(jd: number): Time {
     jd = jd + 0.5;
 
     const Z = Math.floor(jd);
@@ -124,7 +124,7 @@ export function getEpochIntervalToJ2000(startingEpoch: number) {
     return getEpochInterval(startingEpoch, EPOCH_J2000);
 }
 
-export function dayOfYear2time(year: number, dayOfYear: number): ITime {
+export function dayOfYear2time(year: number, dayOfYear: number): Time {
     // Meeus 7
     const K = isLeapYear(year) ? 1 : 2;
     const month = dayOfYear < 32 ? 1 : Math.floor((9 * (K + dayOfYear)) / 275 + 0.98);
@@ -139,7 +139,7 @@ export function dayOfYear2time(year: number, dayOfYear: number): ITime {
     return {year, month, day, hour, min, sec};
 }
 
-export function getDecimalYear(time: ITime): number {
+export function getDecimalYear(time: Time): number {
     const daysInYear = isLeapYear(time.year) ? 366 : 365;
     const dayOfYear = getDayOfYear(time) - 1
         + time.hour / 24
@@ -149,7 +149,7 @@ export function getDecimalYear(time: ITime): number {
     return time.year + dayOfYear / daysInYear;
 }
 
-export function getDayOfYear(time: ITime): number {
+export function getDayOfYear(time: Time): number {
     const K = isLeapYear(time.year) ? 1 : 2;
     const M = time.month;
     const D = time.day;
@@ -158,7 +158,7 @@ export function getDayOfYear(time: ITime): number {
     return Math.floor((275 * M) / 9) - K * Math.floor((M + 9) / 12) + D - 30;
 }
 
-export function getDayOfWeek(time: ITime): number {
+export function getDayOfWeek(time: Time): number {
     const jd = time2julianDay(time);
 
     // Meeus 7.e

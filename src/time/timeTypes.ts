@@ -1,4 +1,4 @@
-export default interface ITime {
+export type Time = {
     year: number,
     month: number,
     day: number,
