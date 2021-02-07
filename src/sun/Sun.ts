@@ -1,14 +1,13 @@
 import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/coordinateTypes';
 import {DIAMETER_SUN} from '../constants/diameters';
 import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {
@@ -27,47 +26,47 @@ export default class Sun extends AstronomicalObject {
         this.earth = createEarth(toi);
     }
 
-    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
-    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
-    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
-    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
-    public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates> {
+    public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
-        return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
+        return spherical2rectangular(coords);
     }
 
-    public async getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates> {
+    public async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
+        return spherical2rectangular(coords);
     }
 
-    public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         const coords = await this.earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 
         return earthEclipticSpherical2sunEclipticSpherical(coords);
     }
 
-    public async getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         const coords = await this.earth.getHeliocentricEclipticSphericalDateCoordinates();
 
         return earthEclipticSpherical2sunEclipticSpherical(coords);
     }
 
-    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
         let coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         coords = correctEffectOfAberration(coords, this.T);
@@ -76,14 +75,14 @@ export default class Sun extends AstronomicalObject {
         return coords;
     }
 
-    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+    public async getTransit(location: Location): Promise<TimeOfInterest> {
         const jd = await getTransit(this.constructor, location, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getRise(
-        location: ILocation,
+        location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
@@ -91,12 +90,12 @@ export default class Sun extends AstronomicalObject {
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getRiseUpperLimb(location: ILocation): Promise<TimeOfInterest> {
+    public async getRiseUpperLimb(location: Location): Promise<TimeOfInterest> {
         return await this.getRise(location, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
     }
 
     public async getSet(
-        location: ILocation,
+        location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
@@ -104,7 +103,7 @@ export default class Sun extends AstronomicalObject {
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getSetUpperLimb(location: ILocation): Promise<TimeOfInterest> {
+    public async getSetUpperLimb(location: Location): Promise<TimeOfInterest> {
         return await this.getSet(location, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
     }
 
@@ -114,7 +113,7 @@ export default class Sun extends AstronomicalObject {
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);
     }
 
-    public async getTopocentricAngularDiameter(location: ILocation): Promise<number> {
+    public async getTopocentricAngularDiameter(location: Location): Promise<number> {
         const distance = await this.getTopocentricDistanceToEarth(location);
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_SUN);

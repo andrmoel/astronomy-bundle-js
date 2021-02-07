@@ -1,4 +1,4 @@
-export default interface ICircumstances {
+export type SolarEclipseCircumstances = {
     eclipseType: string,
     t: number,
     magnitude: number,

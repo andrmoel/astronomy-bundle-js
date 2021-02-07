@@ -1,4 +1,4 @@
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {createTimeOfInterest} from '../time';
 import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
 import {getDeltaT, getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2000, julianDay2time} from './timeCalc';
@@ -12,7 +12,7 @@ import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from './coord
 
 export async function getTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
 ): Promise<number> {
     let m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
@@ -37,7 +37,7 @@ export async function getTransit(
 
 export async function getRise(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -74,7 +74,7 @@ export async function getRise(
 
 export async function getSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -111,7 +111,7 @@ export async function getSet(
 
 async function _getApproximatedMTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
 ): Promise<number> {
     const object = _createAstronomicalObject(objConstructor, jd0);
@@ -128,7 +128,7 @@ async function _getApproximatedMTransit(
 
 async function _getApproximatedMRiseSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -139,7 +139,7 @@ async function _getApproximatedMRiseSet(
 
 async function _getCorrectionsTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     m: number,
 ): Promise<number> {
@@ -155,7 +155,7 @@ async function _getCorrectionsTransit(
 
 async function _getCorrectionsRiseSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
     m: number,
@@ -195,7 +195,7 @@ function _getLocalHourAngle(
     return normalizeAngle(H + 180) - 180;
 }
 
-async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0: number): Promise<number> {
+async function _getH0(objConstructor: any, location: Location, jd0: number, h0: number): Promise<number> {
     const object = _createAstronomicalObject(objConstructor, jd0);
     const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 

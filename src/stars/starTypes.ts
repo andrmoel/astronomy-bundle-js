@@ -1,4 +1,4 @@
-export default interface IProperMotion {
+export type ProperMotion = {
     rightAscension: number,
     declination: number,
 }

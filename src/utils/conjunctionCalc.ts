@@ -1,4 +1,4 @@
-import IConjunction, {Position} from '../planets/interfaces/IConjunction';
+import {Conjunction, Position} from '../planets/planetTypes';
 import {createTimeOfInterest} from '../time';
 import {
     getDeclinationInterpolationArray,
@@ -13,7 +13,7 @@ export async function getConjunctionInRightAscension(
     obj1Constructor: any,
     obj2Constructor: any,
     jd0: number,
-): Promise<IConjunction> {
+): Promise<Conjunction> {
     const raEphemerisObj1 = await getRightAscensionInterpolationArray(obj1Constructor, jd0, 2);
     const raEphemerisObj2 = await getRightAscensionInterpolationArray(obj2Constructor, jd0, 2);
     const raEphemerisDiff = _getEphemerisDiff(raEphemerisObj1, raEphemerisObj2);
@@ -40,7 +40,7 @@ export async function getConjunctionInLongitude(
     obj1Constructor: any,
     obj2Constructor: any,
     jd0: number,
-): Promise<IConjunction> {
+): Promise<Conjunction> {
     const lonEphemerisObj1 = await getLongitudeInterpolationArray(obj1Constructor, jd0, 2);
     const lonEphemerisObj2 = await getLongitudeInterpolationArray(obj2Constructor, jd0, 2);
     const lonEphemerisDiff = _getEphemerisDiff(lonEphemerisObj1, lonEphemerisObj2);
