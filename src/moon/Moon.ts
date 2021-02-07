@@ -20,7 +20,7 @@ import Sun from '../sun/Sun';
 import Earth from '../earth/Earth';
 import createSun from '../sun/createSun';
 import createEarth from '../earth/createEarth';
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
@@ -87,14 +87,14 @@ export default class Moon extends AstronomicalObject {
         return correctEffectOfNutation(coords, this.T);
     }
 
-    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+    public async getTransit(location: Location): Promise<TimeOfInterest> {
         const jd = await getTransit(this.constructor, location, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getRise(
-        location: ILocation,
+        location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
@@ -103,7 +103,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getSet(
-        location: ILocation,
+        location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
     ): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
@@ -117,7 +117,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getAngularDiameter(distance, DIAMETER_MOON);
     }
 
-    public async getTopocentricAngularDiameter(location: ILocation): Promise<number> {
+    public async getTopocentricAngularDiameter(location: Location): Promise<number> {
         const distance = await this.getTopocentricDistanceToEarth(location);
 
         return observationCalc.getAngularDiameter(distance, DIAMETER_MOON);
@@ -130,7 +130,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getElongation(coordsMoon, coordsSun);
     }
 
-    public async getTopocentricElongation(location: ILocation): Promise<number> {
+    public async getTopocentricElongation(location: Location): Promise<number> {
         const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -144,7 +144,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getPhaseAngle(coordsMoon, coordsSun);
     }
 
-    public async getTopocentricPhaseAngle(location: ILocation): Promise<number> {
+    public async getTopocentricPhaseAngle(location: Location): Promise<number> {
         const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -157,7 +157,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getIlluminatedFraction(i);
     }
 
-    public async getTopocentricIlluminatedFraction(location: ILocation): Promise<number> {
+    public async getTopocentricIlluminatedFraction(location: Location): Promise<number> {
         const i = await this.getTopocentricPhaseAngle(location);
 
         return observationCalc.getIlluminatedFraction(i);
@@ -170,7 +170,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
     }
 
-    public async getTopocentricPositionAngleOfBrightLimb(location: ILocation): Promise<number> {
+    public async getTopocentricPositionAngleOfBrightLimb(location: Location): Promise<number> {
         const coordsMoon = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = await this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -183,7 +183,7 @@ export default class Moon extends AstronomicalObject {
         return observationCalc.isWaxing(chi);
     }
 
-    public async isTopocentricWaxing(location: ILocation): Promise<boolean> {
+    public async isTopocentricWaxing(location: Location): Promise<boolean> {
         const chi = await this.getTopocentricPositionAngleOfBrightLimb(location);
 
         return observationCalc.isWaxing(chi);
@@ -198,7 +198,7 @@ export default class Moon extends AstronomicalObject {
         return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i, isWaxing);
     }
 
-    public async getTopocentricApparentMagnitude(location: ILocation): Promise<number> {
+    public async getTopocentricApparentMagnitude(location: Location): Promise<number> {
         const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
         const coordsGeo = await this.getTopocentricEquatorialSphericalCoordinates(location);
         const i = await this.getTopocentricPhaseAngle(location);

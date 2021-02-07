@@ -5,7 +5,7 @@ import {
     LocalHorizontalCoordinates,
     RectangularCoordinates
 } from '../../coordinates/coordinateTypes';
-import ILocation from '../../earth/interfaces/ILocation';
+import {Location} from '../../earth/LocationTypes';
 
 export default interface IAstronomicalObject {
     toi: TimeOfInterest,
@@ -26,9 +26,9 @@ export default interface IAstronomicalObject {
 
     getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates>;
 
-    getTopocentricEquatorialSphericalCoordinates(location: ILocation): Promise<EquatorialSphericalCoordinates>;
+    getTopocentricEquatorialSphericalCoordinates(location: Location): Promise<EquatorialSphericalCoordinates>;
 
-    getTopocentricHorizontalCoordinates(location: ILocation): Promise<LocalHorizontalCoordinates>;
+    getTopocentricHorizontalCoordinates(location: Location): Promise<LocalHorizontalCoordinates>;
 
-    getApparentTopocentricHorizontalCoordinates(location: ILocation): Promise<LocalHorizontalCoordinates>;
+    getApparentTopocentricHorizontalCoordinates(location: Location): Promise<LocalHorizontalCoordinates>;
 }

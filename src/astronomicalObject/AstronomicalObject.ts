@@ -16,7 +16,7 @@ import {
 } from '../utils/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
 import IConjunction from '../planets/interfaces/IConjunction';
 
@@ -82,35 +82,25 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     }
 
     public async getTopocentricEquatorialSphericalCoordinates(
-        location: ILocation
+        location: Location
     ): Promise<EquatorialSphericalCoordinates> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const {lat, lon, elevation} = location;
 
         return equatorialSpherical2topocentricSpherical(
-            this.T,
             coords,
-            lat,
-            lon,
-            elevation,
+            location,
+            this.T,
         );
     }
 
-    public async getTopocentricHorizontalCoordinates(location: ILocation): Promise<LocalHorizontalCoordinates> {
+    public async getTopocentricHorizontalCoordinates(location: Location): Promise<LocalHorizontalCoordinates> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const {lat, lon, elevation} = location;
 
-        return equatorialSpherical2topocentricHorizontal(
-            this.T,
-            coords,
-            lat,
-            lon,
-            elevation,
-        );
+        return equatorialSpherical2topocentricHorizontal(coords, location, this.T);
     }
 
     public async getApparentTopocentricHorizontalCoordinates(
-        location: ILocation
+        location: Location
     ): Promise<LocalHorizontalCoordinates> {
         const {azimuth, altitude, radiusVector} = await this.getTopocentricHorizontalCoordinates(location);
 
@@ -133,7 +123,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(coords.radiusVector);
     }
 
-    public async getTopocentricDistanceToEarth(location: ILocation): Promise<number> {
+    public async getTopocentricDistanceToEarth(location: Location): Promise<number> {
         const coords = await this.getTopocentricEquatorialSphericalCoordinates(location);
 
         return au2km(coords.radiusVector);

@@ -8,6 +8,7 @@ import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 import {earthCalc} from './index';
+import {Location} from '../earth/LocationTypes';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;
@@ -38,13 +39,12 @@ export function spherical2rectangular(coords: EclipticSphericalCoordinates): Rec
 }
 
 export function equatorialSpherical2topocentricSpherical(
-    T: number,
     coords: EquatorialSphericalCoordinates,
-    lat: number,
-    lon: number,
-    elevation?: number,
+    location: Location,
+    T: number,
 ): EquatorialSphericalCoordinates {
     const {rightAscension, declination, radiusVector} = coords;
+    let {lat, lon, elevation} = location;
 
     const dRad = deg2rad(declination);
 
@@ -78,21 +78,14 @@ export function equatorialSpherical2topocentricSpherical(
 }
 
 export function equatorialSpherical2topocentricHorizontal(
-    T: number,
     coords: EquatorialSphericalCoordinates,
-    lat: number,
-    lon: number,
-    elevation?: number
+    location: Location,
+    T: number,
 ): LocalHorizontalCoordinates {
     const {rightAscension, declination} = coords;
+    const {lat, lon} = location;
 
-    const topoCoords = equatorialSpherical2topocentricSpherical(
-        T,
-        coords,
-        lat,
-        lon,
-        elevation,
-    );
+    const topoCoords = equatorialSpherical2topocentricSpherical(coords, location, T,);
     const H = getLocalHourAngle(T, lon, rightAscension);
 
     return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, topoCoords.radiusVector);

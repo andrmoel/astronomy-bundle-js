@@ -20,7 +20,7 @@ import {
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import Mercury from './Mercury';
 import Venus from './Venus';
@@ -92,19 +92,19 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return coords;
     }
 
-    public async getTransit(location: ILocation): Promise<TimeOfInterest> {
+    public async getTransit(location: Location): Promise<TimeOfInterest> {
         const jd = await getTransit(this.constructor, location, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getRise(location: ILocation): Promise<TimeOfInterest> {
+    public async getRise(location: Location): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
-    public async getSet(location: ILocation): Promise<TimeOfInterest> {
+    public async getSet(location: Location): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
 
         return createTimeOfInterest.fromJulianDay(jd);
