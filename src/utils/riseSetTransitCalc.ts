@@ -1,4 +1,4 @@
-import ILocation from '../earth/interfaces/ILocation';
+import {Location} from '../earth/LocationTypes';
 import {createTimeOfInterest} from '../time';
 import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
 import {getDeltaT, getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2000, julianDay2time} from './timeCalc';
@@ -12,23 +12,32 @@ import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from './coord
 
 export async function getTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
 ): Promise<number> {
     let m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsTransit(objConstructor, location, jd0, m0);
         m0 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error(`While loop overflow. Astronomical object has no transit on given day ${jd0}.`);
+        }
     } while (Math.abs(dm) > 0.00001);
+
+    if (m0 < 0 || m0 >= 1) {
+        throw new Error(`Astronomical object has no transit on given day ${jd0}.`);
+    }
 
     return jd0 + m0;
 }
 
 export async function getRise(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -42,9 +51,14 @@ export async function getRise(
     let m1 = normalizeAngle(m0 - mH, 1);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m1);
         m1 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error(`While loop overflow. Astronomical object cannot rise on given day ${jd0}.`);
+        }
     } while (Math.abs(dm) > 0.00001);
 
     if (m1 < 0) {
@@ -60,7 +74,7 @@ export async function getRise(
 
 export async function getSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -74,9 +88,14 @@ export async function getSet(
     let m2 = normalizeAngle(m0 + mH, 1);
     let dm = 0;
 
+    let cnt = 0;
     do {
         dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m2);
         m2 += dm;
+
+        if (cnt++ > 100) {
+            throw new Error(`While loop overflow. Astronomical object cannot set on given day ${jd0}.`);
+        }
     } while (Math.abs(dm) > 0.00001);
 
     if (m2 < 0) {
@@ -92,7 +111,7 @@ export async function getSet(
 
 async function _getApproximatedMTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
 ): Promise<number> {
     const object = _createAstronomicalObject(objConstructor, jd0);
@@ -109,7 +128,7 @@ async function _getApproximatedMTransit(
 
 async function _getApproximatedMRiseSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
@@ -120,7 +139,7 @@ async function _getApproximatedMRiseSet(
 
 async function _getCorrectionsTransit(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     m: number,
 ): Promise<number> {
@@ -136,7 +155,7 @@ async function _getCorrectionsTransit(
 
 async function _getCorrectionsRiseSet(
     objConstructor: any,
-    location: ILocation,
+    location: Location,
     jd0: number,
     h0: number,
     m: number,
@@ -169,12 +188,14 @@ function _getLocalHourAngle(
 ) {
     const T = julianDay2julianCenturiesJ2000(jd0);
     const GAST = getGreenwichApparentSiderealTime(T);
-    const theta0 = normalizeAngle(GAST + 360.985647 * m);
+    const theta0 = GAST + 360.985647 * m;
 
-    return theta0 + longitude - raInterpolated;
+    const H = theta0 + longitude - raInterpolated;
+
+    return normalizeAngle(H + 180) - 180;
 }
 
-async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0: number): Promise<number> {
+async function _getH0(objConstructor: any, location: Location, jd0: number, h0: number): Promise<number> {
     const object = _createAstronomicalObject(objConstructor, jd0);
     const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -184,6 +205,10 @@ async function _getH0(objConstructor: any, location: ILocation, jd0: number, h0:
 
     // Meeus 15.1
     const cosH0 = (Math.sin(h0Rad) - Math.sin(latRad) * Math.sin(dRad)) / (Math.cos(latRad) * Math.cos(dRad));
+
+    if (Math.abs(cosH0) > 1 && Math.abs(cosH0) <= 1.1) {
+        return 0;
+    }
 
     return rad2deg(Math.acos(cosH0));
 }

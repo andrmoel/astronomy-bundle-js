@@ -12,6 +12,10 @@ const location = {
     lon: 13.408,
 };
 
+it('tests getName', () => {
+    expect(sun.getName()).toBe('sun');
+});
+
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await sun.getGeocentricEclipticRectangularJ2000Coordinates();
 

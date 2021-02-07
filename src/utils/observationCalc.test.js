@@ -1,6 +1,7 @@
 import {round} from './math';
 import {
     getAngularDiameter,
+    getAngularSeparation,
     getIlluminatedFraction,
     getPhaseAngle,
     getPositionAngleOfBrightLimb,
@@ -64,4 +65,22 @@ it('test getAngularDiameter', () => {
     const delta = getAngularDiameter(363300, 3474);
 
     expect(deg2angle(delta)).toBe('0° 32\' 52.36"');
+});
+
+it('tests getAngularSeparation', () => {
+    const coords1 = {
+        rightAscension: 213.9154,
+        declination: 19.1825,
+        radiusVector: 1,
+    };
+
+    const coords2 = {
+        rightAscension: 201.2983,
+        declination: -11.1614,
+        radiusVector: 1,
+    };
+
+    const d = getAngularSeparation(coords1, coords2);
+
+    expect(round(d, 4)).toBe(32.7930);
 });

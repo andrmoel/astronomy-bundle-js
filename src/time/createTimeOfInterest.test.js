@@ -7,7 +7,7 @@ import createTimeOfInterest, {
     fromYearOfDay,
 } from './createTimeOfInterest';
 
-jest.spyOn(global.Date, 'now').mockReturnValue('2020-10-21 10:00:00');
+jest.spyOn(global.Date, 'now').mockReturnValue('2020-10-21 10:00:00Z');
 
 it('tests default export', () => {
     const toi = createTimeOfInterest();
@@ -28,7 +28,7 @@ it('tests fromTime', () => {
 });
 
 it('tests fromDate', () => {
-    const toi = fromDate(new Date('2016-07-08 12:34:56'));
+    const toi = fromDate(new Date('2016-07-08 12:34:56Z'));
 
     expect(toi.time).toEqual({year: 2016, month: 7, day: 8, hour: 12, min: 34, sec: 56});
 });

@@ -2,10 +2,14 @@ import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import Earth from './Earth';
 
-it('test getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
+const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
+const earth = new Earth(toi);
 
+it('tests getName', () => {
+    expect(earth.getName()).toBe('earth');
+});
+
+it('test getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await earth.getHeliocentricEclipticRectangularJ2000Coordinates();
 
     expect(round(coords.x, 8)).toBe(0.20701041);
@@ -14,9 +18,6 @@ it('test getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
 });
 
 it('test getHeliocentricEclipticRectangularDateCoordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
-
     const coords = await earth.getHeliocentricEclipticRectangularDateCoordinates();
 
     expect(round(coords.x, 8)).toBe(0.20279686);
@@ -25,9 +26,6 @@ it('test getHeliocentricEclipticRectangularDateCoordinates', async () => {
 });
 
 it('test getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
-
     const coords = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 
     expect(round(coords.lon, 8)).toBe(77.86593249);
@@ -36,9 +34,6 @@ it('test getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
 });
 
 it('test getHeliocentricEclipticSphericalDateCoordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
-
     const coords = await earth.getHeliocentricEclipticSphericalDateCoordinates();
 
     expect(round(coords.lon, 8)).toBe(78.11655576);
