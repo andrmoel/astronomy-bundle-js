@@ -9,7 +9,9 @@ import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002ju
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 import {earthCalc} from './index';
 
-export function rectangular2spherical(x: number, y: number, z: number): EclipticSphericalCoordinates {
+export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
+    const {x, y, z} = coords;
+
     // Meeus 33.2
     const lonRad = Math.atan2(y, x);
     const lon = normalizeAngle(rad2deg(lonRad));
@@ -22,7 +24,9 @@ export function rectangular2spherical(x: number, y: number, z: number): Ecliptic
     return {lon, lat, radiusVector};
 }
 
-export function spherical2rectangular(lon: number, lat: number, radiusVector: number): RectangularCoordinates {
+export function spherical2rectangular(coords: EclipticSphericalCoordinates): RectangularCoordinates {
+    const {lon, lat, radiusVector} = coords;
+
     const lonRad = deg2rad(lon);
     const latRad = deg2rad(lat);
 
@@ -35,13 +39,13 @@ export function spherical2rectangular(lon: number, lat: number, radiusVector: nu
 
 export function equatorialSpherical2topocentricSpherical(
     T: number,
-    rightAscension: number,
-    declination: number,
-    radiusVector: number,
+    coords: EquatorialSphericalCoordinates,
     lat: number,
     lon: number,
     elevation?: number,
 ): EquatorialSphericalCoordinates {
+    const {rightAscension, declination, radiusVector} = coords;
+
     const dRad = deg2rad(declination);
 
     elevation = elevation || 0.0;
@@ -75,25 +79,23 @@ export function equatorialSpherical2topocentricSpherical(
 
 export function equatorialSpherical2topocentricHorizontal(
     T: number,
-    rightAscension: number,
-    declination: number,
-    radiusVector: number,
+    coords: EquatorialSphericalCoordinates,
     lat: number,
     lon: number,
     elevation?: number
 ): LocalHorizontalCoordinates {
-    const coords = equatorialSpherical2topocentricSpherical(
+    const {rightAscension, declination} = coords;
+
+    const topoCoords = equatorialSpherical2topocentricSpherical(
         T,
-        rightAscension,
-        declination,
-        radiusVector,
+        coords,
         lat,
         lon,
         elevation,
     );
     const H = getLocalHourAngle(T, lon, rightAscension);
 
-    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, coords.radiusVector);
+    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, topoCoords.radiusVector);
 }
 
 export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
@@ -123,12 +125,12 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
 }
 
 export function eclipticSpherical2equatorialSpherical(
-    lon: number,
-    lat: number,
-    radiusVector: number,
+    coords: EclipticSphericalCoordinates,
     T: number,
     normalize: boolean = true,
 ): EquatorialSphericalCoordinates {
+    const {lon, lat, radiusVector} = coords;
+
     const eps = earthCalc.getTrueObliquityOfEcliptic(T);
     const epsRad = deg2rad(eps);
     const lonRad = deg2rad(lon);
@@ -150,11 +152,11 @@ export function eclipticSpherical2equatorialSpherical(
 }
 
 export function equatorialSpherical2eclipticSpherical(
-    rightAscension: number,
-    declination: number,
-    radiusVector: number,
+    coords: EquatorialSphericalCoordinates,
     T: number,
 ): EclipticSphericalCoordinates {
+    const {rightAscension, declination, radiusVector} = coords;
+
     const eps = earthCalc.getTrueObliquityOfEcliptic(T);
     const epsRad = deg2rad(eps);
     const rightAscensionRad = deg2rad(rightAscension);

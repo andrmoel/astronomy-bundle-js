@@ -43,29 +43,27 @@ export default class Star extends AstronomicalObject {
     }
 
     async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalJ2000Coordinates();
+        const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        const {rightAscension, declination, radiusVector}
-            = await this.getGeocentricEquatorialSphericalJ2000Coordinates();
+        const coords = await this.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-        return equatorialSpherical2eclipticSpherical(rightAscension, declination, radiusVector, this.T);
+        return equatorialSpherical2eclipticSpherical(coords, this.T);
     }
 
     async getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        const {rightAscension, declination, radiusVector}
-            = await this.getGeocentricEquatorialSphericalDateCoordinates();
+        const coords = await this.getGeocentricEquatorialSphericalDateCoordinates();
 
-        return equatorialSpherical2eclipticSpherical(rightAscension, declination, radiusVector, this.T);
+        return equatorialSpherical2eclipticSpherical(coords, this.T);
     }
 
     async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates> {
@@ -93,8 +91,8 @@ export default class Star extends AstronomicalObject {
     }
 
     async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalCoordinates();
+        const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();
 
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+        return eclipticSpherical2equatorialSpherical(coords, this.T);
     }
 }

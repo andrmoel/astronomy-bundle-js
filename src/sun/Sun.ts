@@ -45,13 +45,13 @@ export default class Sun extends AstronomicalObject {
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
-        return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(coords.lon, coords.lat, coords.radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {

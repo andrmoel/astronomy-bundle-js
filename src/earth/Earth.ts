@@ -10,15 +10,15 @@ export default class Earth extends AstronomicalObject {
     protected name = 'earth';
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
+        const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coords = await this.getHeliocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {

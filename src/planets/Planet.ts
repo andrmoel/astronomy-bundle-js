@@ -42,15 +42,15 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     }
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
+        const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coords = await this.getHeliocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
@@ -72,15 +72,15 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     }
 
     public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        const {x, y, z} = await this.getGeocentricEclipticRectangularJ2000Coordinates();
+        const coords = await this.getGeocentricEclipticRectangularJ2000Coordinates();
 
-        return rectangular2spherical(x, y, z);
+        return rectangular2spherical(coords);
     }
 
     public async getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        const {x, y, z} = await this.getGeocentricEclipticRectangularDateCoordinates();
+        const coords = await this.getGeocentricEclipticRectangularDateCoordinates();
 
-        return rectangular2spherical(x, y, z);
+        return rectangular2spherical(coords);
     }
 
     public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
@@ -162,8 +162,8 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();
 
-        const {x, y, z} = rectangularHeliocentric2rectangularGeocentric(helRecPlanetCoords, helRecEarthCoords);
+        const coords = rectangularHeliocentric2rectangularGeocentric(helRecPlanetCoords, helRecEarthCoords);
 
-        return rectangular2spherical(x, y, z);
+        return rectangular2spherical(coords);
     }
 }

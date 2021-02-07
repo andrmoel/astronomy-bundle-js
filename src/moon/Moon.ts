@@ -54,9 +54,9 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        const {x, y, z} = await this.getHeliocentricEclipticRectangularDateCoordinates();
+        const coords = await this.getHeliocentricEclipticRectangularDateCoordinates();
 
-        return rectangular2spherical(x, y, z);
+        return rectangular2spherical(coords);
     }
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
@@ -64,9 +64,9 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return spherical2rectangular(coords);
     }
 
     public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {

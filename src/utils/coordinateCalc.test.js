@@ -14,11 +14,13 @@ import {
 import {round} from './math';
 
 it('tests rectangular2spherical', () => {
-    const x = 0.621746;
-    const y = -0.66481;
-    const z = -0.033134;
+    const coords = {
+        x: 0.621746,
+        y: -0.66481,
+        z: -0.033134,
+    };
 
-    const spherical = rectangular2spherical(x, y, z);
+    const spherical = rectangular2spherical(coords);
 
     expect(round(spherical.lon, 6)).toBe(313.082894);
     expect(round(spherical.lat, 6)).toBe(-2.084721);
@@ -26,11 +28,13 @@ it('tests rectangular2spherical', () => {
 });
 
 it('tests spherical2rectangular', () => {
-    const lon = 313.082894;
-    const lat = -2.084721;
-    const radiusVector = 0.910845;
+    const coords = {
+        lon: 313.082894,
+        lat: -2.084721,
+        radiusVector: 0.910845,
+    };
 
-    const rectangular = spherical2rectangular(lon, lat, radiusVector);
+    const rectangular = spherical2rectangular(coords);
 
     expect(round(rectangular.x, 6)).toBe(0.621746);
     expect(round(rectangular.y, 6)).toBe(-0.66481);
@@ -38,77 +42,81 @@ it('tests spherical2rectangular', () => {
 });
 
 it('tests equatorialSpherical2topocentricSpherical', () => {
-    const rightAscension = 339.530208;
-    const declination = -15.771083;
-    const radiusVector = 0.37276;
+    const coords = {
+        rightAscension: 339.530208,
+        declination: -15.771083,
+        radiusVector: 0.37276,
+    };
     const lat = 33.356111;
     const lon = -116.8625;
     const elevation = 1705;
     const T = 0.03654036428626374;
 
-    const coords = equatorialSpherical2topocentricSpherical(
+    const {rightAscension, declination, radiusVector} = equatorialSpherical2topocentricSpherical(
         T,
-        rightAscension,
-        declination,
-        radiusVector,
+        coords,
         lat,
         lon,
         elevation,
     );
 
-    expect(round(coords.rightAscension, 6)).toBe(339.5356);
-    expect(round(coords.declination, 6)).toBe(-15.775012);
-    expect(round(coords.radiusVector, 6)).toBe(0.372755);
+    expect(round(rightAscension, 6)).toBe(339.5356);
+    expect(round(declination, 6)).toBe(-15.775012);
+    expect(round(radiusVector, 6)).toBe(0.372755);
 });
 
 it('tests equatorialSpherical2topocentricHorizontal', () => {
     const T = -0.12727429842573834;
-    const rightAscension = 347.3193375;
-    const declination = -6.71989167;
-    const radiusVector = 0.37276;
+    const coords = {
+        rightAscension: 347.3193375,
+        declination: -6.71989167,
+        radiusVector: 0.37276,
+    };
     const lat = 38.921417;
     const lon = -77.065415;
     const elevation = 100;
 
-    const coords = equatorialSpherical2topocentricHorizontal(
+    const {azimuth, altitude, radiusVector} = equatorialSpherical2topocentricHorizontal(
         T,
-        rightAscension,
-        declination,
-        radiusVector,
+        coords,
         lat,
         lon,
         elevation,
     );
 
-    expect(round(coords.azimuth, 6)).toBe(248.033688);
-    expect(round(coords.altitude, 6)).toBe(15.124862);
-    expect(round(coords.radiusVector, 6)).toBe(0.372749);
+    expect(round(azimuth, 6)).toBe(248.033688);
+    expect(round(altitude, 6)).toBe(15.124862);
+    expect(round(radiusVector, 6)).toBe(0.372749);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {
     const T = -0.070321697467488; // 1992-12-20 00:00:00
-    const lon = 313.082894;
-    const lat = -2.084721;
-    const radiusVector = 0.910845;
+    const coords = {
+        lon: 313.082894,
+        lat: -2.084721,
+        radiusVector: 0.910845,
+    };
 
-    const coords = eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, T);
+    const {rightAscension, declination, radiusVector} = eclipticSpherical2equatorialSpherical(coords, T);
 
-    expect(round(coords.rightAscension, 6)).toBe(316.174262);
-    expect(round(coords.declination, 6)).toBe(-18.887468);
-    expect(round(coords.radiusVector, 6)).toBe(0.910845);
+    expect(round(rightAscension, 6)).toBe(316.174262);
+    expect(round(declination, 6)).toBe(-18.887468);
+    expect(round(radiusVector, 6)).toBe(0.910845);
 });
 
 it('tests equatorialSpherical2eclipticSpherical', () => {
     const T = -0.070321697467488; // 1992-12-20 00:00:00
-    const rightAscension = 316.174262;
-    const declination = -18.887468;
-    const radiusVector = 0.910845;
+    const coords = {
+        rightAscension: 316.174262,
+        declination: -18.887468,
+        radiusVector: 0.910845,
+    };
 
-    const coords = equatorialSpherical2eclipticSpherical(rightAscension, declination, radiusVector, T);
+    const {lon, lat, radiusVector} = equatorialSpherical2eclipticSpherical(coords, T);
 
-    expect(round(coords.lon, 6)).toBe(313.082894);
-    expect(round(coords.lat, 6)).toBe(-2.084721);
-    expect(round(coords.radiusVector, 6)).toBe(0.910845);
+    expect(round(lon, 6)).toBe(313.082894);
+    expect(round(lat, 6)).toBe(-2.084721);
+    expect(round(radiusVector, 6)).toBe(0.910845);
 });
 
 it('tests rectangularHeliocentric2rectangularGeocentric', () => {
