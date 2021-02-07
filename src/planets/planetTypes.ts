@@ -1,8 +1,8 @@
-import TimeOfInterest from '../../time/TimeOfInterest';
+import TimeOfInterest from '../time/TimeOfInterest';
 
 export enum Position {'north', 'south'}
 
-export default interface IConjunction {
+export type Conjunction = {
     toi: TimeOfInterest,
     position: Position,
     angularDistance: number,

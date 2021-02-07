@@ -18,7 +18,7 @@ import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import {Location} from '../earth/LocationTypes';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
-import IConjunction from '../planets/interfaces/IConjunction';
+import {Conjunction} from '../planets/planetTypes';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected name = 'astronomical object';
@@ -135,11 +135,11 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
-    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<IConjunction> {
+    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
         return await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
     }
 
-    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<IConjunction> {
+    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
         return await getConjunctionInLongitude(this.constructor, astronomicalObjectConstructor, this.jd0);
     }
 }

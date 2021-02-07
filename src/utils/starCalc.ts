@@ -1,12 +1,12 @@
 import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {EPOCH_J2000} from '../constants/epoch';
-import IProperMotion from '../stars/interfaces/IProperMotion';
+import {ProperMotion} from '../stars/starTypes';
 import {getEpochInterval} from './timeCalc';
 import {normalizeAngle} from './angleCalc';
 
 export function correctProperMotion(
     coords: EquatorialSphericalCoordinates,
-    properMotion: IProperMotion,
+    properMotion: ProperMotion,
     jd: number,
     startingEpoch: number = EPOCH_J2000
 ): EquatorialSphericalCoordinates {
