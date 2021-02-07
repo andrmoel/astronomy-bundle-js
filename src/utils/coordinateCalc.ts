@@ -1,13 +1,15 @@
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
-import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    LocalHorizontalCoordinates,
+    RectangularCoordinates
+} from '../coordinates/coordinateTypes';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 import {earthCalc} from './index';
 
-export function rectangular2spherical(x: number, y: number, z: number): IEclipticSphericalCoordinates {
+export function rectangular2spherical(x: number, y: number, z: number): EclipticSphericalCoordinates {
     // Meeus 33.2
     const lonRad = Math.atan2(y, x);
     const lon = normalizeAngle(rad2deg(lonRad));
@@ -20,7 +22,7 @@ export function rectangular2spherical(x: number, y: number, z: number): IEclipti
     return {lon, lat, radiusVector};
 }
 
-export function spherical2rectangular(lon: number, lat: number, radiusVector: number): IRectangularCoordinates {
+export function spherical2rectangular(lon: number, lat: number, radiusVector: number): RectangularCoordinates {
     const lonRad = deg2rad(lon);
     const latRad = deg2rad(lat);
 
@@ -39,7 +41,7 @@ export function equatorialSpherical2topocentricSpherical(
     lat: number,
     lon: number,
     elevation?: number,
-): IEquatorialSphericalCoordinates {
+): EquatorialSphericalCoordinates {
     const dRad = deg2rad(declination);
 
     elevation = elevation || 0.0;
@@ -79,7 +81,7 @@ export function equatorialSpherical2topocentricHorizontal(
     lat: number,
     lon: number,
     elevation?: number
-): ILocalHorizontalCoordinates {
+): LocalHorizontalCoordinates {
     const coords = equatorialSpherical2topocentricSpherical(
         T,
         rightAscension,
@@ -99,7 +101,7 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     declination: number,
     lat: number,
     radiusVector: number = 0,
-): ILocalHorizontalCoordinates {
+): LocalHorizontalCoordinates {
     const HRad = deg2rad(localHourAngle);
     const dRad = deg2rad(declination);
     const latRad = deg2rad(lat);
@@ -126,7 +128,7 @@ export function eclipticSpherical2equatorialSpherical(
     radiusVector: number,
     T: number,
     normalize: boolean = true,
-): IEquatorialSphericalCoordinates {
+): EquatorialSphericalCoordinates {
     const eps = earthCalc.getTrueObliquityOfEcliptic(T);
     const epsRad = deg2rad(eps);
     const lonRad = deg2rad(lon);
@@ -152,7 +154,7 @@ export function equatorialSpherical2eclipticSpherical(
     declination: number,
     radiusVector: number,
     T: number,
-): IEclipticSphericalCoordinates {
+): EclipticSphericalCoordinates {
     const eps = earthCalc.getTrueObliquityOfEcliptic(T);
     const epsRad = deg2rad(eps);
     const rightAscensionRad = deg2rad(rightAscension);
@@ -174,9 +176,9 @@ export function equatorialSpherical2eclipticSpherical(
 }
 
 export function rectangularHeliocentric2rectangularGeocentric(
-    heliocentricCoords: IRectangularCoordinates,
-    heliocentricCoordsEarth: IRectangularCoordinates
-): IRectangularCoordinates {
+    heliocentricCoords: RectangularCoordinates,
+    heliocentricCoordsEarth: RectangularCoordinates
+): RectangularCoordinates {
     return {
         x: heliocentricCoords.x - heliocentricCoordsEarth.x,
         y: heliocentricCoords.y - heliocentricCoordsEarth.y,
@@ -185,9 +187,9 @@ export function rectangularHeliocentric2rectangularGeocentric(
 }
 
 export function rectangularGeocentric2rectangularHeliocentric(
-    geocentricCoords: IRectangularCoordinates,
-    heliocentricCoordsEarth: IRectangularCoordinates
-): IRectangularCoordinates {
+    geocentricCoords: RectangularCoordinates,
+    heliocentricCoordsEarth: RectangularCoordinates
+): RectangularCoordinates {
     return {
         x: geocentricCoords.x + heliocentricCoordsEarth.x,
         y: geocentricCoords.y + heliocentricCoordsEarth.y,
@@ -196,8 +198,8 @@ export function rectangularGeocentric2rectangularHeliocentric(
 }
 
 export function earthEclipticSpherical2sunEclipticSpherical(
-    coordsEarth: IEclipticSphericalCoordinates
-): IEclipticSphericalCoordinates {
+    coordsEarth: EclipticSphericalCoordinates
+): EclipticSphericalCoordinates {
     const {lon, lat, radiusVector} = coordsEarth;
 
     return {
@@ -215,7 +217,7 @@ export function eclipticJ20002eclipticDate(
     lat: number,
     radiusVector: number,
     T: number,
-): IEclipticSphericalCoordinates {
+): EclipticSphericalCoordinates {
     const jd = julianCenturiesJ20002julianDay(T);
 
     return correctPrecessionForEclipticCoordinates({lon, lat, radiusVector}, jd);

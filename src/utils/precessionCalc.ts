@@ -1,14 +1,13 @@
 import {EPOCH_J2000} from '../constants/epoch';
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getEpochInterval, getEpochIntervalToJ2000} from './timeCalc';
 
 export function correctPrecessionForEclipticCoordinates(
-    coords: IEclipticSphericalCoordinates,
+    coords: EclipticSphericalCoordinates,
     jd: number,
     startingEpoch: number = EPOCH_J2000,
-): IEclipticSphericalCoordinates {
+): EclipticSphericalCoordinates {
     const lonRad = deg2rad(coords.lon);
     const latRad = deg2rad(coords.lat);
 
@@ -46,10 +45,10 @@ export function correctPrecessionForEclipticCoordinates(
 }
 
 export function correctPrecessionForEquatorialCoordinates(
-    coords: IEquatorialSphericalCoordinates,
+    coords: EquatorialSphericalCoordinates,
     jd: number,
     startingEpoch: number = EPOCH_J2000,
-): IEquatorialSphericalCoordinates {
+): EquatorialSphericalCoordinates {
     const raRad = deg2rad(coords.rightAscension);
     const dRad = deg2rad(coords.declination);
 

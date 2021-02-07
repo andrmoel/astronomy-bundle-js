@@ -1,10 +1,10 @@
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
 import IProperMotion from './interfaces/IProperMotion';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Star from './Star';
 
 export function byEquatorialCoordinates(
-    coords: IEquatorialSphericalCoordinates,
+    coords: EquatorialSphericalCoordinates,
     toi?: TimeOfInterest,
     properMotion?: IProperMotion,
     referenceEpoch?: number,

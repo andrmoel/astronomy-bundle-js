@@ -1,9 +1,9 @@
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export function getElongation(
-    equCoordsObj: IEquatorialSphericalCoordinates,
-    equCoordsSun: IEquatorialSphericalCoordinates
+    equCoordsObj: EquatorialSphericalCoordinates,
+    equCoordsSun: EquatorialSphericalCoordinates
 ): number {
     const raObjRad = deg2rad(equCoordsObj.rightAscension);
     const dObjRad = deg2rad(equCoordsObj.declination);
@@ -20,8 +20,8 @@ export function getElongation(
 }
 
 export function getPhaseAngle(
-    equCoordsObj: IEquatorialSphericalCoordinates,
-    equCoordsSun: IEquatorialSphericalCoordinates
+    equCoordsObj: EquatorialSphericalCoordinates,
+    equCoordsSun: EquatorialSphericalCoordinates
 ): number {
     const distObj = equCoordsObj.radiusVector;
     const distSun = equCoordsSun.radiusVector;
@@ -43,8 +43,8 @@ export function getIlluminatedFraction(phaseAngle: number): number {
 }
 
 export function getPositionAngleOfBrightLimb(
-    equCoordsObj: IEquatorialSphericalCoordinates,
-    equCoordsSun: IEquatorialSphericalCoordinates
+    equCoordsObj: EquatorialSphericalCoordinates,
+    equCoordsSun: EquatorialSphericalCoordinates
 ): number {
     const raObjRad = deg2rad(equCoordsObj.rightAscension);
     const dObjRad = deg2rad(equCoordsObj.declination);

@@ -3,14 +3,14 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {observationCalc} from '../utils';
 import {DIAMETER_MARS} from '../constants/diameters';
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
 
 export default class Mars extends Planet {
     protected name = 'mars';
 
-    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mars_heliocentric_spherical_j2000', this.t, async () => {
             const vsop87 = await import('./vsop87/vsop87MarsSphericalJ2000');
 
@@ -22,7 +22,7 @@ export default class Mars extends Planet {
         });
     }
 
-    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mars_heliocentric_spherical_date', this.t, async () => {
             const vsop87 = this.useVsop87Short
                 ? await import('./vsop87/vsop87MarsSphericalDateShort')

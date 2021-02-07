@@ -1,32 +1,34 @@
 import TimeOfInterest from '../../time/TimeOfInterest';
-import IRectangularCoordinates from '../../coordinates/interfaces/IRectangularCoordinates';
-import IEclipticSphericalCoordinates from '../../coordinates/interfaces/IEclipticSphericalCoordinates';
-import IEquatorialSphericalCoordinates from '../../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import ILocalHorizontalCoordinates from '../../coordinates/interfaces/ILocalHorizontalCoordinates';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    LocalHorizontalCoordinates,
+    RectangularCoordinates
+} from '../../coordinates/coordinateTypes';
 import ILocation from '../../earth/interfaces/ILocation';
 
 export default interface IAstronomicalObject {
     toi: TimeOfInterest,
 
-    getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
+    getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
 
-    getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
+    getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
 
-    getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
+    getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
 
-    getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
+    getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
 
-    getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<IEquatorialSphericalCoordinates>;
+    getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates>;
 
-    getGeocentricEquatorialSphericalDateCoordinates(): Promise<IEquatorialSphericalCoordinates>;
+    getGeocentricEquatorialSphericalDateCoordinates(): Promise<EquatorialSphericalCoordinates>;
 
-    getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
+    getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates>;
 
-    getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates>;
+    getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates>;
 
-    getTopocentricEquatorialSphericalCoordinates(location: ILocation): Promise<IEquatorialSphericalCoordinates>;
+    getTopocentricEquatorialSphericalCoordinates(location: ILocation): Promise<EquatorialSphericalCoordinates>;
 
-    getTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates>;
+    getTopocentricHorizontalCoordinates(location: ILocation): Promise<LocalHorizontalCoordinates>;
 
-    getApparentTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates>;
+    getApparentTopocentricHorizontalCoordinates(location: ILocation): Promise<LocalHorizontalCoordinates>;
 }

@@ -1,4 +1,4 @@
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {deg2rad, sec2deg} from './angleCalc';
 import {getEccentricity, getLongitudeOfPerihelionOfOrbit, getNutationInLongitude} from './earthCalc';
 import {sunCalc} from './index';
@@ -11,9 +11,9 @@ export function getLightTimeCorrectedJulianDay(jd: number, d: number): number {
 }
 
 export function correctEffectOfNutation(
-    coords: IEclipticSphericalCoordinates,
+    coords: EclipticSphericalCoordinates,
     T: number
-): IEclipticSphericalCoordinates {
+): EclipticSphericalCoordinates {
     const phi = getNutationInLongitude(T);
 
     return {
@@ -24,9 +24,9 @@ export function correctEffectOfNutation(
 }
 
 export function correctEffectOfAberration(
-    coords: IEclipticSphericalCoordinates,
+    coords: EclipticSphericalCoordinates,
     T: number
-): IEclipticSphericalCoordinates {
+): EclipticSphericalCoordinates {
     // TODO Better formula with Ron-Vondrak expression
     const lonSun = sunCalc.getTrueLongitude(T);
     const e = getEccentricity(T);

@@ -1,4 +1,4 @@
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
+import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {deg2rad, rad2deg} from './angleCalc';
 
 const AU_UNIT_OF_LENGTH = 149597870700.0;
@@ -12,8 +12,8 @@ export function km2au(km: number): number {
 }
 
 export function getAngularSeparation(
-    coords1: IEquatorialSphericalCoordinates,
-    coords2: IEquatorialSphericalCoordinates,
+    coords1: EquatorialSphericalCoordinates,
+    coords2: EquatorialSphericalCoordinates,
 ): number {
     const raRad1 = deg2rad(coords1.rightAscension);
     const dRad1 = deg2rad(coords1.declination);
