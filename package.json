@@ -15,12 +15,15 @@
     "saturn",
     "uranus",
     "neptune",
+    "VSOP87",
     "sunrise",
     "sunset",
     "moonrise",
     "moonset",
     "solar eclipse",
-    "VSOP87"
+    "satellite",
+    "two line elements",
+    "tle"
   ],
   "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
   "author": "Andreas Moeller <andrmoel@gmail.com>",
