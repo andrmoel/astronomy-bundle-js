@@ -1,6 +1,6 @@
 import parseTwoLineElement from './parseTwoLineElement';
 
-it('tests parseTwoLineElementsString', () => {
+it('tests parseTwoLineElementString', () => {
     const tleString = `
         ISS(ZARYA)
         1 25544U 98067A   06040.85138889  .00012260  00000-0  86027-4 0  3194
