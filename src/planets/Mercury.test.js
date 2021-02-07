@@ -13,6 +13,10 @@ const location = {
     lon: 13.408,
 };
 
+it('tests getName', () => {
+    expect(mercury.getName()).toBe('mercury');
+});
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await mercury.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -230,7 +234,9 @@ it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 5, 22, 0, 0, 0);
     const mercury = new Mercury(toiConjunction0);
 
-    const toiConjunction = await mercury.getConjunctionInRightAscensionTo(Venus);
+    const {toi, position, angularDistance} = await mercury.getConjunctionInRightAscensionTo(Venus);
 
-    expect(toiConjunction.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 55, sec: 13});
+    expect(toi.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 55, sec: 13});
+    expect(position).toBe(1);
+    expect(round(angularDistance, 6)).toBe(0.894401);
 });

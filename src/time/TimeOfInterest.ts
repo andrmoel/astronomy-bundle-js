@@ -1,12 +1,12 @@
 import Location from '../earth/Location';
 import {timeCalc} from '../utils';
-import ITime from './interfaces/ITime';
+import {Time} from './timeTypes';
 
 export default class TimeOfInterest {
     public jd: number = 0.0;
     public T: number = 0.0;
 
-    constructor(public time: ITime) {
+    constructor(public time: Time) {
         this.jd = timeCalc.time2julianDay(time);
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
     }

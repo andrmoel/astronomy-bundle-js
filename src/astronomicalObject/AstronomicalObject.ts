@@ -1,10 +1,13 @@
 import TimeOfInterest from '../time/TimeOfInterest';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 import {createTimeOfInterest} from '../time';
-import IEquatorialSphericalCoordinates from '../coordinates/interfaces/IEquatorialSphericalCoordinates';
-import {getConjunctionInRightAscension} from '../utils/conjunctionCalc';
-import IRectangularCoordinates from '../coordinates/interfaces/IRectangularCoordinates';
-import IEclipticSphericalCoordinates from '../coordinates/interfaces/IEclipticSphericalCoordinates';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    LocalHorizontalCoordinates,
+    RectangularCoordinates
+} from '../coordinates/coordinateTypes';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,
@@ -13,11 +16,13 @@ import {
 } from '../utils/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
-import ILocation from '../earth/interfaces/ILocation';
-import ILocalHorizontalCoordinates from '../coordinates/interfaces/ILocalHorizontalCoordinates';
+import {Location} from '../earth/LocationTypes';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
+import {Conjunction} from '../planets/planetTypes';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
+    protected name = 'astronomical object';
+
     protected jd: number = 0.0;
     protected jd0: number = 0.0;
     protected T: number = 0.0;
@@ -30,85 +35,73 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.t = toi.getJulianMillenniaJ2000();
     }
 
-    abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
-
-    abstract getHeliocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
-
-    abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
-
-    abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
-
-    abstract getGeocentricEclipticRectangularJ2000Coordinates(): Promise<IRectangularCoordinates>;
-
-    abstract getGeocentricEclipticRectangularDateCoordinates(): Promise<IRectangularCoordinates>;
-
-    abstract getGeocentricEclipticSphericalJ2000Coordinates(): Promise<IEclipticSphericalCoordinates>;
-
-    abstract getGeocentricEclipticSphericalDateCoordinates(): Promise<IEclipticSphericalCoordinates>;
-
-    public async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<IEquatorialSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalJ2000Coordinates();
-
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+    public getName() {
+        return this.name;
     }
 
-    public async getGeocentricEquatorialSphericalDateCoordinates(): Promise<IEquatorialSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+    abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
 
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+    abstract getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
+
+    abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
+
+    abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
+
+    abstract getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
+
+    abstract getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
+
+    abstract getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
+
+    abstract getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
+
+    public async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates> {
+        const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
+
+        return eclipticSpherical2equatorialSpherical(coords, this.T);
     }
 
-    public async getApparentGeocentricEclipticRectangularCoordinates(): Promise<IRectangularCoordinates> {
-        const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalCoordinates();
+    public async getGeocentricEquatorialSphericalDateCoordinates(): Promise<EquatorialSphericalCoordinates> {
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return spherical2rectangular(lon, lat, radiusVector);
+        return eclipticSpherical2equatorialSpherical(coords, this.T);
     }
 
-    abstract async getApparentGeocentricEclipticSphericalCoordinates(): Promise<IEclipticSphericalCoordinates>;
+    public async getApparentGeocentricEclipticRectangularCoordinates(): Promise<RectangularCoordinates> {
+        const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();
 
-    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<IEquatorialSphericalCoordinates> {
-        const {lon, lat, radiusVector} = await this.getApparentGeocentricEclipticSphericalCoordinates();
+        return spherical2rectangular(coords);
+    }
 
-        return eclipticSpherical2equatorialSpherical(lon, lat, radiusVector, this.T);
+    abstract getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates>;
+
+    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates> {
+        const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();
+
+        return eclipticSpherical2equatorialSpherical(coords, this.T);
     }
 
     public async getTopocentricEquatorialSphericalCoordinates(
-        location: ILocation
-    ): Promise<IEquatorialSphericalCoordinates> {
-        const {rightAscension, declination, radiusVector}
-            = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const {lat, lon, elevation} = location;
+        location: Location
+    ): Promise<EquatorialSphericalCoordinates> {
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return equatorialSpherical2topocentricSpherical(
+            coords,
+            location,
             this.T,
-            rightAscension,
-            declination,
-            radiusVector,
-            lat,
-            lon,
-            elevation,
         );
     }
 
-    public async getTopocentricHorizontalCoordinates(location: ILocation): Promise<ILocalHorizontalCoordinates> {
-        const {rightAscension, declination, radiusVector}
-            = await this.getApparentGeocentricEquatorialSphericalCoordinates();
-        const {lat, lon, elevation} = location;
+    public async getTopocentricHorizontalCoordinates(location: Location): Promise<LocalHorizontalCoordinates> {
+        const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return equatorialSpherical2topocentricHorizontal(
-            this.T,
-            rightAscension,
-            declination,
-            radiusVector,
-            lat,
-            lon,
-            elevation,
-        );
+        return equatorialSpherical2topocentricHorizontal(coords, location, this.T);
     }
 
     public async getApparentTopocentricHorizontalCoordinates(
-        location: ILocation
-    ): Promise<ILocalHorizontalCoordinates> {
+        location: Location
+    ): Promise<LocalHorizontalCoordinates> {
         const {azimuth, altitude, radiusVector} = await this.getTopocentricHorizontalCoordinates(location);
 
         return {
@@ -130,7 +123,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(coords.radiusVector);
     }
 
-    public async getTopocentricDistanceToEarth(location: ILocation): Promise<number> {
+    public async getTopocentricDistanceToEarth(location: Location): Promise<number> {
         const coords = await this.getTopocentricEquatorialSphericalCoordinates(location);
 
         return au2km(coords.radiusVector);
@@ -142,9 +135,11 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
-    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<TimeOfInterest> {
-        const jd = await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
+        return await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+    }
 
-        return createTimeOfInterest.fromJulianDay(jd);
+    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
+        return await getConjunctionInLongitude(this.constructor, astronomicalObjectConstructor, this.jd0);
     }
 }

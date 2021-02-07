@@ -2,6 +2,96 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.0.0 (2021-02-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **typescript:** changed parameters in coordinate calculations functions
+
+* **typescript:** use of types instead of interfaces ([e67e35b](https://github.com/andrmoel/astronomy-bundle-js/commit/e67e35ba4ad0740a40c0e99be3cdc4530a6ad9fa))
+
+## 5.19.0 (2021-01-19)
+
+
+### Features
+
+* **star:** add coordinate calculations for stars ([47ff8e3](https://github.com/andrmoel/astronomy-bundle-js/commit/47ff8e37403cd293a6f03316c64a950631b99f6d))
+
+### 5.18.2 (2021-01-18)
+
+### 5.18.1 (2021-01-18)
+
+## 5.18.0 (2021-01-18)
+
+
+### Features
+
+* **precession:** add functions to calculate precession ([fca422a](https://github.com/andrmoel/astronomy-bundle-js/commit/fca422ae6b84636ba77853bb60566a57ee66e99b))
+
+### 5.17.10 (2021-01-18)
+
+### 5.17.9 (2021-01-18)
+
+### 5.17.8 (2020-12-28)
+
+
+### Bug Fixes
+
+* **typescript:** async cannot be used in abstract functions ([74ade1f](https://github.com/andrmoel/astronomy-bundle-js/commit/74ade1fd27e16d2462c80a85a86ba98ae86158b2))
+
+### 5.17.7 (2020-12-06)
+
+
+### Bug Fixes
+
+* **rise-set:** calculate case when rise and transit are very close ([fce58fd](https://github.com/andrmoel/astronomy-bundle-js/commit/fce58fdc706dac2197a13ac3f2560a62cf26953b))
+
+### 5.17.6 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** local hour angle must be between -180 and 180 deg ([25818ab](https://github.com/andrmoel/astronomy-bundle-js/commit/25818aba0bc29727f809a673240b52e9641f5eca))
+
+### 5.17.5 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** throw error when no transit on given day is possible ([b7db39f](https://github.com/andrmoel/astronomy-bundle-js/commit/b7db39fdd11c9a06621396fe4d1382fc4e0e1d93))
+
+### 5.17.4 (2020-12-05)
+
+### 5.17.3 (2020-12-04)
+
+### 5.17.2 (2020-12-03)
+
+### 5.17.1 (2020-12-01)
+
+## 5.17.0 (2020-11-26)
+
+
+### Features
+
+* **astronomical-object:** add method getName() ([3cb99ae](https://github.com/andrmoel/astronomy-bundle-js/commit/3cb99aecf0da586f301bf1f84f0693eb8837d7cb))
+
+## 5.16.0 (2020-11-25)
+
+
+### Features
+
+* **conjunction:** add calculation for conjunction in longitude ([a28de85](https://github.com/andrmoel/astronomy-bundle-js/commit/a28de85b367ec09fae35e24b389f9960c942de44))
+
+## 5.15.0 (2020-11-25)
+
+
+### Features
+
+* **vsop87:** add short theory for faster calculations ([47c729f](https://github.com/andrmoel/astronomy-bundle-js/commit/47c729f4420b637d037268388ca66c9987e8ce68))
+
+### 5.14.3 (2020-11-24)
+
 ### 5.14.2 (2020-11-23)
 
 ### 5.14.1 (2020-11-23)

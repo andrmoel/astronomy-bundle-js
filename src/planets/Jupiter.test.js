@@ -13,6 +13,10 @@ const location = {
     lon: 13.408,
 };
 
+it('tests getName', () => {
+    expect(jupiter.getName()).toBe('jupiter');
+});
+
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
     const coords = await jupiter.getHeliocentricEclipticRectangularJ2000Coordinates();
 
@@ -224,7 +228,9 @@ it('tests getConjunctionInRightAscensionTo', async () => {
     const toiConjunction0 = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
     const jupiter = new Jupiter(toiConjunction0);
 
-    const toiConjunction = await jupiter.getConjunctionInRightAscensionTo(Saturn);
+    const {toi, position, angularDistance} = await jupiter.getConjunctionInRightAscensionTo(Saturn);
 
-    expect(toiConjunction.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
+    expect(toi.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
+    expect(position).toBe(1);
+    expect(round(angularDistance, 6)).toBe(0.104212);
 });

@@ -37,6 +37,65 @@ export function tabularInterpolation5(values: Array<number>, n: number = 0.0): n
     }
 }
 
+export function getInterpolateValue5(values: Array<number>, n: number = 0.0): number {
+    const y3 = values[2];
+    const A = values[1] - values[0];
+    const B = values[2] - values[1];
+    const C = values[3] - values[2];
+    const D = values[4] - values[3];
+    const E = B - A;
+    const F = C - B;
+    const G = D - C;
+    const H = F - E;
+    const J = G - F;
+    const K = J - H;
+
+    return y3 + (n / 2) * (B + C)
+        + (Math.pow(n, 2) / 2) * F
+        + ((n * (Math.pow(n, 2) - 1)) / 12) * (H + J)
+        + ((Math.pow(n, 2) * (Math.pow(n, 2) - 1)) / 24) * K
+}
+
+export async function getLongitudeInterpolationArray(
+    objConstructor: any,
+    jd0: number,
+    nMax: number = 1.0,
+): Promise<Array<number>> {
+    const result = [];
+
+    for (let n = -1 * nMax; n <= nMax; n++) {
+        const jd = jd0 + n;
+        const toi = createTimeOfInterest.fromJulianDay(jd);
+        const object = new objConstructor(toi, true);
+
+        const {longitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
+
+        result.push(longitude);
+    }
+
+    return _fix360Crossing(result);
+}
+
+export async function getLatitudeInterpolationArray(
+    objConstructor: any,
+    jd0: number,
+    nMax: number = 1.0,
+): Promise<Array<number>> {
+    const result = [];
+
+    for (let n = -1 * nMax; n <= nMax; n++) {
+        const jd = jd0 + n;
+        const toi = createTimeOfInterest.fromJulianDay(jd);
+        const object = new objConstructor(toi, true);
+
+        const {latitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
+
+        result.push(latitude);
+    }
+
+    return result;
+}
+
 export async function getRightAscensionInterpolationArray(
     objConstructor: any,
     jd0: number,
@@ -47,14 +106,14 @@ export async function getRightAscensionInterpolationArray(
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi);
+        const object = new objConstructor(toi, true);
 
         const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
         result.push(rightAscension);
     }
 
-    return _fixRightAscension360Crossing(result);
+    return _fix360Crossing(result);
 }
 
 export async function getDeclinationInterpolationArray(
@@ -77,7 +136,7 @@ export async function getDeclinationInterpolationArray(
     return result;
 }
 
-function _fixRightAscension360Crossing(raArray: Array<number>): Array<number> {
+function _fix360Crossing(raArray: Array<number>): Array<number> {
     const result = [];
 
     let add = 0;
