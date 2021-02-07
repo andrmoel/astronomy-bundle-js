@@ -44,6 +44,8 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 9. [Stars](#stars)
     1. [Position of Stars](#stars-position)
 10. [Solar Eclipse](#solar-eclipse)
+11. [Satellites](#satellites)
+    1. [Two Line Elements](#satellites-tle)
 
 ## <a name="installation"></a>Installation
 
@@ -921,3 +923,21 @@ const exists = solarEclipseExists(toi);
 ```
 
 Result of the calculation: *Yes, there is a solar eclipse*
+
+## <a name="satellites"></a> Satellites
+
+### <a name="satellites-tle"></a> Two Line Elements
+
+**Example**: Parse Two Line Elements for the ISS
+
+```javascript
+import {parseTwoLineElement} from 'astronomy-bundle/satellites';
+
+const tleString = `
+        ISS(ZARYA)
+        1 25544U 98067A   06040.85138889  .00012260  00000-0  86027-4 0  3194
+        2 25544  51.6448 122.3522 0008835 257.3473 251.7436 15.74622749413094
+    `;
+
+const tle = parseTwoLineElement(tleString);
+```
