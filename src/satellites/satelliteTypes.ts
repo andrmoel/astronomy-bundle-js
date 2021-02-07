@@ -1,4 +1,4 @@
-export default interface IEclipticSphericalCoordinates {
+export type TwoLineElement = {
     noradNr: number,
     classification: string,
     internationalDesignator: string,

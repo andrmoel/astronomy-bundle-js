@@ -1,7 +1,27 @@
 import {shortYear2longYear} from '../utils/timeCalc';
+import {TwoLineElement} from "./satelliteTypes";
 
-export default function parseTwoLineElement(tleString: string): object {
-    let result = {};
+export default function parseTwoLineElement(tleString: string): TwoLineElement {
+    let result = {
+        noradNr: 0,
+        classification: '',
+        internationalDesignator: '',
+        epochYear: 0,
+        epochDayOfYear: 0,
+        firstDerivativeMeanMotion: 0,
+        secondDerivativeMeanMotion: 0,
+        dragTerm: 0,
+        ephemerisType: 0,
+        setNumber: 0,
+        catalogNumber: 0,
+        inclination: 0,
+        rightAscension: 0,
+        eccentricity: 0,
+        argumentOfPerigee: 0,
+        meanAnomaly: 0,
+        meanMotion: 0,
+        revolution: 0,
+    };
 
     const rows = tleString.split('\n');
 
