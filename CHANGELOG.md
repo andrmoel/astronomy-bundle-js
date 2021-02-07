@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.0.0 (2021-02-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **typescript:** changed parameters in coordinate calculations functions
+
+* **typescript:** use of types instead of interfaces ([e67e35b](https://github.com/andrmoel/astronomy-bundle-js/commit/e67e35ba4ad0740a40c0e99be3cdc4530a6ad9fa))
+
 ## 5.19.0 (2021-01-19)
 
 
