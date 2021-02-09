@@ -1,0 +1,225 @@
+
+Revision History for orbitTools.core.lib library - Public Edition.
+Copyright (c) Michael F. Henry
+www.zeptomoby.com/satellites
+
+Permission to use for non-commercial purposes only; all other uses 
+contact the author at mfh@zeptomoby.com.
+
+Version 1.4.00 2017-04-22
+
+   Compile with Visual Studio 2017.
+
+Version 1.3.00 2014-06-28
+
+   Class cSite now has optional "name" property.
+   Method cSite::GetPosition() is now deprecated, use cSite::PositionEci().
+   Renamed cSite::m_geo to m_Geo.
+
+Version 1.2.01 2013-01-05
+
+   Classes cEci and cGeo now contain constructors that allow
+      conversions between the two classes.
+   Classes cEciTime and cGeoTime now contain constructors that
+      allow conversions between the two classes. 
+   Added class cTopoTime.
+   Trim leading/trailing spaces from string returned from cTle::GetField().
+   General header file #include clean-up.
+   
+   Breaking changes:
+
+   1. Removed cEciTime::ToGeoTime() (use cGeoTime constructor accepting
+      cEciTime).
+   2. Removed cEciTime::FromGeoTime() (use cEciTime constructor accepting
+      cGeoTime).
+   3. Removed class cEci constructor accepting a single cVector.
+   4. Removed #include for <time.h> from cJulian.h (moved to pre-compiled
+      project header file).
+   5. Removed constructor cGeo::cGeo(const cWgsModel*).
+
+Version 1.2.00 2012-12-09
+
+   Added classes cEciTime and cGeoTime, which encapsulate coordinate
+   information along with a Julian date. This formalizes the connection
+   between coordinates and an associated time, and allows use of the base
+   classes cEci and cGeo when the time component is not needed.
+
+   Breaking changes:
+
+   1. Renamed class cCoordGeo to cGeo.
+   2. Renamed class cCoordTopo to cTopo.
+   3. Class cEci no longer contains m_Date member (use new class EciTime).
+   4. Method cEci::ToGeo() removed; use cEciTime.ToGeoTime().
+   5. Method cSite::GetPosition() returns type cEciTime.
+   6. IOrbit::GetPosition() returns type cEciTime.
+
+Version 1.1.00 2012-08-28
+   
+   Added class IOrbit to allow the writing of code that works with both
+      the Standard and Pro Editions of class cOrbit.
+   Added class cVector copy constructor.
+   Added LatitudeRad(), LongitudeRad(), LatitudeDeg(), LongitudeDeg(), 
+      and AltitudeKm() to class cCoordGeo.
+   Added AzimuthRad(), AzimuthDeg(), ElevationRad(), ElevationDeg(),
+      RangeKm(), and RangeRateKmSec() to cCoordTopo.
+   Added LatitudeRad(), LongitudeRad(), LatitudeDeg(), LongitudeDeg(),
+      AltitudeKm() to class cSite.
+   Updated the format of the string returned from cSite::ToString().
+
+   Breaking changes:
+
+   1. cCoordGeo::m_Lat is protected; use LatitudeRad() for access.
+   2. cCoordGeo::m_Lon is protected; use LongitudeRad() for access.
+   3. cCoordGeo::m_Alt is protected; use AltitudeKm() for access.
+   4. cCoordGeo::m_pEllipsoid is protected; use Ellipsoid() for access.
+   5. cCoordTopo::m_Az is protected; use AzimuthRad() for access;     
+   6. cCoordTopo::m_El is protected; use ElevationRad() for access.
+   7. cCoordTopo::m_Range is protected; use RangeKm() for access.
+   8. cCoordTopo::m_RangeRate is protected; use RangeRateKmSec() for access.
+   9. cSite::GetLat() renamed to LatitudeRad().
+  10. cSite::GetLon() renamed to LongitudeRad().
+  11. cSite::GetAlt() renamed to AltitudeKm().
+  12. cJulian::GetDate() renamed to Date().
+  13. cEci::GetPos() renamed to Position().
+  14. cEci::GetVel() renamed to Velocity().
+  15. cEci::GetDate() renamed to Date().
+  16. cTle::GetName() renamed to Name().
+  17. cTle::GetLine1() renamed to Line1().
+  18  cTle::GetLine2() renamed to Line2().
+
+Version 1.0.06 2012-05-31
+
+   Corrected the value of the constant cJulian.EPOCH_JAN1_00H_1900.
+
+   Breaking changes:
+
+   1. Renamed cJulian.FromJan1_12h_1900() to FromJan0_12h_1900(), which
+      more accurately describes the epoch date.
+   
+Version 1.0.05 2012-05-28
+
+   Some AMSAT TLEs use a non-standard scientific notation format that
+   excludes the sign of the exponent when the exponent is non-negative.
+   Updated Tle.ExpToAtof() to correctly parse these TLEs. Thanks to
+   T. Doyle for first reporting this issue.
+
+Version 1.0.04 2011-09-25
+
+   Compile with Visual Studio 2010.
+   cTle:TrimLeft() now works with empty/blank strings.
+
+Version 1.0.03 2011-04-09
+
+   cTle:IsValidLine() now works with 24-character satellite names.
+
+Version 1.0.02 2010-12-21
+
+   cTle::GetUnits() is now a static method.
+
+Version 1.0.01 2010-12-21
+
+   Refactored cTle::ExpToDecimal(), in some cases it could cause rounding
+   errors. Renamed the method to ExpToAtof().
+   Removed assertion in cTle::Initialize(); the satellite name may
+   now be a zero-length string.
+   cTle::TrimRight() works properly on zero-length strings.
+
+   
+Version 1.0.00 2010-10-30
+
+   Split the orbitTools project into two libraries:
+
+      orbitTools.core.lib  - base functionality (cTle, cJulian, etc.)
+      orbitTools.orbit.lib - all SGP4/SDP4 tracking code
+      
+   Dividing the project into two libraries allows an easier upgrade path
+   for users who wish to transition to licensed versions of the
+   software.
+              
+   Breaking changes from prior (single library) version:
+              
+   All methods renamed to Pascal casing. Classes and methods affected:
+        
+      Class cSite:
+        getPosition() to GetPosition()
+        getLookAngle() to GetLookAngle()
+        
+      Class cTle:
+        getField() to GetField()
+        getName() to GetName()
+        getLine1() to GetLine1()
+        getLine2() to GetLine2()
+        radGet() to RadGet()
+        degGet() to DegGet()
+        
+      Class cJulian:
+        toGMST() to ToGmst()
+        toLMST() to ToLmst()
+        toTime() to ToTime()
+        getComponent() to GetComponent()
+        getDate() to GetDate()
+        addDay() to AddDay()
+        addHour() to AddHour()
+        addMin() to AddMin()
+        addSec() to AddSec()
+        spanDay() to SpanDay()
+        spanHour() to SpanHour()
+        spanMin() to SpanMin()
+        spanSec() to SpanSec()
+
+      Class cEci:
+        toGeo() to ToGeo()
+        getPos() to GetPos()
+        getVel()  to GetVel()
+        getDate() to GetDate()
+        setUnitsAe() to SetUnitsAe()
+        setUnitsKm() to SetUnitsKm()
+        ae2km() to Ae2Km()
+        
+   Renamed methods:
+        
+      Method cTle::mnMotion() renamed to MeanMotionTle().
+      Method cTle::mnAnomaly() (2 overloads) renamed to MeanAnomaly().
+      
+   Other changes:
+
+   Class cEci: Use member initialization list syntax for the constructor.
+   Return cVector references from GetPos() and GetVel(). Thanks to S. Torri
+   for these improvements.
+
+   Compile with Visual Studio 2008.
+
+-----------------------------------------------------------------------------
+   Revision history below this point was for the single-library version of
+  the source code. Only comments relevant to the files that were moved into
+   the core.lib library have been retained. All other comments were moved 
+           into the revision notes file for the orbit.lib library.
+-----------------------------------------------------------------------------
+
+01/25/2009 Repaired a debug assert call in cJulian.cpp that was incorrectly
+           triggering when calculating dates on December 31 during leap
+           years. Thanks to R. Kummerer for uncovering this problem.
+
+10/16/2005 Do not use time_t type when calculating the epoch for ECI 
+           coordinates. Thanks to the U.K's M. Trethewey for locating yet 
+           another time_t problem.
+           
+           Updated class cJulian with a new constructor and "span" functions.
+   
+06/22/2005 MSVC++ 7.0 compiler/library change: pow(int, int) now returns 0 if
+           the exponent is less than 0. Updated ExpToDecimal() to use 
+           pow(double, double) instead. This was not pow() behavior in 
+           MSVC++ 6.0. Thanks to Dr. Andy Register for first reporting this 
+           issue.
+
+08/29/2004 More time_t problems: A truncation error in CJulian::toTime() was
+           causing time_t values to have an average error of 0.5 seconds from
+           their Julian counterpart.
+           
+05/23/2004 Julian date class now calculates year, month, day, without using
+           time_t type, which only has a resolution of 1 second. This was 
+           causing errors when calculating azimuth and elevation for 
+           satellites which pass near the zenith. Thanks to M. Knapek 
+           in Germany for first reporting this issue.
+                               
+12/07/2003 First writing.

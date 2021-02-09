@@ -1,0 +1,134 @@
+
+Revision History for orbitTools.orbit.lib library - Public Edition.
+Copyright (c) Michael F. Henry
+www.zeptomoby.com/satellites
+
+Permission to use for non-commercial purposes only; all other uses
+contact the author at mfh@zeptomoby.com.
+
+Version 1.4.00 2017-04-22
+
+   Compile with Visual Studio 2017.
+
+Version 1.3.01 2014-08-30
+
+   Fixed class cOrbit copy constructor/assignment operator: member variable
+   m_secPeriod was not being propagated.
+   Fixed potential memory leak in cSatellite::operator=().
+
+Version 1.3.00 2014-06-27
+
+   Added class cSatellite.
+   Method cOrbit::GetPosition() is deprecated; use cOrbit::PositionEci().
+   Destructors for classes cNoradSDP4 and cNoradSGP4 are now virtual.
+   Added "orbitLib.h" header file.
+
+Version 1.2.01 2013-09-08
+
+   Added cOrbit::TleLine1() and TleLine2().
+
+Version 1.2.00 2012-09-22
+
+   Updates from orbitTools.core library:
+      Class cCoordGeo renamed cGeo, added derived class cGeoTime.
+      Class cCoordTopo renamed cTopo.
+      Use new classes cEciTime, cGeoTime.
+
+   Breaking changes:
+
+   1. cOrbit::GetPosition() now returns type cEciTime.
+
+Version 1.0.03 2011-05-31
+   
+   cJulian.FromJan1_12h_1900() renamed to FromJan0_12h_1900().   
+
+Version 1.0.02 2011-09-25
+
+   Compile with Visual Studio 2010.
+   Class cOrbit constructor does not need to call cTle::Initialize().
+   Class cOrbit's copy constructor initializes "recovered" caching variables.
+
+   Performance changes: 
+
+   1. Class Orbit now uses caching variables for common TLE orbital 
+   parameters like inclination, argument of perigee, etc.
+
+   Breaking changes:
+
+   1. Removed unused method cOrbit::MeanAnomaly(cJulian).
+
+
+Version 1.0.01 2010-12-31
+
+   Removed unused local from class cNoradSDP4 c'tor.
+
+Version 1.0.0 2010-10-30
+
+   Split the orbitTools project into two libraries:
+
+      core.lib  - base functionality (cTle, cJulian, etc.)
+      orbit.lib - all SGP4/SDP4 tracking code
+      
+   Dividing the project into two libraries allows an easier upgrade path
+   for users who wish to transition to licensed versions of the
+   software.
+              
+   Breaking changes from prior (single library) version:
+              
+   All methods renamed to Pascal casing. Classes and methods affected:
+        
+      Class cNoradBase/cNoradSGP4/cNoradSDP4/cOrbit:
+        getPosition() to GetPosition()
+        
+   Public methods with new signatures:
+      Method cOrbit::GetPosition() - now returns type cEci instead of bool;
+      the cEci parameter has been removed.
+      
+   Public methods with new behaviors:
+      Method cOrbit::GetPosition() - can now throw new exception types
+      cPropagationException and cDecayException.
+      
+   Other changes:
+
+   Removed many unneeded member variables from cNoradBase and cNoradSDP4.
+   Moved the functionality of cNoradSDP4::DeepInit() into the cNoradSDP4
+   constructor, and no longer call the method on every GetPosition() calculation.
+   This speeds up repetitive SDP4 position calculations by about 35%.
+              
+   Removed dp_savtsn; it was used to determine if the number of propagation
+   minutes had changed by more than 30. If so, lunar-solar terms were
+   recalculated. The terms are now always recalculated, regardless of 
+   propagation time. This not only smooths ephemerides for some orbits, but
+   also matches what was done in prior versions of the library.
+
+   cNoradBase::Initialize() has been subsumed by the constructor.
+
+   Compile with Visual Studio 2008.
+
+-----------------------------------------------------------------------------
+   Revision history below this point was for the single-library version of
+  the source code. Only comments relevant to the files that were moved into
+   the orbit.lib library have been retained. All other comments were moved 
+           into the revision notes file for the core.lib library.
+-----------------------------------------------------------------------------
+
+09/11/2009 The variable "dpi_day" was not being initialized in cNoradSDP4.
+           Thanks to H. Krispin et al.
+
+01/02/2009 The orbit axis recovered from orbital elements is now correctly
+           associated with the semimajor axis (and not the semiminor axis).
+           This change does not effect SGP4/SDP4 output calculations, but
+           does correct class cOrbit's convenience methods SemiMajor, SemiMinor,
+           Major, Minor, etc. Thanks to C. Wee for discovering this issue.
+
+           The cOrbit class method "mnMotionRec" was renamed to "MeanMotion".
+
+06/21/2006 Since the cNoradBase class has a virtual function, good design
+           practice dictates it also have a virtual destructor. A Gnu
+           compiler warning sent by R. Graham.
+
+07/19/2005 Fixed error in calculating m_kmPerigeeRec, which is not used by 
+           SGP4 or SDP4 calculations. Added m_kmApogeeRec and corresponding
+           accessor function cOrbit.Apogee().
+           
+12/07/2003 First writing.
