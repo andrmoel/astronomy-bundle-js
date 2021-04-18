@@ -1,14 +1,19 @@
 import Planet from './Planet';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {observationCalc} from '../utils';
-import {DIAMETER_NEPTUNE} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
+import { getAsyncCachedCalculation } from '../cache/calculationCache';
+import { DIAMETER_NEPTUNE } from '../constants/diameters';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { normalizeAngle } from '../utils/angleCalc';
+import { getApparentMagnitudeNeptune } from '../utils/magnitudeCalc';
+import { calculateVSOP87, calculateVSOP87Angle } from '../utils/vsop87Calc';
 
 export default class Neptune extends Planet {
-    protected name = 'neptune';
+
+
+    constructor(toi?: TimeOfInterest) {
+        super('neptune', toi);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('neptune_heliocentric_spherical_j2000', this.t, async () => {

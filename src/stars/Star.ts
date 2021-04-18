@@ -1,29 +1,22 @@
+import { ProperMotion } from './starTypes';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {
-    EclipticSphericalCoordinates,
-    EquatorialSphericalCoordinates,
-    RectangularCoordinates
-} from '../coordinates/coordinateTypes';
+import { EPOCH_J2000 } from '../constants/epoch';
+import { EclipticSphericalCoordinates, EquatorialSphericalCoordinates, RectangularCoordinates } from '../coordinates/coordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
-import {EPOCH_J2000} from '../constants/epoch';
-import {
-    eclipticSpherical2equatorialSpherical,
-    equatorialSpherical2eclipticSpherical,
-    spherical2rectangular
-} from '../utils/coordinateCalc';
-import {correctProperMotion} from '../utils/starCalc';
-import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import {ProperMotion} from './starTypes';
+import { correctEffectOfAberration, correctEffectOfNutation } from '../utils/apparentCoordinateCalc';
+import { eclipticSpherical2equatorialSpherical, equatorialSpherical2eclipticSpherical, spherical2rectangular } from '../utils/coordinateCalc';
+import { correctPrecessionForEquatorialCoordinates } from '../utils/precessionCalc';
+import { correctProperMotion } from '../utils/starCalc';
 
 export default class Star extends AstronomicalObject {
-    public constructor(
-        private equatorialCoords: EquatorialSphericalCoordinates,
+
+    constructor(
+        private readonly equatorialCoords: EquatorialSphericalCoordinates,
         toi?: TimeOfInterest,
-        private properMotion: ProperMotion = {rightAscension: 0, declination: 0},
-        private referenceEpoch: number = EPOCH_J2000,
+        private readonly properMotion: ProperMotion = { rightAscension: 0, declination: 0 },
+        private readonly referenceEpoch: number = EPOCH_J2000,
     ) {
-        super(toi);
+        super('star', toi);
     }
 
     async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {

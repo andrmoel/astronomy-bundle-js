@@ -1,14 +1,19 @@
 import Planet from './Planet';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {observationCalc} from '../utils';
-import {DIAMETER_MARS} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
+import { getAsyncCachedCalculation } from '../cache/calculationCache';
+import { DIAMETER_MARS } from '../constants/diameters';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { normalizeAngle } from '../utils/angleCalc';
+import { getApparentMagnitudeMars } from '../utils/magnitudeCalc';
+import { calculateVSOP87, calculateVSOP87Angle } from '../utils/vsop87Calc';
 
 export default class Mars extends Planet {
-    protected name = 'mars';
+
+
+    constructor(toi?: TimeOfInterest) {
+        super('mars', toi);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mars_heliocentric_spherical_j2000', this.t, async () => {

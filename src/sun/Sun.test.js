@@ -12,8 +12,8 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
-    expect(sun.getName()).toBe('sun');
+it('get name should return expected value', () => {
+    expect(sun.name).toBe('sun');
 });
 
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {

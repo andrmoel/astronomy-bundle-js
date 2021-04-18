@@ -1,42 +1,44 @@
-import TimeOfInterest from '../time/TimeOfInterest';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
-import {createTimeOfInterest} from '../time';
+import { LIGHT_SPEED_KM_PER_SEC } from '../constants/lightSpeed';
 import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
     RectangularCoordinates
-} from '../coordinates/coordinateTypes';
-import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
+    } from '../coordinates/coordinateTypes';
+import { Location } from '../earth/LocationTypes';
+import { Conjunction } from '../planets/planetTypes';
+import { createTimeOfInterest } from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { correctEffectOfRefraction } from '../utils/apparentCoordinateCalc';
+import { getConjunctionInLongitude, getConjunctionInRightAscension } from '../utils/conjunctionCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
     spherical2rectangular
-} from '../utils/coordinateCalc';
-import {au2km} from '../utils/distanceCalc';
-import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
-import {Location} from '../earth/LocationTypes';
-import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
-import {Conjunction} from '../planets/planetTypes';
+    } from '../utils/coordinateCalc';
+import { au2km } from '../utils/distanceCalc';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
-    protected name = 'astronomical object';
 
-    protected jd: number = 0.0;
-    protected jd0: number = 0.0;
-    protected T: number = 0.0;
-    protected t: number = 0.0;
+    protected readonly jd: number;
+    protected readonly jd0: number;
+    protected readonly T: number;
+    protected readonly t: number;
 
-    public constructor(public toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
+    public constructor(
+        private readonly _name: string,
+        public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()
+    ) {
         this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
         this.T = toi.getJulianCenturiesJ2000();
         this.t = toi.getJulianMillenniaJ2000();
     }
 
-    public getName() {
-        return this.name;
+    public get name(): string {
+        return this._name;
     }
 
     abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
@@ -102,7 +104,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     public async getApparentTopocentricHorizontalCoordinates(
         location: Location
     ): Promise<LocalHorizontalCoordinates> {
-        const {azimuth, altitude, radiusVector} = await this.getTopocentricHorizontalCoordinates(location);
+        const { azimuth, altitude, radiusVector } = await this.getTopocentricHorizontalCoordinates(location);
 
         return {
             azimuth: azimuth,
@@ -130,7 +132,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     }
 
     public async getLightTime(): Promise<number> {
-        const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const { radiusVector } = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }

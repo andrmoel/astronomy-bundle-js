@@ -1,14 +1,18 @@
 import Planet from './Planet';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {observationCalc} from '../utils';
-import {DIAMETER_MERCURY} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeMercury} from '../utils/magnitudeCalc';
+import { getAsyncCachedCalculation } from '../cache/calculationCache';
+import { DIAMETER_MERCURY } from '../constants/diameters';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { normalizeAngle } from '../utils/angleCalc';
+import { getApparentMagnitudeMercury } from '../utils/magnitudeCalc';
+import { calculateVSOP87, calculateVSOP87Angle } from '../utils/vsop87Calc';
 
 export default class Mercury extends Planet {
-    protected name = 'mercury';
+
+    constructor(toi?: TimeOfInterest) {
+        super('mercury', toi);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mercury_heliocentric_spherical_j2000', this.t, async () => {

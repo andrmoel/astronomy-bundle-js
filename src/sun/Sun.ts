@@ -1,45 +1,41 @@
-import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/coordinateTypes';
-import {DIAMETER_SUN} from '../constants/diameters';
-import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
-import TimeOfInterest from '../time/TimeOfInterest';
+import { DIAMETER_SUN } from '../constants/diameters';
+import { STANDARD_ALTITUDE_SUN_CENTER_REFRACTION, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION } from '../constants/standardAltitude';
+import { EclipticSphericalCoordinates, RectangularCoordinates } from '../coordinates/coordinateTypes';
+import { createEarth } from '../earth';
 import Earth from '../earth/Earth';
-import {createEarth} from '../earth';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import {Location} from '../earth/LocationTypes';
-import {createTimeOfInterest} from '../time';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {
-    STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
-    STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION
-} from '../constants/standardAltitude';
+import { Location } from '../earth/LocationTypes';
+import { createTimeOfInterest } from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { correctEffectOfAberration, correctEffectOfNutation } from '../utils/apparentCoordinateCalc';
+import { earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular } from '../utils/coordinateCalc';
+import { getRise, getSet, getTransit } from '../utils/riseSetTransitCalc';
 
 export default class Sun extends AstronomicalObject {
-    protected name = 'sun';
 
-    private earth: Earth;
+    private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
-        super(toi);
+        super('sun', toi);
 
         this.earth = createEarth(toi);
     }
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
-        return Promise.resolve({x: 0, y: 0, z: 0});
+        return Promise.resolve({ x: 0, y: 0, z: 0 });
     }
 
     public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        return Promise.resolve({x: 0, y: 0, z: 0});
+        return Promise.resolve({ x: 0, y: 0, z: 0 });
     }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+        return Promise.resolve({ lon: 0, lat: 0, radiusVector: 0 });
     }
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
+        return Promise.resolve({ lon: 0, lat: 0, radiusVector: 0 });
     }
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {

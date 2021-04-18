@@ -12,8 +12,8 @@ const location = {
     lon: -122.4108,
 };
 
-it('tests getName', () => {
-    expect(moon.getName()).toBe('moon');
+it('get name should return expected value', () => {
+    expect(moon.name).toBe('moon');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

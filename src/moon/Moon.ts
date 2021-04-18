@@ -1,38 +1,34 @@
-import {moonCalc, moonPhaseCalc, observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/coordinateTypes';
-import TimeOfInterest from '../time/TimeOfInterest';
+import { DIAMETER_MOON } from '../constants/diameters';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON
-} from '../constants/moonPhase';
-import {DIAMETER_MOON} from '../constants/diameters';
-import {getApparentMagnitudeMoon} from '../utils/magnitudeCalc';
-import {
-    rectangular2spherical,
-    rectangularGeocentric2rectangularHeliocentric,
-    spherical2rectangular
-} from '../utils/coordinateCalc';
-import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import Sun from '../sun/Sun';
-import Earth from '../earth/Earth';
-import createSun from '../sun/createSun';
+    } from '../constants/moonPhase';
+import { STANDARD_ALTITUDE_MOON_CENTER_REFRACTION } from '../constants/standardAltitude';
+import { EclipticSphericalCoordinates, RectangularCoordinates } from '../coordinates/coordinateTypes';
 import createEarth from '../earth/createEarth';
-import {Location} from '../earth/LocationTypes';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {createTimeOfInterest} from '../time';
-import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
+import Earth from '../earth/Earth';
+import { Location } from '../earth/LocationTypes';
+import createSun from '../sun/createSun';
+import Sun from '../sun/Sun';
+import { createTimeOfInterest } from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { moonCalc, moonPhaseCalc, observationCalc } from '../utils';
+import { correctEffectOfNutation } from '../utils/apparentCoordinateCalc';
+import { rectangular2spherical, rectangularGeocentric2rectangularHeliocentric, spherical2rectangular } from '../utils/coordinateCalc';
+import { getApparentMagnitudeMoon } from '../utils/magnitudeCalc';
+import { getRise, getSet, getTransit } from '../utils/riseSetTransitCalc';
 
 export default class Moon extends AstronomicalObject {
-    protected name = 'moon';
 
-    private sun: Sun;
-    private earth: Earth;
+    private readonly sun: Sun;
+
+    private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
-        super(toi);
+        super('moon', toi);
 
         this.sun = createSun(toi);
         this.earth = createEarth(toi);
@@ -78,7 +74,7 @@ export default class Moon extends AstronomicalObject {
         const lat = moonCalc.getLatitude(this.T);
         const radiusVector = moonCalc.getRadiusVector(this.T);
 
-        return Promise.resolve({lon, lat, radiusVector});
+        return Promise.resolve({ lon, lat, radiusVector });
     }
 
     public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {

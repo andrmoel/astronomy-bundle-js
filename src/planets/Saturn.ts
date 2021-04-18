@@ -1,14 +1,18 @@
 import Planet from './Planet';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {observationCalc} from '../utils';
-import {DIAMETER_SATURN} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
+import { getAsyncCachedCalculation } from '../cache/calculationCache';
+import { DIAMETER_SATURN } from '../constants/diameters';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { normalizeAngle } from '../utils/angleCalc';
+import { getApparentMagnitudeSaturn } from '../utils/magnitudeCalc';
+import { calculateVSOP87, calculateVSOP87Angle } from '../utils/vsop87Calc';
 
 export default class Saturn extends Planet {
-    protected name = 'saturn';
+
+    constructor(toi?: TimeOfInterest) {
+        super('saturn', toi);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('saturn_heliocentric_spherical_j2000', this.t, async () => {

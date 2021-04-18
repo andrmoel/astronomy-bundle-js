@@ -1,14 +1,19 @@
 import Planet from './Planet';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {observationCalc} from '../utils';
-import {DIAMETER_VENUS} from '../constants/diameters';
-import {normalizeAngle} from '../utils/angleCalc';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
+import { getAsyncCachedCalculation } from '../cache/calculationCache';
+import { DIAMETER_VENUS } from '../constants/diameters';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { normalizeAngle } from '../utils/angleCalc';
+import { getApparentMagnitudeVenus } from '../utils/magnitudeCalc';
+import { calculateVSOP87, calculateVSOP87Angle } from '../utils/vsop87Calc';
 
 export default class Venus extends Planet {
-    protected name = 'venus';
+
+
+    constructor(toi?: TimeOfInterest) {
+        super('venus', toi);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('venus_heliocentric_spherical_j2000', this.t, async () => {

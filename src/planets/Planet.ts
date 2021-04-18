@@ -1,41 +1,35 @@
-import {
-    rectangular2spherical,
-    rectangularHeliocentric2rectangularGeocentric,
-    spherical2rectangular
-} from '../utils/coordinateCalc';
-import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {RectangularCoordinates} from '../coordinates/coordinateTypes';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
 import IPlanet from './interfaces/IPlanet';
-import {observationCalc} from '../utils';
-import {createSun} from '../sun';
-import TimeOfInterest from '../time/TimeOfInterest';
-import {createEarth} from '../earth';
-import Earth from '../earth/Earth';
-import Sun from '../sun/Sun';
-import {
-    correctEffectOfAberration,
-    correctEffectOfNutation,
-    getLightTimeCorrectedJulianDay
-} from '../utils/apparentCoordinateCalc';
-import {createTimeOfInterest} from '../time';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {Location} from '../earth/LocationTypes';
-import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
-import Mercury from './Mercury';
-import Venus from './Venus';
-import Mars from './Mars';
 import Jupiter from './Jupiter';
+import Mars from './Mars';
+import Mercury from './Mercury';
+import Neptune from './Neptune';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
-import Neptune from './Neptune';
+import Venus from './Venus';
+import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
+import { STANDARD_ALTITUDE_PLANET_REFRACTION } from '../constants/standardAltitude';
+import { RectangularCoordinates } from '../coordinates/coordinateTypes';
+import { EclipticSphericalCoordinates } from '../coordinates/coordinateTypes';
+import { createEarth } from '../earth';
+import Earth from '../earth/Earth';
+import { Location } from '../earth/LocationTypes';
+import { createSun } from '../sun';
+import Sun from '../sun/Sun';
+import { createTimeOfInterest } from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import { observationCalc } from '../utils';
+import { correctEffectOfAberration, correctEffectOfNutation, getLightTimeCorrectedJulianDay } from '../utils/apparentCoordinateCalc';
+import { rectangular2spherical, rectangularHeliocentric2rectangularGeocentric, spherical2rectangular } from '../utils/coordinateCalc';
+import { getRise, getSet, getTransit } from '../utils/riseSetTransitCalc';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
-    private sun: Sun;
-    private earth: Earth;
 
-    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
-        super(toi);
+    private readonly sun: Sun;
+
+    private readonly earth: Earth;
+
+    constructor(name: string, toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+        super(name, toi);
 
         this.sun = createSun(toi);
         this.earth = createEarth(toi);
@@ -144,7 +138,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     }
 
     private async getLightTimeCorrectedEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
-        const {radiusVector} = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const { radiusVector } = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         const jd = getLightTimeCorrectedJulianDay(this.jd, radiusVector);
         const toi = createTimeOfInterest.fromJulianDay(jd);
