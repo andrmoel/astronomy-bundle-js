@@ -18,7 +18,7 @@ import {
 export default class Sun extends AstronomicalObject {
     protected name = 'sun';
 
-    private earth: Earth;
+    private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
         super(toi);

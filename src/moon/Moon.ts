@@ -28,8 +28,8 @@ import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAlt
 export default class Moon extends AstronomicalObject {
     protected name = 'moon';
 
-    private sun: Sun;
-    private earth: Earth;
+    private readonly sun: Sun;
+    private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
         super(toi);

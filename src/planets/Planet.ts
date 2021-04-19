@@ -31,8 +31,8 @@ import Uranus from './Uranus';
 import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
-    private sun: Sun;
-    private earth: Earth;
+    private readonly sun: Sun;
+    private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
         super(toi);

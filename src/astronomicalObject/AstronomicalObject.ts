@@ -23,12 +23,12 @@ import {Conjunction} from '../planets/planetTypes';
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected name = 'astronomical object';
 
-    protected jd: number = 0.0;
-    protected jd0: number = 0.0;
-    protected T: number = 0.0;
-    protected t: number = 0.0;
+    protected readonly jd: number = 0.0;
+    protected readonly jd0: number = 0.0;
+    protected readonly T: number = 0.0;
+    protected readonly t: number = 0.0;
 
-    public constructor(public toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
+    public constructor(public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
         this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
         this.T = toi.getJulianCenturiesJ2000();

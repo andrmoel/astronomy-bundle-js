@@ -18,10 +18,10 @@ import {ProperMotion} from './starTypes';
 
 export default class Star extends AstronomicalObject {
     public constructor(
-        private equatorialCoords: EquatorialSphericalCoordinates,
+        private readonly equatorialCoords: EquatorialSphericalCoordinates,
         toi?: TimeOfInterest,
-        private properMotion: ProperMotion = {rightAscension: 0, declination: 0},
-        private referenceEpoch: number = EPOCH_J2000,
+        private readonly properMotion: ProperMotion = {rightAscension: 0, declination: 0},
+        private readonly referenceEpoch: number = EPOCH_J2000,
     ) {
         super(toi);
     }

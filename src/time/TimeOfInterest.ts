@@ -3,10 +3,10 @@ import {timeCalc} from '../utils';
 import {Time} from './timeTypes';
 
 export default class TimeOfInterest {
-    public jd: number = 0.0;
-    public T: number = 0.0;
+    public readonly jd: number = 0.0;
+    public readonly T: number = 0.0;
 
-    constructor(public time: Time) {
+    constructor(public readonly time: Time) {
         this.jd = timeCalc.time2julianDay(time);
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
     }
