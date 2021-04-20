@@ -1,4 +1,3 @@
-import Planet from './Planet';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {observationCalc} from '../utils';
@@ -6,6 +5,7 @@ import {DIAMETER_NEPTUNE} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
+import Planet from './Planet';
 
 export default class Neptune extends Planet {
     protected name = 'neptune';
@@ -18,7 +18,7 @@ export default class Neptune extends Planet {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 
@@ -32,7 +32,7 @@ export default class Neptune extends Planet {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 

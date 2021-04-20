@@ -3,7 +3,7 @@ import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
-    RectangularCoordinates
+    RectangularCoordinates,
 } from '../../coordinates/coordinateTypes';
 import {Location} from '../../earth/LocationTypes';
 

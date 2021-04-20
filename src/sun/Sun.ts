@@ -12,7 +12,7 @@ import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {
     STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
-    STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION
+    STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION,
 } from '../constants/standardAltitude';
 
 export default class Sun extends AstronomicalObject {

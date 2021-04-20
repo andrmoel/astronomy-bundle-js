@@ -1,12 +1,11 @@
 import {
     rectangular2spherical,
     rectangularHeliocentric2rectangularGeocentric,
-    spherical2rectangular
+    spherical2rectangular,
 } from '../utils/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {RectangularCoordinates} from '../coordinates/coordinateTypes';
 import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
-import IPlanet from './interfaces/IPlanet';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
@@ -16,12 +15,13 @@ import Sun from '../sun/Sun';
 import {
     correctEffectOfAberration,
     correctEffectOfNutation,
-    getLightTimeCorrectedJulianDay
+    getLightTimeCorrectedJulianDay,
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {Location} from '../earth/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
+import IPlanet from './interfaces/IPlanet';
 import Mercury from './Mercury';
 import Venus from './Venus';
 import Mars from './Mars';
@@ -32,6 +32,7 @@ import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private readonly sun: Sun;
+
     private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
@@ -157,7 +158,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
             | typeof Saturn
             | typeof Uranus
             | typeof Neptune
-            >this.constructor)(toi);
+            > this.constructor)(toi);
 
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();

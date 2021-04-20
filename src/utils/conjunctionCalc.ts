@@ -6,7 +6,7 @@ import {
     getLatitudeInterpolationArray,
     getLongitudeInterpolationArray,
     getRightAscensionInterpolationArray,
-    tabularInterpolation5
+    tabularInterpolation5,
 } from './interpolationCalc';
 
 export async function getConjunctionInRightAscension(

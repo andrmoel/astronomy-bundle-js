@@ -5,7 +5,7 @@ export default function(): TimeOfInterest {
     return fromCurrentTime();
 }
 
-export function fromCurrentTime() {
+export function fromCurrentTime(): TimeOfInterest {
     const date = new Date(Date.now());
 
     return new TimeOfInterest({

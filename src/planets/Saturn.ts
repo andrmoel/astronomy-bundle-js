@@ -1,4 +1,3 @@
-import Planet from './Planet';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {observationCalc} from '../utils';
@@ -6,6 +5,7 @@ import {DIAMETER_SATURN} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
+import Planet from './Planet';
 
 export default class Saturn extends Planet {
     protected name = 'saturn';
@@ -18,7 +18,7 @@ export default class Saturn extends Planet {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 
@@ -32,7 +32,7 @@ export default class Saturn extends Planet {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 

@@ -1,5 +1,5 @@
 import {shortYear2longYear} from '../utils/timeCalc';
-import {TwoLineElement} from "./satelliteTypes";
+import {TwoLineElement} from './types/TwoLineElement';
 
 export default function parseTwoLineElement(tleString: string): TwoLineElement {
     let result = {
@@ -29,13 +29,13 @@ export default function parseTwoLineElement(tleString: string): TwoLineElement {
         result = {
             ...result,
             ..._parseRow(row),
-        }
+        };
     });
 
     return result;
 }
 
-function _parseRow(row: string): object {
+function _parseRow(row: string): any {
     row = row.trim();
 
     if (row.match(/^[A-Za-z]/)) {
@@ -55,13 +55,13 @@ function _parseRow(row: string): object {
     return {};
 }
 
-function _parseName(row: string): object {
+function _parseName(row: string): any {
     return {
         name: row.trim(),
-    }
+    };
 }
 
-function _parseRow1(row: string): object {
+function _parseRow1(row: string): any {
     return {
         noradNr: parseInt(row.substr(2, 5)),
         classification: row.substr(7, 1).trim(),
@@ -73,10 +73,10 @@ function _parseRow1(row: string): object {
         dragTerm: _parseExpString(row.substr(53, 8)),
         ephemerisType: parseInt(row.substr(62, 1)),
         setNumber: parseInt(row.substr(64, 4)),
-    }
+    };
 }
 
-function _parseRow2(row: string): object {
+function _parseRow2(row: string): any {
     return {
         catalogNumber: parseInt(row.substr(2, 5)),
         inclination: parseFloat(row.substr(8, 8)),
@@ -86,7 +86,7 @@ function _parseRow2(row: string): object {
         meanAnomaly: parseFloat(row.substr(43, 8)),
         meanMotion: parseFloat(row.substr(52, 11)),
         revolution: parseInt(row.substr(63, 5)),
-    }
+    };
 }
 
 function _parseExpString(expString: string): number {

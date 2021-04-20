@@ -4,6 +4,7 @@ import {Time} from './timeTypes';
 
 export default class TimeOfInterest {
     public readonly jd: number = 0.0;
+
     public readonly T: number = 0.0;
 
     constructor(public readonly time: Time) {
