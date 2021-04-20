@@ -13,7 +13,7 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
+it('tests if name is correct', () => {
     expect(mercury.name).toBe('mercury');
 });
 

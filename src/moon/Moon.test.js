@@ -12,7 +12,7 @@ const location = {
     lon: -122.4108,
 };
 
-it('tests getName', () => {
+it('tests if name is correct', () => {
     expect(moon.name).toBe('moon');
 });
 
