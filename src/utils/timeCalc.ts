@@ -1,4 +1,4 @@
-import {Time} from '../time/timeTypes';
+import {Time} from '../time/types/TimeTypes';
 import {EPOCH_J2000} from '../constants/epoch';
 import {round} from './math';
 import {deg2rad, normalizeAngle} from './angleCalc';

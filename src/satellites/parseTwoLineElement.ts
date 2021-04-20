@@ -1,7 +1,7 @@
 import {shortYear2longYear} from '../utils/timeCalc';
-import {TwoLineElement} from './types/TwoLineElement';
+import {TwoLineElementTypes} from './types/TwoLineElementTypes';
 
-export default function parseTwoLineElement(tleString: string): TwoLineElement {
+export default function parseTwoLineElement(tleString: string): TwoLineElementTypes {
     let result = {
         noradNr: 0,
         classification: '',

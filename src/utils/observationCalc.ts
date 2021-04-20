@@ -1,4 +1,4 @@
-import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EquatorialSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export function getElongation(

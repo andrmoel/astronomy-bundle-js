@@ -4,8 +4,8 @@ import {
     spherical2rectangular,
 } from '../utils/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {RectangularCoordinates} from '../coordinates/coordinateTypes';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
@@ -19,7 +19,7 @@ import {
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {Location} from '../earth/LocationTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import IPlanet from './interfaces/IPlanet';
 import Mercury from './Mercury';

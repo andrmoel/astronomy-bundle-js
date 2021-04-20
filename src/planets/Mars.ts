@@ -2,7 +2,7 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {observationCalc} from '../utils';
 import {DIAMETER_MARS} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
 import Planet from './Planet';

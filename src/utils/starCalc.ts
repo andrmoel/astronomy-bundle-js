@@ -1,6 +1,6 @@
-import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EquatorialSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {EPOCH_J2000} from '../constants/epoch';
-import {ProperMotion} from '../stars/starTypes';
+import {ProperMotion} from '../stars/types/ProperMotionTypes';
 import {getEpochInterval} from './timeCalc';
 import {normalizeAngle} from './angleCalc';
 

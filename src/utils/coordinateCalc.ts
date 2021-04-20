@@ -3,8 +3,8 @@ import {
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
     RectangularCoordinates,
-} from '../coordinates/coordinateTypes';
-import {Location} from '../earth/LocationTypes';
+} from '../coordinates/types/CoordinateTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';

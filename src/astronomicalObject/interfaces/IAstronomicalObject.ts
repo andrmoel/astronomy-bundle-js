@@ -4,8 +4,8 @@ import {
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
     RectangularCoordinates,
-} from '../../coordinates/coordinateTypes';
-import {Location} from '../../earth/LocationTypes';
+} from '../../coordinates/types/CoordinateTypes';
+import {Location} from '../../earth/types/LocationTypes';
 
 export default interface IAstronomicalObject {
     toi: TimeOfInterest,

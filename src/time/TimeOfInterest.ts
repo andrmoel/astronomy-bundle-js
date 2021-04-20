@@ -1,6 +1,6 @@
 import Location from '../earth/Location';
 import {timeCalc} from '../utils';
-import {Time} from './timeTypes';
+import {Time} from './types/TimeTypes';
 
 export default class TimeOfInterest {
     public readonly jd: number = 0.0;

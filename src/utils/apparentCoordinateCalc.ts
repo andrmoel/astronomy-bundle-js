@@ -1,4 +1,4 @@
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {deg2rad, sec2deg} from './angleCalc';
 import {getEccentricity, getLongitudeOfPerihelionOfOrbit, getNutationInLongitude} from './earthCalc';
 import {sunCalc} from './index';

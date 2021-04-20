@@ -1,5 +1,5 @@
 import {EPOCH_J2000} from '../constants/epoch';
-import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getEpochInterval, getEpochIntervalToJ2000} from './timeCalc';
 

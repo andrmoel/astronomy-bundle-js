@@ -1,4 +1,4 @@
-import {Location as LocationType} from './LocationTypes';
+import {Location as LocationType} from './types/LocationTypes';
 
 export default class Location {
     private readonly location: LocationType;

@@ -1,6 +1,6 @@
 import {moonCalc, moonPhaseCalc, observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {
     MOON_PHASE_FIRST_QUARTER,
@@ -20,7 +20,7 @@ import Sun from '../sun/Sun';
 import Earth from '../earth/Earth';
 import createSun from '../sun/createSun';
 import createEarth from '../earth/createEarth';
-import {Location} from '../earth/LocationTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';

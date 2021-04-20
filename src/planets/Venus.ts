@@ -3,7 +3,7 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {observationCalc} from '../utils';
 import {DIAMETER_VENUS} from '../constants/diameters';
 import {normalizeAngle} from '../utils/angleCalc';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 import Planet from './Planet';
 
