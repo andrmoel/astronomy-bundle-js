@@ -7,7 +7,7 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import {Location} from '../earth/LocationTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {

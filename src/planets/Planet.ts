@@ -19,7 +19,7 @@ import {
 } from '../utils/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
-import {Location} from '../earth/LocationTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import IPlanet from './interfaces/IPlanet';
 import Mercury from './Mercury';

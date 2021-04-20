@@ -15,7 +15,7 @@ import {
 } from '../utils/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
-import {Location} from '../earth/LocationTypes';
+import {Location} from '../earth/types/LocationTypes';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
 import {Conjunction} from '../planets/types/PlanetTypes';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
