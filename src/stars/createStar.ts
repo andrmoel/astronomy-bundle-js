@@ -1,6 +1,6 @@
-import {EquatorialSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EquatorialSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
-import {ProperMotion} from './starTypes';
+import {ProperMotion} from './types/ProperMotionTypes';
 import Star from './Star';
 
 export function byEquatorialCoordinates(

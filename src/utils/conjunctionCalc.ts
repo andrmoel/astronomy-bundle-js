@@ -1,4 +1,4 @@
-import {Conjunction, Position} from '../planets/planetTypes';
+import {Conjunction, Position} from '../planets/types/PlanetTypes';
 import {createTimeOfInterest} from '../time';
 import {
     getDeclinationInterpolationArray,

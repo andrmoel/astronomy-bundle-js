@@ -1,6 +1,6 @@
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {earthCalc} from '../utils';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {normalizeAngle} from '../utils/angleCalc';

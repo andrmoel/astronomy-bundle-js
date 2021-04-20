@@ -2,7 +2,7 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {observationCalc} from '../utils';
 import {DIAMETER_URANUS} from '../constants/diameters';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 import Planet from './Planet';

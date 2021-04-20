@@ -4,8 +4,8 @@ import {
     spherical2rectangular,
 } from '../utils/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {RectangularCoordinates} from '../coordinates/coordinateTypes';
-import {EclipticSphericalCoordinates} from '../coordinates/coordinateTypes';
+import {RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';

@@ -1,7 +1,7 @@
 import TimeOfInterest from '../time/TimeOfInterest';
-import {TwoLineElement} from './types/TwoLineElement';
+import {TwoLineElementTypes} from './types/TwoLineElementTypes';
 
 export default class Satellite {
-    constructor(private tle: TwoLineElement, private toi?: TimeOfInterest) {
+    constructor(private tle: TwoLineElementTypes, private toi?: TimeOfInterest) {
     }
 }

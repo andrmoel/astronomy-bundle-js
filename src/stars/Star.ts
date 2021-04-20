@@ -3,7 +3,7 @@ import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     RectangularCoordinates,
-} from '../coordinates/coordinateTypes';
+} from '../coordinates/types/CoordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {EPOCH_J2000} from '../constants/epoch';
 import {
@@ -14,7 +14,7 @@ import {
 import {correctProperMotion} from '../utils/starCalc';
 import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
-import {ProperMotion} from './starTypes';
+import {ProperMotion} from './types/ProperMotionTypes';
 
 export default class Star extends AstronomicalObject {
     public constructor(

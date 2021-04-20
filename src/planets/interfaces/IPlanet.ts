@@ -2,7 +2,7 @@ import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     RectangularCoordinates,
-} from '../../coordinates/coordinateTypes';
+} from '../../coordinates/types/CoordinateTypes';
 
 export default interface IPlanet {
     getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;

@@ -1,4 +1,4 @@
-import TimeOfInterest from '../time/TimeOfInterest';
+import TimeOfInterest from '../../time/TimeOfInterest';
 
 export enum Position {'north', 'south'}
 

@@ -1,4 +1,4 @@
-export type TwoLineElement = {
+export type TwoLineElementTypes = {
     noradNr: number;
     classification: string;
     internationalDesignator: string;
