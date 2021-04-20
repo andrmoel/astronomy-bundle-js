@@ -14,7 +14,7 @@ const location = {
 };
 
 it('tests getName', () => {
-    expect(venus.getName()).toBe('venus');
+    expect(venus.name).toBe('venus');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

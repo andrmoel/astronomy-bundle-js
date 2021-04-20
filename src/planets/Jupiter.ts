@@ -5,10 +5,13 @@ import {DIAMETER_JUPITER} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeJupiter} from '../utils/magnitudeCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
 import Planet from './Planet';
 
 export default class Jupiter extends Planet {
-    protected name = 'jupiter';
+    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+        super('jupiter', toi, useVsop87Short);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('jupiter_heliocentric_spherical_j2000', this.t, async () => {

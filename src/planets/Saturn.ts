@@ -5,10 +5,13 @@ import {DIAMETER_SATURN} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
 import Planet from './Planet';
 
 export default class Saturn extends Planet {
-    protected name = 'saturn';
+    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+        super('saturn', toi, useVsop87Short);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('saturn_heliocentric_spherical_j2000', this.t, async () => {

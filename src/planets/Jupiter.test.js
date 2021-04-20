@@ -14,7 +14,7 @@ const location = {
 };
 
 it('tests getName', () => {
-    expect(jupiter.getName()).toBe('jupiter');
+    expect(jupiter.name).toBe('jupiter');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

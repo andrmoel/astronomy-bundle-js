@@ -13,7 +13,7 @@ const location = {
 };
 
 it('tests getName', () => {
-    expect(moon.getName()).toBe('moon');
+    expect(moon.name).toBe('moon');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

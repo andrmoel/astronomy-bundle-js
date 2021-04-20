@@ -5,10 +5,13 @@ import {DIAMETER_VENUS} from '../constants/diameters';
 import {normalizeAngle} from '../utils/angleCalc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
 import Planet from './Planet';
 
 export default class Venus extends Planet {
-    protected name = 'venus';
+    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+        super('venus', toi, useVsop87Short);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('venus_heliocentric_spherical_j2000', this.t, async () => {

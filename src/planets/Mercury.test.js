@@ -14,7 +14,7 @@ const location = {
 };
 
 it('tests getName', () => {
-    expect(mercury.getName()).toBe('mercury');
+    expect(mercury.name).toBe('mercury');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

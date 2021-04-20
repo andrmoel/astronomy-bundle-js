@@ -5,9 +5,12 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {normalizeAngle} from '../utils/angleCalc';
 import {spherical2rectangular} from '../utils/coordinateCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
 
 export default class Earth extends AstronomicalObject {
-    protected name = 'earth';
+    constructor(toi?: TimeOfInterest) {
+        super('earth', toi);
+    }
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
