@@ -41,7 +41,7 @@ export function correctPrecessionForEclipticCoordinates(
         lon: normalizeAngle(lon),
         lat: lat,
         radiusVector: coords.radiusVector,
-    }
+    };
 }
 
 export function correctPrecessionForEquatorialCoordinates(
@@ -82,5 +82,5 @@ export function correctPrecessionForEquatorialCoordinates(
         rightAscension: normalizeAngle(rightAscension),
         declination: declination,
         radiusVector: coords.radiusVector,
-    }
+    };
 }

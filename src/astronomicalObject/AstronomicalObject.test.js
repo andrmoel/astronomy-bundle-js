@@ -14,7 +14,7 @@ it('creates an AstronomicalObject with TimeOfInterest', () => {
     expect(astronomicalObject.toi.time).toEqual({year: 2000, month: 5, day: 10, min: 0, hour: 0, sec: 0});
 });
 
-it('creates an AstronomicalObject without TImeOfInterest', () => {
+it('creates an AstronomicalObject without TimeOfInterest', () => {
     const astronomicalObject = new TestClass();
 
     expect(astronomicalObject.toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});

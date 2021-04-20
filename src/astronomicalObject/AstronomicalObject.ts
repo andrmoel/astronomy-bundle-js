@@ -1,31 +1,34 @@
 import TimeOfInterest from '../time/TimeOfInterest';
-import IAstronomicalObject from './interfaces/IAstronomicalObject';
 import {createTimeOfInterest} from '../time';
 import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
-    RectangularCoordinates
+    RectangularCoordinates,
 } from '../coordinates/coordinateTypes';
 import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
-    spherical2rectangular
+    spherical2rectangular,
 } from '../utils/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import {Location} from '../earth/LocationTypes';
 import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
 import {Conjunction} from '../planets/planetTypes';
+import IAstronomicalObject from './interfaces/IAstronomicalObject';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
     protected name = 'astronomical object';
 
     protected readonly jd: number = 0.0;
+
     protected readonly jd0: number = 0.0;
+
     protected readonly T: number = 0.0;
+
     protected readonly t: number = 0.0;
 
     public constructor(public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
@@ -35,7 +38,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.t = toi.getJulianMillenniaJ2000();
     }
 
-    public getName() {
+    public getName(): string {
         return this.name;
     }
 
@@ -108,7 +111,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
             azimuth: azimuth,
             altitude: correctEffectOfRefraction(altitude),
             radiusVector: radiusVector,
-        }
+        };
     }
 
     public async getDistanceToEarth(): Promise<number> {

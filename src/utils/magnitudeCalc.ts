@@ -82,7 +82,7 @@ export function getApparentMagnitudeVenus(distanceSun: number, distanceEarth: nu
     } else {
         V += 236.05828
             - 2.81914 * phaseAngle
-            + 8.39034E-3 * Math.pow(phaseAngle, 2)
+            + 8.39034E-3 * Math.pow(phaseAngle, 2);
     }
 
     return V;
@@ -107,7 +107,9 @@ export function getApparentMagnitudeJupiter(distanceSun: number, distanceEarth: 
 }
 
 export function getApparentMagnitudeSaturn(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    return 999.9; // TODO
+    const V = 5 * Math.log10(distanceSun * distanceEarth);
+
+    return 0 * distanceSun * phaseAngle; // TODO implement function
 }
 
 export function getApparentMagnitudeUranus(distanceSun: number, distanceEarth: number, phaseAngle: number): number {

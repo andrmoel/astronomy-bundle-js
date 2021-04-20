@@ -6,14 +6,14 @@ import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
-    MOON_PHASE_NEW_MOON
+    MOON_PHASE_NEW_MOON,
 } from '../constants/moonPhase';
 import {DIAMETER_MOON} from '../constants/diameters';
 import {getApparentMagnitudeMoon} from '../utils/magnitudeCalc';
 import {
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
-    spherical2rectangular
+    spherical2rectangular,
 } from '../utils/coordinateCalc';
 import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 import Sun from '../sun/Sun';
@@ -29,6 +29,7 @@ export default class Moon extends AstronomicalObject {
     protected name = 'moon';
 
     private readonly sun: Sun;
+
     private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {

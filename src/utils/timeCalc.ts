@@ -120,7 +120,7 @@ export function getEpochInterval(jd: number, startingEpoch: number): number {
     return (jd - startingEpoch) / 36525;
 }
 
-export function getEpochIntervalToJ2000(startingEpoch: number) {
+export function getEpochIntervalToJ2000(startingEpoch: number): number {
     return getEpochInterval(startingEpoch, EPOCH_J2000);
 }
 
@@ -220,7 +220,7 @@ export function getLocalHourAngle(T: number, lon: number, rightAscension: number
     return normalizeAngle(LAST - rightAscension);
 }
 
-export function getDeltaT(year: number, month: number = 0): number {
+export function getDeltaT(year: number, month = 0): number {
     // https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html
     const y = year + (month - 0.5) / 12;
 

@@ -21,5 +21,5 @@ export {
     precession,
     starCalc,
     sunCalc,
-    timeCalc
+    timeCalc,
 };

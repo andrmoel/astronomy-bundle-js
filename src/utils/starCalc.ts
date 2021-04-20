@@ -19,5 +19,5 @@ export function correctProperMotion(
         rightAscension: normalizeAngle(rightAscension),
         declination: declination,
         radiusVector: coords.radiusVector,
-    }
+    };
 }

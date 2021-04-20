@@ -1,6 +1,6 @@
 import {createTimeOfInterest} from '../time';
 
-export function tabularInterpolation3(values: Array<number>, n: number = 0.0): number {
+export function tabularInterpolation3(values: Array<number>, n = 0.0): number {
     // Meeus 3.3
     const y2 = values[1];
     const A = values[1] - values[0];
@@ -10,7 +10,7 @@ export function tabularInterpolation3(values: Array<number>, n: number = 0.0): n
     return y2 + 0.5 * n * (A + B + n * C);
 }
 
-export function tabularInterpolation5(values: Array<number>, n: number = 0.0): number {
+export function tabularInterpolation5(values: Array<number>, n = 0.0): number {
     const y3 = values[2];
     const A = values[1] - values[0];
     const B = values[2] - values[1];
@@ -37,7 +37,7 @@ export function tabularInterpolation5(values: Array<number>, n: number = 0.0): n
     }
 }
 
-export function getInterpolateValue5(values: Array<number>, n: number = 0.0): number {
+export function getInterpolateValue5(values: Array<number>, n = 0.0): number {
     const y3 = values[2];
     const A = values[1] - values[0];
     const B = values[2] - values[1];
@@ -53,20 +53,20 @@ export function getInterpolateValue5(values: Array<number>, n: number = 0.0): nu
     return y3 + (n / 2) * (B + C)
         + (Math.pow(n, 2) / 2) * F
         + ((n * (Math.pow(n, 2) - 1)) / 12) * (H + J)
-        + ((Math.pow(n, 2) * (Math.pow(n, 2) - 1)) / 24) * K
+        + ((Math.pow(n, 2) * (Math.pow(n, 2) - 1)) / 24) * K;
 }
 
 export async function getLongitudeInterpolationArray(
-    objConstructor: any,
+    ObjConstructor: any,
     jd0: number,
-    nMax: number = 1.0,
+    nMax = 1.0,
 ): Promise<Array<number>> {
     const result = [];
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi, true);
+        const object = new ObjConstructor(toi, true);
 
         const {longitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
 
@@ -77,16 +77,16 @@ export async function getLongitudeInterpolationArray(
 }
 
 export async function getLatitudeInterpolationArray(
-    objConstructor: any,
+    ObjConstructor: any,
     jd0: number,
-    nMax: number = 1.0,
+    nMax = 1.0,
 ): Promise<Array<number>> {
     const result = [];
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi, true);
+        const object = new ObjConstructor(toi, true);
 
         const {latitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
 
@@ -97,16 +97,16 @@ export async function getLatitudeInterpolationArray(
 }
 
 export async function getRightAscensionInterpolationArray(
-    objConstructor: any,
+    ObjConstructor: any,
     jd0: number,
-    nMax: number = 1.0,
+    nMax = 1.0,
 ): Promise<Array<number>> {
     const result = [];
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi, true);
+        const object = new ObjConstructor(toi, true);
 
         const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -117,16 +117,16 @@ export async function getRightAscensionInterpolationArray(
 }
 
 export async function getDeclinationInterpolationArray(
-    objConstructor: any,
+    ObjConstructor: any,
     jd0: number,
-    nMax: number = 1.0,
+    nMax = 1.0,
 ): Promise<Array<number>> {
     const result = [];
 
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new objConstructor(toi);
+        const object = new ObjConstructor(toi);
 
         const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 

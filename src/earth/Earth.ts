@@ -29,7 +29,7 @@ export default class Earth extends AstronomicalObject {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 
@@ -41,43 +41,43 @@ export default class Earth extends AstronomicalObject {
                 lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
                 lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            }
+            };
         });
     }
 
     getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
-        return Promise.reject({x: 0, y: 0, z: 0});
+        return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
     getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
-        return Promise.reject({x: 0, y: 0, z: 0});
+        return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
     getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
     getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
     async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
-        return Promise.reject({lon: 0, lat: 0, radiusVector: 0});
+        return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
-    public getNutationInLongitude() {
+    public getNutationInLongitude(): number {
         return earthCalc.getNutationInLongitude(this.T);
     }
 
-    public getNutationInObliquity() {
+    public getNutationInObliquity(): number {
         return earthCalc.getNutationInObliquity(this.T);
     }
 
-    public getMeanObliquityOfEcliptic() {
+    public getMeanObliquityOfEcliptic(): number {
         return earthCalc.getMeanObliquityOfEcliptic(this.T);
     }
 
-    public getTrueObliquityOfEcliptic() {
+    public getTrueObliquityOfEcliptic(): number {
         return earthCalc.getTrueObliquityOfEcliptic(this.T);
     }
 }

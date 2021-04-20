@@ -1,14 +1,13 @@
-import {deg2rad} from './angleCalc';
-import {round} from './math';
 import {createTimeOfInterest} from '../time';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
-    MOON_PHASE_NEW_MOON
+    MOON_PHASE_NEW_MOON,
 } from '../constants/moonPhase';
-
+import {round} from './math';
+import {deg2rad} from './angleCalc';
 
 export function getTimeOfInterestOfUpcomingPhase(decimalYear: number, moonPhase: number): TimeOfInterest {
     const k = round((decimalYear - 2000) * 12.3685) + moonPhase;
@@ -231,7 +230,7 @@ function _getMeanAnomalyMoon(k: number, T: number): number {
         + 385.81693528 * k
         + 0.0107582 * Math.pow(T, 2)
         + 0.00001238 * Math.pow(T, 3)
-        + 0.000000058 * Math.pow(T, 4)
+        + 0.000000058 * Math.pow(T, 4);
 }
 
 function _getArgumentOfLatitudeMoon(k: number, T: number): number {

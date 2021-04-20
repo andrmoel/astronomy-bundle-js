@@ -11,7 +11,7 @@ export function calculateVSOP87(terms: Array<Array<Array<number>>>, t: number): 
 
     terms.forEach(
         (term: Array<Array<number>>, key: number) => {
-            result += _sumUpTerm(term, t) * Math.pow(t, key)
+            result += _sumUpTerm(term, t) * Math.pow(t, key);
         }
     );
 
@@ -26,7 +26,7 @@ function _sumUpTerm(terms: Array<Array<number>>, t: number): number {
         const b = term[1] || 0;
         const c = term[2] || 0;
 
-        result += a * Math.cos(b + c * t)
+        result += a * Math.cos(b + c * t);
     });
 
     return result;

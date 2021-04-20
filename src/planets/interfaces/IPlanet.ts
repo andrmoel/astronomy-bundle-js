@@ -1,7 +1,7 @@
 import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
-    RectangularCoordinates
+    RectangularCoordinates,
 } from '../../coordinates/coordinateTypes';
 
 export default interface IPlanet {

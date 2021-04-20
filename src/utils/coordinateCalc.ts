@@ -2,13 +2,13 @@ import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
-    RectangularCoordinates
+    RectangularCoordinates,
 } from '../coordinates/coordinateTypes';
+import {Location} from '../earth/LocationTypes';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 import {earthCalc} from './index';
-import {Location} from '../earth/LocationTypes';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;
@@ -74,7 +74,7 @@ export function equatorialSpherical2topocentricSpherical(
         rightAscension: normalizeAngle(LAST - HTopo),
         declination: rad2deg(dTopoRad),
         radiusVector: q * radiusVector,
-    }
+    };
 }
 
 export function equatorialSpherical2topocentricHorizontal(
@@ -95,7 +95,7 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     localHourAngle: number,
     declination: number,
     lat: number,
-    radiusVector: number = 0,
+    radiusVector = 0,
 ): LocalHorizontalCoordinates {
     const HRad = deg2rad(localHourAngle);
     const dRad = deg2rad(declination);
@@ -114,13 +114,13 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
         azimuth: normalizeAngle(rad2deg(ARad) + 180),
         altitude: rad2deg(hRad),
         radiusVector: radiusVector,
-    }
+    };
 }
 
 export function eclipticSpherical2equatorialSpherical(
     coords: EclipticSphericalCoordinates,
     T: number,
-    normalize: boolean = true,
+    normalize = true,
 ): EquatorialSphericalCoordinates {
     const {lon, lat, radiusVector} = coords;
 
@@ -163,7 +163,8 @@ export function equatorialSpherical2eclipticSpherical(
 
     // Meeus 13.2
     const latRad = Math.asin(
-        Math.sin(declinationRad) * Math.cos(epsRad) - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad)
+        Math.sin(declinationRad) * Math.cos(epsRad)
+        - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad)
     );
     const lat = rad2deg(latRad);
 
@@ -178,7 +179,7 @@ export function rectangularHeliocentric2rectangularGeocentric(
         x: heliocentricCoords.x - heliocentricCoordsEarth.x,
         y: heliocentricCoords.y - heliocentricCoordsEarth.y,
         z: heliocentricCoords.z - heliocentricCoordsEarth.z,
-    }
+    };
 }
 
 export function rectangularGeocentric2rectangularHeliocentric(
@@ -189,7 +190,7 @@ export function rectangularGeocentric2rectangularHeliocentric(
         x: geocentricCoords.x + heliocentricCoordsEarth.x,
         y: geocentricCoords.y + heliocentricCoordsEarth.y,
         z: geocentricCoords.z + heliocentricCoordsEarth.z,
-    }
+    };
 }
 
 export function earthEclipticSpherical2sunEclipticSpherical(
@@ -201,7 +202,7 @@ export function earthEclipticSpherical2sunEclipticSpherical(
         lon: normalizeAngle(lon + 180),
         lat: -1 * lat,
         radiusVector: radiusVector,
-    }
+    };
 }
 
 /**

@@ -2,14 +2,14 @@ import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
-    RectangularCoordinates
+    RectangularCoordinates,
 } from '../coordinates/coordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {EPOCH_J2000} from '../constants/epoch';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
-    spherical2rectangular
+    spherical2rectangular,
 } from '../utils/coordinateCalc';
 import {correctProperMotion} from '../utils/starCalc';
 import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';

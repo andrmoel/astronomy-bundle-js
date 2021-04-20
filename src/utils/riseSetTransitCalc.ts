@@ -5,22 +5,22 @@ import {getDeltaT, getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2
 import {
     getDeclinationInterpolationArray,
     getRightAscensionInterpolationArray,
-    tabularInterpolation3
+    tabularInterpolation3,
 } from './interpolationCalc';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from './coordinateCalc';
 
 export async function getTransit(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
 ): Promise<number> {
-    let m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
+    let m0 = await _getApproximatedMTransit(ObjConstructor, location, jd0);
     let dm = 0;
 
     let cnt = 0;
     do {
-        dm = await _getCorrectionsTransit(objConstructor, location, jd0, m0);
+        dm = await _getCorrectionsTransit(ObjConstructor, location, jd0, m0);
         m0 += dm;
 
         if (cnt++ > 100) {
@@ -36,13 +36,13 @@ export async function getTransit(
 }
 
 export async function getRise(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
-    const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
-    const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
+    const m0 = await _getApproximatedMTransit(ObjConstructor, location, jd0);
+    const mH = await _getApproximatedMRiseSet(ObjConstructor, location, jd0, h0);
 
     if (isNaN(mH)) {
         throw new Error(`Astronomical object cannot rise on given day ${jd0}.`);
@@ -53,7 +53,7 @@ export async function getRise(
 
     let cnt = 0;
     do {
-        dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m1);
+        dm = await _getCorrectionsRiseSet(ObjConstructor, location, jd0, h0, m1);
         m1 += dm;
 
         if (cnt++ > 100) {
@@ -73,13 +73,13 @@ export async function getRise(
 }
 
 export async function getSet(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
-    const m0 = await _getApproximatedMTransit(objConstructor, location, jd0);
-    const mH = await _getApproximatedMRiseSet(objConstructor, location, jd0, h0);
+    const m0 = await _getApproximatedMTransit(ObjConstructor, location, jd0);
+    const mH = await _getApproximatedMRiseSet(ObjConstructor, location, jd0, h0);
 
     if (isNaN(mH)) {
         throw new Error(`Astronomical object cannot set on given day ${jd0}.`);
@@ -90,7 +90,7 @@ export async function getSet(
 
     let cnt = 0;
     do {
-        dm = await _getCorrectionsRiseSet(objConstructor, location, jd0, h0, m2);
+        dm = await _getCorrectionsRiseSet(ObjConstructor, location, jd0, h0, m2);
         m2 += dm;
 
         if (cnt++ > 100) {
@@ -110,11 +110,11 @@ export async function getSet(
 }
 
 async function _getApproximatedMTransit(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
 ): Promise<number> {
-    const object = _createAstronomicalObject(objConstructor, jd0);
+    const object = _createAstronomicalObject(ObjConstructor, jd0);
     const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
     const T = julianDay2julianCenturiesJ2000(jd0);
@@ -127,23 +127,23 @@ async function _getApproximatedMTransit(
 }
 
 async function _getApproximatedMRiseSet(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
     h0: number,
 ): Promise<number> {
-    const H0 = await _getH0(objConstructor, location, jd0, h0);
+    const H0 = await _getH0(ObjConstructor, location, jd0, h0);
 
     return H0 / 360;
 }
 
 async function _getCorrectionsTransit(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
     m: number,
 ): Promise<number> {
-    const rightAscensionArray = await getRightAscensionInterpolationArray(objConstructor, jd0, 1);
+    const rightAscensionArray = await getRightAscensionInterpolationArray(ObjConstructor, jd0, 1);
 
     const n0 = _getN0(jd0, m);
 
@@ -154,7 +154,7 @@ async function _getCorrectionsTransit(
 }
 
 async function _getCorrectionsRiseSet(
-    objConstructor: any,
+    ObjConstructor: any,
     location: Location,
     jd0: number,
     h0: number,
@@ -163,8 +163,8 @@ async function _getCorrectionsRiseSet(
     const {lat} = location;
     const latRad = deg2rad(lat);
 
-    const rightAscensionArray = await getRightAscensionInterpolationArray(objConstructor, jd0, 1);
-    const declinationArray = await getDeclinationInterpolationArray(objConstructor, jd0, 1);
+    const rightAscensionArray = await getRightAscensionInterpolationArray(ObjConstructor, jd0, 1);
+    const declinationArray = await getDeclinationInterpolationArray(ObjConstructor, jd0, 1);
 
     const n0 = _getN0(jd0, m);
 
@@ -195,8 +195,8 @@ function _getLocalHourAngle(
     return normalizeAngle(H + 180) - 180;
 }
 
-async function _getH0(objConstructor: any, location: Location, jd0: number, h0: number): Promise<number> {
-    const object = _createAstronomicalObject(objConstructor, jd0);
+async function _getH0(ObjConstructor: any, location: Location, jd0: number, h0: number): Promise<number> {
+    const object = _createAstronomicalObject(ObjConstructor, jd0);
     const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
     const latRad = deg2rad(location.lat);
@@ -220,8 +220,8 @@ function _getN0(jd: number, m: number): number {
     return m + dT / 86400;
 }
 
-function _createAstronomicalObject(objConstructor: any, jd: number): IAstronomicalObject {
+function _createAstronomicalObject(ObjConstructor: any, jd: number): IAstronomicalObject {
     const toi = createTimeOfInterest.fromJulianDay(jd);
 
-    return new objConstructor(toi);
+    return new ObjConstructor(toi);
 }

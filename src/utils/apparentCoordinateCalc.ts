@@ -45,7 +45,7 @@ export function correctEffectOfAberration(
         lon: coords.lon + dLon,
         lat: coords.lat + dLat,
         radiusVector: coords.radiusVector,
-    }
+    };
 }
 
 export function correctEffectOfRefraction(altitude: number): number {
