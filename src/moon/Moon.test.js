@@ -275,19 +275,19 @@ it('tests getTopocentricApparentMagnitude', async () => {
 it('tests getUpcomingNewMoon', () => {
     const toiNewMoon = moon.getUpcomingNewMoon();
 
-    expect(toiNewMoon.time).toEqual({year: 1992, month: 4, day: 3, hour: 5, min: 2, sec: 3});
+    expect(toiNewMoon.time).toEqual({year: 1992, month: 5, day: 2, hour: 17, min: 44, sec: 56});
 });
 
 it('tests getUpcomingFirstQuarter', () => {
     const toiFirstQuarter = moon.getUpcomingFirstQuarter();
 
-    expect(toiFirstQuarter.time).toEqual({year: 1992, month: 4, day: 10, hour: 10, min: 6, sec: 42});
+    expect(toiFirstQuarter.time).toEqual({year: 1992, month: 5, day: 9, hour: 15, min: 44, sec: 22});
 });
 
 it('tests getUpcomingFullMoon', () => {
     const toiFullMoon = moon.getUpcomingFullMoon();
 
-    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 43, sec: 22});
+    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 43, sec: 21});
 });
 
 it('tests getUpcomingLastQuarter', () => {
