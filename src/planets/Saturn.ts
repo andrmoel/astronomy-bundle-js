@@ -9,7 +9,7 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import Planet from './Planet';
 
 export default class Saturn extends Planet {
-    constructor(toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+    constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
         super('saturn', toi, useVsop87Short);
     }
 
