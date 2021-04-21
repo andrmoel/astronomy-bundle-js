@@ -23,7 +23,7 @@ export default class Star extends AstronomicalObject {
         private readonly properMotion: ProperMotion = {rightAscension: 0, declination: 0},
         private readonly referenceEpoch: number = EPOCH_J2000,
     ) {
-        super(toi);
+        super('star', toi);
     }
 
     async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {

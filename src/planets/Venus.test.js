@@ -13,8 +13,8 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
-    expect(venus.getName()).toBe('venus');
+it('tests if name is correct', () => {
+    expect(venus.name).toBe('venus');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

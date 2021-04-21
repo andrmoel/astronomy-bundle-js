@@ -13,8 +13,8 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
-    expect(jupiter.getName()).toBe('jupiter');
+it('tests if name is correct', () => {
+    expect(jupiter.name).toBe('jupiter');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

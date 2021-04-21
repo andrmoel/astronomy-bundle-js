@@ -5,10 +5,13 @@ import {DIAMETER_MERCURY} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeMercury} from '../utils/magnitudeCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
 import Planet from './Planet';
 
 export default class Mercury extends Planet {
-    protected name = 'mercury';
+    constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
+        super('mercury', toi, useVsop87Short);
+    }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await getAsyncCachedCalculation('mercury_heliocentric_spherical_j2000', this.t, async () => {

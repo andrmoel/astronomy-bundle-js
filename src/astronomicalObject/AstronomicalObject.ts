@@ -21,8 +21,6 @@ import {Conjunction} from '../planets/types/PlanetTypes';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 
 export default abstract class AstronomicalObject implements IAstronomicalObject {
-    protected name = 'astronomical object';
-
     protected readonly jd: number = 0.0;
 
     protected readonly jd0: number = 0.0;
@@ -31,15 +29,18 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
 
     protected readonly t: number = 0.0;
 
-    public constructor(public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
+    public constructor(
+        private readonly _name = 'astronomical object',
+        public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()
+    ) {
         this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
         this.T = toi.getJulianCenturiesJ2000();
         this.t = toi.getJulianMillenniaJ2000();
     }
 
-    public getName(): string {
-        return this.name;
+    public get name(): string {
+        return this._name;
     }
 
     abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;

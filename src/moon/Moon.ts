@@ -26,14 +26,12 @@ import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
 
 export default class Moon extends AstronomicalObject {
-    protected name = 'moon';
-
     private readonly sun: Sun;
 
     private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
-        super(toi);
+        super('moon', toi);
 
         this.sun = createSun(toi);
         this.earth = createEarth(toi);

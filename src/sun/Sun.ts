@@ -16,12 +16,10 @@ import {
 } from '../constants/standardAltitude';
 
 export default class Sun extends AstronomicalObject {
-    protected name = 'sun';
-
     private readonly earth: Earth;
 
     constructor(toi?: TimeOfInterest) {
-        super(toi);
+        super('sun', toi);
 
         this.earth = createEarth(toi);
     }
