@@ -42,6 +42,14 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         this.earth = createEarth(toi);
     }
 
+    public abstract get diameter(): number;
+
+    public async getAngularDiameter(): Promise<number> {
+        const distance = await this.getApparentDistanceToEarth();
+
+        return observationCalc.getAngularDiameter(distance, this.diameter);
+    }
+
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
 
