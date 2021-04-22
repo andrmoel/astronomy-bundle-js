@@ -1,6 +1,5 @@
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {observationCalc} from '../utils';
 import {DIAMETER_MARS} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
@@ -11,6 +10,10 @@ import Planet from './Planet';
 export default class Mars extends Planet {
     constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
         super('mars', toi, useVsop87Short);
+    }
+
+    public get diameter(): number {
+        return DIAMETER_MARS;
     }
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
@@ -37,12 +40,6 @@ export default class Mars extends Planet {
                 radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
             };
         });
-    }
-
-    public async getAngularDiameter(): Promise<number> {
-        const distance = await this.getApparentDistanceToEarth();
-
-        return observationCalc.getAngularDiameter(distance, DIAMETER_MARS);
     }
 
     public async getApparentMagnitude(): Promise<number> {
