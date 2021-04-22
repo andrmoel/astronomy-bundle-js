@@ -1,4 +1,4 @@
-import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/moon';
+import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../moon/constants/calculations';
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {km2au} from './distanceCalc';
 import {earthCalc, sunCalc} from './index';

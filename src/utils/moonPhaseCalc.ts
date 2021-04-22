@@ -5,7 +5,7 @@ import {
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON,
-} from '../constants/moonPhase';
+} from '../moon/constants/moonPhases';
 import {round} from './math';
 import {deg2rad} from './angleCalc';
 
