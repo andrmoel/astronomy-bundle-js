@@ -8,7 +8,6 @@ import {
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON,
 } from '../constants/moonPhase';
-import {DIAMETER_MOON} from '../constants/diameters';
 import {getApparentMagnitudeMoon} from '../utils/magnitudeCalc';
 import {
     rectangular2spherical,
@@ -24,6 +23,7 @@ import {Location} from '../earth/types/LocationTypes';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
+import {DIAMETER_MOON} from './constants/diameters';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;

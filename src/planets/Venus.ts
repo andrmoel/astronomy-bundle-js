@@ -1,10 +1,10 @@
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
-import {DIAMETER_VENUS} from '../constants/diameters';
 import {normalizeAngle} from '../utils/angleCalc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {DIAMETER_VENUS} from './constants/diameters';
 import Planet from './Planet';
 
 export default class Venus extends Planet {

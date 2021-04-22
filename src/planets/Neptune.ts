@@ -1,10 +1,10 @@
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {DIAMETER_NEPTUNE} from '../constants/diameters';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {DIAMETER_NEPTUNE} from './constants/diameters';
 import Planet from './Planet';
 
 export default class Neptune extends Planet {
