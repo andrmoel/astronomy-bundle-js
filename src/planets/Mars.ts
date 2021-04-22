@@ -2,7 +2,6 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_MARS} from './constants/diameters';
 import Planet from './Planet';
@@ -42,11 +41,15 @@ export default class Mars extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        let v = 5 * Math.log10(distanceSun * distanceEarth);
 
-        return getApparentMagnitudeMars(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        v += -1.52 + 0.016 * phaseAngle;
+
+        return v;
     }
 }

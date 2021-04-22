@@ -50,6 +50,19 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return observationCalc.getAngularDiameter(distance, this.diameter);
     }
 
+    public async getApparentMagnitude(): Promise<number> {
+        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
+        const phaseAngle = await this.getPhaseAngle();
+
+        return this.calculateApparentMagnitude(coordsHelio.radiusVector, coordsGeo.radiusVector, phaseAngle);
+    }
+
+    protected abstract calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number): number;
+
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();
 

@@ -2,7 +2,6 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {normalizeAngle} from '../utils/angleCalc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
-import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_VENUS} from './constants/diameters';
 import Planet from './Planet';
@@ -42,11 +41,25 @@ export default class Venus extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        let v = 5 * Math.log10(distanceSun * distanceEarth);
 
-        return getApparentMagnitudeVenus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        if (phaseAngle <= 163.7) {
+            v += -4.384
+                - 1.044E-3 * phaseAngle
+                + 3.687E-4 * Math.pow(phaseAngle, 2)
+                - 2.814E-6 * Math.pow(phaseAngle, 3)
+                + 8.938E-9 * Math.pow(phaseAngle, 4);
+        } else {
+            v += 236.05828
+                - 2.81914 * phaseAngle
+                + 8.39034E-3 * Math.pow(phaseAngle, 2);
+        }
+
+        return v;
     }
 }

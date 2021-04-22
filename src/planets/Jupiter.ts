@@ -2,7 +2,6 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeJupiter} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_JUPITER} from './constants/diameters';
 import Planet from './Planet';
@@ -42,11 +41,17 @@ export default class Jupiter extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        let v = 5 * Math.log10(distanceSun * distanceEarth);
 
-        return getApparentMagnitudeJupiter(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        v += -9.395
+            + 3.7E-4 * phaseAngle
+            + 6.15E-4 * Math.pow(phaseAngle, 2);
+
+        return v;
     }
 }

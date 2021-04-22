@@ -2,7 +2,6 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_NEPTUNE} from './constants/diameters';
 import Planet from './Planet';
@@ -42,12 +41,23 @@ export default class Neptune extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        phaseAngle: number
+    ): number {
         const year = this.toi.getDecimalYear();
+        let v = 5 * Math.log10(distanceSun * distanceEarth);
 
-        return getApparentMagnitudeNeptune(coordsHelio.radiusVector, coordsGeo.radiusVector, i, year);
+        if (year < 1980) {
+            v += -6.9;
+        } else if (year >= 1980 && year <= 2000) {
+            v += -6.89 - 0.0054 * (year - 1980);
+        } else {
+            v += -7;
+        }
+
+        return v;
     }
 }

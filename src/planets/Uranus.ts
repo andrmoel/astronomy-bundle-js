@@ -2,7 +2,6 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_URANUS} from './constants/diameters';
 import Planet from './Planet';
@@ -42,11 +41,11 @@ export default class Uranus extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
-
-        return getApparentMagnitudeUranus(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        return 5 * Math.log10(distanceSun * distanceEarth) + -7.19 + 0.002 * phaseAngle;
     }
 }

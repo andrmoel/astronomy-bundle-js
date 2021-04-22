@@ -2,7 +2,6 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {DIAMETER_SATURN} from './constants/diameters';
 import Planet from './Planet';
@@ -42,11 +41,14 @@ export default class Saturn extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const v = 5 * Math.log10(distanceSun * distanceEarth);
 
-        return getApparentMagnitudeSaturn(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+        return 0 * distanceSun * phaseAngle; // TODO implement function
     }
 }
