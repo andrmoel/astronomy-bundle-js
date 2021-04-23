@@ -3,6 +3,7 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeSaturn} from '../utils/magnitudeCalc';
 import {DIAMETER_SATURN} from './constants/diameters';
 import Planet from './Planet';
 
@@ -46,9 +47,6 @@ export default class Saturn extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const v = 5 * Math.log10(distanceSun * distanceEarth);
-
-        return 0 * distanceSun * phaseAngle; // TODO implement function
+        return getApparentMagnitudeSaturn(distanceSun, distanceEarth, phaseAngle);
     }
 }

@@ -3,6 +3,7 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeMars} from '../utils/magnitudeCalc';
 import {DIAMETER_MARS} from './constants/diameters';
 import Planet from './Planet';
 
@@ -46,10 +47,6 @@ export default class Mars extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        let v = 5 * Math.log10(distanceSun * distanceEarth);
-
-        v += -1.52 + 0.016 * phaseAngle;
-
-        return v;
+        return getApparentMagnitudeMars(distanceSun, distanceEarth, phaseAngle);
     }
 }

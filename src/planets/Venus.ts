@@ -3,6 +3,7 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {normalizeAngle} from '../utils/angleCalc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 import {DIAMETER_VENUS} from './constants/diameters';
 import Planet from './Planet';
 
@@ -46,20 +47,6 @@ export default class Venus extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        let v = 5 * Math.log10(distanceSun * distanceEarth);
-
-        if (phaseAngle <= 163.7) {
-            v += -4.384
-                - 1.044E-3 * phaseAngle
-                + 3.687E-4 * Math.pow(phaseAngle, 2)
-                - 2.814E-6 * Math.pow(phaseAngle, 3)
-                + 8.938E-9 * Math.pow(phaseAngle, 4);
-        } else {
-            v += 236.05828
-                - 2.81914 * phaseAngle
-                + 8.39034E-3 * Math.pow(phaseAngle, 2);
-        }
-
-        return v;
+        return getApparentMagnitudeVenus(distanceSun, distanceEarth, phaseAngle);
     }
 }

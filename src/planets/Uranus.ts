@@ -3,6 +3,7 @@ import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 import {DIAMETER_URANUS} from './constants/diameters';
 import Planet from './Planet';
 
@@ -46,6 +47,6 @@ export default class Uranus extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        return 5 * Math.log10(distanceSun * distanceEarth) + -7.19 + 0.002 * phaseAngle;
+        return getApparentMagnitudeUranus(distanceSun, distanceEarth, phaseAngle);
     }
 }

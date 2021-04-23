@@ -3,6 +3,7 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeMercury} from '../utils/magnitudeCalc';
 import {DIAMETER_MERCURY} from './constants/diameters';
 import Planet from './Planet';
 
@@ -46,16 +47,6 @@ export default class Mercury extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        let v = 5 * Math.log10(distanceSun * distanceEarth);
-
-        v += -0.613
-            + 6.3280E-2 * phaseAngle
-            - 1.6336E-3 * Math.pow(phaseAngle, 2)
-            + 3.3644E-5 * Math.pow(phaseAngle, 3)
-            - 3.4265E-7 * Math.pow(phaseAngle, 4)
-            + 1.6893E-9 * Math.pow(phaseAngle, 5)
-            - 3.0334E-12 * Math.pow(phaseAngle, 6);
-
-        return v;
+        return getApparentMagnitudeMercury(distanceSun, distanceEarth, phaseAngle);
     }
 }

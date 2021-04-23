@@ -3,6 +3,7 @@ import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeNeptune} from '../utils/magnitudeCalc';
 import {DIAMETER_NEPTUNE} from './constants/diameters';
 import Planet from './Planet';
 
@@ -47,17 +48,6 @@ export default class Neptune extends Planet {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         phaseAngle: number
     ): number {
-        const year = this.toi.getDecimalYear();
-        let v = 5 * Math.log10(distanceSun * distanceEarth);
-
-        if (year < 1980) {
-            v += -6.9;
-        } else if (year >= 1980 && year <= 2000) {
-            v += -6.89 - 0.0054 * (year - 1980);
-        } else {
-            v += -7;
-        }
-
-        return v;
+        return getApparentMagnitudeNeptune(distanceSun, distanceEarth, this.toi.getDecimalYear());
     }
 }
