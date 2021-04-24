@@ -32,11 +32,12 @@
   "types": "./index.d.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src",
+    "lint": "eslint ./src ./bin",
+    "lint:fix": "eslint --fix ./src ./bin",
     "test": "jest ./src",
     "release": "standard-version --tag-prefix --commit-all",
-    "release:push": "git push --follow-tags"
+    "release:push": "git push --follow-tags",
+    "bin:download-besselian-elements": "ts-node ./bin/solarEclipse/downloadBesselianElements.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.12.0",
@@ -51,11 +52,16 @@
     "husky": "^4.3.0",
     "jest": "^26.5.3",
     "standard-version": "^9.0.0",
+    "ts-node": "^9.1.1",
     "typescript": "^4.0.3"
   },
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint:fix && yarn test"
     }
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "entities": "^2.2.0"
   }
 }

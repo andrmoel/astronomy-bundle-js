@@ -12,6 +12,10 @@ export default class TimeOfInterest {
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
     }
 
+    public getTime(): Time {
+        return this.time;
+    }
+
     public getDate(): Date {
         const {year, month, day, hour, min, sec} = this.time;
 
