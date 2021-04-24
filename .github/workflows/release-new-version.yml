@@ -24,11 +24,11 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: 'Prepare git'
-        run: |
-          git config --global user.email "noreply@github.com"
-          git config --global user.name "github version update"
-          git branch -u origin/master master
+#      - name: 'Prepare git'
+#        run: |
+#          git config --global user.email "noreply@github.com"
+#          git config --global user.name "github version update"
+#          git branch -u origin/master master
 
       - name: 'Install project'
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
