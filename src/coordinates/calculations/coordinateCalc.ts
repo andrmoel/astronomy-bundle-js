@@ -3,16 +3,16 @@ import {
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
     RectangularCoordinates,
-} from '../coordinates/types/CoordinateTypes';
-import {Location} from '../earth/types/LocationTypes';
-import {earthCalc} from '../earth/calculations';
+} from '../types/CoordinateTypes';
+import {Location} from '../../earth/types/LocationTypes';
+import {earthCalc} from '../../earth/calculations';
 import {
     getLocalApparentSiderealTime,
     getLocalHourAngle,
     julianCenturiesJ20002julianDay,
-} from '../time/calculations/timeCalc';
-import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
-import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
+} from '../../time/calculations/timeCalc';
+import {deg2rad, normalizeAngle, rad2deg, sec2deg} from '../../utils/angleCalc';
+import {correctPrecessionForEclipticCoordinates} from '../../utils/precessionCalc';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;

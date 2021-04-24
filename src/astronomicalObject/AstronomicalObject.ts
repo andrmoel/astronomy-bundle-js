@@ -12,7 +12,7 @@ import {
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import {Location} from '../earth/types/LocationTypes';

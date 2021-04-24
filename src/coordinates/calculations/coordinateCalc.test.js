@@ -1,3 +1,4 @@
+import {round} from '../../utils/math';
 import {
     earthEclipticSpherical2sunEclipticSpherical,
     eclipticJ20002eclipticDate,
@@ -11,7 +12,6 @@ import {
     rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
 } from './coordinateCalc';
-import {round} from './math';
 
 it('tests rectangular2spherical', () => {
     const coords = {

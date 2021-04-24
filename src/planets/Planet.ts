@@ -2,7 +2,7 @@ import {
     rectangular2spherical,
     rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';

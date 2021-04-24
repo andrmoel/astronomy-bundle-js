@@ -7,7 +7,7 @@ import {
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
 import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 import Sun from '../sun/Sun';
 import Earth from '../earth/Earth';

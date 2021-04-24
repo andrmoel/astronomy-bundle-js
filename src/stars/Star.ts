@@ -10,7 +10,7 @@ import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
 import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';
 import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
 import {correctProperMotion} from './calculations/starCalc';

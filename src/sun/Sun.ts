@@ -1,7 +1,10 @@
 import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
-import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from '../utils/coordinateCalc';
+import {
+    earthEclipticSpherical2sunEclipticSpherical,
+    spherical2rectangular,
+} from '../coordinates/calculations/coordinateCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import Earth from '../earth/Earth';
 import {createEarth} from '../earth';
