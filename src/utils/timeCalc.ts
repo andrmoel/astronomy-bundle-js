@@ -1,8 +1,8 @@
 import {Time} from '../time/types/TimeTypes';
 import {EPOCH_J2000} from '../constants/epoch';
+import {earthCalc} from '../earth/calculations';
 import {round} from './math';
 import {deg2rad, normalizeAngle} from './angleCalc';
-import {earthCalc} from './index';
 
 export function sec2string(sec: number, short = false): string {
     const sign = sec < 0 ? '-' : '';

@@ -1,5 +1,5 @@
+import {round} from '../../utils/math';
 import {getApparentLongitude, getEquationOfCenter, getMeanAnomaly, getTrueAnomaly, getTrueLongitude} from './sunCalc';
-import {round} from './math';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;

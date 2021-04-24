@@ -1,7 +1,8 @@
 import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '../constants/calculations';
 import {deg2rad, normalizeAngle, rad2deg} from '../../utils/angleCalc';
 import {km2au} from '../../utils/distanceCalc';
-import {earthCalc, sunCalc} from '../../utils/index';
+import {earthCalc} from '../../earth/calculations';
+import {sunCalc} from '../../sun/calculations';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2

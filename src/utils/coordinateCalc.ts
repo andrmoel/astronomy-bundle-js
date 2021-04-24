@@ -5,10 +5,10 @@ import {
     RectangularCoordinates,
 } from '../coordinates/types/CoordinateTypes';
 import {Location} from '../earth/types/LocationTypes';
+import {earthCalc} from '../earth/calculations';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
 import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
-import {earthCalc} from './index';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;

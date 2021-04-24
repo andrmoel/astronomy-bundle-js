@@ -4,8 +4,8 @@ import {
     getLongitudeOfPerihelionOfOrbit,
     getNutationInLongitude,
 } from '../earth/calculations/earthCalc';
+import {sunCalc} from '../sun/calculations';
 import {deg2rad, sec2deg} from './angleCalc';
-import {sunCalc} from './index';
 
 export function getLightTimeCorrectedJulianDay(jd: number, d: number): number {
     // Meeus 33.3
