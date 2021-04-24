@@ -1,5 +1,5 @@
-import {Conjunction, Position} from '../planets/types/PlanetTypes';
-import {createTimeOfInterest} from '../time';
+import {Conjunction, Position} from '../types/PlanetTypes';
+import {createTimeOfInterest} from '../../time';
 import {
     getDeclinationInterpolationArray,
     getInterpolateValue5,
@@ -7,7 +7,7 @@ import {
     getLongitudeInterpolationArray,
     getRightAscensionInterpolationArray,
     tabularInterpolation5,
-} from './interpolationCalc';
+} from '../../utils/interpolationCalc';
 
 export async function getConjunctionInRightAscension(
     obj1Constructor: any,

@@ -6,7 +6,7 @@ import {
     LocalHorizontalCoordinates,
     RectangularCoordinates,
 } from '../coordinates/types/CoordinateTypes';
-import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../planets/calculations/conjunctionCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,

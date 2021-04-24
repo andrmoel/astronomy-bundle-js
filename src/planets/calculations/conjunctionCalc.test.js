@@ -1,8 +1,8 @@
-import Jupiter from '../planets/Jupiter';
-import Saturn from '../planets/Saturn';
-import Venus from '../planets/Venus';
+import Jupiter from '../Jupiter';
+import Saturn from '../Saturn';
+import Venus from '../Venus';
+import {round} from '../../utils/math';
 import {getConjunctionInLongitude, getConjunctionInRightAscension} from './conjunctionCalc';
-import {round} from './math';
 
 describe('test for getConjunctionInRightAscension', () => {
     it('gets the conjunction of jupiter and saturn in 2020', async () => {

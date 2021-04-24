@@ -1,4 +1,4 @@
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
+import {calculateVSOP87, calculateVSOP87Angle} from '../planets/calculations/vsop87Calc';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
