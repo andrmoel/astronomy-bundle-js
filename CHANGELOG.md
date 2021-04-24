@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.1.0 (2021-04-24)
+
+
+### Features
+
+* **besselian-elements:** add function to download besselian elements from NASA's website ([9c7eaaa](https://github.com/andrmoel/astronomy-bundle-js/commit/9c7eaaa6295332c126162949bdb3f72fcd16bc9a))
+
 ### 6.0.24 (2021-04-24)
 
 
