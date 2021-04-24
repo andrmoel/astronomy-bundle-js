@@ -45,8 +45,10 @@
     "@babel/preset-typescript": "^7.12.1",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.5.2",
+    "entities": "^2.2.0",
     "eslint": "^7.11.0",
     "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
     "husky": "^4.3.0",
@@ -59,9 +61,5 @@
     "hooks": {
       "pre-commit": "yarn lint:fix && yarn test"
     }
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "entities": "^2.2.0"
   }
 }

@@ -8,11 +8,9 @@ import BesselianElementsParser from './BesselianElementsParser';
 
 export default class BesselianElementsDownloader {
     public async run(): Promise<void> {
-        const promises = SOLAR_ECLIPSES.map(async (jd) => {
-            await BesselianElementsDownloader.downloadSingleBesselianElements(jd);
-        });
-
-        Promise.all(promises);
+        for (let i = 0; i < SOLAR_ECLIPSES.length; i++) {
+            await BesselianElementsDownloader.downloadSingleBesselianElements(SOLAR_ECLIPSES[i]);
+        }
     }
 
     private static async downloadSingleBesselianElements(jd: number): Promise<void> {
