@@ -123,7 +123,6 @@ export function getApparentMagnitudeUranus(distanceSun: number, distanceEarth: n
 export function getApparentMagnitudeNeptune(
     distanceSun: number,
     distanceEarth: number,
-    phaseAngle: number,
     year: number
 ): number {
     let V = 5 * Math.log10(distanceSun * distanceEarth);

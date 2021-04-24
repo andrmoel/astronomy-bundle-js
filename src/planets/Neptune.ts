@@ -42,12 +42,12 @@ export default class Neptune extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
-        const year = this.toi.getDecimalYear();
-
-        return getApparentMagnitudeNeptune(coordsHelio.radiusVector, coordsGeo.radiusVector, i, year);
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        phaseAngle: number
+    ): number {
+        return getApparentMagnitudeNeptune(distanceSun, distanceEarth, this.toi.getDecimalYear());
     }
 }

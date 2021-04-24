@@ -42,11 +42,11 @@ export default class Jupiter extends Planet {
         });
     }
 
-    public async getApparentMagnitude(): Promise<number> {
-        const coordsHelio = await this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = await this.getGeocentricEclipticSphericalDateCoordinates();
-        const i = await this.getPhaseAngle();
-
-        return getApparentMagnitudeJupiter(coordsHelio.radiusVector, coordsGeo.radiusVector, i);
+    protected calculateApparentMagnitude(
+        distanceSun: number,
+        distanceEarth: number,
+        phaseAngle: number
+    ): number {
+        return getApparentMagnitudeJupiter(distanceSun, distanceEarth, phaseAngle);
     }
 }
