@@ -49,7 +49,12 @@ jobs:
       - name: 'Push release'
         run: yarn release:push
 
+      - name: 'Add package.json to release'
+        run: cp ./package.json ./dist/package.json
+
       - name: 'Publish release'
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          package: ./dist/package.json
+          dry-run: true
