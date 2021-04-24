@@ -8,7 +8,7 @@ import {
     rectangularGeocentric2rectangularHeliocentric,
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
-import {correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+import {correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
 import Sun from '../sun/Sun';
 import Earth from '../earth/Earth';
 import createSun from '../sun/createSun';

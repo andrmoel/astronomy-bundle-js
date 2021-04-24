@@ -1,11 +1,11 @@
-import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
+import {EclipticSphericalCoordinates} from '../types/CoordinateTypes';
 import {
     getEccentricity,
     getLongitudeOfPerihelionOfOrbit,
     getNutationInLongitude,
-} from '../earth/calculations/earthCalc';
-import {sunCalc} from '../sun/calculations';
-import {deg2rad, sec2deg} from './angleCalc';
+} from '../../earth/calculations/earthCalc';
+import {sunCalc} from '../../sun/calculations';
+import {deg2rad, sec2deg} from '../../utils/angleCalc';
 
 export function getLightTimeCorrectedJulianDay(jd: number, d: number): number {
     // Meeus 33.3

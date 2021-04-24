@@ -1,5 +1,5 @@
+import {round} from '../../utils/math';
 import {correctPrecessionForEclipticCoordinates, correctPrecessionForEquatorialCoordinates} from './precessionCalc';
-import {round} from './math';
 
 describe('test for correctPrecessionForEquatorialCoordinates', () => {
     const jd = 1643074.5;

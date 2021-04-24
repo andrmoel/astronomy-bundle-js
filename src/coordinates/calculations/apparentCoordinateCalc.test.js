@@ -1,10 +1,10 @@
+import {round} from '../../utils/math';
 import {
     correctEffectOfAberration,
     correctEffectOfNutation,
     correctEffectOfRefraction,
     getLightTimeCorrectedJulianDay,
 } from './apparentCoordinateCalc';
-import {round} from './math';
 
 it('tests getLightTimeCorrectedJulianDay', () => {
     const jd = 2448976.5;

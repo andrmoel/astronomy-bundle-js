@@ -1,3 +1,5 @@
 import * as coordinateCalc from './coordinateCalc';
+import * as apparentCoordinateCalc from './apparentCoordinateCalc';
+import * as precessionCalc from './precessionCalc';
 
-export {coordinateCalc};
+export {coordinateCalc, apparentCoordinateCalc, precessionCalc};

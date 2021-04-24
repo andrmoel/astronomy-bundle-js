@@ -12,7 +12,7 @@ import {
     julianCenturiesJ20002julianDay,
 } from '../../time/calculations/timeCalc';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from '../../utils/angleCalc';
-import {correctPrecessionForEclipticCoordinates} from '../../utils/precessionCalc';
+import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;

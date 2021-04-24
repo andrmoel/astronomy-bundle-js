@@ -16,7 +16,7 @@ import {
     correctEffectOfAberration,
     correctEffectOfNutation,
     getLightTimeCorrectedJulianDay,
-} from '../utils/apparentCoordinateCalc';
+} from '../coordinates/calculations/apparentCoordinateCalc';
 import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {Location} from '../earth/types/LocationTypes';

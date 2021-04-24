@@ -11,8 +11,8 @@ import {
     equatorialSpherical2eclipticSpherical,
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
-import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+import {correctPrecessionForEquatorialCoordinates} from '../coordinates/calculations/precessionCalc';
+import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
 import {correctProperMotion} from './calculations/starCalc';
 import {ProperMotion} from './types/ProperMotionTypes';
 
