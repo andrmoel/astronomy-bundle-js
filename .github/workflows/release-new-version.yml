@@ -49,8 +49,9 @@ jobs:
           yarn release:push
 
       - name: 'Add package.json to release'
-        run: cp ./package.json ./dist/package.json
-        run: cp ./README.md ./dist/README.md
+        run: |
+          cp ./package.json ./dist/package.json
+          cp ./README.md ./dist/README.md
 
       - name: 'Publish release to npm'
         uses: JS-DevTools/npm-publish@v1
