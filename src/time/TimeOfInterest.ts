@@ -1,5 +1,5 @@
 import Location from '../earth/Location';
-import {timeCalc} from '../utils';
+import {timeCalc} from '../time/calculations';
 import {Time} from './types/TimeTypes';
 
 export default class TimeOfInterest {

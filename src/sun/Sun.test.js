@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../utils/timeCalc';
+import {sec2string} from '../time/calculations/timeCalc';
 import Sun from './Sun';
 
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);

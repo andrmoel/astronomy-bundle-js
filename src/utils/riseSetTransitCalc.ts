@@ -1,7 +1,12 @@
 import {Location} from '../earth/types/LocationTypes';
 import {createTimeOfInterest} from '../time';
 import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
-import {getDeltaT, getGreenwichApparentSiderealTime, julianDay2julianCenturiesJ2000, julianDay2time} from './timeCalc';
+import {
+    getDeltaT,
+    getGreenwichApparentSiderealTime,
+    julianDay2julianCenturiesJ2000,
+    julianDay2time,
+} from '../time/calculations/timeCalc';
 import {
     getDeclinationInterpolationArray,
     getRightAscensionInterpolationArray,

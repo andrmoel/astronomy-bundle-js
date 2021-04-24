@@ -1,5 +1,7 @@
-import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
-import {EPOCH_J1950, EPOCH_J2000} from '../constants/epoch';
+import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../../constants/dayOfWeek';
+import {EPOCH_J1950, EPOCH_J2000} from '../../constants/epoch';
+import {round} from '../../utils/math';
+import {deg2time} from '../../utils/angleCalc';
 import {
     dayOfYear2time,
     getDayOfWeek,
@@ -25,8 +27,6 @@ import {
     shortYear2longYear,
     time2julianDay,
 } from './timeCalc';
-import {round} from './math';
-import {deg2time} from './angleCalc';
 
 it('tests sec2string', () => {
     expect(sec2string(9434.3570044)).toBe('2h 37m 14.36s');

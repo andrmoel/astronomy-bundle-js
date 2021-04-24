@@ -6,8 +6,12 @@ import {
 } from '../coordinates/types/CoordinateTypes';
 import {Location} from '../earth/types/LocationTypes';
 import {earthCalc} from '../earth/calculations';
+import {
+    getLocalApparentSiderealTime,
+    getLocalHourAngle,
+    julianCenturiesJ20002julianDay,
+} from '../time/calculations/timeCalc';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from './angleCalc';
-import {getLocalApparentSiderealTime, getLocalHourAngle, julianCenturiesJ20002julianDay} from './timeCalc';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
