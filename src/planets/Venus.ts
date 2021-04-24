@@ -1,8 +1,8 @@
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {normalizeAngle} from '../utils/angleCalc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
-import {getApparentMagnitudeVenus} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeVenus} from './calculations/magnitudeCalc';
 import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import {DIAMETER_VENUS} from './constants/diameters';
 import Planet from './Planet';
