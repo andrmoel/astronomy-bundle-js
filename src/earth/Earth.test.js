@@ -5,8 +5,8 @@ import Earth from './Earth';
 const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = new Earth(toi);
 
-it('tests getName', () => {
-    expect(earth.getName()).toBe('earth');
+it('tests if name is correct', () => {
+    expect(earth.name).toBe('earth');
 });
 
 it('test getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

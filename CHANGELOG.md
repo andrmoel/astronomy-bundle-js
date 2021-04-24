@@ -2,6 +2,115 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.0.22 (2021-04-24)
+
+### 6.0.21 (2021-04-24)
+
+### 6.0.20 (2021-04-24)
+
+### 6.0.19 (2021-04-24)
+
+### 6.0.18 (2021-04-24)
+
+### 6.0.17 (2021-04-24)
+
+### 6.0.16 (2021-04-24)
+
+### 6.0.15 (2021-04-24)
+
+### 6.0.14 (2021-04-22)
+
+### 6.0.13 (2021-04-22)
+
+### 6.0.12 (2021-04-22)
+
+### 6.0.11 (2021-04-22)
+
+### 6.0.10 (2021-04-21)
+
+### 6.0.9 (2021-04-21)
+
+### 6.0.8 (2021-04-20)
+
+### 6.0.7 (2021-04-20)
+
+### 6.0.6 (2021-04-20)
+
+### 6.0.5 (2021-04-19)
+
+### 6.0.4 (2021-02-07)
+
+### 6.0.3 (2021-02-07)
+
+### 6.0.2 (2021-02-07)
+
+### 6.0.1 (2021-02-07)
+
+## 6.0.0 (2021-02-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **typescript:** changed parameters in coordinate calculations functions
+
+* **typescript:** use of types instead of interfaces ([e67e35b](https://github.com/andrmoel/astronomy-bundle-js/commit/e67e35ba4ad0740a40c0e99be3cdc4530a6ad9fa))
+
+## 5.19.0 (2021-01-19)
+
+
+### Features
+
+* **star:** add coordinate calculations for stars ([47ff8e3](https://github.com/andrmoel/astronomy-bundle-js/commit/47ff8e37403cd293a6f03316c64a950631b99f6d))
+
+### 5.18.2 (2021-01-18)
+
+### 5.18.1 (2021-01-18)
+
+## 5.18.0 (2021-01-18)
+
+
+### Features
+
+* **precession:** add functions to calculate precession ([fca422a](https://github.com/andrmoel/astronomy-bundle-js/commit/fca422ae6b84636ba77853bb60566a57ee66e99b))
+
+### 5.17.10 (2021-01-18)
+
+### 5.17.9 (2021-01-18)
+
+### 5.17.8 (2020-12-28)
+
+
+### Bug Fixes
+
+* **typescript:** async cannot be used in abstract functions ([74ade1f](https://github.com/andrmoel/astronomy-bundle-js/commit/74ade1fd27e16d2462c80a85a86ba98ae86158b2))
+
+### 5.17.7 (2020-12-06)
+
+
+### Bug Fixes
+
+* **rise-set:** calculate case when rise and transit are very close ([fce58fd](https://github.com/andrmoel/astronomy-bundle-js/commit/fce58fdc706dac2197a13ac3f2560a62cf26953b))
+
+### 5.17.6 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** local hour angle must be between -180 and 180 deg ([25818ab](https://github.com/andrmoel/astronomy-bundle-js/commit/25818aba0bc29727f809a673240b52e9641f5eca))
+
+### 5.17.5 (2020-12-05)
+
+
+### Bug Fixes
+
+* **rise-set:** throw error when no transit on given day is possible ([b7db39f](https://github.com/andrmoel/astronomy-bundle-js/commit/b7db39fdd11c9a06621396fe4d1382fc4e0e1d93))
+
+### 5.17.4 (2020-12-05)
+
+### 5.17.3 (2020-12-04)
+
+### 5.17.2 (2020-12-03)
+
 ### 5.17.1 (2020-12-01)
 
 ## 5.17.0 (2020-11-26)

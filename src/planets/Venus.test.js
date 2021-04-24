@@ -1,7 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../utils/timeCalc';
+import {sec2string} from '../time/calculations/timeCalc';
 import Venus from './Venus';
 import Neptune from './Neptune';
 
@@ -13,8 +13,8 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
-    expect(venus.getName()).toBe('venus');
+it('tests if name is correct', () => {
+    expect(venus.name).toBe('venus');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

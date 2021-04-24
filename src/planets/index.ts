@@ -5,7 +5,7 @@ import {
     createNeptune,
     createSaturn,
     createUranus,
-    createVenus
+    createVenus,
 } from './createPlanet';
 import Mercury from './Mercury';
 import Venus from './Venus';

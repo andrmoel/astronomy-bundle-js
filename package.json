@@ -1,6 +1,6 @@
 {
   "name": "astronomy-bundle",
-  "version": "5.17.1",
+  "version": "6.0.22",
   "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
   "keywords": [
     "astronomy",
@@ -15,12 +15,15 @@
     "saturn",
     "uranus",
     "neptune",
+    "VSOP87",
     "sunrise",
     "sunset",
     "moonrise",
     "moonset",
     "solar eclipse",
-    "VSOP87"
+    "satellite",
+    "two line elements",
+    "tle"
   ],
   "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
   "author": "Andreas Moeller <andrmoel@gmail.com>",
@@ -31,7 +34,7 @@
     "build": "tsc",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "test": "TZ=UTC jest ./src",
+    "test": "jest ./src",
     "release": "standard-version --tag-prefix --commit-all",
     "release:push": "git push --follow-tags"
   },
@@ -39,6 +42,8 @@
     "@babel/core": "^7.12.0",
     "@babel/preset-env": "^7.12.0",
     "@babel/preset-typescript": "^7.12.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.5.2",
     "eslint": "^7.11.0",

@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../utils/timeCalc';
+import {sec2string} from '../time/calculations/timeCalc';
 import createMoon from './createMoon';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
@@ -12,8 +12,8 @@ const location = {
     lon: -122.4108,
 };
 
-it('tests getName', () => {
-    expect(moon.getName()).toBe('moon');
+it('tests if name is correct', () => {
+    expect(moon.name).toBe('moon');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {

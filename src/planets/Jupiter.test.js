@@ -1,7 +1,7 @@
 import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../utils/timeCalc';
+import {sec2string} from '../time/calculations/timeCalc';
 import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 
@@ -13,8 +13,8 @@ const location = {
     lon: 13.408,
 };
 
-it('tests getName', () => {
-    expect(jupiter.getName()).toBe('jupiter');
+it('tests if name is correct', () => {
+    expect(jupiter.name).toBe('jupiter');
 });
 
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
