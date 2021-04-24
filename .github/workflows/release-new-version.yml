@@ -46,11 +46,11 @@ jobs:
       - name: 'Prepare release'
         run: yarn release
 
-      - name: 'Add package.json to build'
-        run: cp ./package.json ./dist/package.json
-
       - name: 'Push release'
         run: yarn release:push
+
+      - name: 'Add package.json to release'
+        run: cp ./package.json ./dist/package.json
 
       - name: 'Publish release'
         uses: JS-DevTools/npm-publish@v1
