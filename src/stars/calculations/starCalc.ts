@@ -1,8 +1,8 @@
-import {EquatorialSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
-import {EPOCH_J2000} from '../constants/epoch';
-import {ProperMotion} from '../stars/types/ProperMotionTypes';
-import {getEpochInterval} from '../time/calculations/timeCalc';
-import {normalizeAngle} from './angleCalc';
+import {EquatorialSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
+import {EPOCH_J2000} from '../../constants/epoch';
+import {ProperMotion} from '../types/ProperMotionTypes';
+import {getEpochInterval} from '../../time/calculations/timeCalc';
+import {normalizeAngle} from '../../utils/angleCalc';
 
 export function correctProperMotion(
     coords: EquatorialSphericalCoordinates,

@@ -1,6 +1,6 @@
-import {EPOCH_J1950} from '../constants/epoch';
+import {EPOCH_J1950} from '../../constants/epoch';
+import {round} from '../../utils/math';
 import {correctProperMotion} from './starCalc';
-import {round} from './math';
 
 describe('test for correctProperMotion', () => {
     const coords = {
