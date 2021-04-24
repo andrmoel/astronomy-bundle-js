@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.2.0 (2021-04-24)
+
+
+### Features
+
+* **time-of-interest:** add method getString() ([58ccb39](https://github.com/andrmoel/astronomy-bundle-js/commit/58ccb39c49b5df5fa999e748d65ddaac4db3151d))
+
 ## 6.1.0 (2021-04-24)
 
 
