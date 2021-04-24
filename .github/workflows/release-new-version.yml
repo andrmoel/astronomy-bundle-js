@@ -43,16 +43,15 @@ jobs:
       - name: 'Build project'
         run: yarn build
 
-      - name: 'Prepare release'
-        run: yarn release
-
-      - name: 'Push release'
-        run: yarn release:push
+      - name: 'Increase version and push to git'
+        run: |
+          yarn release
+          yarn release:push
 
       - name: 'Add package.json to release'
         run: cp ./package.json ./dist/package.json
 
-      - name: 'Publish release'
+      - name: 'Publish release to npm'
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
