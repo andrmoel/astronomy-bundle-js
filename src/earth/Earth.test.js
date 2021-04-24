@@ -2,32 +2,30 @@ import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import Earth from './Earth';
 
-it('test getHeliocentricRectangularJ2000Coordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
+const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
+const earth = new Earth(toi);
 
-    const coords = await earth.getHeliocentricRectangularJ2000Coordinates();
+it('tests if name is correct', () => {
+    expect(earth.name).toBe('earth');
+});
 
-    expect(round(coords.x, 8)).toBe(0.2070104);
+it('test getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await earth.getHeliocentricEclipticRectangularJ2000Coordinates();
+
+    expect(round(coords.x, 8)).toBe(0.20701041);
     expect(round(coords.y, 8)).toBe(0.96282379);
     expect(round(coords.z, 8)).toBe(-0.00004247);
 });
 
-it('test getHeliocentricRectangularDateCoordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
+it('test getHeliocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await earth.getHeliocentricEclipticRectangularDateCoordinates();
 
-    const coords = await earth.getHeliocentricRectangularDateCoordinates();
-
-    expect(round(coords.x, 8)).toBe(0.20279685);
+    expect(round(coords.x, 8)).toBe(0.20279686);
     expect(round(coords.y, 8)).toBe(0.96372008);
     expect(round(coords.z, 8)).toBe(-0.00000252);
 });
 
 it('test getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
-
     const coords = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 
     expect(round(coords.lon, 8)).toBe(77.86593249);
@@ -36,9 +34,6 @@ it('test getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
 });
 
 it('test getHeliocentricEclipticSphericalDateCoordinates', async () => {
-    const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-    const earth = new Earth(toi);
-
     const coords = await earth.getHeliocentricEclipticSphericalDateCoordinates();
 
     expect(round(coords.lon, 8)).toBe(78.11655576);

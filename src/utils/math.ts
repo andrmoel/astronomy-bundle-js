@@ -4,7 +4,7 @@ export function round(value: number, decimals = 0): number {
     return Math.round(value * p) / p;
 }
 
-export function pad(num: number|string, size: number): string {
+export function pad(num: number | string, size: number): string {
     let numStr = num.toString();
 
     while (numStr.length < size) {

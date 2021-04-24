@@ -1,5 +1,22 @@
 {
   "extends": [
     "eslint-config-andrmoel/default"
+  ],
+  "rules": {
+    "semi": ["off"],
+    "no-extra-semi": ["off"],
+    "valid-jsdoc": ["off"]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ]
+    }
   ]
 }

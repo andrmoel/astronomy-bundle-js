@@ -18,6 +18,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
     3. [Delta T](#time-of-interest-deltat)
 4. [Astronomical Objects](#astronomical-objects)
+    1. [Coordinates](#astronomical-objects-coordinates)
 5. [Earth](#earth)
     1. [Position of the Earth](#earth-position)
     2. [Nutation in Longitude and Obliquity](#earth-nutation)
@@ -25,15 +26,26 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 6. [Sun](#sun)
     1. [Position of the Sun](#sun-position)
     2. [Distance to Earth and Diameter](#sun-distance-diameter)
+    3. [Sunrise, Sunset and Transit](#sun-rise-set)
 7. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
+    3. [Moonrise, Moonset and Transit](#moon-rise-set)
     3. [Phases](#moon-phases)
+    4. [Apparent Magnitude](#moon-magnitude)
+    5. [Physical Observation](#moon-observation)
 8. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
-9. [Solar Eclipse](#solar-eclipse)
+    4. [Apparent Magnitude](#planets-magnitude)
+    5. [Physical Observation](#planets-observation)
+    5. [Conjunction](#planets-conjunction)
+9. [Stars](#stars)
+    1. [Position of Stars](#stars-position)
+10. [Solar Eclipse](#solar-eclipse)
+11. [Satellites](#satellites)
+    1. [Two Line Elements](#satellites-tle)
 
 ## <a name="installation"></a>Installation
 
@@ -248,6 +260,52 @@ import {createMoon} from 'astronomy-bundle/moon';
 const moon = createMoon();
 ```
 
+### <a name="astronomical-objects-coordinates"></a> Coordinates of Astronomical Objects
+
+#### Explanation of different Coordinate Systems used
+Center of coordinate system
+* Heliocentric (Sun is center of coordinate system)
+* Geocentric (Earth is center of coordinate system)
+* Topocentric (Observer's location is center of coordinate system)
+
+Coordinate system type
+* Ecliptic Rectangular (x, y, z)
+* Ecliptic Spherical (lon, lat, radiusVector)
+* Equatorial Spherical (rightAscension, declination, radiusVector)
+* Horizontal (azimuth, altitude, radiusVector)
+
+#### Usable Methods in objects 
+
+Each object (e.g. Moon, Sun, Venus, Jupiter, ...) provides the following methods to get their coordinates in space:
+
+##### Heliocentric coordinates
+```javascript
+getHeliocentricEclipticRectangularJ2000Coordinates()
+getHeliocentricEclipticRectangularDateCoordinates()
+getHeliocentricEclipticSphericalJ2000Coordinates()
+getHeliocentricEclipticSphericalDateCoordinates()
+```
+
+##### Geocentric coordinates
+```javascript
+getGeocentricEclipticRectangularJ2000Coordinates()
+getGeocentricEclipticRectangularDateCoordinates()
+getGeocentricEclipticSphericalJ2000Coordinates()
+getGeocentricEclipticSphericalDateCoordinates()
+getGeocentricEquatorialSphericalJ2000Coordinates()
+getGeocentricEquatorialSphericalDateCoordinates()
+getApparentGeocentricRectangularCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEclipticSphericalCoordinates() // Corrected by light time, abberation & nutation
+getApparentGeocentricEquatorialSphericalCoordinates() // Corrected by light time, abberation & nutation
+```
+
+##### Topocentric coordinates
+```javascript
+getTopocentricEquatorialSphericalCoordinates(location)
+getTopocentricHorizontalCoordinates(location)
+getApparentTopocentricHorizontalCoordinates(location) // Corrected by atmospheric refraction
+```
+
 ## <a name="earth"></a> Earth
 
 This library uses the VSOP87 theory to calculate precise planetary positions.
@@ -266,7 +324,7 @@ import {createEarth} from 'astronomy-bundle/earth';
 const toi = createTimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = createEarth(toi);
 
-const {x, y, z} = await earth.getHeliocentricRectangularJ2000Coordinates();
+const {x, y, z} = await earth.getHeliocentricEclipticRectangularJ2000Coordinates();
 const {lon, lat, radiusVector} = await earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 ```
 
@@ -391,7 +449,47 @@ The result should be:\
 Distance: *151797423.98 km*\
 Diameter: *0° 31' 32.43"*
 
+### <a name="sun-rise-set"></a> Sunrise, Sunset and Transit
+
+The used standard altitudes for sunset and sunrise consider the effect of atmospheric refraction and are given as:
+* Sun's center: -0.583°
+* Sun's upper limb: -0.833°
+
+**Example**: Get the rise, set and transit of the Sun on 20. November 2020 in Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSun} from 'astronomy-bundle/sun';
+
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 20, 0, 0, 0);
+const sun = createSun(toi);
+
+const toiRiseUpperLimb = await sun.getRiseUpperLimb(location);
+const toiRiseCenter = await sun.getRise(location);
+const toiTransit = await sun.getTransit(location);
+const toiSetCenter = await sun.getSet(location);
+const toiSetUpperLimb = await sun.getSetUpperLimb(location);
+```
+
+The result should be:\
+\
+Sunrise (upper limb): *06:37:31 UTC*\
+Sunrise (disk's center): *06:39:28 UTC*\
+Transit: *11:52:04 UTC*\
+Sunset (disk's center): *15:04:10 UTC*\
+Sunset (upper limb): *15:06:07 UTC*
+
 ## <a name="moon"></a> Moon
+
+This library uses the VSOP87 theory to calculate precise planetary positions.
+Each calculation uses terms with a heavy file size of several kilobytes.
+For that reason all VSOP87 calculations will **load asynchronous** and only when they are used.
+All coordinate methods do return a **Promise**.
 
 ### <a name="moon-position"></a> Position of the Moon
 
@@ -404,12 +502,16 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalCoordinates();
-const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalCoordinates();
-const {x, y, z} = moon.getGeocentricEquatorialRectangularCoordinates();
+const {x, y, z} = await moon.getGeocentricEclipticRectangularDateCoordinates();
+const {lon, lat, radiusVector} = await moon.getGeocentricEclipticSphericalDateCoordinates();
+const {rightAscension, declination, radiusVector} = await moon.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
+\
+x: *-0.001682*\
+y: *-0.001701*\
+z: *0.000586*\
 \
 Longitude: *133.17°*\
 Latitude: *-3.23°*\
@@ -417,11 +519,7 @@ Radius Vector: *0.002463*\
 \
 Right Ascension: *134.69°*\
 Declination: *13.77°*\
-Radius Vector: *0.002463*\
-\
-x: *-0.001682*\
-y: *-0.001701*\
-z: *0.000586*
+Radius Vector: *0.002463*
 
 ### <a name="moon-distance-diameter"></a> Distance to earth and diameter
 
@@ -432,8 +530,8 @@ import {createMoon} from 'astronomy-bundle/moon';
 
 const moon = createMoon();
 
-const distance = moon.getDistanceToEarth();
-const delta = moon.getAngularDiameter();
+const distance = await moon.getDistanceToEarth();
+const delta = await moon.getAngularDiameter();
 ```
 
 The result should be between 363300 km and 405500 km.\
@@ -448,14 +546,43 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(2017, 6, 5, 20, 30, 0);
 const moon = createMoon(toi);
 
-const distance = moon.getDistanceToEarth();
+const distance = await moon.getDistanceToEarth();
 ```
 
 The result should be: *402937.61 km*
 
+### <a name="moon-rise-set"></a> Moonrise, Moonset and Transit
+
+The used standard altitude for moonset and moonrise is 0.125 which considers the effect of atmospheric refraction.
+
+**Example**: Get the rise, set and transit of the Moon on 20. November 2020 in Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const location = {
+    lat: 52.519,
+    lon: 13.408,
+};
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 20, 0, 0, 0);
+const moon = createMoon(toi);
+
+const toiRise = await moon.getRise(location);
+const toiTransit = await moon.getTransit(location);
+const toiSet = await moon.getSet(location);
+```
+
+The result should be:\
+\
+Moonrise: *12:02:52 UTC*\
+Transit: *16:03:43 UTC*\
+Moonset: *20:11:42 UTC*
+
 ### <a name="moon-phases"></a> Phases of the Moon
 
-**Example 1**: Get the phase angle and illumination of the Moon for 12 April 1992 at 00:00 UTC
+**Example 1**: Get the illuminated fraction of the Moon for 12 April 1992 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -464,13 +591,13 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const i = await moon.getPhaseAngle();
 const k = await moon.getIlluminatedFraction();
+const isWaxing = await moon.isWaxing();
 ```
 
 The result of the calculation should be:\
-Phase angle: *69.07545°*\
-Illumination: *0.679 (67.9%)*
+Illumination: *0.679 (67.9%)*\
+Is waxing: *true*
 
 **Example 2**: Get upcoming first quarter and next full moon in November 2020
 
@@ -489,6 +616,64 @@ The result of the calculation should be:\
 Upcoming first quarter: *2020-11-22 04:46:35 UTC*\
 Upcoming full moon: *2020-11-30 09:31:22 UTC*
 
+### <a name="moon-magnitude"></a> Apparent magnitude of the Moon
+
+**Example**: Get the apparent Magnitude of the Moon for 07 November 2020 at 01:20 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const V = await moon.getApparentMagnitude();
+```
+
+The result of the calculation should be: *-10.71m*
+
+### <a name="moon-observation"></a> Physical Observation of the Moon
+
+**Example 1**: Get the geocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const phi = await moon.getElongation();
+const i = await moon.getPhaseAngle();
+const chi = await moon.getPositionAngleOfBrightLimb();
+```
+
+The result of the calculation should be:\
+Elongation from Sun: *108.26°*\
+Phase Angle: *71.6°*\
+Position Angle of bright Limb: *100.29°*
+
+**Example 2**: Get the topocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC for Berlin, Germany
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const location = createLocation(52.52, 13.41, 30);
+
+const toi = createTimeOfInterest.fromTime(2020, 11, 7, 1, 20, 0);
+const moon = createMoon(toi);
+
+const phi = await moon.getTopocentricElongation(location);
+const i = await moon.getTopocentricPhaseAngle(location);
+const chi = await moon.getTopocentricPositionAngleOfBrightLimb(location);
+```
+
+The result of the calculation should be:\
+Elongation from Sun: *107.81°*\
+Phase Angle: *72.05°*\
+Position Angle of bright Limb: *100.58°*
+
 ## <a name="planets"></a> Planets
 
 This library uses the VSOP87 theory to calculate precise planetary positions.
@@ -498,20 +683,7 @@ All coordinate methods do return a **Promise**.
 
 ### <a name="planets-position"></a> Position of Planets
 
-Each planet (Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune) provides the following methods:
-
-```javascript
-getHeliocentricRectangularJ2000Coordinates()
-getHeliocentricRectangularDateCoordinates()
-getHeliocentricEclipticSphericalJ2000Coordinates()
-getHeliocentricEclipticSphericalDateCoordinates()
-getGeocentricRectangularJ2000Coordinates()
-getGeocentricRectangularDateCoordinates()
-getGeocentricEclipticSphericalJ2000Coordinates()
-getGeocentricEclipticSphericalDateCoordinates()
-```
-
-**Example 1**: Calculate the heliocentric position of Venus for 04 November 2020 at 00:00 UTC
+**Example 1**: Calculate the heliocentric position for equinox J2000 of Venus for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -520,10 +692,8 @@ import {createVenus} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
 const venus = createVenus(toi);
 
-const coordsRecJ2000 = await venus.getHeliocentricRectangularJ2000Coordinates();
-const coordsRecDate = await venus.getHeliocentricRectangularDateCoordinates();
-const coordsSphJ2000 = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
-const coordsSphDate = await venus.getHeliocentricEclipticSphericalDateCoordinates();
+const coordsRec = await venus.getHeliocentricEclipticRectangularJ2000Coordinates();
+const coordsSph = await venus.getHeliocentricEclipticSphericalJ2000Coordinates();
 ```
 The result of the calculation should be:\
 \
@@ -532,22 +702,12 @@ x: *-0.53523555*\
 y: *0.477793213*\
 z: *0.037443275*\
 \
-Heliocentric Rectangular (Date)\
-x: *-0.537656853*\
-y: *0.475065298*\
-z: *0.037463575*\
-\
 Heliocentric Spherical (J2000)\
 Longitude: *138° 14' 43.437"*\
 Latitude: *2° 59' 14.774"*\
 Radius Vector: *0.71844655*\
-\
-Heliocentric Spherical (Date)\
-Longitude: *138° 32' 12.055"*\
-Latitude: *2° 59' 20.61"*\
-Radius Vector: *0.71844655*
 
-**Example 2**: Calculate the geocentric position of Jupiter for 04 November 2020 at 00:00 UTC
+**Example 2**: Calculate the geocentric position for current date of Jupiter for 04 November 2020 at 00:00 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -556,21 +716,21 @@ import {createJupiter} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2020, 11, 4, 0, 0, 0);
 const jupiter = createJupiter(toi);
 
-const coordsRecJ2000 = await jupiter.getGeocentricRectangularJ2000Coordinates();
-const coordsSphJ2000 = await jupiter.getGeocentricEclipticSphericalJ2000Coordinates();
+const coordsRec = await jupiter.getGeocentricEclipticRectangularDateCoordinates();
+const coordsSph = await jupiter.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
 \
-Geocentric Rectangular (J2000)\
-x: *1.94431267*\
-y: *-5.01496365*\
-z: *-0.04193732*\
+Geocentric Rectangular\
+x: *4.1719826*\
+y: *1.966573890*\
+z: *-0.101817535*\
 \
-Geocentric Spherical (J2000)\
-Longitude: *291° 11' 29.126"*\
-Latitude: *-0° 26' 48.204"*\
-Radius Vector: *5.37884475*
+Geocentric Spherical\
+Longitude: *25° 14' 17.091"*\
+Latitude: *-1° 15' 52.651"*\
+Radius Vector: *4.613373871*
 
 ### <a name="planets-distance-diameter"></a> Distance to Earth and diameter
 
@@ -593,7 +753,7 @@ Diameter: *0° 00' 12.065"*
 
 ### <a name="planets-phases"></a> Phases of a Planet
 
-**Example**: Get the phase angle and illumination of the Mars for 20 Match 2019 at 02:55 UTC
+**Example**: Get the illumination of the Mars for 20 Match 2019 at 02:55 UTC
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -602,13 +762,143 @@ import {createMars} from 'astronomy-bundle/planets';
 const toi = createTimeOfInterest.fromTime(2019, 3, 20, 2, 55, 0);
 const mars = createMars(toi);
 
-const i = await mars.getPhaseAngle();
 const k = await mars.getIlluminatedFraction();
+const isWaxing = await mars.isWaxing();
 ```
 
 The result of the calculation should be:\
-Phase angle: *30.98°*\
-Illumination: *0.929 (92.9%)*
+Illumination: *0.929 (92.9%)*\
+Is waxing: *true*
+
+### <a name="planets-magnitude"></a> Apparent magnitude of a Planet
+
+**Example**: Get the apparent magnitude of Jupiter for 05 January 2012 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2012, 1, 5, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const V = await jupiter.getApparentMagnitude();
+```
+
+The result of the calculation should be: *-2.52m*
+
+### <a name="planets-observation"></a> Physical Observation of Planets
+
+**Example**: Get the geocentric Physical Observation of Venus for 30 July 2020 at 22:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createVenus} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 7, 30, 22, 0, 0);
+const venus = createVenus(toi);
+
+const phi = await venus.getElongation();
+const i = await venus.getPhaseAngle();
+const chi = await venus.getPositionAngleOfBrightLimb();
+```
+
+The result of the calculation should be:\
+Elongation from Sun: *45.09°*\
+Phase Angle: *98.85°*\
+Position Angle of bright Limb: *83.08°*
+
+### <a name="planets-conjunction"></a> Conjunction of two Planets
+
+**Example 1**: Check if there is a conjunction between Jupiter and Saturn on 04 June 2018
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter, Saturn} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2018, 6, 4, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const {toi} = await jupiter.getConjunctionInRightAscensionTo(Saturn);
+```
+
+This code will throw an error: *No conjunction possible for given objects at 2458273.5*
+
+**Example 2**: Check if there is a conjunction between Jupiter and Saturn on 21 December 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createJupiter, Saturn} from 'astronomy-bundle/planets';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 21, 0, 0, 0);
+const jupiter = createJupiter(toi);
+
+const {toi, position, angularDistance} = await jupiter.getConjunctionInRightAscensionTo(Saturn);
+```
+
+Result of the calculation:\
+*There is a conjunction on 21 December 2020 at 13:24 UTC*\
+*And Jupiter is 06' 15.164" north of Saturn* 
+
+## <a name="stars"></a> Stars
+
+### <a name="stars-position"></a> Position of Stars
+
+**Example 1**: Given are the equatorial coordinates of epoch J2000.\
+Right Ascension: 2h 44m 11.986s\
+Declination: 49° 13' 42.48"\
+Proper motion in Right Ascension: 0.03425"\
+Proper motion in Declination: -0.0895"\
+Calculate the apparent position for 04 November 2028 at 00:00 UTC
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createStar} from 'astronomy-bundle/stars';
+
+const toi = createTimeOfInterest.fromTime(2028, 11, 13, 0, 0, 0);
+
+const coordsJ2000 = {
+    rightAscension: 41.04994167,
+    declination: 49.22846667,
+    radiusVector: 1,
+};
+
+const properMotion = {
+    rightAscension: 0.0001427083,
+    declination: -0.000024861,
+};
+
+const star = createStar.byEquatorialCoordinates(coordsJ2000, toi, properMotion);
+
+const coords = await star.getApparentGeocentricEquatorialSphericalCoordinates();
+```
+
+The result of the calculation should be:\
+\
+Right Ascension: 2h 46m 14.548s\
+Declination: 49° 21' 05.617"
+
+**Example 2**: You may pass the epoch in Julian Days to the constructor,
+in case the coordinates of a star are given for another epoch than J2000.
+
+```javascript
+import {createTimeOfInterest, EPOCH_J1950} from 'astronomy-bundle/time';
+import {createStar} from 'astronomy-bundle/stars';
+
+const toi = createTimeOfInterest.fromTime(2028, 11, 13, 0, 0, 0);
+
+const coordsJ1950 = {
+    rightAscension: 41.04994167,
+    declination: 49.22846667,
+    radiusVector: 1,
+};
+
+const properMotion = {
+    rightAscension: 0.0001427083,
+    declination: -0.000024861,
+};
+
+const star = createStar.byEquatorialCoordinates(coordsJ1950, toi, properMotion, EPOCH_J1950);
+```
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 
@@ -633,3 +923,21 @@ const exists = solarEclipseExists(toi);
 ```
 
 Result of the calculation: *Yes, there is a solar eclipse*
+
+## <a name="satellites"></a> Satellites
+
+### <a name="satellites-tle"></a> Two Line Elements
+
+**Example**: Parse Two Line Elements for the ISS
+
+```javascript
+import {parseTwoLineElement} from 'astronomy-bundle/satellites';
+
+const tleString = `
+        ISS(ZARYA)
+        1 25544U 98067A   06040.85138889  .00012260  00000-0  86027-4 0  3194
+        2 25544  51.6448 122.3522 0008835 257.3473 251.7436 15.74622749413094
+    `;
+
+const tle = parseTwoLineElement(tleString);
+```

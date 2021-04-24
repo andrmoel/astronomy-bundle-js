@@ -5,7 +5,6 @@
 .env.*.local
 stats.json
 
-/.next
-/out
+/dist
 /node_modules
 /coverage
