@@ -1,3 +1,5 @@
+import {round} from '../../utils/math';
+import {deg2angle} from '../../utils/angleCalc';
 import {
     getEccentricity,
     getLongitudeOfPerihelionOfOrbit,
@@ -7,8 +9,6 @@ import {
     getNutationInObliquity,
     getTrueObliquityOfEcliptic,
 } from './earthCalc';
-import {round} from './math';
-import {deg2angle} from './angleCalc';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;

@@ -1,6 +1,10 @@
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
+import {
+    getEccentricity,
+    getLongitudeOfPerihelionOfOrbit,
+    getNutationInLongitude,
+} from '../earth/calculations/earthCalc';
 import {deg2rad, sec2deg} from './angleCalc';
-import {getEccentricity, getLongitudeOfPerihelionOfOrbit, getNutationInLongitude} from './earthCalc';
 import {sunCalc} from './index';
 
 export function getLightTimeCorrectedJulianDay(jd: number, d: number): number {
