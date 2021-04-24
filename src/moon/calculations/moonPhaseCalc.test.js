@@ -1,4 +1,4 @@
-import {MOON_PHASE_LAST_QUARTER, MOON_PHASE_NEW_MOON} from '../moon/constants/moonPhases';
+import {MOON_PHASE_LAST_QUARTER, MOON_PHASE_NEW_MOON} from '../constants/moonPhases';
 import {getTimeOfInterestOfUpcomingPhase} from './moonPhaseCalc';
 
 it('tests getTimeOfInterestOfUpcomingPhase with new moon', () => {

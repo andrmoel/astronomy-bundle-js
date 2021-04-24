@@ -1,3 +1,4 @@
+import {round} from '../../utils/math';
 import {
     getArgumentOfLatitude,
     getDistanceToEarth,
@@ -12,7 +13,6 @@ import {
     getOpticalLiberationInLongitude,
     getRadiusVector,
 } from './moonCalc';
-import {round} from './math';
 
 const T = -0.077221081451;
 
