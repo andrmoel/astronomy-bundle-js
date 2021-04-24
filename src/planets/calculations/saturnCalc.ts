@@ -1,4 +1,4 @@
-import {deg2rad, rad2deg} from "./angleCalc";
+import {deg2rad, rad2deg} from '../../utils/angleCalc';
 
 export function getRingInclination(T: number): number {
     return 28.075216
