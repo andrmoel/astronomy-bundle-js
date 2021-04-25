@@ -6,17 +6,17 @@ import {
     LocalHorizontalCoordinates,
     RectangularCoordinates,
 } from '../coordinates/types/CoordinateTypes';
-import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../utils/conjunctionCalc';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../planets/calculations/conjunctionCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
 import {au2km} from '../utils/distanceCalc';
 import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import {Location} from '../earth/types/LocationTypes';
-import {correctEffectOfRefraction} from '../utils/apparentCoordinateCalc';
+import {correctEffectOfRefraction} from '../coordinates/calculations/apparentCoordinateCalc';
 import {Conjunction} from '../planets/types/PlanetTypes';
 import IAstronomicalObject from './interfaces/IAstronomicalObject';
 

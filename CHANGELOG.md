@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.2.0 (2021-04-24)
+
+
+### Features
+
+* **time-of-interest:** add method getString() ([58ccb39](https://github.com/andrmoel/astronomy-bundle-js/commit/58ccb39c49b5df5fa999e748d65ddaac4db3151d))
+
+## 6.1.0 (2021-04-24)
+
+
+### Features
+
+* **besselian-elements:** add function to download besselian elements from NASA's website ([9c7eaaa](https://github.com/andrmoel/astronomy-bundle-js/commit/9c7eaaa6295332c126162949bdb3f72fcd16bc9a))
+
+### 6.0.24 (2021-04-24)
+
+
+### Bug Fixes
+
+* **github-actions:** add readme to release ([1a7b0c1](https://github.com/andrmoel/astronomy-bundle-js/commit/1a7b0c18f0b30308a391463b412d3facda98e025))
+
+### 6.0.23 (2021-04-24)
+
+### 6.0.22 (2021-04-24)
+
+### 6.0.21 (2021-04-24)
+
+### 6.0.20 (2021-04-24)
+
+### 6.0.19 (2021-04-24)
+
+### 6.0.18 (2021-04-24)
+
+### 6.0.17 (2021-04-24)
+
+### 6.0.16 (2021-04-24)
+
+### 6.0.15 (2021-04-24)
+
 ### 6.0.14 (2021-04-22)
 
 ### 6.0.13 (2021-04-22)

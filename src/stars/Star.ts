@@ -10,10 +10,10 @@ import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     spherical2rectangular,
-} from '../utils/coordinateCalc';
-import {correctProperMotion} from '../utils/starCalc';
-import {correctPrecessionForEquatorialCoordinates} from '../utils/precessionCalc';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../utils/apparentCoordinateCalc';
+} from '../coordinates/calculations/coordinateCalc';
+import {correctPrecessionForEquatorialCoordinates} from '../coordinates/calculations/precessionCalc';
+import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
+import {correctProperMotion} from './calculations/starCalc';
 import {ProperMotion} from './types/ProperMotionTypes';
 
 export default class Star extends AstronomicalObject {

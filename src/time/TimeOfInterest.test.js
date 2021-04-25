@@ -3,6 +3,26 @@ import {DAY_OF_WEEK_SATURDAY} from '../constants/dayOfWeek';
 import {createLocation} from '../earth';
 import TimeOfInterest from './TimeOfInterest';
 
+it('tests getTime', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(toi.getTime()).toEqual({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+});
+
+describe('test getString', () => {
+    it('has date AD', () => {
+        const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+        expect(toi.getString()).toBe('2000-05-20 13:50:40');
+    });
+
+    it('has date BC', () => {
+        const toi = new TimeOfInterest({year: -2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+        expect(toi.getString()).toBe('-2000-05-20 13:50:40');
+    });
+});
+
 it('tests getDate', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 

@@ -1,4 +1,4 @@
-import {shortYear2longYear} from '../utils/timeCalc';
+import {shortYear2longYear} from '../time/calculations/timeCalc';
 import {TwoLineElementTypes} from './types/TwoLineElementTypes';
 
 export default function parseTwoLineElement(tleString: string): TwoLineElementTypes {

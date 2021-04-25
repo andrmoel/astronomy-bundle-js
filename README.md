@@ -336,7 +336,7 @@ z: *-0.00004247*\
 \
 Longitude: *77° 51' 57.357"*\
 Latitude: *-0° 00' 08.895"*\
-Radius Vector: *0.98482636*\
+Radius Vector: *0.98482636*
 
 ### <a name="earth-nutation"></a> Nutation in Longitude and Obliquity
 
@@ -412,7 +412,7 @@ Radius Vector: *0.99514386*\
 \
 Right Ascension: *207.25282342°*\
 Declination: *-11.22796087°*\
-Right Ascension: *0.99514386*\
+Radius Vector: *0.99514386*
 
 ### <a name="sun-distance-diameter"></a> Distance to Earth and diameter of the Sun
 
@@ -705,7 +705,7 @@ z: *0.037443275*\
 Heliocentric Spherical (J2000)\
 Longitude: *138° 14' 43.437"*\
 Latitude: *2° 59' 14.774"*\
-Radius Vector: *0.71844655*\
+Radius Vector: *0.71844655*
 
 **Example 2**: Calculate the geocentric position for current date of Jupiter for 04 November 2020 at 00:00 UTC
 

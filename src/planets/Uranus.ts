@@ -1,9 +1,9 @@
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {calculateVSOP87, calculateVSOP87Angle} from '../utils/vsop87Calc';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
 import {normalizeAngle} from '../utils/angleCalc';
-import {getApparentMagnitudeUranus} from '../utils/magnitudeCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {getApparentMagnitudeUranus} from './calculations/magnitudeCalc';
+import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import {DIAMETER_URANUS} from './constants/diameters';
 import Planet from './Planet';
 

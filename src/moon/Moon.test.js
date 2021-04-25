@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../utils/timeCalc';
+import {sec2string} from '../time/calculations/timeCalc';
 import createMoon from './createMoon';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
