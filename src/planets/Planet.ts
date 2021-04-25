@@ -5,7 +5,9 @@ import {
 } from '../coordinates/calculations/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
 import {RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {getAsyncCachedCalculation} from '../cache/calculationCache';
 import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
+import {normalizeAngle} from '../utils/angleCalc';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
@@ -21,6 +23,7 @@ import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {Location} from '../earth/types/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
+import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import IPlanet from './interfaces/IPlanet';
 import Mercury from './Mercury';
 import Venus from './Venus';
@@ -29,6 +32,12 @@ import Jupiter from './Jupiter';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
 import Neptune from './Neptune';
+
+type Vsop87 = {
+    VSOP87_X: Array<Array<Array<number>>>,
+    VSOP87_Y: Array<Array<Array<number>>>,
+    VSOP87_Z: Array<Array<Array<number>>>
+}
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private readonly sun: Sun;
@@ -75,9 +84,39 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
         return spherical2rectangular(coords);
     }
 
-    public abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
+        const cacheKey = `${this.name}_heliocentric_spherical_j2000`;
 
-    public abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
+        return this.getHeliocentricEclipticSphericalCoordinates(cacheKey, 'J2000');
+    }
+
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
+        const cacheKey = `${this.name}_heliocentric_spherical_date`;
+        const resourceSuffix = this.useVsop87Short ? 'DateShort' : 'Date';
+
+        return this.getHeliocentricEclipticSphericalCoordinates(cacheKey, resourceSuffix);
+    }
+
+    private async getHeliocentricEclipticSphericalCoordinates(
+        cacheKey: string,
+        resourceSuffix: string
+    ): Promise<EclipticSphericalCoordinates> {
+        return await getAsyncCachedCalculation(cacheKey, this.t, async () => {
+            const vsop87 = await import(this.getVsop87ImportResourceName(resourceSuffix)) as Vsop87;
+
+            return {
+                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+            };
+        });
+    }
+
+    private getVsop87ImportResourceName(suffix: string): string {
+        const nameFirstCapitalized = this.name.charAt(0).toUpperCase() + this.name.substr(1);
+
+        return `./vsop87/vsop87${nameFirstCapitalized}Spherical${suffix}`;
+    }
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricEclipticRectangularJ2000Coordinates();
