@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.3.1 (2021-04-26)
+
+
+### Bug Fixes
+
+* **solar-eclipse:** remove file extension for dynamic import of besselian elements ([7bdbc2c](https://github.com/andrmoel/astronomy-bundle-js/commit/7bdbc2c1c1bf8679d5b0ca3384c64de511303e21))
+
 ## 6.3.0 (2021-04-26)
 
 
