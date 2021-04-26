@@ -2,14 +2,6 @@ import {createTimeOfInterest} from '../time';
 import createSolarEclipse from './createSolarEclipse';
 import SolarEclipse from './SolarEclipse';
 
-it('tests createSolarEclipse without TOI', () => {
-    try {
-        createSolarEclipse();
-    } catch (error) {
-        expect(error.message).toBe('Could not find Solar Eclipse for given date: undefined');
-    }
-});
-
 it('tests createSolarEclipse with invalid TOI', () => {
     const toi = createTimeOfInterest.fromTime(2020, 1, 1, 0, 0, 0);
 
