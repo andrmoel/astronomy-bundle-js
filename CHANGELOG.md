@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.3.0 (2021-04-26)
+
+
+### Features
+
+* **solar-eclipse:** get location of greatest eclipse ([28b41f4](https://github.com/andrmoel/astronomy-bundle-js/commit/28b41f4e3e42c097a06c5d63605c8a67d142747b))
+
 ## 6.2.0 (2021-04-24)
 
 
