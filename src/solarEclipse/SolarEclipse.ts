@@ -12,7 +12,7 @@ export default class SolarEclipse {
 
     private static loadBesselianElements(toi: TimeOfInterest): BesselianElements {
         const jd0 = toi?.getJulianDay0();
-        const besselianElemenetsFile = __dirname + `/resources/besselianElements/${jd0}.ts`;
+        const besselianElemenetsFile = __dirname + `/resources/besselianElements/${jd0}`;
 
         return require(besselianElemenetsFile).default;
     }
