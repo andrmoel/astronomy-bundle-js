@@ -1,4 +1,4 @@
-import {BesselianElementsTypes} from '../../src/solarEclipse/types/besselianElementsTypes';
+import {BesselianElements} from '../../src/solarEclipse/types/besselianElementsTypes';
 
 type Polynomials = {
     x: Array<number>;
@@ -21,7 +21,7 @@ export default class BesselianElementsParser {
         this.rows = this.content.split('\n');
     }
 
-    public parseBesselianElements(): BesselianElementsTypes {
+    public parseBesselianElements(): BesselianElements {
         const tMax = this.parseTMax();
         const t0 = this.parseT0();
         const dT = this.parseDeltaT();
