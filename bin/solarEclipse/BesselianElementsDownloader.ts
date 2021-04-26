@@ -1,16 +1,22 @@
 import {existsSync, writeFileSync} from 'fs';
 import axios from 'axios';
+import pLimit from 'p-limit';
 import {decodeHTML} from 'entities';
 import {SOLAR_ECLIPSES} from '../../src/solarEclipse/constants/solarEclipseList';
 import {createTimeOfInterest} from '../../src/time';
 import {pad} from '../../src/utils/math';
+
 import BesselianElementsParser from './BesselianElementsParser';
 
 export default class BesselianElementsDownloader {
     public async run(): Promise<void> {
-        for (let i = 0; i < SOLAR_ECLIPSES.length; i++) {
-            await BesselianElementsDownloader.downloadSingleBesselianElements(SOLAR_ECLIPSES[i]);
-        }
+        const limit = pLimit(10);
+
+        const promises = SOLAR_ECLIPSES.map((jd0) => limit(
+            () => BesselianElementsDownloader.downloadSingleBesselianElements(jd0)
+        ));
+
+        await Promise.all(promises);
     }
 
     private static async downloadSingleBesselianElements(jd: number): Promise<void> {
@@ -31,7 +37,7 @@ export default class BesselianElementsDownloader {
 
     private static getLocalFile(jd: number): string {
         const dir = __dirname + '/../../src/solarEclipse/resources/besselianElements/';
-        const fileName = jd + '.json';
+        const fileName = jd + '.ts';
 
         return dir + fileName;
     }
@@ -47,7 +53,9 @@ export default class BesselianElementsDownloader {
             const parser = new BesselianElementsParser(besselianElementsString);
             const besselianElements = parser.parseBesselianElements();
 
-            writeFileSync(file, JSON.stringify(besselianElements));
+            const content = 'export default ' + JSON.stringify(besselianElements);
+
+            writeFileSync(file, content);
         }
     }
 
