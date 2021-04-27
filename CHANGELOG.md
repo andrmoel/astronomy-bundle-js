@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.3.3 (2021-04-27)
+
+### 6.3.2 (2021-04-26)
+
+### 6.3.1 (2021-04-26)
+
+
+### Bug Fixes
+
+* **solar-eclipse:** remove file extension for dynamic import of besselian elements ([7bdbc2c](https://github.com/andrmoel/astronomy-bundle-js/commit/7bdbc2c1c1bf8679d5b0ca3384c64de511303e21))
+
+## 6.3.0 (2021-04-26)
+
+
+### Features
+
+* **solar-eclipse:** get location of greatest eclipse ([28b41f4](https://github.com/andrmoel/astronomy-bundle-js/commit/28b41f4e3e42c097a06c5d63605c8a67d142747b))
+
+## 6.2.0 (2021-04-24)
+
+
+### Features
+
+* **time-of-interest:** add method getString() ([58ccb39](https://github.com/andrmoel/astronomy-bundle-js/commit/58ccb39c49b5df5fa999e748d65ddaac4db3151d))
+
 ## 6.1.0 (2021-04-24)
 
 

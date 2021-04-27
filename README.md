@@ -44,6 +44,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 9. [Stars](#stars)
     1. [Position of Stars](#stars-position)
 10. [Solar Eclipse](#solar-eclipse)
+    1. [Greatest Eclipse](#solar-eclipse-greatest)
 11. [Satellites](#satellites)
     1. [Two Line Elements](#satellites-tle)
 
@@ -905,6 +906,7 @@ const star = createStar.byEquatorialCoordinates(coordsJ1950, toi, properMotion, 
 **Example 1**: Check if there is a Solar Eclipse on 15 January 2019
 
 ```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
 import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
 
 const toi = createTimeOfInterest.fromTime(2019, 1, 15, 0, 0, 0);
@@ -916,6 +918,7 @@ Result of the calculation: *There is no solar eclipse*
 **Example 2**: Check if there is a Solar Eclipse on 21 August 2017
 
 ```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
 import {solarEclipseExists} from 'astronomy-bundle/solarEclipse';
 
 const toi = createTimeOfInterest.fromTime(2017, 8, 21, 0, 0, 0);
@@ -923,6 +926,24 @@ const exists = solarEclipseExists(toi);
 ```
 
 Result of the calculation: *Yes, there is a solar eclipse*
+
+### <a name="solar-eclipse-greatest"></a> Greatest Eclipse
+
+**Example**: Get the location of the greatest eclipse for the total solar eclipse on 14 December 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const solarEclipse = createSolarEclipse(toi);
+
+const location = solarEclipse.getLocationOfGreatestEclipse();
+```
+
+Result of the calculation:\
+Lat: *-40.3°*\
+Lon: *-67.9°*
 
 ## <a name="satellites"></a> Satellites
 
