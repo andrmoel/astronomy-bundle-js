@@ -1,4 +1,4 @@
-export type BesselianElements = {
+export type BesselianElementsTypes = {
     tMax: number,
     t0: number,
 
