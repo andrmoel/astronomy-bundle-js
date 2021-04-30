@@ -1,11 +1,8 @@
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
-import {normalizeAngle} from '../utils/angleCalc';
 import TimeOfInterest from '../time/TimeOfInterest';
 import {getApparentMagnitudeSaturn} from './calculations/magnitudeCalc';
-import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import {DIAMETER_SATURN} from './constants/diameters';
 import Planet from './Planet';
+import {Vsop87} from './types/Vsop87Types';
 
 export default class Saturn extends Planet {
     constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
@@ -16,30 +13,16 @@ export default class Saturn extends Planet {
         return DIAMETER_SATURN;
     }
 
-    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        return await getAsyncCachedCalculation('saturn_heliocentric_spherical_j2000', this.t, async () => {
-            const vsop87 = await import('./vsop87/vsop87SaturnSphericalJ2000');
-
-            return {
-                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
-                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
-                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            };
-        });
+    protected get vsop87J2000(): Promise<Vsop87> {
+        return import('./vsop87/vsop87SaturnSphericalJ2000');
     }
 
-    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        return await getAsyncCachedCalculation('saturn_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = this.useVsop87Short
-                ? await import('./vsop87/vsop87SaturnSphericalDateShort')
-                : await import('./vsop87/vsop87SaturnSphericalDate');
+    protected get vsop87Date(): Promise<Vsop87> {
+        return import('./vsop87/vsop87SaturnSphericalDate');
+    }
 
-            return {
-                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
-                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
-                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            };
-        });
+    protected get vsop87DateShort(): Promise<Vsop87> {
+        return import('./vsop87/vsop87SaturnSphericalDateShort');
     }
 
     protected calculateApparentMagnitude(
