@@ -44,7 +44,8 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 9. [Stars](#stars)
     1. [Position of Stars](#stars-position)
 10. [Solar Eclipse](#solar-eclipse)
-    1. [Greatest Eclipse](#solar-eclipse-greatest)
+    1. [Solar Eclipse exists](#solar-eclipse-exists)
+    2. [Greatest Eclipse](#solar-eclipse-greatest)
 11. [Satellites](#satellites)
     1. [Two Line Elements](#satellites-tle)
 
@@ -903,6 +904,49 @@ const star = createStar.byEquatorialCoordinates(coordsJ1950, toi, properMotion, 
 
 ## <a name="solar-eclipse"></a> Solar Eclipse
 
+You can create a new Solar Eclipse object by using Besselian Elements or a given date using the TimeOfInterest object.
+This bundle contains all Besselian Elements **from the year 1500 to 2500**.
+To reduce the bundle size the `createSolarEclipse.fromTimeOfInterest()` function will load the
+Besselian Elements asynchronous.
+
+**Example 1**: Create the Solar Eclipse for 14 December 2020 using the TimeOfInterest object
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+```
+
+**Example 2**: Create the Solar Eclipse for 14 December 2020 using the Besselian Elements\
+*Data source: https://eclipse.gsfc.nasa.gov/SEsearch/SEdata.php?Ecl=20201214*
+
+```javascript
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+
+const besselianElements = {
+   tMax: 2459198.177,
+   t0: 16,
+   dT: 72.1,
+   x: [-0.181824, 0.5633567, 0.0000216, -0.000009],
+   y: [-0.269645, -0.0858122, 0.0001884, 0.0000015],
+   d: [-23.2577591, -0.001986, 0.000006, 0],
+   l1: [0.543862, 0.000097, -0.0000126, 0],
+   l2: [-0.002265, 0.0000965, -0.0000125, 0],
+   mu: [61.265911, 14.9965, 0, 0],
+   tanF1: 0.0047502,
+   tanF2: 0.0047266,
+   latGreatestEclipse: -40.3,
+   lonGreatestEclipse: -67.9,
+};
+
+const solarEclipse = createSolarEclipse.fromBesselianElements(besselianElements);
+```
+
+### <a name="solar-eclipse-exists"></a> Check if solar eclipse exists
+
 **Example 1**: Check if there is a Solar Eclipse on 15 January 2019
 
 ```javascript
@@ -936,7 +980,7 @@ import {createTimeOfInterest} from 'astronomy-bundle/time';
 import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
 
 const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
-const solarEclipse = createSolarEclipse(toi);
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
 
 const location = solarEclipse.getLocationOfGreatestEclipse();
 ```

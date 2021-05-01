@@ -21,24 +21,24 @@ export default class BesselianElementsParser {
         this.rows = this.content.split('\n');
     }
 
-    public parseBesselianElements(): BesselianElements {
+    public parseBesselianElements(): Array<any> {
         const tMax = this.parseTMax();
         const t0 = this.parseT0();
         const dT = this.parseDeltaT();
         const polynomials = this.parsePolynomials();
         const tanF1F2 = this.parseTanF1F2();
-        const latGreatestEclipse = this.parseLatitudeGreatestEclipse();
-        const lonGreatestEclipse = this.parseLongitudeGreatestEclipse();
+        const latGE = this.parseLatitudeGreatestEclipse();
+        const lonGE = this.parseLongitudeGreatestEclipse();
 
-        return {
+        return [
             tMax,
             t0,
             dT,
             ...polynomials,
             ...tanF1F2,
-            latGreatestEclipse,
-            lonGreatestEclipse,
-        };
+            latGE,
+            lonGE,
+        ];
     }
 
     private parseTMax(): number {
@@ -74,15 +74,15 @@ export default class BesselianElementsParser {
         return 0.0;
     }
 
-    private parsePolynomials(): Polynomials {
-        const polynomials: Polynomials = {
-            x: [],
-            y: [],
-            d: [],
-            l1: [],
-            l2: [],
-            mu: [],
-        };
+    private parsePolynomials(): Array<Array<number>> {
+        const polynomials: Array<Array<number>> = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+        ];
 
         const regExp = new RegExp(/[0-9]{1} +[0-9.-]+ +[0-9.-]+/si);
 
@@ -90,33 +90,30 @@ export default class BesselianElementsParser {
             if (row.match(regExp)) {
                 const parts = row.split(/\s+/).filter((value) => value);
 
-                polynomials.x.push(parseFloat(parts[1]));
-                polynomials.y.push(parseFloat(parts[2]));
-                polynomials.d.push(parseFloat(parts[3]));
-                polynomials.l1.push(parseFloat(parts[4]));
-                polynomials.l2.push(parseFloat(parts[5]));
-                polynomials.mu.push(parseFloat(parts[6]));
+                polynomials[0].push(parseFloat(parts[1]));
+                polynomials[1].push(parseFloat(parts[2]));
+                polynomials[2].push(parseFloat(parts[3]));
+                polynomials[3].push(parseFloat(parts[4]));
+                polynomials[4].push(parseFloat(parts[5]));
+                polynomials[5].push(parseFloat(parts[6]));
             }
         });
 
         return polynomials;
     }
 
-    private parseTanF1F2(): TanF1F2 {
+    private parseTanF1F2(): Array<number> {
         const regExp = new RegExp(/Tan [f|ƒ]1 = ([0-9.]+).*?Tan [f|ƒ]2 = ([0-9.]+)/si);
         const matches = this.content.match(regExp);
 
         if (matches) {
-            return {
-                tanF1: parseFloat(matches[1]),
-                tanF2: parseFloat(matches[2]),
-            }
+            return [
+                parseFloat(matches[1]),
+                parseFloat(matches[2]),
+            ]
         }
 
-        return {
-            tanF1: 0.0,
-            tanF2: 0.0,
-        }
+        return [0.0, 0.0]
     }
 
     private parseLatitudeGreatestEclipse(): number {
