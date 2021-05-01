@@ -52,7 +52,6 @@ jobs:
         run: |
           cp ./package.json ./dist/package.json
           cp ./README.md ./dist/README.md
-          cp ./src/solarEclipse/besselianElements/*.json ./dist/solarEclipse/besselianElements/
 
       - name: 'Publish release to npm'
         uses: JS-DevTools/npm-publish@v1
