@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.4.0 (2021-05-01)
+
+
+### Features
+
+* **solar-eclipse:** load besselian elements from year 1500 to 2500 ([6ffefe3](https://github.com/andrmoel/astronomy-bundle-js/commit/6ffefe381fa4f23f086f75c429a9b4e809005a89))
+
 ### 6.3.5 (2021-04-30)
 
 ### 6.3.4 (2021-04-27)
