@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.4.1 (2021-05-01)
+
+
+### Bug Fixes
+
+* **solar-eclipse:** add besselian elements to release ([b079554](https://github.com/andrmoel/astronomy-bundle-js/commit/b079554625cefd26cb2a69e423007d669331c10b))
+
 ## 6.4.0 (2021-05-01)
 
 
