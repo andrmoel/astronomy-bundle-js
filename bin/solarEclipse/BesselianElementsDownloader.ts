@@ -6,24 +6,54 @@ import {SOLAR_ECLIPSES} from '../../src/solarEclipse/constants/solarEclipseList'
 import {createTimeOfInterest} from '../../src/time';
 import {pad} from '../../src/utils/math';
 
+import {time2julianDay} from '../../dist/time/calculations/timeCalc';
 import BesselianElementsParser from './BesselianElementsParser';
 
 export default class BesselianElementsDownloader {
+    private targetDir: string = __dirname + '/../../src/solarEclipse/besselianElements/';
+
     public async run(): Promise<void> {
         const limit = pLimit(10);
 
-        const promises = SOLAR_ECLIPSES.map((jd0) => limit(
-            () => BesselianElementsDownloader.downloadSingleBesselianElements(jd0)
-        ));
+        const promises = SOLAR_ECLIPSES.map((jd0: number) => limit(() => {
+            if (BesselianElementsDownloader.isBetweenGivenTimePeriod(jd0)) {
+                this.downloadSingleBesselianElements(jd0)
+            }
+        }));
 
         await Promise.all(promises);
+
+        this.createGetterFunction();
     }
 
-    private static async downloadSingleBesselianElements(jd: number): Promise<void> {
+    private async downloadSingleBesselianElements(jd: number): Promise<void> {
         const url = BesselianElementsDownloader.getDownloadUrl(jd);
-        const file = BesselianElementsDownloader.getLocalFile(jd);
+        const file = this.getLocalFile(jd);
 
         await BesselianElementsDownloader.downloadFile(url, file);
+    }
+
+    private createGetterFunction(): void {
+        let content = `export default function loadBesselianElements(jd0: number): any {
+                switch(jd0) {
+        `
+
+        for (let i = 0; i <= SOLAR_ECLIPSES.length; i++) {
+            const jd0 = SOLAR_ECLIPSES[i];
+
+            if (BesselianElementsDownloader.isBetweenGivenTimePeriod(jd0)) {
+                content += `case ${jd0}: return require('./${jd0}');\n`;
+            }
+        }
+
+        content += `
+                }
+            }
+        `;
+
+        const file = this.targetDir + 'loadBesselianElements.ts';
+
+        writeFileSync(file, content);
     }
 
     private static getDownloadUrl(jd: number): string {
@@ -35,28 +65,35 @@ export default class BesselianElementsDownloader {
         return `https://eclipse.gsfc.nasa.gov/SEsearch/SEdata.php?Ecl=${dateString}`;
     }
 
-    private static getLocalFile(jd: number): string {
-        const dir = __dirname + '/../../src/solarEclipse/resources/besselianElements/';
-        const fileName = jd + '.ts';
+    private getLocalFile(jd: number): string {
+        const fileName = jd + '.json';
 
-        return dir + fileName;
+        return this.targetDir + fileName;
     }
 
     private static async downloadFile(url: string, file: string): Promise<void> {
         if (!existsSync(file)) {
-            const {data} = await axios.get(url);
+            try {
+                const {data} = await axios.get(url);
 
-            console.log('Downloaded besselian elements: ' + url);
-
-            const besselianElementsString = BesselianElementsDownloader.parseBesselianElementsString(data, url);
-
-            const parser = new BesselianElementsParser(besselianElementsString);
-            const besselianElements = parser.parseBesselianElements();
-
-            const content = 'export default ' + JSON.stringify(besselianElements);
-
-            writeFileSync(file, content);
+                BesselianElementsDownloader.onDownloadSuccess(data, url, file);
+            } catch (error) {
+                console.log('Error while downloading: ' + url)
+            }
         }
+    }
+
+    private static onDownloadSuccess(data: string, url: string, file: string): void {
+        console.log('Downloaded besselian elements: ' + url);
+
+        const besselianElementsString = BesselianElementsDownloader.parseBesselianElementsString(data, url);
+
+        const parser = new BesselianElementsParser(besselianElementsString);
+        const besselianElements = parser.parseBesselianElements();
+
+        const content = JSON.stringify(besselianElements);
+
+        writeFileSync(file, content);
     }
 
     private static parseBesselianElementsString(content: string, url: string): string {
@@ -70,5 +107,10 @@ export default class BesselianElementsDownloader {
         }
 
         throw Error(`Could not parse besselian elements string: ${url}`);
+    }
+
+    private static isBetweenGivenTimePeriod(jd0: number): boolean {
+        return jd0 >= time2julianDay({year: 1500, month: 1, day: 1, hour: 0, min: 0, sec: 0})
+            && jd0 < time2julianDay({year: 2500, month: 1, day: 1, hour: 0, min: 0, sec: 0})
     }
 }
