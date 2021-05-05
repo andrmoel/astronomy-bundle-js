@@ -1,5 +1,4 @@
 import {round} from '../../utils/math';
-
 import {populate, populateD} from './besselianElementsCalc';
 
 describe('test for populate', () => {
