@@ -8,7 +8,7 @@ export function getGeocentricPosition(location: Location): GeocentricPosition {
 
     const tmp = Math.atan(EARTH_AXIS_RATIO * Math.tan(latRad));
 
-    const rhoSin0 = (EARTH_AXIS_RATIO * Math.sin(tmp)) + (elevation * Math.sin(latRad) / 6378137.0);
+    const rhoSin0 = (EARTH_AXIS_RATIO * Math.sin(tmp)) + (elevation * Math.sin(latRad) / EARTH_RADIUS);
     const rhoCos0 = Math.cos(tmp) + (elevation * Math.cos(latRad) / EARTH_RADIUS);
 
     return {
