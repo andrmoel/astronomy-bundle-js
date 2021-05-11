@@ -1,7 +1,7 @@
 import {round} from '../../utils/math';
 import {
     circumstancesToJulianDay,
-    getMid,
+    iterateCircumstancesMaximumEclipse,
     getTimeDependentCircumstances,
     getTimeLocalDependentCircumstances,
 } from './circumstancesCalc';
@@ -60,8 +60,8 @@ it('tests getTimeLocalDependentCircumstances', () => {
     expect(round(n2, 6)).toBe(0.14223);
 });
 
-it('tests getMid', () => {
-    const {t, u, v, a, b, n2} = getMid(besselianElements, location);
+it('tests iterateCircumstancesMaximumEclipse', () => {
+    const {t, u, v, a, b, n2} = iterateCircumstancesMaximumEclipse(besselianElements, location);
 
     expect(round(t, 8)).toBe(0.1505589);
     expect(round(u, 6)).toBe(-0.000885);

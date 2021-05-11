@@ -1,7 +1,7 @@
 import Location from '../earth/Location';
 import createLocation from '../earth/createLocation';
 import {BesselianElements} from './types/besselianElementsTypes';
-import {circumstancesToJulianDay, getMid} from './calculations/circumstancesCalc';
+import {iterateCircumstancesMaximumEclipse} from './calculations/circumstancesCalc';
 import createSolarEclipseCircumstances from './createSolarEclipseCircumstances';
 import SolarEclipseCircumstances from './SolarEclipseCircumstances';
 
@@ -20,7 +20,7 @@ export default class SolarEclipse {
     }
 
     public getCircumstancesMaximumEclipse(location: Location): SolarEclipseCircumstances {
-        const circumstances = getMid(this.besselianElements, location);
+        const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
 
         return createSolarEclipseCircumstances(this.besselianElements, circumstances);
     }

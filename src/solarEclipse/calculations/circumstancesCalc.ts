@@ -62,7 +62,7 @@ export function getTimeLocalDependentCircumstances(
     return {t, u, v, a, b, n2}
 }
 
-export function getMid(
+export function iterateCircumstancesMaximumEclipse(
     besselianElements: BesselianElements,
     location: Location,
 ): TimeLocalDependentCircumstances {
@@ -76,7 +76,6 @@ export function getMid(
         const {u, v, a, b, n2} = circumstances;
 
         tmp = (u * a + v * b) / n2;
-
         t -= tmp;
 
         circumstances = getTimeLocalDependentCircumstances(besselianElements, location, t);
