@@ -1,8 +1,8 @@
 import {BesselianElements} from '../types/besselianElementsTypes';
-import {TimeDependentCircumstances, TimeDependentLocalCircumstances} from '../types/circumstancesTypes';
+import {TimeDependentCircumstances, TimeLocalDependentCircumstances} from '../types/circumstancesTypes';
 import {Location} from '../../earth/types/LocationTypes';
 import {deg2rad} from '../../utils/angleCalc';
-import {getGeocentricPosition} from '../../earth/calculations/observerCalc';
+import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
 import {populate, populateD} from './besselianElementsCalc';
 
 export function getTimeDependentCircumstances(
@@ -29,14 +29,15 @@ export function getTimeDependentCircumstances(
 
 export function getTimeLocalDependentCircumstances(
     besselianElements: BesselianElements,
-    t: number,
     location: Location,
-): TimeDependentLocalCircumstances {
+    t: number,
+): TimeLocalDependentCircumstances {
     const {dT} = besselianElements;
-    const {lon} = location;
+    const {lat, lon, elevation} = location;
 
     const {x, dX, y, dY, mu, dMu, d, dD} = getTimeDependentCircumstances(besselianElements, t);
-    const {rhoSin0, rhoCos0} = getGeocentricPosition(location);
+    const rhoSinLat = getRhoSinLat(lat, elevation);
+    const rhoCosLat = getRhoCosLat(lat, elevation);
 
     const muRad = deg2rad(mu);
     const dMuRad = deg2rad(dMu);
@@ -46,10 +47,10 @@ export function getTimeLocalDependentCircumstances(
 
     const hRad = muRad + lonRad - (dT / 13713.440924999626077);
 
-    const xi = rhoCos0 * Math.sin(hRad);
-    const eta = rhoSin0 * Math.cos(dRad) - rhoCos0 * Math.cos(hRad) * Math.sin(dRad);
-    const zeta = rhoSin0 * Math.sin(dRad) + rhoCos0 * Math.cos(hRad) * Math.cos(dRad);
-    const dXi = dMuRad * rhoCos0 * Math.cos(hRad);
+    const xi = rhoCosLat * Math.sin(hRad);
+    const eta = rhoSinLat * Math.cos(dRad) - rhoCosLat * Math.cos(hRad) * Math.sin(dRad);
+    const zeta = rhoSinLat * Math.sin(dRad) + rhoCosLat * Math.cos(hRad) * Math.cos(dRad);
+    const dXi = dMuRad * rhoCosLat * Math.cos(hRad);
     const dEta = dMuRad * xi * Math.sin(dRad) - zeta * dDRad;
 
     const u = x - xi;
@@ -57,5 +58,10 @@ export function getTimeLocalDependentCircumstances(
     const a = dX - dXi;
     const b = dY - dEta;
 
-    console.log(a, b);
+    return {
+        u,
+        v,
+        a,
+        b,
+    }
 }

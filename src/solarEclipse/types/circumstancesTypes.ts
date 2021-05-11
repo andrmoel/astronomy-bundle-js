@@ -13,10 +13,9 @@ export type TimeDependentCircumstances = {
     dL2: number,
 };
 
-export type TimeDependentLocalCircumstances = {
-    h: number,
-    // xi: number,
-    // eta: number,
-    // zeta: number,
-    // dxi: number,
+export type TimeLocalDependentCircumstances = {
+    u: number,
+    v: number,
+    a: number,
+    b: number,
 };
