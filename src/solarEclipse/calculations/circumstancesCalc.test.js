@@ -3,7 +3,7 @@ import {
     circumstancesToJulianDay,
     getMid,
     getTimeDependentCircumstances,
-    getTimeLocalDependentCircumstances
+    getTimeLocalDependentCircumstances,
 } from './circumstancesCalc';
 
 const besselianElements = {
