@@ -161,7 +161,7 @@ it('tests getApparentDistanceToEarth', async () => {
 it('tests getTopocentricDistanceToEarth', async () => {
     const d = await moon.getTopocentricDistanceToEarth(location);
 
-    expect(round(d, 6)).toBe(365174.894771);
+    expect(round(d, 6)).toBe(365174.89477);
 });
 
 it('tests getTransit', async () => {
