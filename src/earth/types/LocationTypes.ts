@@ -3,8 +3,3 @@ export type Location = {
     lon: number,
     elevation: number,
 }
-
-export type GeocentricPosition = {
-    rhoSin0: number,
-    rhoCos0: number,
-}
