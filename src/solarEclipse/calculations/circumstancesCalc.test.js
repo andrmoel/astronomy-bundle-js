@@ -26,22 +26,20 @@ const location = {
 it('tests getTimeDependentCircumstances', () => {
     const t = 0.5;
 
-    const circumstances = getTimeDependentCircumstances(besselianElements, t);
+    const {x, dX, y, dY, d, dD, mu, dMu, l1, dL1, l2, dL2} = getTimeDependentCircumstances(besselianElements, t);
 
-    expect(circumstances).toEqual({
-        x: 0.099858625,
-        dX: 0.5633715499999999,
-        y: -0.3125038125,
-        dY: -0.085622675,
-        d: -23.258750600000003,
-        dD: -0.00198,
-        mu: 68.764161,
-        dMu: 14.9965,
-        l1: 0.54390735,
-        dL1: 0.0000844,
-        l2: -0.002219875,
-        dL2: 0.000084,
-    });
+    expect(round(x, 6)).toBe(0.099859);
+    expect(round(dX, 6)).toBe(0.563372);
+    expect(round(y, 6)).toBe(-0.312504);
+    expect(round(dY, 6)).toBe(-0.085623);
+    expect(round(d, 6)).toBe(-23.258751);
+    expect(round(dD, 6)).toBe(-0.00198);
+    expect(round(mu, 6)).toBe(68.764161);
+    expect(round(dMu, 6)).toBe(14.9965);
+    expect(round(l1, 6)).toBe(0.543907);
+    expect(round(dL1, 6)).toBe(0.000084);
+    expect(round(l2, 6)).toBe(-0.00222);
+    expect(round(dL2, 6)).toBe(0.000084);
 });
 
 it('tests getTimeLocalDependentCircumstances', () => {

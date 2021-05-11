@@ -58,10 +58,5 @@ export function getTimeLocalDependentCircumstances(
     const a = dX - dXi;
     const b = dY - dEta;
 
-    return {
-        u,
-        v,
-        a,
-        b,
-    }
+    return {u, v, a, b}
 }
