@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.5.0 (2021-05-11)
+
+
+### Features
+
+* **solar-eclipse:** calculate solar eclipse circumstances for maximum eclipse ([127902b](https://github.com/andrmoel/astronomy-bundle-js/commit/127902bf6b7699cc0185f4d4b6a41b41abeef588))
+
 ### 6.4.4 (2021-05-11)
 
 ### 6.4.3 (2021-05-11)
