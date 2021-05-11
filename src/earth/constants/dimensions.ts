@@ -1,0 +1,2 @@
+export const EARTH_RADIUS = 6378137;
+export const EARTH_AXIS_RATIO = 0.996647189335;
