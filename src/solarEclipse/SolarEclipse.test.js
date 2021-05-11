@@ -1,4 +1,6 @@
+import Location from '../earth/Location';
 import SolarEclipse from './SolarEclipse';
+import SolarEclipseCircumstances from './SolarEclipseCircumstances';
 
 const besselianElements = {
     tMax: 2459198.177,
@@ -36,9 +38,17 @@ it('tests getBesselianElements', async () => {
     });
 });
 
+const location = new Location(-39.53940, -70.37216, 450);
+
 it('tests getLocationOfGreatestEclipse', () => {
     const location = solarEclipse.getLocationOfGreatestEclipse();
 
     expect(location.lat).toBe(-40.3);
     expect(location.lon).toBe(-67.9);
+});
+
+it('tests getCircumstancesMaximumEclipse', () => {
+    const circumstances = solarEclipse.getCircumstancesMaximumEclipse(location);
+
+    expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
 });

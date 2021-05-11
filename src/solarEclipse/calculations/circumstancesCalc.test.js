@@ -1,5 +1,10 @@
 import {round} from '../../utils/math';
-import {getTimeDependentCircumstances, getTimeLocalDependentCircumstances} from './circumstancesCalc';
+import {
+    circumstancesToJulianDay,
+    getMid,
+    getTimeDependentCircumstances,
+    getTimeLocalDependentCircumstances
+} from './circumstancesCalc';
 
 const besselianElements = {
     tMax: 2459198.177,
@@ -45,10 +50,38 @@ it('tests getTimeDependentCircumstances', () => {
 it('tests getTimeLocalDependentCircumstances', () => {
     const t = 0;
 
-    const {u, v, a, b} = getTimeLocalDependentCircumstances(besselianElements, location, t);
+    const {u, v, a, b, n2} = getTimeLocalDependentCircumstances(besselianElements, location, t);
 
+    expect(round(t, 6)).toBe(0);
     expect(round(u, 6)).toBe(-0.055589);
     expect(round(v, 6)).toBe(0.011296);
     expect(round(a, 6)).toBe(0.363938);
     expect(round(b, 6)).toBe(-0.098892);
+    expect(round(n2, 6)).toBe(0.14223);
+});
+
+it('tests getMid', () => {
+    const {t, u, v, a, b, n2} = getMid(besselianElements, location);
+
+    expect(round(t, 8)).toBe(0.1505589);
+    expect(round(u, 6)).toBe(-0.000885);
+    expect(round(v, 6)).toBe(-0.003355);
+    expect(round(a, 6)).toBe(0.362797);
+    expect(round(b, 6)).toBe(-0.095723);
+    expect(round(n2, 6)).toBe(0.140784);
+});
+
+it('tests circumstancesToJulianDay', () => {
+    const circumstances = {
+        t: 0.1505589,
+        u: -0.000885,
+        v: -0.003355,
+        a: 0.362797,
+        b: -0.095723,
+        n2: 0.14078416,
+    };
+
+    const jd = circumstancesToJulianDay(besselianElements, circumstances);
+
+    expect(round(jd, 6)).toBe(2459198.172106);
 });

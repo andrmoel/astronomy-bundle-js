@@ -57,6 +57,51 @@ export function getTimeLocalDependentCircumstances(
     const v = y - eta;
     const a = dX - dXi;
     const b = dY - dEta;
+    const n2 = Math.pow(a, 2) + Math.pow(b, 2);
 
-    return {u, v, a, b}
+    return {t, u, v, a, b, n2}
+}
+
+export function getMid(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocalDependentCircumstances {
+    let t = 0;
+    let tmp = 1;
+    let cnt = 0;
+
+    let circumstances = getTimeLocalDependentCircumstances(besselianElements, location, t);
+
+    while (Math.abs(tmp) > 0.000001 && cnt < 50) {
+        const {u, v, a, b, n2} = circumstances;
+
+        tmp = (u * a + v * b) / n2;
+
+        t -= tmp;
+
+        circumstances = getTimeLocalDependentCircumstances(besselianElements, location, t);
+
+        cnt++;
+    }
+
+    return circumstances;
+}
+
+export function circumstancesToJulianDay(
+    besselianElements: BesselianElements,
+    circumstances: TimeLocalDependentCircumstances
+): number {
+    const {tMax, t0, dT} = besselianElements;
+    let {t} = circumstances;
+
+    let jd = Math.floor(tMax - t0 / 24.0);
+    t = t + t0 - ((dT - 0.05) / 3600.0);
+
+    if (t < 0.0) {
+        jd--;
+    } else if (t >= 24.0) {
+        jd++;
+    }
+
+    return jd + (t + 12) / 24;
 }

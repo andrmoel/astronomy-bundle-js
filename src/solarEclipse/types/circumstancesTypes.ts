@@ -14,8 +14,10 @@ export type TimeDependentCircumstances = {
 };
 
 export type TimeLocalDependentCircumstances = {
+    t: number,
     u: number,
     v: number,
     a: number,
     b: number,
+    n2: number,
 };
