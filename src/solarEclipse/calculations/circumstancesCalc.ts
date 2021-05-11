@@ -32,7 +32,7 @@ export function getTimeLocalDependentCircumstances(
     location: Location,
     t: number,
 ): TimeLocalDependentCircumstances {
-    const {dT} = besselianElements;
+    const {tMax, t0, dT} = besselianElements;
     const {lat, lon, elevation} = location;
 
     const {x, dX, y, dY, mu, dMu, d, dD} = getTimeDependentCircumstances(besselianElements, t);
@@ -59,7 +59,7 @@ export function getTimeLocalDependentCircumstances(
     const b = dY - dEta;
     const n2 = Math.pow(a, 2) + Math.pow(b, 2);
 
-    return {t, u, v, a, b, n2}
+    return {tMax, t0, dT, t, u, v, a, b, n2}
 }
 
 export function iterateCircumstancesMaximumEclipse(
@@ -86,12 +86,8 @@ export function iterateCircumstancesMaximumEclipse(
     return circumstances;
 }
 
-export function circumstancesToJulianDay(
-    besselianElements: BesselianElements,
-    circumstances: TimeLocalDependentCircumstances
-): number {
-    const {tMax, t0, dT} = besselianElements;
-    let {t} = circumstances;
+export function circumstancesToJulianDay(circumstances: TimeLocalDependentCircumstances): number {
+    let {tMax, t0, dT, t} = circumstances;
 
     let jd = Math.floor(tMax - t0 / 24.0);
     t = t + t0 - ((dT - 0.05) / 3600.0);

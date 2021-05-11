@@ -22,6 +22,6 @@ export default class SolarEclipse {
     public getCircumstancesMaximumEclipse(location: Location): SolarEclipseCircumstances {
         const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
 
-        return createSolarEclipseCircumstances(this.besselianElements, circumstances);
+        return createSolarEclipseCircumstances(circumstances);
     }
 }

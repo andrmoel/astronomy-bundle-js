@@ -1,9 +1,9 @@
 import {round} from '../../utils/math';
 import {
     circumstancesToJulianDay,
-    iterateCircumstancesMaximumEclipse,
     getTimeDependentCircumstances,
     getTimeLocalDependentCircumstances,
+    iterateCircumstancesMaximumEclipse,
 } from './circumstancesCalc';
 
 const besselianElements = {
@@ -50,8 +50,11 @@ it('tests getTimeDependentCircumstances', () => {
 it('tests getTimeLocalDependentCircumstances', () => {
     const t = 0;
 
-    const {u, v, a, b, n2} = getTimeLocalDependentCircumstances(besselianElements, location, t);
+    const {tMax, t0, dT, u, v, a, b, n2} = getTimeLocalDependentCircumstances(besselianElements, location, t);
 
+    expect(round(tMax, 6)).toBe(2459198.177);
+    expect(round(t0, 6)).toBe(16);
+    expect(round(dT, 6)).toBe(72.1);
     expect(round(t, 6)).toBe(0);
     expect(round(u, 6)).toBe(-0.055589);
     expect(round(v, 6)).toBe(0.011296);
@@ -61,8 +64,11 @@ it('tests getTimeLocalDependentCircumstances', () => {
 });
 
 it('tests iterateCircumstancesMaximumEclipse', () => {
-    const {t, u, v, a, b, n2} = iterateCircumstancesMaximumEclipse(besselianElements, location);
+    const {tMax, t0, dT, t, u, v, a, b, n2} = iterateCircumstancesMaximumEclipse(besselianElements, location);
 
+    expect(round(tMax, 6)).toBe(2459198.177);
+    expect(round(t0, 6)).toBe(16);
+    expect(round(dT, 6)).toBe(72.1);
     expect(round(t, 8)).toBe(0.1505589);
     expect(round(u, 6)).toBe(-0.000885);
     expect(round(v, 6)).toBe(-0.003355);
@@ -73,6 +79,9 @@ it('tests iterateCircumstancesMaximumEclipse', () => {
 
 it('tests circumstancesToJulianDay', () => {
     const circumstances = {
+        tMax: 2459198.177,
+        t0: 16,
+        dT: 72.1,
         t: 0.1505589,
         u: -0.000885,
         v: -0.003355,
@@ -81,7 +90,7 @@ it('tests circumstancesToJulianDay', () => {
         n2: 0.14078416,
     };
 
-    const jd = circumstancesToJulianDay(besselianElements, circumstances);
+    const jd = circumstancesToJulianDay(circumstances);
 
     expect(round(jd, 6)).toBe(2459198.172106);
 });
