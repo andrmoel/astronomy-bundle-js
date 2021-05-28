@@ -1,4 +1,4 @@
-import Location from '../earth/Location';
+import {createLocation} from '../earth';
 import SolarEclipse from './SolarEclipse';
 import SolarEclipseCircumstances from './SolarEclipseCircumstances';
 
@@ -38,7 +38,7 @@ it('tests getBesselianElements', async () => {
     });
 });
 
-const location = new Location(-39.53940, -70.37216, 450);
+const location = createLocation(-39.53940, -70.37216, 450);
 
 it('tests getLocationOfGreatestEclipse', () => {
     const location = solarEclipse.getLocationOfGreatestEclipse();
@@ -47,8 +47,37 @@ it('tests getLocationOfGreatestEclipse', () => {
     expect(location.lon).toBe(-67.9);
 });
 
+it('tests getCircumstancesContact1', () => {
+    // TODO implement
+    const circumstances = solarEclipse.getCircumstancesContact1(location);
+
+    expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
+});
+
+it('tests getCircumstancesContact2', () => {
+    // TODO implement
+    const circumstances = solarEclipse.getCircumstancesContact2(location);
+
+    expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
+});
+
 it('tests getCircumstancesMaximumEclipse', () => {
     const circumstances = solarEclipse.getCircumstancesMaximumEclipse(location);
+
+    expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
+    expect(circumstances.getTimeOfInterest().time).toEqual({year: 2020, month: 12, day: 14, hour: 16, min: 7, sec: 49});
+});
+
+it('tests getCircumstancesContact3', () => {
+    // TODO implement
+    const circumstances = solarEclipse.getCircumstancesContact3(location);
+
+    expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
+});
+
+it('tests getCircumstancesContact4', () => {
+    // TODO implement
+    const circumstances = solarEclipse.getCircumstancesContact4(location);
 
     expect(circumstances).toBeInstanceOf(SolarEclipseCircumstances);
 });

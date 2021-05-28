@@ -1,7 +1,7 @@
 import Location from '../earth/Location';
 import createLocation from '../earth/createLocation';
 import {BesselianElements} from './types/besselianElementsTypes';
-import {iterateCircumstancesMaximumEclipse} from './calculations/circumstancesCalc';
+import {getTimeLocalDependentCircumstances, iterateCircumstancesMaximumEclipse} from './calculations/circumstancesCalc';
 import createSolarEclipseCircumstances from './createSolarEclipseCircumstances';
 import SolarEclipseCircumstances from './SolarEclipseCircumstances';
 
@@ -19,7 +19,42 @@ export default class SolarEclipse {
         return createLocation(latGreatestEclipse, lonGreatestEclipse);
     }
 
+    public getCircumstances(location: Location, t: number): SolarEclipseCircumstances {
+        // TODO implement
+        const circumstances = getTimeLocalDependentCircumstances(this.besselianElements, location, t);
+
+        return createSolarEclipseCircumstances(circumstances);
+    }
+
+    public getCircumstancesContact1(location: Location): SolarEclipseCircumstances {
+        // TODO implement
+        const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
+
+        return createSolarEclipseCircumstances(circumstances);
+    }
+
+    public getCircumstancesContact2(location: Location): SolarEclipseCircumstances {
+        // TODO implement
+        const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
+
+        return createSolarEclipseCircumstances(circumstances);
+    }
+
     public getCircumstancesMaximumEclipse(location: Location): SolarEclipseCircumstances {
+        const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
+
+        return createSolarEclipseCircumstances(circumstances);
+    }
+
+    public getCircumstancesContact3(location: Location): SolarEclipseCircumstances {
+        // TODO implement
+        const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
+
+        return createSolarEclipseCircumstances(circumstances);
+    }
+
+    public getCircumstancesContact4(location: Location): SolarEclipseCircumstances {
+        // TODO implement
         const circumstances = iterateCircumstancesMaximumEclipse(this.besselianElements, location);
 
         return createSolarEclipseCircumstances(circumstances);
