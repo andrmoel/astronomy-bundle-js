@@ -263,13 +263,13 @@ it('tests isTopocentricWaxing', async () => {
 it('tests getApparentMagnitude', async () => {
     const V = await moon.getApparentMagnitude();
 
-    expect(round(V, 2)).toBe(-11.02);
+    expect(round(V, 2)).toBe(-11.04);
 });
 
 it('tests getTopocentricApparentMagnitude', async () => {
     const V = await moon.getTopocentricApparentMagnitude(location);
 
-    expect(round(V, 2)).toBe(-11.06);
+    expect(round(V, 2)).toBe(-11.08);
 });
 
 it('tests getUpcomingNewMoon', () => {
