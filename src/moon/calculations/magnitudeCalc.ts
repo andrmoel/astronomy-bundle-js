@@ -13,7 +13,7 @@ export function getApparentMagnitudeMoon(
     // Numeric formula by. Dr. Elmar Schmidt (Arbeitskreis Meteore e.V.)
 
     // Area A
-    if (phaseAngle > 160) {
+    if (phaseAngle >= 160) {
         V += -449.88
             + 7.1112 * phaseAngle
             - 0.037714 * Math.pow(phaseAngle, 2)
@@ -21,7 +21,7 @@ export function getApparentMagnitudeMoon(
     }
 
     // Area B
-    if (phaseAngle > 40 && phaseAngle <= 160) {
+    if (phaseAngle >= 40 && phaseAngle < 160) {
         V += -12.07857
             + 0.002175199 * signedPhaseAngle
             + 0.0002859289 * Math.pow(signedPhaseAngle, 2)
@@ -32,27 +32,17 @@ export function getApparentMagnitudeMoon(
     }
 
     // Area C2
-    if (signedPhaseAngle > 1.5 && signedPhaseAngle <= 40) {
+    if (signedPhaseAngle >= 0 && signedPhaseAngle < 40) {
         V += -12.861
             + 0.037 * phaseAngle
             - 0.00012 * Math.pow(phaseAngle, 2)
     }
 
     // Area C1
-    if (signedPhaseAngle >= -40 && signedPhaseAngle < -1.5) {
+    if (signedPhaseAngle > -40 && signedPhaseAngle < 0) {
         V += -12.85
             - 0.037 * signedPhaseAngle
             - 0.000235 * Math.pow(signedPhaseAngle, 2)
-    }
-
-    // Area D
-    if (phaseAngle >= -1.5 && phaseAngle <= 1.5) {
-        // TODO opposition and lunar eclipse. Use optimized formula
-        V += -12.92
-            + 0.0475 * phaseAngle
-            - 0.000769 * Math.pow(phaseAngle, 2)
-            + 0.000017998 * Math.pow(phaseAngle, 3)
-            - 0.0000001965 * Math.pow(phaseAngle, 4);
     }
 
     return V;
