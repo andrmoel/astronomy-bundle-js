@@ -94,7 +94,8 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     protected abstract calculateApparentMagnitude(
         distanceSun: number,
         distanceEarth: number,
-        phaseAngle: number): number;
+        phaseAngle: number,
+    ): number;
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getHeliocentricEclipticSphericalJ2000Coordinates();

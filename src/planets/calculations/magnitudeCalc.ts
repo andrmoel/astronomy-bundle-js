@@ -1,3 +1,6 @@
+import {deg2rad} from '../../utils/angleCalc';
+import {getB, getDeltaU} from './saturnCalc';
+
 export function getApparentMagnitudeMercury(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
     let V = 5 * Math.log10(distanceSun * distanceEarth);
 
@@ -48,10 +51,23 @@ export function getApparentMagnitudeJupiter(distanceSun: number, distanceEarth: 
     return V;
 }
 
-export function getApparentMagnitudeSaturn(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    const V = 5 * Math.log10(distanceSun * distanceEarth);
+export function getApparentMagnitudeSaturn(
+    distanceSun: number,
+    distanceEarth: number,
+    phaseAngle: number,
+    T: number
+): number {
+    let V = 5 * Math.log10(distanceSun * distanceEarth);
+    const deltaU = getDeltaU(T);
+    const B = Math.abs(getB(T));
+    const BRad = deg2rad(B);
 
-    return 0 * distanceSun * phaseAngle; // TODO implement function
+    V += -8.88
+        + 0.044 * deltaU
+        - 2.6 * Math.sin(BRad)
+        + 1.25 * Math.sin(BRad);
+
+    return V;
 }
 
 export function getApparentMagnitudeUranus(distanceSun: number, distanceEarth: number, phaseAngle: number): number {

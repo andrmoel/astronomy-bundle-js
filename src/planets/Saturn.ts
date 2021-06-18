@@ -30,6 +30,6 @@ export default class Saturn extends Planet {
         distanceEarth: number,
         phaseAngle: number
     ): number {
-        return getApparentMagnitudeSaturn(distanceSun, distanceEarth, phaseAngle);
+        return getApparentMagnitudeSaturn(distanceSun, distanceEarth, phaseAngle, this.T);
     }
 }
