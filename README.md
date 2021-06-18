@@ -46,6 +46,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 10. [Solar Eclipse](#solar-eclipse)
     1. [Solar Eclipse exists](#solar-eclipse-exists)
     2. [Greatest Eclipse](#solar-eclipse-greatest)
+    3. [Local Circumstances](#solar-eclipse-circumstances)
 11. [Satellites](#satellites)
     1. [Two Line Elements](#satellites-tle)
 
@@ -988,6 +989,56 @@ const location = solarEclipse.getLocationOfGreatestEclipse();
 Result of the calculation:\
 Lat: *-40.3°*\
 Lon: *-67.9°*
+
+### <a name="solar-eclipse-circumstances"></a> Local Circumstances
+
+The local circumstances describe the situation for a specific location at a specific time.
+They contain data such as type of the eclipse (none, partial, annular or total), obscuration, magnitude or moon-sun ratio.
+It is possible to get the local circumstances for a given time or for each contact.
+
+* Contact 1 (C1): Partial phase begins
+* Contact 2 (C2): Total or annular phase begins
+* Max: Maximum eclipse (can be either partial, total or annular)
+* Contact 3 (C3): Total or annular phase ends
+* Contact 4 (C4): Partial phase ends
+
+**Example 1**: Get different eclipse circumstances for -39.53940, -70.37216 (Argentina) of the eclipse of 14 December 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createLocation} from 'astronomy-bundle/earth';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const location = createLocation(-39.53940, -70.37216);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+
+const circumstancesC1 = solarEclipse.getCircumstancesContact1(location);
+const circumstancesC2 = solarEclipse.getCircumstancesContact2(location);
+const circumstancesMax = solarEclipse.getCircumstancesMaximumEclipse(location);
+const circumstancesC3 = solarEclipse.getCircumstancesContact3(location);
+const circumstancesC4 = solarEclipse.getCircumstancesContact4(location);
+```
+
+**Example 1**: Get circumstances of the maximum eclipse for -39.53940, -70.37216 (Argentina) of the eclipse of 14 December 2020
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createLocation} from 'astronomy-bundle/earth';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const location = createLocation(-39.53940, -70.37216);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+const circumstancesMax = solarEclipse.getCircumstancesMaximumEclipse(location);
+
+const toiMaxEclipse = circumstancesMax.getTimeOfInterest();
+```
+
+Result of the calculation:\
+Time of maximum eclipse: *2020-12-14 16:07:49 UTC*
 
 ## <a name="satellites"></a> Satellites
 
