@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.6.1 (2021-06-17)
+
+## 6.6.0 (2021-06-17)
+
+
+### Features
+
+* **moon:** add new calculations for apparent magnitude ([e1b943e](https://github.com/andrmoel/astronomy-bundle-js/commit/e1b943ee724bde54cd9dbdca6096eab81025ba75))
+
+### 6.5.1 (2021-06-12)
+
 ## 6.5.0 (2021-05-11)
 
 

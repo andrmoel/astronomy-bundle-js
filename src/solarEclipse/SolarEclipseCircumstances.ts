@@ -1,6 +1,5 @@
 import {createTimeOfInterest} from '../time';
 import TimeOfInterest from '../time/TimeOfInterest';
-
 import {TimeLocalDependentCircumstances} from './types/circumstancesTypes';
 import {circumstancesToJulianDay} from './calculations/circumstancesCalc';
 

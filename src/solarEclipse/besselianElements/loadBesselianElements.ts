@@ -1,4 +1,6 @@
-export default function loadBesselianElements(jd0: number): any {
+import {BesselianElementsArray} from '../types/besselianElementsTypes';
+
+export default function loadBesselianElements(jd0: number): BesselianElementsArray|undefined {
     switch (jd0) {
         case 2269079.5: return require('./2269079.5');
         case 2269257.5: return require('./2269257.5');
