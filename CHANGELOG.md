@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.6.2 (2021-10-05)
+
+
+### Bug Fixes
+
+* **node:** upgrade dependencies ([126d4c4](https://github.com/andrmoel/astronomy-bundle-js/commit/126d4c42ce7681a5d4f4350c688f809bdd137c8c))
+
 ### 6.6.1 (2021-06-17)
 
 ## 6.6.0 (2021-06-17)
