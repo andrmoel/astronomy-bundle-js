@@ -52,6 +52,7 @@
     "eslint": "^7.11.0",
     "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
     "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-jest": "^24.5.2",
     "husky": "^4.3.0",
     "jest": "^27.0.4",
     "p-limit": "^3.1.0",
