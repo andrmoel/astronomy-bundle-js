@@ -17,3 +17,19 @@ export type BesselianElements = {
     latGreatestEclipse: number,
     lonGreatestEclipse: number,
 };
+
+export type BesselianElementsArray = [
+    number,
+    number,
+    number,
+    Array<number>,
+    Array<number>,
+    Array<number>,
+    Array<number>,
+    Array<number>,
+    Array<number>,
+    number,
+    number,
+    number,
+    number,
+];
