@@ -1,5 +1,6 @@
 import Location from '../earth/Location';
 import {timeCalc} from '../time/calculations';
+import {pad} from '../utils/math';
 import {Time} from './types/TimeTypes';
 
 export default class TimeOfInterest {
@@ -10,6 +11,16 @@ export default class TimeOfInterest {
     constructor(public readonly time: Time) {
         this.jd = timeCalc.time2julianDay(time);
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
+    }
+
+    public getTime(): Time {
+        return this.time;
+    }
+
+    public getString(): string {
+        const {year, month, day, hour, min, sec} = this.time;
+
+        return `${year}-${pad(month, 2)}-${pad(day, 2)} ${pad(hour, 2)}:${pad(min, 2)}:${pad(sec, 2)}`;
     }
 
     public getDate(): Date {

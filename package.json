@@ -1,6 +1,6 @@
 {
   "name": "astronomy-bundle",
-  "version": "6.0.22",
+  "version": "6.6.1",
   "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
   "keywords": [
     "astronomy",
@@ -32,11 +32,12 @@
   "types": "./index.d.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src",
+    "lint": "eslint ./src ./bin",
+    "lint:fix": "eslint --fix ./src ./bin",
     "test": "jest ./src",
     "release": "standard-version --tag-prefix --commit-all",
-    "release:push": "git push --follow-tags"
+    "release:push": "git push --follow-tags",
+    "bin:download-besselian-elements": "ts-node ./bin/solarEclipse/downloadBesselianElements.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.12.0",
@@ -44,13 +45,17 @@
     "@babel/preset-typescript": "^7.12.1",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "axios": "^0.22.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.5.2",
+    "babel-jest": "^27.0.2",
+    "entities": "^3.0.0",
     "eslint": "^7.11.0",
     "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
     "husky": "^4.3.0",
-    "jest": "^26.5.3",
+    "jest": "^27.0.4",
+    "p-limit": "^4.0.0",
     "standard-version": "^9.0.0",
+    "ts-node": "^10.0.0",
     "typescript": "^4.0.3"
   },
   "husky": {

@@ -2,6 +2,89 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.6.1 (2021-06-17)
+
+## 6.6.0 (2021-06-17)
+
+
+### Features
+
+* **moon:** add new calculations for apparent magnitude ([e1b943e](https://github.com/andrmoel/astronomy-bundle-js/commit/e1b943ee724bde54cd9dbdca6096eab81025ba75))
+
+### 6.5.1 (2021-06-12)
+
+## 6.5.0 (2021-05-11)
+
+
+### Features
+
+* **solar-eclipse:** calculate solar eclipse circumstances for maximum eclipse ([127902b](https://github.com/andrmoel/astronomy-bundle-js/commit/127902bf6b7699cc0185f4d4b6a41b41abeef588))
+
+### 6.4.4 (2021-05-11)
+
+### 6.4.3 (2021-05-11)
+
+### 6.4.2 (2021-05-01)
+
+### 6.4.1 (2021-05-01)
+
+
+### Bug Fixes
+
+* **solar-eclipse:** add besselian elements to release ([b079554](https://github.com/andrmoel/astronomy-bundle-js/commit/b079554625cefd26cb2a69e423007d669331c10b))
+
+## 6.4.0 (2021-05-01)
+
+
+### Features
+
+* **solar-eclipse:** load besselian elements from year 1500 to 2500 ([6ffefe3](https://github.com/andrmoel/astronomy-bundle-js/commit/6ffefe381fa4f23f086f75c429a9b4e809005a89))
+
+### 6.3.5 (2021-04-30)
+
+### 6.3.4 (2021-04-27)
+
+### 6.3.3 (2021-04-27)
+
+### 6.3.2 (2021-04-26)
+
+### 6.3.1 (2021-04-26)
+
+
+### Bug Fixes
+
+* **solar-eclipse:** remove file extension for dynamic import of besselian elements ([7bdbc2c](https://github.com/andrmoel/astronomy-bundle-js/commit/7bdbc2c1c1bf8679d5b0ca3384c64de511303e21))
+
+## 6.3.0 (2021-04-26)
+
+
+### Features
+
+* **solar-eclipse:** get location of greatest eclipse ([28b41f4](https://github.com/andrmoel/astronomy-bundle-js/commit/28b41f4e3e42c097a06c5d63605c8a67d142747b))
+
+## 6.2.0 (2021-04-24)
+
+
+### Features
+
+* **time-of-interest:** add method getString() ([58ccb39](https://github.com/andrmoel/astronomy-bundle-js/commit/58ccb39c49b5df5fa999e748d65ddaac4db3151d))
+
+## 6.1.0 (2021-04-24)
+
+
+### Features
+
+* **besselian-elements:** add function to download besselian elements from NASA's website ([9c7eaaa](https://github.com/andrmoel/astronomy-bundle-js/commit/9c7eaaa6295332c126162949bdb3f72fcd16bc9a))
+
+### 6.0.24 (2021-04-24)
+
+
+### Bug Fixes
+
+* **github-actions:** add readme to release ([1a7b0c1](https://github.com/andrmoel/astronomy-bundle-js/commit/1a7b0c18f0b30308a391463b412d3facda98e025))
+
+### 6.0.23 (2021-04-24)
+
 ### 6.0.22 (2021-04-24)
 
 ### 6.0.21 (2021-04-24)

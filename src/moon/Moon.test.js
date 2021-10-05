@@ -161,7 +161,7 @@ it('tests getApparentDistanceToEarth', async () => {
 it('tests getTopocentricDistanceToEarth', async () => {
     const d = await moon.getTopocentricDistanceToEarth(location);
 
-    expect(round(d, 6)).toBe(365174.894771);
+    expect(round(d, 6)).toBe(365174.89477);
 });
 
 it('tests getTransit', async () => {
@@ -263,13 +263,13 @@ it('tests isTopocentricWaxing', async () => {
 it('tests getApparentMagnitude', async () => {
     const V = await moon.getApparentMagnitude();
 
-    expect(round(V, 2)).toBe(-11.02);
+    expect(round(V, 2)).toBe(-11.04);
 });
 
 it('tests getTopocentricApparentMagnitude', async () => {
     const V = await moon.getTopocentricApparentMagnitude(location);
 
-    expect(round(V, 2)).toBe(-11.06);
+    expect(round(V, 2)).toBe(-11.08);
 });
 
 it('tests getUpcomingNewMoon', () => {

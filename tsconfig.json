@@ -3,17 +3,20 @@
     "target": "es5",
     "module": "commonjs",
     "outDir": "./dist/",
+    "esModuleInterop": true,
     "strict": true,
     "declaration": true,
     "removeComments": true,
+    "resolveJsonModule": true,
     "allowJs": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/**/*.json"
   ],
   "exclude": [
     "node_modules",
     "**/*.test.js",
-    "**/*.test.ts",
+    "**/*.test.ts"
   ]
 }

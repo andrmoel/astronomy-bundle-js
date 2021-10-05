@@ -4,8 +4,7 @@ import {
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
-import {EclipticSphericalCoordinates} from '../coordinates/types/CoordinateTypes';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import {observationCalc} from '../utils';
 import {createSun} from '../sun';
 import TimeOfInterest from '../time/TimeOfInterest';
@@ -21,6 +20,10 @@ import {createTimeOfInterest} from '../time';
 import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {Location} from '../earth/types/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
+import {getAsyncCachedCalculation} from '../cache/calculationCache';
+import {normalizeAngle} from '../utils/angleCalc';
+import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
+import {Vsop87} from './types/Vsop87Types';
 import IPlanet from './interfaces/IPlanet';
 import Mercury from './Mercury';
 import Venus from './Venus';
@@ -43,6 +46,36 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     }
 
     public abstract get diameter(): number;
+
+    protected abstract get vsop87J2000(): Promise<Vsop87>;
+
+    protected abstract get vsop87Date(): Promise<Vsop87>;
+
+    protected abstract get vsop87DateShort(): Promise<Vsop87>;
+
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
+        return await getAsyncCachedCalculation(this.name + '_heliocentric_spherical_j2000', this.t, async () => {
+            const vsop87 = await this.vsop87J2000;
+
+            return {
+                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+            };
+        });
+    }
+
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
+        return await getAsyncCachedCalculation(this.name + '_heliocentric_spherical_date', this.t, async () => {
+            const vsop87 = this.useVsop87Short ? await this.vsop87DateShort : await this.vsop87Date;
+
+            return {
+                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+            };
+        });
+    }
 
     public async getAngularDiameter(): Promise<number> {
         const distance = await this.getApparentDistanceToEarth();
@@ -75,10 +108,6 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
         return spherical2rectangular(coords);
     }
-
-    public abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
-
-    public abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
 
     public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coordsPlanet = await this.getHeliocentricEclipticRectangularJ2000Coordinates();

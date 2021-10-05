@@ -128,7 +128,7 @@ it('tests getApparentDistanceToEarth', async () => {
 it('tests getTopocentricDistanceToEarth', async () => {
     const d = await sun.getTopocentricDistanceToEarth(location);
 
-    expect(round(d, 6)).toBe(148871013.470823);
+    expect(round(d, 6)).toBe(148871013.470828);
 });
 
 it('tests getTransit', async () => {
