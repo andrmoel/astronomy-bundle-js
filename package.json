@@ -51,6 +51,7 @@
     "entities": "^3.0.0",
     "eslint": "^7.11.0",
     "eslint-config-andrmoel": "github:andrmoel/eslint-config-andrmoel",
+    "eslint-plugin-cypress": "^2.12.1",
     "husky": "^4.3.0",
     "jest": "^27.0.4",
     "p-limit": "^4.0.0",
