@@ -35,6 +35,7 @@
     "lint": "eslint ./src ./bin",
     "lint:fix": "eslint --fix ./src ./bin",
     "test": "jest ./src",
+    "test:coverage": "jest ./src --coverage",
     "release": "standard-version --tag-prefix --commit-all",
     "release:push": "git push --follow-tags",
     "bin:download-besselian-elements": "ts-node ./bin/solarEclipse/downloadBesselianElements.ts"
