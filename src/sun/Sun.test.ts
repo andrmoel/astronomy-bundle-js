@@ -10,10 +10,43 @@ const sun = new Sun(toi);
 const location = {
     lat: 52.519,
     lon: 13.408,
+    elevation: 0,
 };
 
 it('tests if name is correct', () => {
     expect(sun.name).toBe('sun');
+});
+
+it('tests getHeliocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await sun.getHeliocentricEclipticRectangularJ2000Coordinates();
+
+    expect(coords.x).toBe(0);
+    expect(coords.y).toBe(0);
+    expect(coords.z).toBe(0);
+});
+
+it('tests getHeliocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await sun.getHeliocentricEclipticRectangularDateCoordinates();
+
+    expect(coords.x).toBe(0);
+    expect(coords.y).toBe(0);
+    expect(coords.z).toBe(0);
+});
+
+it('tests getHeliocentricEclipticSphericalJ2000Coordinates', async () => {
+    const coords = await sun.getHeliocentricEclipticSphericalJ2000Coordinates();
+
+    expect(coords.lon).toBe(0);
+    expect(coords.lat).toBe(0);
+    expect(coords.radiusVector).toBe(0);
+});
+
+it('tests getHeliocentricEclipticSphericalDateCoordinates', async () => {
+    const coords = await sun.getHeliocentricEclipticSphericalDateCoordinates();
+
+    expect(coords.lon).toBe(0);
+    expect(coords.lat).toBe(0);
+    expect(coords.radiusVector).toBe(0);
 });
 
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', async () => {
