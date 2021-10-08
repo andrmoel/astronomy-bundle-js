@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.7.0 (2021-10-08)
+
+
+### Features
+
+* **location:** calculate distance between two locations ([03eca26](https://github.com/andrmoel/astronomy-bundle-js/commit/03eca265221a3e5e819e36134f9c35499b1e745f))
+
 ### 6.6.10 (2021-10-08)
 
 ### 6.6.9 (2021-10-08)
