@@ -11,6 +11,7 @@ const jupiter = new Jupiter(toi);
 const location = {
     lat: 52.519,
     lon: 13.408,
+    elevation: 0,
 };
 
 it('tests if name is correct', () => {
