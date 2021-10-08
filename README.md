@@ -244,7 +244,7 @@ Delta T: *64*
 
 ### <a name="location-distance"></a> Distance between two locations
 
-**Example**: Calculate the distance of the Eiffel Tower and the Washington Monument in km
+**Example**: Calculate the distance between the Eiffel Tower and the Washington Monument in km
 
 ```javascript
 import {createLocation} from 'astronomy-bundle/earth';
