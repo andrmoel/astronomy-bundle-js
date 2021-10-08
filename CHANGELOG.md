@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 6.6.6 (2021-10-08)
+
+
+### Bug Fixes
+
+* **codecov:** ignore loadBesselianElements function ([673cc16](https://github.com/andrmoel/astronomy-bundle-js/commit/673cc16520efb306d66e2606619a1f571c9e7235))
+
 ### 6.6.5 (2021-10-08)
 
 ### 6.6.4 (2021-10-08)
