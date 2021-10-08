@@ -1,2 +1,2 @@
 ignore:
-  - "loadBesselianElements.ts"
+  - "**/loadBesselianElements.ts"
