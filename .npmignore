@@ -6,7 +6,7 @@ coverage/**
 node_modules/**
 src/**
 webpack.config.js
-*.test.js
+*.test.ts
 *.log
 .babelrc.json
 .eslintrc.json

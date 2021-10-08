@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.7.0 (2021-10-08)
+
+
+### Features
+
+* **location:** calculate distance between two locations ([03eca26](https://github.com/andrmoel/astronomy-bundle-js/commit/03eca265221a3e5e819e36134f9c35499b1e745f))
+
+### 6.6.10 (2021-10-08)
+
+### 6.6.9 (2021-10-08)
+
+### 6.6.8 (2021-10-08)
+
+### 6.6.7 (2021-10-08)
+
+### 6.6.6 (2021-10-08)
+
+
+### Bug Fixes
+
+* **codecov:** ignore loadBesselianElements function ([673cc16](https://github.com/andrmoel/astronomy-bundle-js/commit/673cc16520efb306d66e2606619a1f571c9e7235))
+
+### 6.6.5 (2021-10-08)
+
+### 6.6.4 (2021-10-08)
+
+### 6.6.3 (2021-10-06)
+
+### 6.6.2 (2021-10-05)
+
+
+### Bug Fixes
+
+* **node:** upgrade dependencies ([126d4c4](https://github.com/andrmoel/astronomy-bundle-js/commit/126d4c42ce7681a5d4f4350c688f809bdd137c8c))
+
 ### 6.6.1 (2021-06-17)
 
 ## 6.6.0 (2021-06-17)

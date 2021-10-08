@@ -9,45 +9,47 @@ For a detailed see the table of contents.
 Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
 
 ## Table of Contents  
-1.  [Installation](#installation)
+1. [Installation](#installation)
 2. [Angle Utils](#angle-utils)
 3. [Time of Interest](#toi)
     1. [Create Time Of Interest](#create-time-of-interest)
     2. [Calendar methods](#time-of-interest-calendar)
     3. [Julian Day, Centuries and Millennia](#time-of-interest-jd)
-    3. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
-    3. [Delta T](#time-of-interest-deltat)
-4. [Astronomical Objects](#astronomical-objects)
+    4. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
+    5. [Delta T](#time-of-interest-deltat)
+4. [Location](#location)
+   1. [Distance between two locations](#location-distance)
+5. [Astronomical Objects](#astronomical-objects)
     1. [Coordinates](#astronomical-objects-coordinates)
-5. [Earth](#earth)
+6. [Earth](#earth)
     1. [Position of the Earth](#earth-position)
     2. [Nutation in Longitude and Obliquity](#earth-nutation)
     3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
-6. [Sun](#sun)
+7. [Sun](#sun)
     1. [Position of the Sun](#sun-position)
     2. [Distance to Earth and Diameter](#sun-distance-diameter)
     3. [Sunrise, Sunset and Transit](#sun-rise-set)
-7. [Moon](#moon)
+8. [Moon](#moon)
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
     3. [Moonrise, Moonset and Transit](#moon-rise-set)
     3. [Phases](#moon-phases)
     4. [Apparent Magnitude](#moon-magnitude)
     5. [Physical Observation](#moon-observation)
-8. [Planets](#planets)
+9. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
     3. [Phases](#planets-phases)
     4. [Apparent Magnitude](#planets-magnitude)
     5. [Physical Observation](#planets-observation)
     5. [Conjunction](#planets-conjunction)
-9. [Stars](#stars)
-    1. [Position of Stars](#stars-position)
-10. [Solar Eclipse](#solar-eclipse)
+10. [Stars](#stars)
+     1. [Position of Stars](#stars-position)
+11. [Solar Eclipse](#solar-eclipse)
     1. [Solar Eclipse exists](#solar-eclipse-exists)
     2. [Greatest Eclipse](#solar-eclipse-greatest)
     3. [Local Circumstances](#solar-eclipse-circumstances)
-11. [Satellites](#satellites)
+12. [Satellites](#satellites)
     1. [Two Line Elements](#satellites-tle)
 
 ## <a name="installation"></a>Installation
@@ -238,6 +240,23 @@ const deltaT = toi.getDeltaT();
 
 The result of the calculation should be:\
 Delta T: *64*
+
+## <a name="location"></a> Location
+
+### <a name="location-distance"></a> Distance between two locations
+
+**Example**: Calculate the distance between the Eiffel Tower and the Washington Monument in km
+
+```javascript
+import {createLocation} from 'astronomy-bundle/earth';
+
+const locationParis = createLocation(48.858272, 2.29447);
+const locationWashingtonDc = createLocation(38.889514, -77.035193);
+
+const distanceInKm = locationParis.getDistanceToInKm(locationWashingtonDc);
+```
+
+The result of the calculation should be: *6177.93 km*
 
 ## <a name="astronomical-objects"></a> Astronomical Objects
 
@@ -659,6 +678,7 @@ Position Angle of bright Limb: *100.29°*
 **Example 2**: Get the topocentric Physical Observation of the Moon for 07 November 2020 at 01:20 UTC for Berlin, Germany
 
 ```javascript
+import {createLocation} from 'astronomy-bundle/earth';
 import {createTimeOfInterest} from 'astronomy-bundle/time';
 import {createMoon} from 'astronomy-bundle/moon';
 

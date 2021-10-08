@@ -41,6 +41,46 @@ it('test getHeliocentricEclipticSphericalDateCoordinates', async () => {
     expect(round(coords.radiusVector, 8)).toBe(0.98482636);
 });
 
+it('test getGeocentricEclipticRectangularJ2000Coordinates', async () => {
+    const coords = await earth.getGeocentricEclipticRectangularJ2000Coordinates();
+
+    expect(coords.x).toBe(0);
+    expect(coords.y).toBe(0);
+    expect(coords.z).toBe(0);
+});
+
+it('test getGeocentricEclipticRectangularDateCoordinates', async () => {
+    const coords = await earth.getGeocentricEclipticRectangularDateCoordinates();
+
+    expect(coords.x).toBe(0);
+    expect(coords.y).toBe(0);
+    expect(coords.z).toBe(0);
+});
+
+it('test getGeocentricEclipticSphericalJ2000Coordinates', async () => {
+    const coords = await earth.getGeocentricEclipticSphericalJ2000Coordinates();
+
+    expect(coords.lon).toBe(0);
+    expect(coords.lat).toBe(0);
+    expect(coords.radiusVector).toBe(0);
+});
+
+it('test getGeocentricEclipticSphericalDateCoordinates', async () => {
+    const coords = await earth.getGeocentricEclipticSphericalDateCoordinates();
+
+    expect(coords.lon).toBe(0);
+    expect(coords.lat).toBe(0);
+    expect(coords.radiusVector).toBe(0);
+});
+
+it('test getApparentGeocentricEclipticSphericalCoordinates', async () => {
+    const coords = await earth.getApparentGeocentricEclipticSphericalCoordinates();
+
+    expect(coords.lon).toBe(0);
+    expect(coords.lat).toBe(0);
+    expect(coords.radiusVector).toBe(0);
+});
+
 it('tests getNutationInLongitude', () => {
     const toi = createTimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
     const earth = new Earth(toi);
