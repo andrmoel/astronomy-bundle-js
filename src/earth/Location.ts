@@ -10,4 +10,16 @@ export default class Location {
     ) {
         this.location = {lat, lon, elevation};
     }
+
+    public getLatitude(): number {
+        return this.location.lat;
+    }
+
+    public getLongitude(): number {
+        return this.location.lon;
+    }
+
+    public getElevation(): number {
+        return this.location.elevation;
+    }
 }
