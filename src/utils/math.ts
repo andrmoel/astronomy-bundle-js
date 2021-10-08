@@ -13,3 +13,11 @@ export function pad(num: number | string, size: number): string {
 
     return numStr;
 }
+
+export function sin2(number: number): number {
+    return Math.sin(number) * Math.sin(number);
+}
+
+export function cos2(number: number): number {
+    return Math.cos(number) * Math.cos(number);
+}
