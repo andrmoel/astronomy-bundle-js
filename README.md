@@ -255,7 +255,7 @@ const locationWashingtonDc = createLocation(38.889514, -77.035193);
 const distanceInKm = locationParis.getDistanceToInKm(locationWashingtonDc);
 ```
 
-The result of the calculation should be: 6177.93 km
+The result of the calculation should be: *6177.93 km*
 
 ## <a name="astronomical-objects"></a> Astronomical Objects
 
