@@ -1,25 +1,33 @@
 import TimeOfInterest from '../time/TimeOfInterest';
-import {BesselianElements} from './types/besselianElementsTypes';
+import {BesselianElements, BesselianElementsArray} from './types/besselianElementsTypes';
 import loadBesselianElements from './besselianElements/loadBesselianElements';
 
 export default async function createBesselianElements(toi: TimeOfInterest): Promise<BesselianElements> {
     const jd0 = toi.getJulianDay0();
 
-    const array = await loadBesselianElements(jd0);
+    const besselianElementsArray = await loadBesselianElements(jd0);
 
+    if (!besselianElementsArray) {
+        throw new Error(`No besselian elements found for ${jd0}`);
+    }
+
+    return _getBesselianElements(besselianElementsArray);
+}
+
+function _getBesselianElements(besselianElementsArray: BesselianElementsArray): BesselianElements {
     return {
-        tMax: array[0],
-        t0: array[1],
-        dT: array[2],
-        x: array[3],
-        y: array[4],
-        d: array[5],
-        l1: array[6],
-        l2: array[7],
-        mu: array[8],
-        tanF1: array[9],
-        tanF2: array[10],
-        latGreatestEclipse: array[11],
-        lonGreatestEclipse: array[12],
+        tMax: besselianElementsArray[0],
+        t0: besselianElementsArray[1],
+        dT: besselianElementsArray[2],
+        x: besselianElementsArray[3],
+        y: besselianElementsArray[4],
+        d: besselianElementsArray[5],
+        l1: besselianElementsArray[6],
+        l2: besselianElementsArray[7],
+        mu: besselianElementsArray[8],
+        tanF1: besselianElementsArray[9],
+        tanF2: besselianElementsArray[10],
+        latGreatestEclipse: besselianElementsArray[11],
+        lonGreatestEclipse: besselianElementsArray[12],
     }
 }

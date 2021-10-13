@@ -38,7 +38,12 @@ jobs:
         run: yarn lint
 
       - name: 'Run unit tests'
-        run: yarn test
+        run: yarn test:coverage
+
+      - name: 'Upload code coverage'
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: 'Build project'
         run: yarn build

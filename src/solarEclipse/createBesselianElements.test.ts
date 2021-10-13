@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import createBesselianElements from './createBesselianElements';
 
-it('tests createBesselianElements', async () => {
+it('tests creates besselian elements successfully', async () => {
     const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
 
     const besselianElements = await createBesselianElements(toi);
@@ -21,4 +21,12 @@ it('tests createBesselianElements', async () => {
         latGreatestEclipse: -40.3,
         lonGreatestEclipse: -67.9,
     });
+});
+
+it('has an error while creating besselian elements', () => {
+    const toi = createTimeOfInterest.fromTime(2020, 12, 20, 0, 0, 0);
+
+    expect(async () => {
+        await createBesselianElements(toi)
+    }).rejects.toThrow('No besselian elements found for 2459203.5');
 });
