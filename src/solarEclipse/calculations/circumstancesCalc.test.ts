@@ -5,9 +5,6 @@ import {
     getObservationalCircumstances,
     getTimeCircumstances,
     getTimeLocationCircumstances,
-    getTimeLocationCircumstancesC1,
-    getTimeLocationCircumstancesC4,
-    getTimeLocationCircumstancesMaxEclipse,
 } from './circumstancesCalc';
 
 const besselianElements = {
@@ -32,10 +29,7 @@ const location = {
     elevation: 450,
 }
 
-const timeLocationCircumstances: TimeLocationCircumstances = {
-    tMax: 2459198.177,
-    t0: 16,
-    dT: 72.1,
+const circumstances: TimeLocationCircumstances = {
     t: 0,
     u: -0.0555894700932891,
     v: 0.011295675571670327,
@@ -66,73 +60,20 @@ it('tests getTimeCircumstances', () => {
 });
 
 it('tests getTimeLocationCircumstances', () => {
-    const t = 0;
+    const {t, u, v, a, b, l1Derived, l2Derived, n2} = getTimeLocationCircumstances(besselianElements, location, 0);
 
-    const circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-
-    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
-    expect(round(circumstances.t0, 6)).toBe(16);
-    expect(round(circumstances.dT, 6)).toBe(72.1);
-    expect(round(circumstances.t, 6)).toBe(0);
-    expect(round(circumstances.u, 6)).toBe(-0.055589);
-    expect(round(circumstances.v, 6)).toBe(0.011296);
-    expect(round(circumstances.a, 6)).toBe(0.363938);
-    expect(round(circumstances.b, 6)).toBe(-0.098892);
-    expect(round(circumstances.l1Derived, 6)).toBe(0.539349);
-    expect(round(circumstances.l2Derived, 6)).toBe(-0.006755);
-    expect(round(circumstances.n2, 6)).toBe(0.14223);
-});
-
-it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-    const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
-    expect(round(circumstances.t0, 6)).toBe(16);
-    expect(round(circumstances.dT, 6)).toBe(72.1);
-    expect(round(circumstances.t, 8)).toBe(0.1505589);
-    expect(round(circumstances.u, 6)).toBe(-0.000885);
-    expect(round(circumstances.v, 6)).toBe(-0.003355);
-    expect(round(circumstances.a, 6)).toBe(0.362797);
-    expect(round(circumstances.b, 6)).toBe(-0.095723);
-    expect(round(circumstances.l1Derived, 6)).toBe(0.539344);
-    expect(round(circumstances.l2Derived, 6)).toBe(-0.00676);
-    expect(round(circumstances.n2, 6)).toBe(0.140784);
-});
-
-it('tests getTimeLocationCircumstancesC1', () => {
-    const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
-    expect(round(circumstances.t0, 6)).toBe(16);
-    expect(round(circumstances.dT, 6)).toBe(72.1);
-    expect(round(circumstances.t, 8)).toBe(-1.24158445);
-    expect(round(circumstances.u, 6)).toBe(-0.51834);
-    expect(round(circumstances.v, 6)).toBe(0.149826);
-    expect(round(circumstances.a, 6)).toBe(0.384829);
-    expect(round(circumstances.b, 6)).toBe(-0.123805);
-    expect(round(circumstances.l1Derived, 6)).toBe(0.539559);
-    expect(round(circumstances.l2Derived, 6)).toBe(-0.006546);
-    expect(round(circumstances.n2, 6)).toBe(0.163421);
-});
-
-it('tests getTimeLocationCircumstancesC4', () => {
-    const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
-    expect(round(circumstances.t0, 6)).toBe(16);
-    expect(round(circumstances.dT, 6)).toBe(72.1);
-    expect(round(circumstances.t, 8)).toBe(1.6025965);
-    expect(round(circumstances.u, 6)).toBe(0.52602);
-    expect(round(circumstances.v, 6)).toBe(-0.120008);
-    expect(round(circumstances.a, 6)).toBe(0.367769);
-    expect(round(circumstances.b, 6)).toBe(-0.065072);
-    expect(round(circumstances.l1Derived, 6)).toBe(0.539536);
-    expect(round(circumstances.l2Derived, 6)).toBe(-0.006569);
-    expect(round(circumstances.n2, 6)).toBe(0.139488);
+    expect(round(t, 6)).toBe(0);
+    expect(round(u, 6)).toBe(-0.055589);
+    expect(round(v, 6)).toBe(0.011296);
+    expect(round(a, 6)).toBe(0.363938);
+    expect(round(b, 6)).toBe(-0.098892);
+    expect(round(l1Derived, 6)).toBe(0.539349);
+    expect(round(l2Derived, 6)).toBe(-0.006755);
+    expect(round(n2, 6)).toBe(0.14223);
 });
 
 it('tests getObservationalCircumstances', () => {
-    const {maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(timeLocationCircumstances);
+    const {maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(circumstances);
 
     expect(round(maximumEclipse, 5)).toBe(0.05673);
     expect(round(magnitude, 5)).toBe(0.90618);
@@ -140,7 +81,7 @@ it('tests getObservationalCircumstances', () => {
 });
 
 it('tests circumstancesToJulianDay', () => {
-    const jd = circumstancesToJulianDay(timeLocationCircumstances);
+    const jd = circumstancesToJulianDay(besselianElements, circumstances);
 
     expect(round(jd, 6)).toBe(2459198.165833);
 });
