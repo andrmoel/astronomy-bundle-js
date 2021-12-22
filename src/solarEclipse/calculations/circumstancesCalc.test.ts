@@ -1,5 +1,6 @@
 import {round} from '../../utils/math';
 import {TimeLocationCircumstances} from '../types/circumstancesTypes';
+import {SolarEclipseType} from '../constants/solarEclipseTypes';
 import {
     circumstancesToJulianDay,
     getObservationalCircumstances,
@@ -72,12 +73,83 @@ it('tests getTimeLocationCircumstances', () => {
     expect(round(n2, 6)).toBe(0.14223);
 });
 
-it('tests getObservationalCircumstances', () => {
-    const {maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(circumstances);
+describe('tests for getObservationalCircumstances', () => {
+    it('has a no eclipse', () => {
+        const circumstances = {
+            t: -0.6157557359012282,
+            u: -0.27117343363648627,
+            v: -0.7577231107198906,
+            a: 0.31486969929335396,
+            b: -0.11268536352471581,
+            l1Derived: 0.5399940994544585,
+            l2Derived: -0.006113658680568816,
+            n2: 0.1118409186857845,
+        }
 
-    expect(round(maximumEclipse, 5)).toBe(0.05673);
-    expect(round(magnitude, 5)).toBe(0.90618);
-    expect(round(moonSunRatio, 5)).toBe(1.02537);
+        const {eclipseType} = getObservationalCircumstances(circumstances);
+
+        expect(eclipseType).toBe(SolarEclipseType.none);
+    });
+
+    it('has a partial eclipse', () => {
+        const circumstances = {
+            t: 1.2555163742113822,
+            u: -0.024193949269768478,
+            v: -0.31344968745463037,
+            a: 0.36979881208723364,
+            b: -0.028543310736849174,
+            l1Derived: 0.5400101652811893,
+            l2Derived: -0.006097661736670686,
+            n2: 0.13756588200894948,
+        }
+
+        const {eclipseType, maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(circumstances);
+
+        expect(eclipseType).toBe(SolarEclipseType.partial);
+        expect(round(maximumEclipse, 5)).toBe(0.31438);
+        expect(round(magnitude, 5)).toBe(0.42259);
+        expect(round(moonSunRatio, 5)).toBe(1.02284);
+    });
+
+    it('has a total eclipse', () => {
+        const circumstances = {
+            t: 0.15055890323155477,
+            u: -0.0008852124445086068,
+            v: -0.0033550231864724056,
+            a: 0.36279652916104377,
+            b: -0.09572273289195118,
+            l1Derived: 0.5393443092306598,
+            l2Derived: -0.006760247799288219,
+            n2: 0.1407841631636039,
+        }
+
+        const {eclipseType, maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(circumstances);
+
+        expect(eclipseType).toBe(SolarEclipseType.total);
+        expect(round(maximumEclipse, 5)).toBe(0.00347);
+        expect(round(magnitude, 5)).toBe(1.00618);
+        expect(round(moonSunRatio, 5)).toBe(1.02539);
+    });
+
+    it('has an annular eclipse', () => {
+        const circumstances = {
+            t: -1.024647932292263,
+            u: 0.0003771879709230097,
+            v: -0.001470168001986627,
+            a: 0.560161571759926,
+            b: 0.14371568855535619,
+            l1Derived: 0.5639161791727346,
+            l2Derived: 0.0176895233963809,
+            n2: 0.33443518561349084,
+        }
+
+        const {eclipseType, maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(circumstances);
+
+        expect(eclipseType).toBe(SolarEclipseType.annular);
+        expect(round(maximumEclipse, 5)).toBe(0.00152);
+        expect(round(magnitude, 5)).toBe(0.96698);
+        expect(round(moonSunRatio, 5)).toBe(0.93917);
+    });
 });
 
 it('tests circumstancesToJulianDay', () => {

@@ -3,6 +3,7 @@ import {ObservationalCircumstances, TimeCircumstances, TimeLocationCircumstances
 import {Location} from '../../earth/types/LocationTypes';
 import {deg2rad} from '../../utils/angleCalc';
 import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
+import {SolarEclipseType} from '../constants/solarEclipseTypes';
 import {populate, populateD} from './besselianElementsCalc';
 
 export function getTimeCircumstances(
@@ -77,10 +78,31 @@ export function getObservationalCircumstances(
     const moonSunRatio = (l1Derived - l2Derived) / (l1Derived + l2Derived);
 
     return {
+        eclipseType: getEclipseType(circumstances),
         maximumEclipse,
         magnitude,
         moonSunRatio,
     }
+}
+
+function getEclipseType(circumstances: TimeLocationCircumstances): SolarEclipseType {
+    const {u, v, l1Derived, l2Derived} = circumstances;
+    const maximumEclipse = Math.sqrt(Math.pow(u, 2) + Math.pow(v, 2));
+    const magnitude = (l1Derived - maximumEclipse) / (l1Derived + l2Derived);
+
+    if (magnitude <= 0.0) {
+        return SolarEclipseType.none
+    }
+
+    if (maximumEclipse < l2Derived || maximumEclipse < -1 * l2Derived) {
+        if (l2Derived < 0.0) {
+            return SolarEclipseType.total;
+        }
+
+        return SolarEclipseType.annular;
+    }
+
+    return SolarEclipseType.partial;
 }
 
 export function circumstancesToJulianDay(
