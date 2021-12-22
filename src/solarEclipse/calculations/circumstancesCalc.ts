@@ -1,14 +1,14 @@
 import {BesselianElements} from '../types/besselianElementsTypes';
-import {TimeDependentCircumstances, TimeLocalDependentCircumstances} from '../types/circumstancesTypes';
+import {ObservationalCircumstances, TimeCircumstances, TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {Location} from '../../earth/types/LocationTypes';
 import {deg2rad} from '../../utils/angleCalc';
 import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
 import {populate, populateD} from './besselianElementsCalc';
 
-export function getTimeDependentCircumstances(
+export function getTimeCircumstances(
     besselianElements: BesselianElements,
     t: number,
-): TimeDependentCircumstances {
+): TimeCircumstances {
     const {x, y, d, mu, l1, l2} = besselianElements;
 
     return {
@@ -27,15 +27,15 @@ export function getTimeDependentCircumstances(
     }
 }
 
-export function getTimeLocalDependentCircumstances(
+export function getTimeLocationCircumstances(
     besselianElements: BesselianElements,
     location: Location,
     t: number,
-): TimeLocalDependentCircumstances {
-    const {tMax, t0, dT} = besselianElements;
+): TimeLocationCircumstances {
+    const {tMax, t0, dT, tanF1, tanF2} = besselianElements;
     const {lat, lon, elevation} = location;
 
-    const {x, dX, y, dY, mu, dMu, d, dD} = getTimeDependentCircumstances(besselianElements, t);
+    const {x, dX, y, dY, mu, dMu, d, dD, l1, l2} = getTimeCircumstances(besselianElements, t);
     const rhoSinLat = getRhoSinLat(lat, elevation);
     const rhoCosLat = getRhoCosLat(lat, elevation);
 
@@ -57,36 +57,33 @@ export function getTimeLocalDependentCircumstances(
     const v = y - eta;
     const a = dX - dXi;
     const b = dY - dEta;
+
+    // TODO If condition
+    const l1Derived = l1 - zeta * tanF1;
+    const l2Derived = l2 - zeta * tanF2;
+
     const n2 = Math.pow(a, 2) + Math.pow(b, 2);
 
-    return {tMax, t0, dT, t, u, v, a, b, n2}
+    return {tMax, t0, dT, t, u, v, a, b, l1Derived, l2Derived, n2}
 }
 
-export function iterateCircumstancesMaximumEclipse(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocalDependentCircumstances {
-    let t = 0;
-    let tmp = 1;
-    let cnt = 0;
+export function getObservationalCircumstances(
+    circumstances: TimeLocationCircumstances,
+): ObservationalCircumstances {
+    const {u, v, l1Derived, l2Derived} = circumstances;
 
-    let circumstances = getTimeLocalDependentCircumstances(besselianElements, location, t);
+    const maximumEclipse = Math.sqrt(Math.pow(u, 2) + Math.pow(v, 2));
+    const magnitude = (l1Derived - maximumEclipse) / (l1Derived + l2Derived);
+    const moonSunRatio = (l1Derived - l2Derived) / (l1Derived + l2Derived);
 
-    while (Math.abs(tmp) > 0.000001 && cnt < 50) {
-        const {u, v, a, b, n2} = circumstances;
-
-        tmp = (u * a + v * b) / n2;
-        t -= tmp;
-
-        circumstances = getTimeLocalDependentCircumstances(besselianElements, location, t);
-
-        cnt++;
+    return {
+        maximumEclipse,
+        magnitude,
+        moonSunRatio,
     }
-
-    return circumstances;
 }
 
-export function circumstancesToJulianDay(circumstances: TimeLocalDependentCircumstances): number {
+export function circumstancesToJulianDay(circumstances: TimeLocationCircumstances): number {
     let {tMax, t0, dT, t} = circumstances;
 
     let jd = Math.floor(tMax - t0 / 24.0);

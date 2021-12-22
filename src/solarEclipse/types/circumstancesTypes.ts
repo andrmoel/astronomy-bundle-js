@@ -1,4 +1,4 @@
-export type TimeDependentCircumstances = {
+export type TimeCircumstances = {
     x: number,
     dX: number,
     y: number,
@@ -13,15 +13,22 @@ export type TimeDependentCircumstances = {
     dL2: number,
 };
 
-export type TimeLocalDependentCircumstances = {
+export type TimeLocationCircumstances = {
     tMax: number,
     t0: number,
     dT: number,
-
     t: number,
     u: number,
     v: number,
     a: number,
     b: number,
+    l1Derived: number,
+    l2Derived: number,
     n2: number,
 };
+
+export type ObservationalCircumstances = {
+    maximumEclipse: number,
+    magnitude: number,
+    moonSunRatio: number,
+}
