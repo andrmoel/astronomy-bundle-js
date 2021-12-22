@@ -1,10 +1,10 @@
 import {createTimeOfInterest} from '../time';
 import TimeOfInterest from '../time/TimeOfInterest';
-import {TimeLocalDependentCircumstances} from './types/circumstancesTypes';
+import {TimeLocationCircumstances} from './types/circumstancesTypes';
 import {circumstancesToJulianDay} from './calculations/circumstancesCalc';
 
 export default class SolarEclipseCircumstances {
-    constructor(private circumstances: TimeLocalDependentCircumstances) {
+    constructor(private circumstances: TimeLocationCircumstances) {
     }
 
     public getTimeOfInterest(): TimeOfInterest {

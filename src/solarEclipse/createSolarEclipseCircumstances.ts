@@ -1,8 +1,8 @@
 import SolarEclipseCircumstances from './SolarEclipseCircumstances';
-import {TimeLocalDependentCircumstances} from './types/circumstancesTypes';
+import {TimeLocationCircumstances} from './types/circumstancesTypes';
 
 export default function createSolarEclipseCircumstances(
-    circumstances: TimeLocalDependentCircumstances,
+    circumstances: TimeLocationCircumstances,
 ): SolarEclipseCircumstances {
     return new SolarEclipseCircumstances(circumstances);
 }
