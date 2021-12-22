@@ -5,7 +5,7 @@ import {
     getObservationalCircumstances,
     getTimeCircumstances,
     getTimeLocationCircumstances,
-    iterateCircumstancesMaximumEclipse,
+    getTimeLocationCircumstancesMaxEclipse,
 } from './circumstancesCalc';
 
 const besselianElements = {
@@ -68,8 +68,6 @@ it('tests getTimeLocationCircumstances', () => {
 
     const circumstances = getTimeLocationCircumstances(besselianElements, location, t);
 
-    console.log(circumstances);
-
     expect(round(circumstances.tMax, 6)).toBe(2459198.177);
     expect(round(circumstances.t0, 6)).toBe(16);
     expect(round(circumstances.dT, 6)).toBe(72.1);
@@ -83,26 +81,28 @@ it('tests getTimeLocationCircumstances', () => {
     expect(round(circumstances.n2, 6)).toBe(0.14223);
 });
 
+it('tests getTimeLocationCircumstancesMaxEclipse', () => {
+    const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+
+    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
+    expect(round(circumstances.t0, 6)).toBe(16);
+    expect(round(circumstances.dT, 6)).toBe(72.1);
+    expect(round(circumstances.t, 8)).toBe(0.1505589);
+    expect(round(circumstances.u, 6)).toBe(-0.000885);
+    expect(round(circumstances.v, 6)).toBe(-0.003355);
+    expect(round(circumstances.a, 6)).toBe(0.362797);
+    expect(round(circumstances.b, 6)).toBe(-0.095723);
+    expect(round(circumstances.l1Derived, 6)).toBe(0.539344);
+    expect(round(circumstances.l2Derived, 6)).toBe(-0.00676);
+    expect(round(circumstances.n2, 6)).toBe(0.140784);
+});
+
 it('tests getObservationalCircumstances', () => {
     const {maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(timeLocationCircumstances);
 
     expect(round(maximumEclipse, 5)).toBe(0.05673);
     expect(round(magnitude, 5)).toBe(0.90618);
     expect(round(moonSunRatio, 5)).toBe(1.02537);
-});
-
-it('tests iterateCircumstancesMaximumEclipse', () => {
-    const {tMax, t0, dT, t, u, v, a, b, n2} = iterateCircumstancesMaximumEclipse(besselianElements, location);
-
-    expect(round(tMax, 6)).toBe(2459198.177);
-    expect(round(t0, 6)).toBe(16);
-    expect(round(dT, 6)).toBe(72.1);
-    expect(round(t, 8)).toBe(0.1505589);
-    expect(round(u, 6)).toBe(-0.000885);
-    expect(round(v, 6)).toBe(-0.003355);
-    expect(round(a, 6)).toBe(0.362797);
-    expect(round(b, 6)).toBe(-0.095723);
-    expect(round(n2, 6)).toBe(0.140784);
 });
 
 it('tests circumstancesToJulianDay', () => {

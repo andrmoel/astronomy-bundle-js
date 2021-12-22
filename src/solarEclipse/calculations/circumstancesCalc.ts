@@ -1,9 +1,5 @@
 import {BesselianElements} from '../types/besselianElementsTypes';
-import {
-    ObservationalCircumstances,
-    TimeCircumstances,
-    TimeLocationCircumstances,
-} from '../types/circumstancesTypes';
+import {ObservationalCircumstances, TimeCircumstances, TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {Location} from '../../earth/types/LocationTypes';
 import {deg2rad} from '../../utils/angleCalc';
 import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
@@ -71,32 +67,16 @@ export function getTimeLocationCircumstances(
     return {tMax, t0, dT, t, u, v, a, b, l1Derived, l2Derived, n2}
 }
 
-export function getObservationalCircumstances(
-    circumstances: TimeLocationCircumstances,
-): ObservationalCircumstances {
-    const {u, v, l1Derived, l2Derived} = circumstances;
-
-    const maximumEclipse = Math.sqrt(Math.pow(u, 2) + Math.pow(v, 2));
-    const magnitude = (l1Derived - maximumEclipse) / (l1Derived + l2Derived);
-    const moonSunRatio = (l1Derived - l2Derived) / (l1Derived + l2Derived);
-
-    return {
-        maximumEclipse,
-        magnitude,
-        moonSunRatio,
-    }
-}
-
-export function iterateCircumstancesMaximumEclipse(
+export function getTimeLocationCircumstancesMaxEclipse(
     besselianElements: BesselianElements,
     location: Location,
 ): TimeLocationCircumstances {
     let t = 0;
     let tau = 1;
-    let cnt = 0;
 
     let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
 
+    let cnt = 0;
     while (Math.abs(tau) > 0.000001 && cnt < 50) {
         const {u, v, a, b, n2} = circumstances;
 
@@ -111,55 +91,20 @@ export function iterateCircumstancesMaximumEclipse(
     return circumstances;
 }
 
-export function iterateCircumstancesContact1(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocationCircumstances {
-    const circumstancesMaximumEclipse = iterateCircumstancesMaximumEclipse(besselianElements, location);
-    const tmp = _getTauForContact1AndContact4(circumstancesMaximumEclipse);
+export function getObservationalCircumstances(
+    circumstances: TimeLocationCircumstances,
+): ObservationalCircumstances {
+    const {u, v, l1Derived, l2Derived} = circumstances;
 
-    let t = circumstancesMaximumEclipse.t - tmp;
-    let tau = 1;
-    let cnt = 0;
-    const sign = -1; // TODO -1 c1 / +1 c4
+    const maximumEclipse = Math.sqrt(Math.pow(u, 2) + Math.pow(v, 2));
+    const magnitude = (l1Derived - maximumEclipse) / (l1Derived + l2Derived);
+    const moonSunRatio = (l1Derived - l2Derived) / (l1Derived + l2Derived);
 
-    let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-
-    while (Math.abs(tau) > 0.000001 && cnt < 50) {
-        const {u, v, a, b, l1Derived, n2} = circumstances;
-        const n = Math.sqrt(n2);
-
-        tau = (v * a - u * b) / (n * l1Derived);
-
-        if (Math.abs(tau) <= 1.0) {
-            tau = sign * Math.sqrt(1.0 - Math.pow(tau, 2)) * l1Derived / n;
-        } else {
-            tau = 0.0;
-        }
-
-        tau = (u * a + v * b) / n2 - tau;
-
-        t -= tau;
-
-        circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-
-        cnt++;
+    return {
+        maximumEclipse,
+        magnitude,
+        moonSunRatio,
     }
-
-    return circumstances;
-}
-
-function _getTauForContact1AndContact4(circumstancesMaximumEclipse: TimeLocationCircumstances): number {
-    const {u, v, a, b, l1Derived, n2} = circumstancesMaximumEclipse;
-
-    const n = Math.sqrt(n2);
-    const tau = (v * a - u * b) / (n * l1Derived);
-
-    if (Math.abs(tau) > 1.0) {
-        return 0.0;
-    }
-
-    return Math.sqrt(1.0 - Math.pow(tau, 2)) * l1Derived / n;
 }
 
 export function circumstancesToJulianDay(circumstances: TimeLocationCircumstances): number {
