@@ -67,8 +67,6 @@ it('tests getTimeLocationCircumstances', () => {
 
     const circumstances = getTimeLocationCircumstances(besselianElements, location, t);
 
-    console.log(circumstances);
-
     expect(round(circumstances.tMax, 6)).toBe(2459198.177);
     expect(round(circumstances.t0, 6)).toBe(16);
     expect(round(circumstances.dT, 6)).toBe(72.1);
