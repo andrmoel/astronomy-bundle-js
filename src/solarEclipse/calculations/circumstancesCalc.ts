@@ -67,6 +67,30 @@ export function getTimeLocationCircumstances(
     return {tMax, t0, dT, t, u, v, a, b, l1Derived, l2Derived, n2}
 }
 
+export function getTimeLocationCircumstancesMaxEclipse(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
+    let t = 0;
+    let tau = 1;
+
+    let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
+
+    let cnt = 0;
+    while (Math.abs(tau) > 0.000001 && cnt < 50) {
+        const {u, v, a, b, n2} = circumstances;
+
+        tau = (u * a + v * b) / n2;
+        t -= tau;
+
+        circumstances = getTimeLocationCircumstances(besselianElements, location, t);
+
+        cnt++;
+    }
+
+    return circumstances;
+}
+
 export function getObservationalCircumstances(
     circumstances: TimeLocationCircumstances,
 ): ObservationalCircumstances {

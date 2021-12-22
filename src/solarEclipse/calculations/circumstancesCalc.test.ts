@@ -5,6 +5,7 @@ import {
     getObservationalCircumstances,
     getTimeCircumstances,
     getTimeLocationCircumstances,
+    getTimeLocationCircumstancesMaxEclipse,
 } from './circumstancesCalc';
 
 const besselianElements = {
@@ -78,6 +79,22 @@ it('tests getTimeLocationCircumstances', () => {
     expect(round(circumstances.l1Derived, 6)).toBe(0.539349);
     expect(round(circumstances.l2Derived, 6)).toBe(-0.006755);
     expect(round(circumstances.n2, 6)).toBe(0.14223);
+});
+
+it('tests getTimeLocationCircumstancesMaxEclipse', () => {
+    const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+
+    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
+    expect(round(circumstances.t0, 6)).toBe(16);
+    expect(round(circumstances.dT, 6)).toBe(72.1);
+    expect(round(circumstances.t, 8)).toBe(0.1505589);
+    expect(round(circumstances.u, 6)).toBe(-0.000885);
+    expect(round(circumstances.v, 6)).toBe(-0.003355);
+    expect(round(circumstances.a, 6)).toBe(0.362797);
+    expect(round(circumstances.b, 6)).toBe(-0.095723);
+    expect(round(circumstances.l1Derived, 6)).toBe(0.539344);
+    expect(round(circumstances.l2Derived, 6)).toBe(-0.00676);
+    expect(round(circumstances.n2, 6)).toBe(0.140784);
 });
 
 it('tests getObservationalCircumstances', () => {
