@@ -1,7 +1,7 @@
 import Location from '../earth/Location';
 import createLocation from '../earth/createLocation';
 import {BesselianElements} from './types/besselianElementsTypes';
-import {getTimeLocalDependentCircumstances, iterateCircumstancesMaximumEclipse} from './calculations/circumstancesCalc';
+import {getTimeLocationCircumstances, iterateCircumstancesMaximumEclipse} from './calculations/circumstancesCalc';
 import createSolarEclipseCircumstances from './createSolarEclipseCircumstances';
 import SolarEclipseCircumstances from './SolarEclipseCircumstances';
 
@@ -21,7 +21,7 @@ export default class SolarEclipse {
 
     public getCircumstances(location: Location, t: number): SolarEclipseCircumstances {
         // TODO implement
-        const circumstances = getTimeLocalDependentCircumstances(this.besselianElements, location, t);
+        const circumstances = getTimeLocationCircumstances(this.besselianElements, location, t);
 
         return createSolarEclipseCircumstances(circumstances);
     }

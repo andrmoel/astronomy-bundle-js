@@ -1,8 +1,10 @@
 import {round} from '../../utils/math';
+import {TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {
     circumstancesToJulianDay,
-    getTimeDependentCircumstances,
-    getTimeLocalDependentCircumstances,
+    getObservationalCircumstances,
+    getTimeCircumstances,
+    getTimeLocationCircumstances,
     iterateCircumstancesMaximumEclipse,
 } from './circumstancesCalc';
 
@@ -28,10 +30,24 @@ const location = {
     elevation: 450,
 }
 
-it('tests getTimeDependentCircumstances', () => {
+const timeLocationCircumstances: TimeLocationCircumstances = {
+    tMax: 2459198.177,
+    t0: 16,
+    dT: 72.1,
+    t: 0,
+    u: -0.0555894700932891,
+    v: 0.011295675571670327,
+    a: 0.3639375042180445,
+    b: -0.09889174084574227,
+    l1Derived: 0.53934912025566,
+    l2Derived: -0.0067554588016498825,
+    n2: 0.14223008338396062,
+}
+
+it('tests getTimeCircumstances', () => {
     const t = 0.5;
 
-    const {x, dX, y, dY, d, dD, mu, dMu, l1, dL1, l2, dL2} = getTimeDependentCircumstances(besselianElements, t);
+    const {x, dX, y, dY, d, dD, mu, dMu, l1, dL1, l2, dL2} = getTimeCircumstances(besselianElements, t);
 
     expect(round(x, 6)).toBe(0.099859);
     expect(round(dX, 6)).toBe(0.563372);
@@ -47,20 +63,32 @@ it('tests getTimeDependentCircumstances', () => {
     expect(round(dL2, 6)).toBe(0.000084);
 });
 
-it('tests getTimeLocalDependentCircumstances', () => {
+it('tests getTimeLocationCircumstances', () => {
     const t = 0;
 
-    const {tMax, t0, dT, u, v, a, b, n2} = getTimeLocalDependentCircumstances(besselianElements, location, t);
+    const circumstances = getTimeLocationCircumstances(besselianElements, location, t);
 
-    expect(round(tMax, 6)).toBe(2459198.177);
-    expect(round(t0, 6)).toBe(16);
-    expect(round(dT, 6)).toBe(72.1);
-    expect(round(t, 6)).toBe(0);
-    expect(round(u, 6)).toBe(-0.055589);
-    expect(round(v, 6)).toBe(0.011296);
-    expect(round(a, 6)).toBe(0.363938);
-    expect(round(b, 6)).toBe(-0.098892);
-    expect(round(n2, 6)).toBe(0.14223);
+    console.log(circumstances);
+
+    expect(round(circumstances.tMax, 6)).toBe(2459198.177);
+    expect(round(circumstances.t0, 6)).toBe(16);
+    expect(round(circumstances.dT, 6)).toBe(72.1);
+    expect(round(circumstances.t, 6)).toBe(0);
+    expect(round(circumstances.u, 6)).toBe(-0.055589);
+    expect(round(circumstances.v, 6)).toBe(0.011296);
+    expect(round(circumstances.a, 6)).toBe(0.363938);
+    expect(round(circumstances.b, 6)).toBe(-0.098892);
+    expect(round(circumstances.l1Derived, 6)).toBe(0.539349);
+    expect(round(circumstances.l2Derived, 6)).toBe(-0.006755);
+    expect(round(circumstances.n2, 6)).toBe(0.14223);
+});
+
+it('tests getObservationalCircumstances', () => {
+    const {maximumEclipse, magnitude, moonSunRatio} = getObservationalCircumstances(timeLocationCircumstances);
+
+    expect(round(maximumEclipse, 5)).toBe(0.05673);
+    expect(round(magnitude, 5)).toBe(0.90618);
+    expect(round(moonSunRatio, 5)).toBe(1.02537);
 });
 
 it('tests iterateCircumstancesMaximumEclipse', () => {
@@ -78,19 +106,7 @@ it('tests iterateCircumstancesMaximumEclipse', () => {
 });
 
 it('tests circumstancesToJulianDay', () => {
-    const circumstances = {
-        tMax: 2459198.177,
-        t0: 16,
-        dT: 72.1,
-        t: 0.1505589,
-        u: -0.000885,
-        v: -0.003355,
-        a: 0.362797,
-        b: -0.095723,
-        n2: 0.14078416,
-    };
+    const jd = circumstancesToJulianDay(timeLocationCircumstances);
 
-    const jd = circumstancesToJulianDay(circumstances);
-
-    expect(round(jd, 6)).toBe(2459198.172106);
+    expect(round(jd, 6)).toBe(2459198.165833);
 });
