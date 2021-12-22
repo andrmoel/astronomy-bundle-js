@@ -1,4 +1,3 @@
-import Location from '../earth/Location';
 import SolarEclipse from './SolarEclipse';
 
 const besselianElements = {
@@ -36,8 +35,6 @@ it('tests getBesselianElements', async () => {
         lonGreatestEclipse: -67.9,
     });
 });
-
-const location = new Location(-39.53940, -70.37216, 450);
 
 it('tests getLocationOfGreatestEclipse', () => {
     const location = solarEclipse.getLocationOfGreatestEclipse();
