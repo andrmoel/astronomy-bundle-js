@@ -14,9 +14,6 @@ export type TimeCircumstances = {
 };
 
 export type TimeLocationCircumstances = {
-    tMax: number,
-    t0: number,
-    dT: number,
     t: number,
     u: number,
     v: number,
@@ -26,9 +23,3 @@ export type TimeLocationCircumstances = {
     l2Derived: number,
     n2: number,
 };
-
-export type ObservationalCircumstances = {
-    maximumEclipse: number,
-    magnitude: number,
-    moonSunRatio: number,
-}
