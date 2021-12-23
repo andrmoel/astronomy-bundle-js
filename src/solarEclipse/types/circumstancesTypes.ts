@@ -1,5 +1,3 @@
-import {SolarEclipseType} from '../constants/solarEclipseTypes';
-
 export type TimeCircumstances = {
     x: number,
     dX: number,
@@ -25,10 +23,3 @@ export type TimeLocationCircumstances = {
     l2Derived: number,
     n2: number,
 };
-
-export type ObservationalCircumstances = {
-    eclipseType: SolarEclipseType,
-    maximumEclipse: number,
-    magnitude: number,
-    moonSunRatio: number,
-}

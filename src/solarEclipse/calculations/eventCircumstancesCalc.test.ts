@@ -10,9 +10,6 @@ import {
     getTimeLocationCircumstancesMaxEclipse,
 } from './eventCircumstancesCalc';
 
-import '../../assets/script_xavier';
-import {getObservationalCircumstances} from './circumstancesCalc';
-
 describe('test for partial solar eclipse 2019-01-06', () => {
     const toi = createTimeOfInterest.fromTime(2019, 1, 6, 0, 0, 0);
     let besselianElements: BesselianElements;
@@ -43,9 +40,6 @@ describe('test for partial solar eclipse 2019-01-06', () => {
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
-            const obsCircumstances = getObservationalCircumstances(circumstances);
-
-            console.log(obsCircumstances);
             // TODO Throw exception, no eclipse possible
         });
 
