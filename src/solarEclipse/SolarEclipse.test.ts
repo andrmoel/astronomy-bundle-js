@@ -1,4 +1,6 @@
+import {createLocation} from '../earth';
 import SolarEclipse from './SolarEclipse';
+import LocalCircumstances from './LocalCircumstances';
 
 const besselianElements = {
     tMax: 2459198.177,
@@ -41,4 +43,12 @@ it('tests getLocationOfGreatestEclipse', () => {
 
     expect(location.lat).toBe(-40.3);
     expect(location.lon).toBe(-67.9);
+});
+
+it('tests getLocalCircumstances', () => {
+    const location = createLocation(-39.53940, -70.37216, 450);
+
+    const circumstances = solarEclipse.getLocalCircumstances(location);
+
+    expect(circumstances).toBeInstanceOf(LocalCircumstances);
 });
