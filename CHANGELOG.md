@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.8.0 (2021-12-27)
+
+
+### Features
+
+* **solar-eclipse:** add observational circumstances ([045c418](https://github.com/andrmoel/astronomy-bundle-js/commit/045c4180880749c1d7292dad19555032c061e066))
+
 ### 6.7.10 (2021-12-27)
 
 ### 6.7.9 (2021-12-27)
