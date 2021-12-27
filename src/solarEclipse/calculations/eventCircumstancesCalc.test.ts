@@ -118,6 +118,193 @@ describe('test for partial solar eclipse 2019-01-06', () => {
     });
 });
 
+describe('test for annular solar eclipse 2021-06-10', () => {
+    const toi = createTimeOfInterest.fromTime(2021, 6, 10, 0, 0, 0);
+    let besselianElements: BesselianElements;
+
+    beforeEach(async () => {
+        besselianElements = await createBesselianElements(toi);
+    });
+
+    describe('an observer outside the path of eclipse', () => {
+        const location = {
+            lat: 42.55581,
+            lon: 12.00954,
+            elevation: 515,
+        }
+
+        it('tests getTimeLocationCircumstancesC1', () => {
+            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesC2', () => {
+            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
+            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesC3', () => {
+            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesC4', () => {
+            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+    });
+
+    describe('an observer inside path of partial eclipse', () => {
+        const location = {
+            lat: 52.52199,
+            lon: 13.41297,
+            elevation: 35,
+        }
+
+        it('tests getTimeLocationCircumstancesC1', () => {
+            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-1.37374146);
+            expect(round(circumstances.h, 8)).toBe(337.63279536);
+            expect(round(circumstances.u, 6)).toBe(-0.47515);
+            expect(round(circumstances.v, 6)).toBe(0.297542);
+            expect(round(circumstances.a, 6)).toBe(0.353489);
+            expect(round(circumstances.b, 6)).toBe(0.113077);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.560623);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.014413);
+            expect(round(circumstances.n2, 6)).toBe(0.137741);
+        });
+
+        it('tests getTimeLocationCircumstancesC2', () => {
+            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
+            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-0.33407113);
+            expect(round(circumstances.h, 8)).toBe(353.22701849);
+            expect(round(circumstances.u, 6)).toBe(-0.114235);
+            expect(round(circumstances.v, 6)).toBe(0.406489);
+            expect(round(circumstances.a, 6)).toBe(0.342695);
+            expect(round(circumstances.b, 6)).toBe(0.096307);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.560407);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.014198);
+            expect(round(circumstances.n2, 6)).toBe(0.126715);
+        });
+
+        it('tests getTimeLocationCircumstancesC3', () => {
+            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
+
+            // TODO Throw exception, no eclipse possible
+        });
+
+        it('tests getTimeLocationCircumstancesC4', () => {
+            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(0.73815111);
+            expect(round(circumstances.h, 8)).toBe(369.30949431);
+            expect(round(circumstances.u, 6)).toBe(0.252658);
+            expect(round(circumstances.v, 6)).toBe(0.500167);
+            expect(round(circumstances.a, 6)).toBe(0.34375);
+            expect(round(circumstances.b, 6)).toBe(0.078444);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.560359);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.014151);
+            expect(round(circumstances.n2, 6)).toBe(0.124317);
+        });
+    });
+
+    describe('an observer inside path of annularity', () => {
+        const location = {
+            lat: 54.75462,
+            lon: -82.39848,
+            elevation: 20,
+        }
+
+        it('tests getTimeLocationCircumstancesC1', () => {
+            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-1.97556532);
+            expect(round(circumstances.h, 8)).toBe(232.7944688);
+            expect(round(circumstances.u, 6)).toBe(-0.548079);
+            expect(round(circumstances.v, 6)).toBe(-0.135031);
+            expect(round(circumstances.a, 6)).toBe(0.592581);
+            expect(round(circumstances.b, 6)).toBe(0.136664);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.564468);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.018238);
+            expect(round(circumstances.n2, 6)).toBe(0.369829);
+        });
+
+        it('tests getTimeLocationCircumstancesC2', () => {
+            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-1.05513053);
+            expect(round(circumstances.h, 8)).toBe(246.60025435);
+            expect(round(circumstances.u, 6)).toBe(-0.016715);
+            expect(round(circumstances.v, 6)).toBe(-0.005848);
+            expect(round(circumstances.a, 6)).toBe(0.561269);
+            expect(round(circumstances.b, 6)).toBe(0.14354);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.563935);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.017708);
+            expect(round(circumstances.n2, 6)).toBe(0.335627);
+        });
+
+        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
+            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-1.02464793);
+            expect(round(circumstances.h, 8)).toBe(247.05746894);
+            expect(round(circumstances.u, 6)).toBe(0.000377);
+            expect(round(circumstances.v, 6)).toBe(-0.00147);
+            expect(round(circumstances.a, 6)).toBe(0.560162);
+            expect(round(circumstances.b, 6)).toBe(0.143716);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.563916);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.01769);
+            expect(round(circumstances.n2, 6)).toBe(0.334435);
+        });
+
+        it('tests getTimeLocationCircumstancesC3', () => {
+            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-0.99417691);
+            expect(round(circumstances.h, 8)).toBe(247.51450986);
+            expect(round(circumstances.u, 6)).toBe(0.017429);
+            expect(round(circumstances.v, 6)).toBe(0.002912);
+            expect(round(circumstances.a, 6)).toBe(0.559051);
+            expect(round(circumstances.b, 6)).toBe(0.143888);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.563897);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.01767);
+            expect(round(circumstances.n2, 6)).toBe(0.333241);
+        });
+
+        it('tests getTimeLocationCircumstancesC4', () => {
+            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
+
+            expect(round(circumstances.t, 8)).toBe(-0.0199363);
+            expect(round(circumstances.h, 8)).toBe(262.1273396);
+            expect(round(circumstances.u, 6)).toBe(0.544226);
+            expect(round(circumstances.v, 6)).toBe(0.145155);
+            expect(round(circumstances.a, 6)).toBe(0.521966);
+            expect(round(circumstances.b, 6)).toBe(0.1475);
+            expect(round(circumstances.l1Derived, 6)).toBe(0.563251);
+            expect(round(circumstances.l2Derived, 6)).toBe(0.017028);
+            expect(round(circumstances.n2, 6)).toBe(0.294205);
+        });
+    });
+});
+
 describe('test for total solar eclipse 2020-12-14', () => {
     const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
     let besselianElements: BesselianElements;
@@ -309,193 +496,6 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(round(circumstances.l1Derived, 6)).toBe(0.539536);
             expect(round(circumstances.l2Derived, 6)).toBe(-0.006569);
             expect(round(circumstances.n2, 6)).toBe(0.139488);
-        });
-    });
-});
-
-describe('test for annular solar eclipse 2021-06-10', () => {
-    const toi = createTimeOfInterest.fromTime(2021, 6, 10, 0, 0, 0);
-    let besselianElements: BesselianElements;
-
-    beforeEach(async () => {
-        besselianElements = await createBesselianElements(toi);
-    });
-
-    describe('an observer outside the path of eclipse', () => {
-        const location = {
-            lat: 42.55581,
-            lon: 12.00954,
-            elevation: 515,
-        }
-
-        it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-    });
-
-    describe('an observer inside path of partial eclipse', () => {
-        const location = {
-            lat: 52.52199,
-            lon: 13.41297,
-            elevation: 35,
-        }
-
-        it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-1.37374146);
-            expect(round(circumstances.h, 8)).toBe(337.63279536);
-            expect(round(circumstances.u, 6)).toBe(-0.47515);
-            expect(round(circumstances.v, 6)).toBe(0.297542);
-            expect(round(circumstances.a, 6)).toBe(0.353489);
-            expect(round(circumstances.b, 6)).toBe(0.113077);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.560623);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.014413);
-            expect(round(circumstances.n2, 6)).toBe(0.137741);
-        });
-
-        it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-0.33407113);
-            expect(round(circumstances.h, 8)).toBe(353.22701849);
-            expect(round(circumstances.u, 6)).toBe(-0.114235);
-            expect(round(circumstances.v, 6)).toBe(0.406489);
-            expect(round(circumstances.a, 6)).toBe(0.342695);
-            expect(round(circumstances.b, 6)).toBe(0.096307);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.560407);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.014198);
-            expect(round(circumstances.n2, 6)).toBe(0.126715);
-        });
-
-        it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
-        });
-
-        it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(0.73815111);
-            expect(round(circumstances.h, 8)).toBe(369.30949431);
-            expect(round(circumstances.u, 6)).toBe(0.252658);
-            expect(round(circumstances.v, 6)).toBe(0.500167);
-            expect(round(circumstances.a, 6)).toBe(0.34375);
-            expect(round(circumstances.b, 6)).toBe(0.078444);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.560359);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.014151);
-            expect(round(circumstances.n2, 6)).toBe(0.124317);
-        });
-    });
-
-    describe('an observer inside path of annularity', () => {
-        const location = {
-            lat: 54.75462,
-            lon: -82.39848,
-            elevation: 20,
-        }
-
-        it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-1.97556532);
-            expect(round(circumstances.h, 8)).toBe(232.7944688);
-            expect(round(circumstances.u, 6)).toBe(-0.548079);
-            expect(round(circumstances.v, 6)).toBe(-0.135031);
-            expect(round(circumstances.a, 6)).toBe(0.592581);
-            expect(round(circumstances.b, 6)).toBe(0.136664);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.564468);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.018238);
-            expect(round(circumstances.n2, 6)).toBe(0.369829);
-        });
-
-        it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-1.05513053);
-            expect(round(circumstances.h, 8)).toBe(246.60025435);
-            expect(round(circumstances.u, 6)).toBe(-0.016715);
-            expect(round(circumstances.v, 6)).toBe(-0.005848);
-            expect(round(circumstances.a, 6)).toBe(0.561269);
-            expect(round(circumstances.b, 6)).toBe(0.14354);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.563935);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.017708);
-            expect(round(circumstances.n2, 6)).toBe(0.335627);
-        });
-
-        it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-1.02464793);
-            expect(round(circumstances.h, 8)).toBe(247.05746894);
-            expect(round(circumstances.u, 6)).toBe(0.000377);
-            expect(round(circumstances.v, 6)).toBe(-0.00147);
-            expect(round(circumstances.a, 6)).toBe(0.560162);
-            expect(round(circumstances.b, 6)).toBe(0.143716);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.563916);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.01769);
-            expect(round(circumstances.n2, 6)).toBe(0.334435);
-        });
-
-        it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-0.99417691);
-            expect(round(circumstances.h, 8)).toBe(247.51450986);
-            expect(round(circumstances.u, 6)).toBe(0.017429);
-            expect(round(circumstances.v, 6)).toBe(0.002912);
-            expect(round(circumstances.a, 6)).toBe(0.559051);
-            expect(round(circumstances.b, 6)).toBe(0.143888);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.563897);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.01767);
-            expect(round(circumstances.n2, 6)).toBe(0.333241);
-        });
-
-        it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-0.0199363);
-            expect(round(circumstances.h, 8)).toBe(262.1273396);
-            expect(round(circumstances.u, 6)).toBe(0.544226);
-            expect(round(circumstances.v, 6)).toBe(0.145155);
-            expect(round(circumstances.a, 6)).toBe(0.521966);
-            expect(round(circumstances.b, 6)).toBe(0.1475);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.563251);
-            expect(round(circumstances.l2Derived, 6)).toBe(0.017028);
-            expect(round(circumstances.n2, 6)).toBe(0.294205);
         });
     });
 });

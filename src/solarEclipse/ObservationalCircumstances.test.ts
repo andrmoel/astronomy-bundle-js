@@ -33,3 +33,9 @@ it('tests getMoonSunRatio', () => {
 
     expect(round(moonSunRatio, 5)).toBe(1.02539);
 });
+
+it('tests getObscuration', () => {
+    const moonSunRatio = obsCircumstances.getObscuration();
+
+    expect(round(moonSunRatio, 5)).toBe(1);
+});

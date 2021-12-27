@@ -1,4 +1,9 @@
-import {getEclipseType, getMagnitude, getMoonSunRatio} from './calculations/observationalCircumstancesCalc';
+import {
+    getEclipseType,
+    getMagnitude,
+    getMoonSunRatio,
+    getObscuration,
+} from './calculations/observationalCircumstancesCalc';
 import {TimeLocationCircumstances} from './types/circumstancesTypes';
 import {SolarEclipseType} from './constants/solarEclipseTypes';
 
@@ -16,5 +21,9 @@ export default class ObservationalCircumstances {
 
     public getMoonSunRatio(): number {
         return getMoonSunRatio(this.circumstances);
+    }
+
+    public getObscuration(): number {
+        return getObscuration(this.circumstances);
     }
 }
