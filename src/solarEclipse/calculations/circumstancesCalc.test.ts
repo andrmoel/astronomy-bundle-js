@@ -18,12 +18,6 @@ const besselianElements = {
     lonGreatestEclipse: -67.9,
 };
 
-const location = {
-    lat: -39.53940,
-    lon: -70.37216,
-    elevation: 450,
-}
-
 const circumstances: TimeLocationCircumstances = {
     t: 0,
     h: -9.407488,
@@ -55,18 +49,46 @@ it('tests getTimeCircumstances', () => {
     expect(round(dL2, 6)).toBe(0.000084);
 });
 
-it('tests getTimeLocationCircumstances', () => {
-    const {t, h, u, v, a, b, l1Derived, l2Derived, n2} = getTimeLocationCircumstances(besselianElements, location, 0);
+describe('tests for getTimeLocationCircumstances', () => {
+    it('has an elevation of 0 meters', () => {
+        const location = {
+            lat: -39.53940,
+            lon: -70.37216,
+            elevation: 0,
+        }
 
-    expect(round(t, 6)).toBe(0);
-    expect(round(h, 6)).toBe(-9.407488);
-    expect(round(u, 6)).toBe(-0.055589);
-    expect(round(v, 6)).toBe(0.011296);
-    expect(round(a, 6)).toBe(0.363938);
-    expect(round(b, 6)).toBe(-0.098892);
-    expect(round(l1Derived, 6)).toBe(0.539349);
-    expect(round(l2Derived, 6)).toBe(-0.006755);
-    expect(round(n2, 6)).toBe(0.14223);
+        const circumstances = getTimeLocationCircumstances(besselianElements, location, 0);
+
+        expect(round(circumstances.t, 6)).toBe(0);
+        expect(round(circumstances.h, 6)).toBe(-9.407488);
+        expect(round(circumstances.u, 6)).toBe(-0.055598);
+        expect(round(circumstances.v, 6)).toBe(0.011276);
+        expect(round(circumstances.a, 6)).toBe(0.363952);
+        expect(round(circumstances.b, 6)).toBe(-0.098891);
+        expect(round(circumstances.l1Derived, 6)).toBe(0.539349);
+        expect(round(circumstances.l2Derived, 6)).toBe(-0.006755);
+        expect(round(circumstances.n2, 6)).toBe(0.14224);
+    });
+
+    it('has an elevation of 450 meters', () => {
+        const location = {
+            lat: -39.53940,
+            lon: -70.37216,
+            elevation: 450,
+        }
+
+        const circumstances = getTimeLocationCircumstances(besselianElements, location, 0);
+
+        expect(round(circumstances.t, 6)).toBe(0);
+        expect(round(circumstances.h, 6)).toBe(-9.407488);
+        expect(round(circumstances.u, 6)).toBe(-0.055589);
+        expect(round(circumstances.v, 6)).toBe(0.011296);
+        expect(round(circumstances.a, 6)).toBe(0.363938);
+        expect(round(circumstances.b, 6)).toBe(-0.098892);
+        expect(round(circumstances.l1Derived, 6)).toBe(0.539349);
+        expect(round(circumstances.l2Derived, 6)).toBe(-0.006755);
+        expect(round(circumstances.n2, 6)).toBe(0.14223);
+    });
 });
 
 it('tests circumstancesToJulianDay', () => {
