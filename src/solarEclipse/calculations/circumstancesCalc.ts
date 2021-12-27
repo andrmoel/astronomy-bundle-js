@@ -65,7 +65,7 @@ export function getTimeLocationCircumstances(
 
     const n2 = Math.pow(a, 2) + Math.pow(b, 2);
 
-    return {t, h, u, v, a, b, l1Derived, l2Derived, n2}
+    return {t, h, u, v, a, b, l1Derived, l2Derived, n2};
 }
 
 export function circumstancesToJulianDay(
