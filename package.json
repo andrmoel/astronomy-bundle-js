@@ -1,6 +1,6 @@
 {
   "name": "astronomy-bundle",
-  "version": "6.7.9",
+  "version": "6.7.10",
   "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
   "keywords": [
     "astronomy",
