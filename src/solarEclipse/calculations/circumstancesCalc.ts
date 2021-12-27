@@ -1,7 +1,7 @@
 import {BesselianElements} from '../types/besselianElementsTypes';
 import {TimeCircumstances, TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {Location} from '../../earth/types/LocationTypes';
-import {deg2rad} from '../../utils/angleCalc';
+import {deg2rad, rad2deg} from '../../utils/angleCalc';
 import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
 import {populate, populateD} from './besselianElementsCalc';
 
@@ -46,6 +46,7 @@ export function getTimeLocationCircumstances(
     const lonRad = deg2rad(lon);
 
     const hRad = muRad + lonRad - (dT / 13713.440924999626077);
+    const h = rad2deg(hRad);
 
     const xi = rhoCosLat * Math.sin(hRad);
     const eta = rhoSinLat * Math.cos(dRad) - rhoCosLat * Math.cos(hRad) * Math.sin(dRad);
@@ -64,7 +65,7 @@ export function getTimeLocationCircumstances(
 
     const n2 = Math.pow(a, 2) + Math.pow(b, 2);
 
-    return {t, u, v, a, b, l1Derived, l2Derived, n2}
+    return {t, h, u, v, a, b, l1Derived, l2Derived, n2}
 }
 
 export function circumstancesToJulianDay(
