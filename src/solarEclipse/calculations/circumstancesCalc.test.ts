@@ -26,6 +26,7 @@ const location = {
 
 const circumstances: TimeLocationCircumstances = {
     t: 0,
+    h: -9.407488,
     u: -0.0555894700932891,
     v: 0.011295675571670327,
     a: 0.3639375042180445,
@@ -55,9 +56,10 @@ it('tests getTimeCircumstances', () => {
 });
 
 it('tests getTimeLocationCircumstances', () => {
-    const {t, u, v, a, b, l1Derived, l2Derived, n2} = getTimeLocationCircumstances(besselianElements, location, 0);
+    const {t, h, u, v, a, b, l1Derived, l2Derived, n2} = getTimeLocationCircumstances(besselianElements, location, 0);
 
     expect(round(t, 6)).toBe(0);
+    expect(round(h, 6)).toBe(-9.407488);
     expect(round(u, 6)).toBe(-0.055589);
     expect(round(v, 6)).toBe(0.011296);
     expect(round(a, 6)).toBe(0.363938);

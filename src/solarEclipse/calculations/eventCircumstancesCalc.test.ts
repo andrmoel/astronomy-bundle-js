@@ -86,6 +86,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.12886616);
+            expect(round(circumstances.h, 8)).toBe(367.22697942);
             expect(round(circumstances.u, 6)).toBe(-0.007053);
             expect(round(circumstances.v, 6)).toBe(0.166332);
             expect(round(circumstances.a, 6)).toBe(0.363898);
@@ -105,6 +106,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(1.33158222);
+            expect(round(circumstances.h, 8)).toBe(389.1289441);
             expect(round(circumstances.u, 6)).toBe(0.534497);
             expect(round(circumstances.v, 6)).toBe(0.204095);
             expect(round(circumstances.a, 6)).toBe(0.381066);
@@ -147,6 +149,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.61575574);
+            expect(round(circumstances.h, 8)).toBe(-15.17919907);
             expect(round(circumstances.u, 6)).toBe(-0.271173);
             expect(round(circumstances.v, 6)).toBe(-0.757723);
             expect(round(circumstances.a, 6)).toBe(0.31487);
@@ -180,6 +183,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.02926645);
+            expect(round(circumstances.h, 8)).toBe(17.35514748);
             expect(round(circumstances.u, 6)).toBe(-0.473179);
             expect(round(circumstances.v, 6)).toBe(-0.258729);
             expect(round(circumstances.a, 6)).toBe(0.333153);
@@ -199,6 +203,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(1.25551637);
+            expect(round(circumstances.h, 8)).toBe(36.62239313);
             expect(round(circumstances.u, 6)).toBe(-0.024194);
             expect(round(circumstances.v, 6)).toBe(-0.31345);
             expect(round(circumstances.a, 6)).toBe(0.369799);
@@ -218,6 +223,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(2.39729641);
+            expect(round(circumstances.h, 8)).toBe(53.74509751);
             expect(round(circumstances.u, 6)).toBe(0.425645);
             expect(round(circumstances.v, 6)).toBe(-0.333794);
             expect(round(circumstances.a, 6)).toBe(0.420675);
@@ -239,6 +245,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-1.24158445);
+            expect(round(circumstances.h, 8)).toBe(-28.02690935);
             expect(round(circumstances.u, 6)).toBe(-0.51834);
             expect(round(circumstances.v, 6)).toBe(0.149826);
             expect(round(circumstances.a, 6)).toBe(0.384829);
@@ -252,6 +259,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(0.13509718);
+            expect(round(circumstances.h, 8)).toBe(-7.38150333);
             expect(round(circumstances.u, 6)).toBe(-0.006495);
             expect(round(circumstances.v, 6)).toBe(-0.001872);
             expect(round(circumstances.a, 6)).toBe(0.362899);
@@ -265,6 +273,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(0.1505589);
+            expect(round(circumstances.h, 8)).toBe(-7.14963159);
             expect(round(circumstances.u, 6)).toBe(-0.000885);
             expect(round(circumstances.v, 6)).toBe(-0.003355);
             expect(round(circumstances.a, 6)).toBe(0.362797);
@@ -278,6 +287,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(0.1660297);
+            expect(round(circumstances.h, 8)).toBe(-6.91762379);
             expect(round(circumstances.u, 6)).toBe(0.004727);
             expect(round(circumstances.v, 6)).toBe(-0.004833);
             expect(round(circumstances.a, 6)).toBe(0.362697);
@@ -291,6 +301,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(1.6025965);
+            expect(round(circumstances.h, 8)).toBe(14.62585025);
             expect(round(circumstances.u, 6)).toBe(0.52602);
             expect(round(circumstances.v, 6)).toBe(-0.120008);
             expect(round(circumstances.a, 6)).toBe(0.367769);
@@ -359,6 +370,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-1.37374146);
+            expect(round(circumstances.h, 8)).toBe(337.63279536);
             expect(round(circumstances.u, 6)).toBe(-0.47515);
             expect(round(circumstances.v, 6)).toBe(0.297542);
             expect(round(circumstances.a, 6)).toBe(0.353489);
@@ -378,6 +390,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.33407113);
+            expect(round(circumstances.h, 8)).toBe(353.22701849);
             expect(round(circumstances.u, 6)).toBe(-0.114235);
             expect(round(circumstances.v, 6)).toBe(0.406489);
             expect(round(circumstances.a, 6)).toBe(0.342695);
@@ -397,6 +410,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(0.73815111);
+            expect(round(circumstances.h, 8)).toBe(369.30949431);
             expect(round(circumstances.u, 6)).toBe(0.252658);
             expect(round(circumstances.v, 6)).toBe(0.500167);
             expect(round(circumstances.a, 6)).toBe(0.34375);
@@ -418,6 +432,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-1.97556532);
+            expect(round(circumstances.h, 8)).toBe(232.7944688);
             expect(round(circumstances.u, 6)).toBe(-0.548079);
             expect(round(circumstances.v, 6)).toBe(-0.135031);
             expect(round(circumstances.a, 6)).toBe(0.592581);
@@ -431,6 +446,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-1.05513053);
+            expect(round(circumstances.h, 8)).toBe(246.60025435);
             expect(round(circumstances.u, 6)).toBe(-0.016715);
             expect(round(circumstances.v, 6)).toBe(-0.005848);
             expect(round(circumstances.a, 6)).toBe(0.561269);
@@ -444,6 +460,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-1.02464793);
+            expect(round(circumstances.h, 8)).toBe(247.05746894);
             expect(round(circumstances.u, 6)).toBe(0.000377);
             expect(round(circumstances.v, 6)).toBe(-0.00147);
             expect(round(circumstances.a, 6)).toBe(0.560162);
@@ -457,6 +474,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.99417691);
+            expect(round(circumstances.h, 8)).toBe(247.51450986);
             expect(round(circumstances.u, 6)).toBe(0.017429);
             expect(round(circumstances.v, 6)).toBe(0.002912);
             expect(round(circumstances.a, 6)).toBe(0.559051);
@@ -470,6 +488,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
 
             expect(round(circumstances.t, 8)).toBe(-0.0199363);
+            expect(round(circumstances.h, 8)).toBe(262.1273396);
             expect(round(circumstances.u, 6)).toBe(0.544226);
             expect(round(circumstances.v, 6)).toBe(0.145155);
             expect(round(circumstances.a, 6)).toBe(0.521966);

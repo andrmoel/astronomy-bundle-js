@@ -15,6 +15,7 @@ export type TimeCircumstances = {
 
 export type TimeLocationCircumstances = {
     t: number,
+    h: number,
     u: number,
     v: number,
     a: number,
