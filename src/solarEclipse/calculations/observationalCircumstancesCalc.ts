@@ -1,5 +1,10 @@
 import {TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {SolarEclipseType} from '../constants/solarEclipseTypes';
+import {Location} from '../../earth/types/LocationTypes';
+import {BesselianElements} from '../types/besselianElementsTypes';
+import {LocalHorizontalCoordinates} from '../../coordinates/types/CoordinateTypes';
+import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from '../../coordinates/calculations/coordinateCalc';
+import {getTimeCircumstances} from './circumstancesCalc';
 
 export function getMaximumEclipse(circumstances: TimeLocationCircumstances): number {
     const {u, v} = circumstances;
@@ -38,4 +43,16 @@ export function getEclipseType(circumstances: TimeLocationCircumstances): SolarE
     }
 
     return SolarEclipseType.partial;
+}
+
+export function getTopocentricHorizontalCoordinates(
+    besselianElements: BesselianElements,
+    circumstances: TimeLocationCircumstances,
+    location: Location,
+): LocalHorizontalCoordinates {
+    const {t, h} = circumstances;
+    const {d} = getTimeCircumstances(besselianElements, t);
+    const {lat} = location;
+
+    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(h, d, lat);
 }
