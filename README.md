@@ -48,6 +48,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 11. [Solar Eclipse](#solar-eclipse)
     1. [Solar Eclipse exists](#solar-eclipse-exists)
     2. [Greatest Eclipse](#solar-eclipse-greatest)
+    3. [Observational Circumstances](#solar-eclipse-obs-circumstances)
 12. [Satellites](#satellites)
     1. [Two Line Elements](#satellites-tle)
 
@@ -1008,6 +1009,103 @@ const location = solarEclipse.getLocationOfGreatestEclipse();
 Result of the calculation:\
 Lat: *-40.3°*\
 Lon: *-67.9°*
+
+### <a name="solar-eclipse-obs-circumstances"></a> Observational Solar Eclipse Circumstances
+
+Observational circumstances are circumstances which are dependent on the location of the observer and the exact time.
+Some events during an eclipse are special:
+
+* C1: First contact of the moon and the sun. Beginning of the solar eclipse
+* C2: Beginning of totality or annularity (Only during total or annular eclipse)
+* Max: Maximum obscuration of the sun
+* C3: End of totality or annularity (Only during total or annular eclipse)
+* C4: Last contact of the moon and the sun. End of the solar eclipse
+
+**Hint for examples:**
+All examples below are using the following data:\
+Eclipse date: 14 December 2020\
+Location of the observer: -40.04842°, -70.07593° (Piedra del Águila, Argentina, elevation: 500 meters)
+
+**Example 1**: Get the observational circumstances for all contacts and the maximum eclipse.
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+import {createLocation} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const location = createLocation(-40.04842, -70.07593, 500);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+
+const localCircumstances = solarEclipse.getLocalCircumstances(location);
+
+const obsCircumstancesC1 = localCircumstances.getObservationalCircumstancesForC1();
+const obsCircumstancesC2 = localCircumstances.getObservationalCircumstancesForC2();
+const obsCircumstancesMax = localCircumstances.getObservationalCircumstancesForMaxEclipse();
+const obsCircumstancesC3 = localCircumstances.getObservationalCircumstancesForC3();
+const obsCircumstancesC4 = localCircumstances.getObservationalCircumstancesForC4();
+```
+
+**Example 2**: Get the eclipse type, magnitude, moon-sun ratio and obscuration of the maximum eclipse for the given location.
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+import {createLocation} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const location = createLocation(-40.04842, -70.07593, 500);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+
+const obsCircumstances = solarEclipse
+        .getLocalCircumstances(location)
+        .getObservationalCircumstancesForMaxEclipse();
+
+const eclipseType = obsCircumstances.getEclipseType();
+const magnitude = obsCircumstances.getMagnitude();
+const moonSunRatio = obsCircumstances.getMoonSunRatio();
+const obscuration = obsCircumstances.getObscuration();
+```
+
+Result of the calculation:\
+Eclipse type: *3 (0 = none, 1 = partial, 2 = annular, 3 = total)*\
+Magnitude: *1.00633*\
+Moon-Sun ratio: *1.02535*\
+Obscuration: *100%*
+
+In other words: The observer will see a total solar eclipse where to moon covers the sun 100%.
+
+**Example 3**: Get the eclipse type, magnitude, moon-sun ratio and obscuration of the maximum eclipse for an observer **outside** of the path of totality.
+Location: -37.47010, -72.36141
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createSolarEclipse} from 'astronomy-bundle/solarEclipse';
+import {createLocation} from 'astronomy-bundle/earth';
+
+const toi = createTimeOfInterest.fromTime(2020, 12, 14, 0, 0, 0);
+const location = createLocation(-37.47010, -72.36141, 135);
+
+const solarEclipse = await createSolarEclipse.fromTimeOfInterest(toi);
+
+const obsCircumstances = solarEclipse
+        .getLocalCircumstances(location)
+        .getObservationalCircumstancesForMaxEclipse();
+
+const eclipseType = obsCircumstances.getEclipseType();
+const magnitude = obsCircumstances.getMagnitude();
+const moonSunRatio = obsCircumstances.getMoonSunRatio();
+const obscuration = obsCircumstances.getObscuration();
+```
+
+Result of the calculation:\
+Eclipse type: *1 (0 = none, 1 = partial, 2 = annular, 3 = total)*\
+Magnitude: *0.96144*\
+Moon-Sun ratio: *1.02547*\
+Obscuration: *95.76%*
+
+In other words: The observer will see a partial solar eclipse with a maximum obscuration of 95.8%.
 
 ## <a name="satellites"></a> Satellites
 
