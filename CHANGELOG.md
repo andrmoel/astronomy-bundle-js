@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 6.9.0 (2021-12-27)
+
+
+### Features
+
+* **solar-eclipse:** get obscuration ([6cf8fef](https://github.com/andrmoel/astronomy-bundle-js/commit/6cf8fef8f0933de65c608891b1988f1891ad98cf))
+
 ## 6.8.0 (2021-12-27)
 
 
