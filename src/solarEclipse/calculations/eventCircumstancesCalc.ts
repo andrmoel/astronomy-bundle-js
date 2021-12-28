@@ -26,7 +26,7 @@ export function getTimeLocationCircumstancesC1(
 
     validateCircumstances(circumstances, location, SolarEclipseEventType.c1);
 
-    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c1);
+    return iterateCircumstancesForContact(besselianElements, location, SolarEclipseEventType.c1);
 }
 
 export function getTimeLocationCircumstancesC2(
@@ -37,7 +37,7 @@ export function getTimeLocationCircumstancesC2(
 
     validateCircumstances(circumstances, location, SolarEclipseEventType.c2);
 
-    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c2);
+    return iterateCircumstancesForContact(besselianElements, location, SolarEclipseEventType.c2);
 }
 
 export function getTimeLocationCircumstancesC3(
@@ -48,7 +48,7 @@ export function getTimeLocationCircumstancesC3(
 
     validateCircumstances(circumstances, location, SolarEclipseEventType.c3);
 
-    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c3);
+    return iterateCircumstancesForContact(besselianElements, location, SolarEclipseEventType.c3);
 }
 
 export function getTimeLocationCircumstancesC4(
@@ -59,7 +59,7 @@ export function getTimeLocationCircumstancesC4(
 
     validateCircumstances(circumstances, location, SolarEclipseEventType.c4);
 
-    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c4);
+    return iterateCircumstancesForContact(besselianElements, location, SolarEclipseEventType.c4);
 }
 
 function iterateCircumstancesMax(
@@ -86,29 +86,29 @@ function iterateCircumstancesMax(
     return circumstances;
 }
 
-function iterateCircumstancesC1C4(
+function iterateCircumstancesForContact(
     besselianElements: BesselianElements,
     location: Location,
     eventType: SolarEclipseEventType,
 ): TimeLocationCircumstances {
-    const circumstancesMaximumEclipse = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-    const tauD = getTauForEclipseContacts(circumstancesMaximumEclipse, eventType);
+    const circumstancesMax = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
 
-    let t = circumstancesMaximumEclipse.t - tauD;
-    let tau = 1;
-    const sign = eventType === SolarEclipseEventType.c1 ? -1 : 1;
+    let t = getTForContacts(circumstancesMax, eventType);
+    const sign = getSign(circumstancesMax, eventType);
 
     let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-
+    let tau = 1;
     let cnt = 0;
-    while (Math.abs(tau) > 0.000001 && cnt < 50) {
-        const {u, v, a, b, l1Derived, n2} = circumstances;
-        const n = Math.sqrt(n2);
 
-        tau = (v * a - u * b) / (n * l1Derived);
+    while (Math.abs(tau) > 0.000001 && cnt < 50) {
+        const {u, v, a, b, n2} = circumstances;
+        const lParamDerived = getLDerived(circumstances, eventType);
+
+        const n = Math.sqrt(n2);
+        tau = (v * a - u * b) / (n * lParamDerived);
 
         if (Math.abs(tau) <= 1.0) {
-            tau = sign * Math.sqrt(1.0 - Math.pow(tau, 2)) * l1Derived / n;
+            tau = sign * Math.sqrt(1.0 - Math.pow(tau, 2)) * lParamDerived / n;
         } else {
             tau = 0.0;
         }
@@ -123,58 +123,30 @@ function iterateCircumstancesC1C4(
     return circumstances;
 }
 
-function iterateCircumstancesC2C3(
-    besselianElements: BesselianElements,
-    location: Location,
+function getTForContacts(
+    circumstancesMax: TimeLocationCircumstances,
     eventType: SolarEclipseEventType,
-): TimeLocationCircumstances {
-    const circumstancesMaximumEclipse = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-    const tauD = getTauForEclipseContacts(circumstancesMaximumEclipse, eventType);
+): number {
+    const {t, l2Derived} = circumstancesMax;
+    const tauD = getTauForEclipseContacts(circumstancesMax, eventType);
 
-    const {l2Derived} = circumstancesMaximumEclipse;
-
-    let t = circumstancesMaximumEclipse.t + (isTotalSolarEclipse(circumstancesMaximumEclipse) ? tauD : -1 * tauD);
-
-    let sign = eventType === SolarEclipseEventType.c2 ? -1 : 1;
-    if (l2Derived < 0.0) {
-        sign = -1 * sign;
-    }
-
-    let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-    let tau = 1;
-    let cnt = 0;
-    while (Math.abs(tau) > 0.000001 && cnt < 50) {
-        const {u, v, a, b, l2Derived, n2} = circumstances;
-        const n = Math.sqrt(n2);
-
-        tau = (v * a - u * b) / (n * l2Derived);
-
-        if (Math.abs(tau) <= 1.0) {
-            tau = sign * Math.sqrt(1.0 - Math.pow(tau, 2)) * l2Derived / n;
-        } else {
-            tau = 0.0;
+    if (eventType === SolarEclipseEventType.c2 || eventType === SolarEclipseEventType.c3) {
+        if (l2Derived < 0.0) {
+            return t + tauD;
         }
-
-        t -= (u * a + v * b) / n2 - tau;
-
-        circumstances = getTimeLocationCircumstances(besselianElements, location, t);
-        cnt++;
     }
 
-    return circumstances;
+    return t - tauD;
 }
 
 function getTauForEclipseContacts(
-    circumstancesMaximumEclipse: TimeLocationCircumstances,
+    circumstancesMax: TimeLocationCircumstances,
     eventType: SolarEclipseEventType,
 ): number {
-    const {u, v, a, b, l1Derived, l2Derived, n2} = circumstancesMaximumEclipse;
+    const {u, v, a, b, n2} = circumstancesMax;
+    const lDerived = getLDerived(circumstancesMax, eventType);
+
     const n = Math.sqrt(n2);
-
-    const lDerived = eventType === SolarEclipseEventType.c1 || eventType === SolarEclipseEventType.c4
-        ? l1Derived
-        : l2Derived;
-
     const tau = (v * a - u * b) / (n * lDerived);
 
     if (Math.abs(tau) > 1.0) {
@@ -184,8 +156,34 @@ function getTauForEclipseContacts(
     return Math.sqrt(1.0 - Math.pow(tau, 2)) * lDerived / n;
 }
 
-function isTotalSolarEclipse(circumstances: TimeLocationCircumstances): boolean {
-    return circumstances.l2Derived < 0.0;
+function getSign(
+    circumstancesMax: TimeLocationCircumstances,
+    eventType: SolarEclipseEventType,
+): number {
+    const sign = (eventType === SolarEclipseEventType.c1 || eventType === SolarEclipseEventType.c2) ? -1 : 1;
+
+    if (eventType === SolarEclipseEventType.c2 || eventType === SolarEclipseEventType.c3) {
+        const {l2Derived} = circumstancesMax;
+
+        if (l2Derived < 0.0) {
+            return -1 * sign;
+        }
+    }
+
+    return sign;
+}
+
+function getLDerived(
+    circumstances: TimeLocationCircumstances,
+    eventType: SolarEclipseEventType,
+): number {
+    const {l1Derived, l2Derived} = circumstances;
+
+    if (eventType === SolarEclipseEventType.c1 || eventType === SolarEclipseEventType.c4) {
+        return l1Derived;
+    }
+
+    return l2Derived;
 }
 
 function validateCircumstances(
