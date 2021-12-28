@@ -26,33 +26,43 @@ describe('test for partial solar eclipse 2019-01-06', () => {
         }
 
         it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC1(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC4(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
     });
 
@@ -77,9 +87,11 @@ describe('test for partial solar eclipse 2019-01-06', () => {
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No C2 possible. Eclipse is only partial at 56.31702, 160.8409')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
@@ -97,9 +109,11 @@ describe('test for partial solar eclipse 2019-01-06', () => {
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No C3 possible. Eclipse is only partial at 56.31702, 160.8409')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {
@@ -116,7 +130,8 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(round(circumstances.n2, 6)).toBe(0.146497);
         });
     });
-});
+})
+;
 
 describe('test for annular solar eclipse 2021-06-10', () => {
     const toi = createTimeOfInterest.fromTime(2021, 6, 10, 0, 0, 0);
@@ -134,33 +149,43 @@ describe('test for annular solar eclipse 2021-06-10', () => {
         }
 
         it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC1(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC4(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 42.55581, 12.00954')
+            );
         });
     });
 
@@ -186,9 +211,11 @@ describe('test for annular solar eclipse 2021-06-10', () => {
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No C2 possible. Eclipse is only partial at 52.52199, 13.41297')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
@@ -206,9 +233,11 @@ describe('test for annular solar eclipse 2021-06-10', () => {
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No C3 possible. Eclipse is only partial at 52.52199, 13.41297')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {
@@ -321,41 +350,43 @@ describe('test for total solar eclipse 2020-12-14', () => {
         }
 
         it('tests getTimeLocationCircumstancesC1', () => {
-            const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC1(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 10.48946, -66.90969')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 10.48946, -66.90969')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
-            const circumstances = getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
-
-            expect(round(circumstances.t, 8)).toBe(-0.61575574);
-            expect(round(circumstances.h, 8)).toBe(-15.17919907);
-            expect(round(circumstances.u, 6)).toBe(-0.271173);
-            expect(round(circumstances.v, 6)).toBe(-0.757723);
-            expect(round(circumstances.a, 6)).toBe(0.31487);
-            expect(round(circumstances.b, 6)).toBe(-0.112685);
-            expect(round(circumstances.l1Derived, 6)).toBe(0.539994);
-            expect(round(circumstances.l2Derived, 6)).toBe(-0.006114);
-            expect(round(circumstances.n2, 6)).toBe(0.111841);
+            expect(() => {
+                getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 10.48946, -66.90969')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 10.48946, -66.90969')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {
-            const circumstances = getTimeLocationCircumstancesC4(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC4(besselianElements, location);
+            }).toThrow(
+                new Error('No eclipse visible at 10.48946, -66.90969')
+            );
         });
     });
 
@@ -381,9 +412,11 @@ describe('test for total solar eclipse 2020-12-14', () => {
         });
 
         it('tests getTimeLocationCircumstancesC2', () => {
-            const circumstances = getTimeLocationCircumstancesC2(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC2(besselianElements, location);
+            }).toThrow(
+                new Error('No C2 possible. Eclipse is only partial at -22.92768, -43.17063')
+            );
         });
 
         it('tests getTimeLocationCircumstancesMaxEclipse', () => {
@@ -401,9 +434,11 @@ describe('test for total solar eclipse 2020-12-14', () => {
         });
 
         it('tests getTimeLocationCircumstancesC3', () => {
-            const circumstances = getTimeLocationCircumstancesC3(besselianElements, location);
-
-            // TODO Throw exception, no eclipse possible
+            expect(() => {
+                getTimeLocationCircumstancesC3(besselianElements, location);
+            }).toThrow(
+                new Error('No C3 possible. Eclipse is only partial at -22.92768, -43.17063')
+            );
         });
 
         it('tests getTimeLocationCircumstancesC4', () => {

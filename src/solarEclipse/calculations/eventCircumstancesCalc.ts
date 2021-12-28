@@ -2,18 +2,76 @@ import {BesselianElements} from '../types/besselianElementsTypes';
 import {Location} from '../../earth/types/LocationTypes';
 import {TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {SolarEclipseEventType} from '../constants/solarEclipseEvents';
+import {round} from '../../utils/math';
+import {SolarEclipseType} from '../constants/solarEclipseTypes';
 import {getTimeLocationCircumstances} from './circumstancesCalc';
+import {getEclipseType} from './observationalCircumstancesCalc';
 
 export function getTimeLocationCircumstancesMaxEclipse(
     besselianElements: BesselianElements,
     location: Location,
 ): TimeLocationCircumstances {
+    const circumstances = iterateCircumstancesMax(besselianElements, location);
+
+    validateCircumstances(circumstances, location, SolarEclipseEventType.mid);
+
+    return circumstances;
+}
+
+export function getTimeLocationCircumstancesC1(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
+    const circumstances = iterateCircumstancesMax(besselianElements, location);
+
+    validateCircumstances(circumstances, location, SolarEclipseEventType.c1);
+
+    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c1);
+}
+
+export function getTimeLocationCircumstancesC2(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
+    const circumstances = iterateCircumstancesMax(besselianElements, location);
+
+    validateCircumstances(circumstances, location, SolarEclipseEventType.c2);
+
+    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c2);
+}
+
+export function getTimeLocationCircumstancesC3(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
+    const circumstances = iterateCircumstancesMax(besselianElements, location);
+
+    validateCircumstances(circumstances, location, SolarEclipseEventType.c3);
+
+    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c3);
+}
+
+export function getTimeLocationCircumstancesC4(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
+    const circumstances = iterateCircumstancesMax(besselianElements, location);
+
+    validateCircumstances(circumstances, location, SolarEclipseEventType.c4);
+
+    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c4);
+}
+
+function iterateCircumstancesMax(
+    besselianElements: BesselianElements,
+    location: Location,
+): TimeLocationCircumstances {
     let t = 0;
     let tau = 1;
+    let cnt = 0;
 
     let circumstances = getTimeLocationCircumstances(besselianElements, location, t);
 
-    let cnt = 0;
     while (Math.abs(tau) > 0.000001 && cnt < 50) {
         const {u, v, a, b, n2} = circumstances;
 
@@ -26,34 +84,6 @@ export function getTimeLocationCircumstancesMaxEclipse(
     }
 
     return circumstances;
-}
-
-export function getTimeLocationCircumstancesC1(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocationCircumstances {
-    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c1);
-}
-
-export function getTimeLocationCircumstancesC2(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocationCircumstances {
-    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c2);
-}
-
-export function getTimeLocationCircumstancesC3(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocationCircumstances {
-    return iterateCircumstancesC2C3(besselianElements, location, SolarEclipseEventType.c3);
-}
-
-export function getTimeLocationCircumstancesC4(
-    besselianElements: BesselianElements,
-    location: Location,
-): TimeLocationCircumstances {
-    return iterateCircumstancesC1C4(besselianElements, location, SolarEclipseEventType.c4);
 }
 
 function iterateCircumstancesC1C4(
@@ -156,4 +186,27 @@ function getTauForEclipseContacts(
 
 function isTotalSolarEclipse(circumstances: TimeLocationCircumstances): boolean {
     return circumstances.l2Derived < 0.0;
+}
+
+function validateCircumstances(
+    circumstances: TimeLocationCircumstances,
+    location: Location,
+    eventType: SolarEclipseEventType,
+): void {
+    const {lat, lon} = location;
+    const eclipseType = getEclipseType(circumstances);
+
+    if (eclipseType === SolarEclipseType.none) {
+        throw new Error(`No eclipse visible at ${round(lat, 5)}, ${round(lon, 5)}`);
+    }
+
+    if (eclipseType === SolarEclipseType.partial) {
+        if (eventType === SolarEclipseEventType.c2) {
+            throw new Error(`No C2 possible. Eclipse is only partial at ${round(lat, 5)}, ${round(lon, 5)}`);
+        }
+
+        if (eventType === SolarEclipseEventType.c3) {
+            throw new Error(`No C3 possible. Eclipse is only partial at ${round(lat, 5)}, ${round(lon, 5)}`);
+        }
+    }
 }
