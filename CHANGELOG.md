@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.0.0 (2022-02-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **eslint:** change enum keys from camelCase to PascalCase
+
+* **eslint:** add eslint config for TypeScript ([9cb4c62](https://github.com/andrmoel/astronomy-bundle-js/commit/9cb4c6280b1162c1c43dfabc736a35d5cbb73859))
+
 ### 6.9.3 (2021-12-28)
 
 ### 6.9.2 (2021-12-28)
