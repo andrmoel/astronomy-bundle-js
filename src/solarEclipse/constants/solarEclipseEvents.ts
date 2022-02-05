@@ -1,7 +1,7 @@
 export enum SolarEclipseEventType {
-    'c1',
-    'c2',
-    'mid',
-    'c3',
-    'c4',
+    C1 = 'c1',
+    C2 = 'c2',
+    Mid = 'mid',
+    C3 = 'c3',
+    C4 = 'c4',
 }

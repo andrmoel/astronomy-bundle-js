@@ -2,6 +2,7 @@ import Jupiter from '../Jupiter';
 import Saturn from '../Saturn';
 import Venus from '../Venus';
 import {round} from '../../utils/math';
+import {Position} from '../types/PlanetTypes';
 import {getConjunctionInLongitude, getConjunctionInRightAscension} from './conjunctionCalc';
 
 describe('test for getConjunctionInRightAscension', () => {
@@ -11,7 +12,7 @@ describe('test for getConjunctionInRightAscension', () => {
         const {toi, position, angularDistance} = await getConjunctionInRightAscension(Jupiter, Saturn, jd0);
 
         expect(toi.time).toEqual({year: 2020, month: 12, day: 21, hour: 13, min: 33, sec: 22});
-        expect(position).toBe(1);
+        expect(position).toBe(Position.South);
         expect(round(angularDistance, 6)).toBe(0.104212);
     });
 

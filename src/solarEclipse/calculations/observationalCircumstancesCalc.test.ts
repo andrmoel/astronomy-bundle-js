@@ -82,19 +82,19 @@ const location = {
 
 describe('tests for getEclipseType', () => {
     it('is not an eclipse', () => {
-        expect(getEclipseType(circumstancesNoEclipse)).toBe(SolarEclipseType.none);
+        expect(getEclipseType(circumstancesNoEclipse)).toBe(SolarEclipseType.None);
     });
 
     it('is a partial eclipse', () => {
-        expect(getEclipseType(circumstancesPartial)).toBe(SolarEclipseType.partial);
+        expect(getEclipseType(circumstancesPartial)).toBe(SolarEclipseType.Partial);
     });
 
     it('is an annular eclipse', () => {
-        expect(getEclipseType(circumstancesAnnular)).toBe(SolarEclipseType.annular);
+        expect(getEclipseType(circumstancesAnnular)).toBe(SolarEclipseType.Annular);
     });
 
     it('is a total eclipse', () => {
-        expect(getEclipseType(circumstancesTotal)).toBe(SolarEclipseType.total);
+        expect(getEclipseType(circumstancesTotal)).toBe(SolarEclipseType.Total);
     });
 });
 

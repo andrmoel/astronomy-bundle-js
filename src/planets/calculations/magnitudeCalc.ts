@@ -49,7 +49,7 @@ export function getApparentMagnitudeJupiter(distanceSun: number, distanceEarth: 
 }
 
 export function getApparentMagnitudeSaturn(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
-    const V = 5 * Math.log10(distanceSun * distanceEarth);
+    // const V = 5 * Math.log10(distanceSun * distanceEarth);
 
     return 0 * distanceSun * phaseAngle; // TODO implement function
 }

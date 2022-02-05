@@ -1,6 +1,6 @@
 export enum SolarEclipseType {
-    'none',
-    'partial',
-    'annular',
-    'total',
+    None ='none',
+    Partial = 'partial',
+    Annular = 'annular',
+    Total = 'total',
 }

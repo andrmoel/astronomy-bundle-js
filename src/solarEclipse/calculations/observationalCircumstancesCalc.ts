@@ -12,18 +12,18 @@ export function getEclipseType(circumstances: TimeLocationCircumstances): SolarE
     const magnitude = getMagnitude(circumstances);
 
     if (magnitude <= 0.0) {
-        return SolarEclipseType.none
+        return SolarEclipseType.None
     }
 
     if (maximumEclipse < l2Derived || maximumEclipse < -1 * l2Derived) {
         if (l2Derived < 0.0) {
-            return SolarEclipseType.total;
+            return SolarEclipseType.Total;
         }
 
-        return SolarEclipseType.annular;
+        return SolarEclipseType.Annular;
     }
 
-    return SolarEclipseType.partial;
+    return SolarEclipseType.Partial;
 }
 
 export function getMaximumEclipse(circumstances: TimeLocationCircumstances): number {
@@ -61,7 +61,7 @@ export function getObscuration(circumstances: TimeLocationCircumstances): number
         return 1.0;
     }
 
-    if (eclipseType === SolarEclipseType.annular) {
+    if (eclipseType === SolarEclipseType.Annular) {
         return Math.pow(moonSunRatio, 2);
     }
 

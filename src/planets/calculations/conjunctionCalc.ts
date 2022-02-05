@@ -31,7 +31,7 @@ export async function getConjunctionInRightAscension(
 
     return {
         toi: createTimeOfInterest.fromJulianDay(jd0 + n),
-        position: declination >= 0 ? Position.north : Position.south,
+        position: declination >= 0 ? Position.North : Position.South,
         angularDistance: Math.abs(declination),
     };
 }
@@ -58,7 +58,7 @@ export async function getConjunctionInLongitude(
 
     return {
         toi: createTimeOfInterest.fromJulianDay(jd0 + n),
-        position: latitude >= 0 ? Position.north : Position.south,
+        position: latitude >= 0 ? Position.North : Position.South,
         angularDistance: Math.abs(latitude),
     };
 }

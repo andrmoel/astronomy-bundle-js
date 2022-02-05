@@ -1,6 +1,9 @@
 import TimeOfInterest from '../../time/TimeOfInterest';
 
-export enum Position {'north', 'south'}
+export enum Position {
+    North = 'north',
+    South = 'south'
+}
 
 export type Conjunction = {
     toi: TimeOfInterest,

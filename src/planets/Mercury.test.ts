@@ -4,6 +4,7 @@ import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
 import Mercury from './Mercury';
 import Venus from './Venus';
+import {Position} from './types/PlanetTypes';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const mercury = new Mercury(toi);
@@ -238,6 +239,6 @@ it('tests getConjunctionInRightAscensionTo', async () => {
     const {toi, position, angularDistance} = await mercury.getConjunctionInRightAscensionTo(Venus);
 
     expect(toi.time).toEqual({year: 2020, month: 5, day: 22, hour: 7, min: 55, sec: 13});
-    expect(position).toBe(1);
+    expect(position).toBe(Position.South);
     expect(round(angularDistance, 6)).toBe(0.894401);
 });

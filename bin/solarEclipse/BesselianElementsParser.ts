@@ -1,21 +1,5 @@
-import {BesselianElements} from '../../src/solarEclipse/types/besselianElementsTypes';
-
-type Polynomials = {
-    x: Array<number>;
-    y: Array<number>;
-    d: Array<number>;
-    l1: Array<number>;
-    l2: Array<number>;
-    mu: Array<number>;
-}
-
-type TanF1F2 = {
-    tanF1: number,
-    tanF2: number,
-}
-
 export default class BesselianElementsParser {
-    private rows: string[] = [];
+    private rows: Array<string> = [];
 
     constructor(private content: string) {
         this.rows = this.content.split('\n');

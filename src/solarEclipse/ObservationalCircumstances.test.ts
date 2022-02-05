@@ -19,7 +19,7 @@ const obsCircumstances = new ObservationalCircumstances(circumstances);
 it('tests getEclipseType', () => {
     const eclipseType = obsCircumstances.getEclipseType();
 
-    expect(eclipseType).toBe(SolarEclipseType.total);
+    expect(eclipseType).toBe(SolarEclipseType.Total);
 });
 
 it('tests getMagnitude', () => {
