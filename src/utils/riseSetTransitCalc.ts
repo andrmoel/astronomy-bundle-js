@@ -190,7 +190,7 @@ function _getLocalHourAngle(
     longitude: number,
     jd0: number,
     m: number,
-) {
+): number {
     const T = julianDay2julianCenturiesJ2000(jd0);
     const GAST = getGreenwichApparentSiderealTime(T);
     const theta0 = GAST + 360.985647 * m;
