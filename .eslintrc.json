@@ -8,6 +8,7 @@
   ],
   "rules": {
     "valid-jsdoc": "off",
+    "@typescript-eslint/no-loss-of-precision": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
