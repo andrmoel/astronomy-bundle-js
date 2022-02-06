@@ -18,13 +18,6 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: 'Setup cache for node_modules'
-        id: cache-node-modules
-        uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-
       - name: 'Prepare git'
         run: |
           git config --global user.email "noreply@github.com"
@@ -45,6 +38,7 @@ jobs:
 
       - name: 'Push to git'
         run: |
+          git pull
           git add .
           git commit -m "chore(node): upgrade dependencies"
           git push
