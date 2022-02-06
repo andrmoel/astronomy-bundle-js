@@ -8,7 +8,7 @@ export default class TimeOfInterest {
 
     public readonly T: number = 0.0;
 
-    constructor(public readonly time: Time) {
+    public constructor(public readonly time: Time) {
         this.jd = timeCalc.time2julianDay(time);
         this.T = timeCalc.julianDay2julianCenturiesJ2000(this.jd);
     }

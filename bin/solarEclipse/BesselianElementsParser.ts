@@ -1,7 +1,7 @@
 export default class BesselianElementsParser {
     private rows: Array<string> = [];
 
-    constructor(private content: string) {
+    public constructor(private content: string) {
         this.rows = this.content.split('\n');
     }
 

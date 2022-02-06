@@ -5,7 +5,7 @@ import createLocalCircumstances from './createLocalCircumstances';
 import LocalCircumstances from './LocalCircumstances';
 
 export default class SolarEclipse {
-    constructor(private besselianElements: BesselianElements) {
+    public constructor(private besselianElements: BesselianElements) {
     }
 
     public getBesselianElements(): BesselianElements {

@@ -21,7 +21,7 @@ import {DIAMETER_SUN} from './constants/diameters';
 export default class Sun extends AstronomicalObject {
     private readonly earth: Earth;
 
-    constructor(toi?: TimeOfInterest) {
+    public constructor(toi?: TimeOfInterest) {
         super('sun', toi);
 
         this.earth = createEarth(toi);

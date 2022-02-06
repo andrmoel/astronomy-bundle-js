@@ -5,7 +5,7 @@ import Planet from './Planet';
 import {Vsop87} from './types/Vsop87Types';
 
 export default class Mars extends Planet {
-    constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
+    public constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
         super('mars', toi, useVsop87Short);
     }
 

@@ -43,21 +43,21 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return this._name;
     }
 
-    abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
+    public abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
 
-    abstract getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
+    public abstract getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
 
-    abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
+    public abstract getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
 
-    abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
+    public abstract getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
 
-    abstract getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
+    public abstract getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
 
-    abstract getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
+    public abstract getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;
 
-    abstract getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
+    public abstract getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates>;
 
-    abstract getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
+    public abstract getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates>;
 
     public async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
@@ -77,7 +77,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return spherical2rectangular(coords);
     }
 
-    abstract getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates>;
+    public abstract getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates>;
 
     public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates> {
         const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();

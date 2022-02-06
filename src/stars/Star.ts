@@ -26,51 +26,51 @@ export default class Star extends AstronomicalObject {
         super('star', toi);
     }
 
-    async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return await this.getGeocentricEclipticSphericalJ2000Coordinates();
     }
 
-    async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         return await this.getGeocentricEclipticSphericalDateCoordinates();
     }
 
-    async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
+    public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         return await this.getGeocentricEclipticRectangularJ2000Coordinates();
     }
 
-    async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
+    public async getHeliocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         return await this.getGeocentricEclipticRectangularDateCoordinates();
     }
 
-    async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
+    public async getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalJ2000Coordinates();
 
         return spherical2rectangular(coords);
     }
 
-    async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
+    public async getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
         return spherical2rectangular(coords);
     }
 
-    async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         const coords = await this.getGeocentricEquatorialSphericalJ2000Coordinates();
 
         return equatorialSpherical2eclipticSpherical(coords, this.T);
     }
 
-    async getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         const coords = await this.getGeocentricEquatorialSphericalDateCoordinates();
 
         return equatorialSpherical2eclipticSpherical(coords, this.T);
     }
 
-    async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates> {
+    public async getGeocentricEquatorialSphericalJ2000Coordinates(): Promise<EquatorialSphericalCoordinates> {
         return Promise.resolve(this.equatorialCoords);
     }
 
-    async getGeocentricEquatorialSphericalDateCoordinates(): Promise<EquatorialSphericalCoordinates> {
+    public async getGeocentricEquatorialSphericalDateCoordinates(): Promise<EquatorialSphericalCoordinates> {
         const coords = correctProperMotion(
             this.equatorialCoords,
             this.properMotion,
@@ -83,14 +83,14 @@ export default class Star extends AstronomicalObject {
         );
     }
 
-    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
         let coords = await this.getGeocentricEclipticSphericalDateCoordinates();
         coords = correctEffectOfAberration(coords, this.T);
 
         return correctEffectOfNutation(coords, this.T);
     }
 
-    async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates> {
+    public async getApparentGeocentricEquatorialSphericalCoordinates(): Promise<EquatorialSphericalCoordinates> {
         const coords = await this.getApparentGeocentricEclipticSphericalCoordinates();
 
         return eclipticSpherical2equatorialSpherical(coords, this.T);

@@ -11,7 +11,7 @@ import {
 import createObservationalCircumstances from './createObservationalCircumstances';
 
 export default class LocalCircumstances {
-    constructor(private besselianElements: BesselianElements, private location: Location) {
+    public constructor(private besselianElements: BesselianElements, private location: Location) {
     }
 
     public getObservationalCircumstancesForC1(): ObservationalCircumstances {

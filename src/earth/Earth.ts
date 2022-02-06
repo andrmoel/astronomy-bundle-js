@@ -8,7 +8,7 @@ import TimeOfInterest from '../time/TimeOfInterest';
 import {earthCalc} from './calculations';
 
 export default class Earth extends AstronomicalObject {
-    constructor(toi?: TimeOfInterest) {
+    public constructor(toi?: TimeOfInterest) {
         super('earth', toi);
     }
 
@@ -48,23 +48,23 @@ export default class Earth extends AstronomicalObject {
         });
     }
 
-    getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
+    public getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {
         return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
-    getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
+    public getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates> {
         return Promise.resolve({x: 0, y: 0, z: 0});
     }
 
-    getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
+    public getGeocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
         return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
-    getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
+    public getGeocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
         return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 
-    async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
+    public async getApparentGeocentricEclipticSphericalCoordinates(): Promise<EclipticSphericalCoordinates> {
         return Promise.resolve({lon: 0, lat: 0, radiusVector: 0});
     }
 

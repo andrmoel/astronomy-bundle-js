@@ -31,7 +31,7 @@ export default class Moon extends AstronomicalObject {
 
     private readonly earth: Earth;
 
-    constructor(toi?: TimeOfInterest) {
+    public constructor(toi?: TimeOfInterest) {
         super('moon', toi);
 
         this.sun = createSun(toi);

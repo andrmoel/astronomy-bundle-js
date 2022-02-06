@@ -8,7 +8,7 @@ import {TimeLocationCircumstances} from './types/circumstancesTypes';
 import {SolarEclipseType} from './constants/solarEclipseTypes';
 
 export default class ObservationalCircumstances {
-    constructor(private circumstances: TimeLocationCircumstances) {
+    public constructor(private circumstances: TimeLocationCircumstances) {
     }
 
     public getEclipseType(): SolarEclipseType {

@@ -2,7 +2,7 @@ import {createTimeOfInterest} from '../time';
 import AstronomicalObject from './AstronomicalObject';
 
 class TestClass extends AstronomicalObject {
-    constructor(toi) {
+    public constructor(toi) {
         super('TestClass', toi);
     }
 }

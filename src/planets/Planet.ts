@@ -38,7 +38,7 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
     private readonly earth: Earth;
 
-    constructor(name: string, toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
+    public constructor(name: string, toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
         super(name, toi);
 
         this.sun = createSun(toi);

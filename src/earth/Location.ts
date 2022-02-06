@@ -4,7 +4,7 @@ import {Location as LocationType} from './types/LocationTypes';
 export default class Location {
     private readonly location: LocationType;
 
-    constructor(
+    public constructor(
         public readonly lat: number,
         public readonly lon: number,
         public readonly elevation: number = 0,
