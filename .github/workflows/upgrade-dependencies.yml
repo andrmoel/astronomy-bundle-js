@@ -1,0 +1,50 @@
+name: Upgrade dependencies
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+jobs:
+  upgradeDependencies:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 'Use Node.js'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: 'Setup cache for node_modules'
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: 'Prepare git'
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "github version update"
+          git branch -u origin/master master
+
+      - name: 'Upgrade dependencies'
+        run: yarn upgrade --latest
+
+      - name: 'Check code style'
+        run: yarn lint
+
+      - name: 'Run unit tests'
+        run: yarn test
+
+      - name: 'Build project'
+        run: yarn build
+
+      - name: 'Push to git'
+        run: |
+          git add .
+          git commit -m "chore(node): upgrade dependencies"
+          git push
