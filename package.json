@@ -41,8 +41,8 @@
     "bin:download-besselian-elements": "ts-node ./bin/solarEclipse/downloadBesselianElements.ts"
   },
   "devDependencies": {
-    "@andrmoel/eslint-config": "^1.4.1",
-    "@andrmoel/eslint-config-typescript": "^1.4.1",
+    "@andrmoel/eslint-config": "^1.5.1",
+    "@andrmoel/eslint-config-typescript": "^1.5.1",
     "@babel/core": "^7.12.0",
     "@babel/preset-env": "^7.12.0",
     "@babel/preset-typescript": "^7.12.1",

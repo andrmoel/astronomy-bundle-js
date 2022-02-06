@@ -239,7 +239,7 @@ export function getOpticalLiberationInLongitude(longitude: number, latitude: num
 
     const ARad = Math.atan2(
         Math.sin(WRad) * Math.cos(latRad) * Math.cos(iRad) - Math.sin(latRad) * Math.sin(iRad),
-        Math.cos(WRad) * Math.cos(latRad)
+        Math.cos(WRad) * Math.cos(latRad),
     );
     const A = normalizeAngle(rad2deg(ARad));
 
@@ -260,7 +260,7 @@ export function getOpticalLiberationInLatitude(longitude: number, latitude: numb
     const WRad = deg2rad(W);
 
     const bRad = Math.asin(
-        -1 * Math.sin(WRad) * Math.cos(latRad) * Math.sin(iRad) - Math.sin(latRad) * Math.cos(iRad)
+        -1 * Math.sin(WRad) * Math.cos(latRad) * Math.sin(iRad) - Math.sin(latRad) * Math.cos(iRad),
     );
 
     return rad2deg(bRad);

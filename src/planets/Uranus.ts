@@ -28,7 +28,7 @@ export default class Uranus extends Planet {
     protected calculateApparentMagnitude(
         distanceSun: number,
         distanceEarth: number,
-        phaseAngle: number
+        phaseAngle: number,
     ): number {
         return getApparentMagnitudeUranus(distanceSun, distanceEarth, phaseAngle);
     }

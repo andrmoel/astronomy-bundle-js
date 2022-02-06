@@ -16,7 +16,7 @@ export function getLightTimeCorrectedJulianDay(jd: number, d: number): number {
 
 export function correctEffectOfNutation(
     coords: EclipticSphericalCoordinates,
-    T: number
+    T: number,
 ): EclipticSphericalCoordinates {
     const phi = getNutationInLongitude(T);
 
@@ -29,7 +29,7 @@ export function correctEffectOfNutation(
 
 export function correctEffectOfAberration(
     coords: EclipticSphericalCoordinates,
-    T: number
+    T: number,
 ): EclipticSphericalCoordinates {
     // TODO Better formula with Ron-Vondrak expression
     const lonSun = sunCalc.getTrueLongitude(T);

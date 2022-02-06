@@ -3,7 +3,7 @@ import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export function getElongation(
     equCoordsObj: EquatorialSphericalCoordinates,
-    equCoordsSun: EquatorialSphericalCoordinates
+    equCoordsSun: EquatorialSphericalCoordinates,
 ): number {
     const raObjRad = deg2rad(equCoordsObj.rightAscension);
     const dObjRad = deg2rad(equCoordsObj.declination);
@@ -13,7 +13,7 @@ export function getElongation(
 
     // Meeus 48.2
     const phiRad = Math.acos(
-        Math.sin(dSunRad) * Math.sin(dObjRad) + Math.cos(dSunRad) * Math.cos(dObjRad) * Math.cos(raSunRad - raObjRad)
+        Math.sin(dSunRad) * Math.sin(dObjRad) + Math.cos(dSunRad) * Math.cos(dObjRad) * Math.cos(raSunRad - raObjRad),
     );
 
     return rad2deg(phiRad);
@@ -21,7 +21,7 @@ export function getElongation(
 
 export function getPhaseAngle(
     equCoordsObj: EquatorialSphericalCoordinates,
-    equCoordsSun: EquatorialSphericalCoordinates
+    equCoordsSun: EquatorialSphericalCoordinates,
 ): number {
     const distObj = equCoordsObj.radiusVector;
     const distSun = equCoordsSun.radiusVector;
@@ -44,7 +44,7 @@ export function getIlluminatedFraction(phaseAngle: number): number {
 
 export function getPositionAngleOfBrightLimb(
     equCoordsObj: EquatorialSphericalCoordinates,
-    equCoordsSun: EquatorialSphericalCoordinates
+    equCoordsSun: EquatorialSphericalCoordinates,
 ): number {
     const raObjRad = deg2rad(equCoordsObj.rightAscension);
     const dObjRad = deg2rad(equCoordsObj.declination);
@@ -81,7 +81,7 @@ export function getAngularSeparation(
 
     const dRad = Math.acos(
         Math.sin(dRad1) * Math.sin(dRad2)
-        + Math.cos(dRad1) * Math.cos(dRad2) * Math.cos(raRad1 - raRad2)
+        + Math.cos(dRad1) * Math.cos(dRad2) * Math.cos(raRad1 - raRad2),
     );
 
     return rad2deg(dRad);

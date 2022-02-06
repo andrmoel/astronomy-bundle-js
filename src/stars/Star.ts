@@ -75,11 +75,11 @@ export default class Star extends AstronomicalObject {
             this.equatorialCoords,
             this.properMotion,
             this.jd,
-            this.referenceEpoch
+            this.referenceEpoch,
         );
 
         return Promise.resolve(
-            correctPrecessionForEquatorialCoordinates(coords, this.jd, this.referenceEpoch)
+            correctPrecessionForEquatorialCoordinates(coords, this.jd, this.referenceEpoch),
         );
     }
 

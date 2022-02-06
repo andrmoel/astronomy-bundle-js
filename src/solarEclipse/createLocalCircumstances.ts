@@ -4,7 +4,7 @@ import {BesselianElements} from './types/besselianElementsTypes';
 
 export default function createLocalCircumstances(
     besselianElements: BesselianElements,
-    location: Location
+    location: Location,
 ): LocalCircumstances {
     return new LocalCircumstances(besselianElements, location);
 }

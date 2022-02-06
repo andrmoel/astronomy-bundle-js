@@ -29,7 +29,7 @@ export default class Neptune extends Planet {
         distanceSun: number,
         distanceEarth: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        phaseAngle: number
+        phaseAngle: number,
     ): number {
         return getApparentMagnitudeNeptune(distanceSun, distanceEarth, this.toi.getDecimalYear());
     }

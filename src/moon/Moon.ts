@@ -95,7 +95,7 @@ export default class Moon extends AstronomicalObject {
 
     public async getRise(
         location: Location,
-        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
 
@@ -104,7 +104,7 @@ export default class Moon extends AstronomicalObject {
 
     public async getSet(
         location: Location,
-        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
 

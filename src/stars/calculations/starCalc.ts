@@ -8,7 +8,7 @@ export function correctProperMotion(
     coords: EquatorialSphericalCoordinates,
     properMotion: ProperMotion,
     jd: number,
-    startingEpoch: number = EPOCH_J2000
+    startingEpoch: number = EPOCH_J2000,
 ): EquatorialSphericalCoordinates {
     const t = getEpochInterval(jd, startingEpoch) * 100;
 

@@ -28,7 +28,7 @@ export default class Mercury extends Planet {
     protected calculateApparentMagnitude(
         distanceSun: number,
         distanceEarth: number,
-        phaseAngle: number
+        phaseAngle: number,
     ): number {
         return getApparentMagnitudeMercury(distanceSun, distanceEarth, phaseAngle);
     }

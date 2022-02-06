@@ -24,7 +24,7 @@ export function fromTime(
     day: number,
     hour: number,
     min: number,
-    sec: number
+    sec: number,
 ): TimeOfInterest {
     return new TimeOfInterest({year, month, day, hour, min, sec});
 }

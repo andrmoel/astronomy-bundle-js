@@ -90,7 +90,7 @@ export function equatorialSpherical2topocentricHorizontal(
     const {rightAscension, declination} = coords;
     const {lat, lon} = location;
 
-    const topoCoords = equatorialSpherical2topocentricSpherical(coords, location, T,);
+    const topoCoords = equatorialSpherical2topocentricSpherical(coords, location, T);
     const H = getLocalHourAngle(T, lon, rightAscension);
 
     return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, topoCoords.radiusVector);
@@ -109,7 +109,7 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     // Meeus 13.5
     const ARad = Math.atan2(
         Math.sin(HRad),
-        Math.cos(HRad) * Math.sin(latRad) - Math.tan(dRad) * Math.cos(latRad)
+        Math.cos(HRad) * Math.sin(latRad) - Math.tan(dRad) * Math.cos(latRad),
     );
 
     // Meeus 13.6
@@ -142,7 +142,7 @@ export function eclipticSpherical2equatorialSpherical(
 
     // Meeus 13.4
     const declinationRad = Math.asin(
-        Math.sin(latRad) * Math.cos(epsRad) + Math.cos(latRad) * Math.sin(epsRad) * Math.sin(lonRad)
+        Math.sin(latRad) * Math.cos(epsRad) + Math.cos(latRad) * Math.sin(epsRad) * Math.sin(lonRad),
     );
     const declination = rad2deg(declinationRad);
 
@@ -169,7 +169,7 @@ export function equatorialSpherical2eclipticSpherical(
     // Meeus 13.2
     const latRad = Math.asin(
         Math.sin(declinationRad) * Math.cos(epsRad)
-        - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad)
+        - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad),
     );
     const lat = rad2deg(latRad);
 
@@ -178,7 +178,7 @@ export function equatorialSpherical2eclipticSpherical(
 
 export function rectangularHeliocentric2rectangularGeocentric(
     heliocentricCoords: RectangularCoordinates,
-    heliocentricCoordsEarth: RectangularCoordinates
+    heliocentricCoordsEarth: RectangularCoordinates,
 ): RectangularCoordinates {
     return {
         x: heliocentricCoords.x - heliocentricCoordsEarth.x,
@@ -189,7 +189,7 @@ export function rectangularHeliocentric2rectangularGeocentric(
 
 export function rectangularGeocentric2rectangularHeliocentric(
     geocentricCoords: RectangularCoordinates,
-    heliocentricCoordsEarth: RectangularCoordinates
+    heliocentricCoordsEarth: RectangularCoordinates,
 ): RectangularCoordinates {
     return {
         x: geocentricCoords.x + heliocentricCoordsEarth.x,
@@ -199,7 +199,7 @@ export function rectangularGeocentric2rectangularHeliocentric(
 }
 
 export function earthEclipticSpherical2sunEclipticSpherical(
-    coordsEarth: EclipticSphericalCoordinates
+    coordsEarth: EclipticSphericalCoordinates,
 ): EclipticSphericalCoordinates {
     const {lon, lat, radiusVector} = coordsEarth;
 

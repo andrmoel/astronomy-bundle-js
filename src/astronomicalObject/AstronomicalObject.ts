@@ -31,7 +31,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
 
     public constructor(
         private readonly _name = 'astronomical object',
-        public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()
+        public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime(),
     ) {
         this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
@@ -86,7 +86,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     }
 
     public async getTopocentricEquatorialSphericalCoordinates(
-        location: Location
+        location: Location,
     ): Promise<EquatorialSphericalCoordinates> {
         const coords = await this.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -104,7 +104,7 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
     }
 
     public async getApparentTopocentricHorizontalCoordinates(
-        location: Location
+        location: Location,
     ): Promise<LocalHorizontalCoordinates> {
         const {azimuth, altitude, radiusVector} = await this.getTopocentricHorizontalCoordinates(location);
 

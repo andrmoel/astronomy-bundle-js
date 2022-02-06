@@ -10,10 +10,10 @@
     "@jridgewell/sourcemap-codec" "^1.4.9"
     "@jridgewell/trace-mapping" "^0.2.7"
 
-"@andrmoel/eslint-config-typescript@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@andrmoel/eslint-config-typescript/-/eslint-config-typescript-1.4.1.tgz#bce19a0629f25ca7de415713db3c8bd21bd2af33"
-  integrity sha512-qGgtL15E+9rBfHb0ezv5sHDVs7Ac/2wWzTDkN2JgJfhkpgrGA6llEBSL0jObIx+x6N4dxp9BgnUzq2dmVzqn2A==
+"@andrmoel/eslint-config-typescript@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@andrmoel/eslint-config-typescript/-/eslint-config-typescript-1.5.1.tgz#d13f106a55e09cb78038cb02f4c64c3bfaf5efa6"
+  integrity sha512-F6OtqtJfprMAMQtfbB7simwbpj5uxIBNl6SP7vmTL4qJMYhHP+G0vhavFOTUAjt9VMqiLN+KGRzJxZdMwvgj1Q==
   dependencies:
     "@babel/eslint-parser" "^7.16.3"
     "@babel/eslint-plugin" "^7.14.5"
@@ -25,10 +25,10 @@
     eslint-plugin-jest "^25.2.4"
     eslint-plugin-react "^7.18.3"
 
-"@andrmoel/eslint-config@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@andrmoel/eslint-config/-/eslint-config-1.4.1.tgz#e09f1a64b2efc8ca2575a3762b03e2e4659de1d5"
-  integrity sha512-zzk2Eeyz/sjLNuesDknzcmZEpSeqgVpMt01/BfWZ5S5hq1Ri50Oe05zI2u3M/O7/Ja6t6ow5BCqLEna4EEa6sg==
+"@andrmoel/eslint-config@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@andrmoel/eslint-config/-/eslint-config-1.5.1.tgz#a50758575eda06a99a480c97992482fb18a645d1"
+  integrity sha512-nP26cS1vn7gskMkWi1d6HrtVlncLfuqN180DV8RHYNRuDnOHTXDGMfyKyqI3hGaRgfGmqPHMA/MeJnXL2pWgwg==
   dependencies:
     "@babel/eslint-parser" "^7.16.3"
     "@babel/eslint-plugin" "^7.14.5"

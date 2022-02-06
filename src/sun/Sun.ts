@@ -84,7 +84,7 @@ export default class Sun extends AstronomicalObject {
 
     public async getRise(
         location: Location,
-        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
         const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
 
@@ -97,7 +97,7 @@ export default class Sun extends AstronomicalObject {
 
     public async getSet(
         location: Location,
-        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION
+        standardAltitude: number = STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
         const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
 

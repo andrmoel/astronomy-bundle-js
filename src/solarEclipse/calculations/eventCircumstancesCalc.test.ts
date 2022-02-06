@@ -29,7 +29,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC1(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -37,7 +37,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -45,7 +45,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -53,7 +53,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -61,7 +61,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC4(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
     });
@@ -90,7 +90,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No C2 possible. Eclipse is only partial at 56.31702, 160.8409')
+                new Error('No C2 possible. Eclipse is only partial at 56.31702, 160.8409'),
             );
         });
 
@@ -112,7 +112,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No C3 possible. Eclipse is only partial at 56.31702, 160.8409')
+                new Error('No C3 possible. Eclipse is only partial at 56.31702, 160.8409'),
             );
         });
 
@@ -152,7 +152,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC1(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -160,7 +160,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -168,7 +168,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -176,7 +176,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
 
@@ -184,7 +184,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC4(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 42.55581, 12.00954')
+                new Error('No eclipse visible at 42.55581, 12.00954'),
             );
         });
     });
@@ -214,7 +214,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No C2 possible. Eclipse is only partial at 52.52199, 13.41297')
+                new Error('No C2 possible. Eclipse is only partial at 52.52199, 13.41297'),
             );
         });
 
@@ -236,7 +236,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No C3 possible. Eclipse is only partial at 52.52199, 13.41297')
+                new Error('No C3 possible. Eclipse is only partial at 52.52199, 13.41297'),
             );
         });
 
@@ -353,7 +353,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC1(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 10.48946, -66.90969')
+                new Error('No eclipse visible at 10.48946, -66.90969'),
             );
         });
 
@@ -361,7 +361,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 10.48946, -66.90969')
+                new Error('No eclipse visible at 10.48946, -66.90969'),
             );
         });
 
@@ -369,7 +369,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesMaxEclipse(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 10.48946, -66.90969')
+                new Error('No eclipse visible at 10.48946, -66.90969'),
             );
         });
 
@@ -377,7 +377,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 10.48946, -66.90969')
+                new Error('No eclipse visible at 10.48946, -66.90969'),
             );
         });
 
@@ -385,7 +385,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC4(besselianElements, location);
             }).toThrow(
-                new Error('No eclipse visible at 10.48946, -66.90969')
+                new Error('No eclipse visible at 10.48946, -66.90969'),
             );
         });
     });
@@ -415,7 +415,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC2(besselianElements, location);
             }).toThrow(
-                new Error('No C2 possible. Eclipse is only partial at -22.92768, -43.17063')
+                new Error('No C2 possible. Eclipse is only partial at -22.92768, -43.17063'),
             );
         });
 
@@ -437,7 +437,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             expect(() => {
                 getTimeLocationCircumstancesC3(besselianElements, location);
             }).toThrow(
-                new Error('No C3 possible. Eclipse is only partial at -22.92768, -43.17063')
+                new Error('No C3 possible. Eclipse is only partial at -22.92768, -43.17063'),
             );
         });
 

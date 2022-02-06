@@ -28,7 +28,7 @@ export default class Mars extends Planet {
     protected calculateApparentMagnitude(
         distanceSun: number,
         distanceEarth: number,
-        phaseAngle: number
+        phaseAngle: number,
     ): number {
         return getApparentMagnitudeMars(distanceSun, distanceEarth, phaseAngle);
     }

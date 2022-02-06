@@ -28,7 +28,7 @@ export default class Venus extends Planet {
     protected calculateApparentMagnitude(
         distanceSun: number,
         distanceEarth: number,
-        phaseAngle: number
+        phaseAngle: number,
     ): number {
         return getApparentMagnitudeVenus(distanceSun, distanceEarth, phaseAngle);
     }

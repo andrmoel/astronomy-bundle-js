@@ -12,7 +12,7 @@ export function calculateVSOP87(terms: Array<Array<Array<number>>>, t: number): 
     terms.forEach(
         (term: Array<Array<number>>, key: number) => {
             result += _sumUpTerm(term, t) * Math.pow(t, key);
-        }
+        },
     );
 
     return result;

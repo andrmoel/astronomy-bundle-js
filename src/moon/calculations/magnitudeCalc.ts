@@ -4,7 +4,7 @@ export function getApparentMagnitudeMoon(
     distanceSun: number,
     distanceEarth: number,
     phaseAngle: number,
-    isWaxing: boolean
+    isWaxing: boolean,
 ): number {
     const signedPhaseAngle = isWaxing ? -1 * phaseAngle : phaseAngle;
 
