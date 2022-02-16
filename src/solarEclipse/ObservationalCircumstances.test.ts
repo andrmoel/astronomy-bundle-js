@@ -12,7 +12,7 @@ const circumstances = {
     l1Derived: 0.5393443092306598,
     l2Derived: -0.006760247799288219,
     n2: 0.1407841631636039,
-}
+};
 
 const obsCircumstances = new ObservationalCircumstances(circumstances);
 

@@ -12,7 +12,7 @@ export function getEclipseType(circumstances: TimeLocationCircumstances): SolarE
     const magnitude = getMagnitude(circumstances);
 
     if (magnitude <= 0.0) {
-        return SolarEclipseType.None
+        return SolarEclipseType.None;
     }
 
     if (maximumEclipse < l2Derived || maximumEclipse < -1 * l2Derived) {

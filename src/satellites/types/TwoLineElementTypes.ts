@@ -17,4 +17,4 @@ export type TwoLineElementTypes = {
     meanAnomaly: number;
     meanMotion: number;
     revolution: number;
-}
+};

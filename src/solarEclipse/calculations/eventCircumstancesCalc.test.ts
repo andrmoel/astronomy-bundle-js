@@ -23,7 +23,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             lat: 42.55581,
             lon: 12.00954,
             elevation: 515,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             expect(() => {
@@ -71,7 +71,7 @@ describe('test for partial solar eclipse 2019-01-06', () => {
             lat: 56.31702,
             lon: 160.84090,
             elevation: 50,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
@@ -146,7 +146,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             lat: 42.55581,
             lon: 12.00954,
             elevation: 515,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             expect(() => {
@@ -194,7 +194,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             lat: 52.52199,
             lon: 13.41297,
             elevation: 35,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
@@ -260,7 +260,7 @@ describe('test for annular solar eclipse 2021-06-10', () => {
             lat: 54.75462,
             lon: -82.39848,
             elevation: 20,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
@@ -347,7 +347,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             lat: 10.48946,
             lon: -66.90969,
             elevation: 960,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             expect(() => {
@@ -395,7 +395,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             lat: -22.92768,
             lon: -43.17063,
             elevation: 0,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);
@@ -461,7 +461,7 @@ describe('test for total solar eclipse 2020-12-14', () => {
             lat: -39.53940,
             lon: -70.37216,
             elevation: 450,
-        }
+        };
 
         it('tests getTimeLocationCircumstancesC1', () => {
             const circumstances = getTimeLocationCircumstancesC1(besselianElements, location);

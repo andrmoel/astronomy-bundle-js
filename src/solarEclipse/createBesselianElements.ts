@@ -29,5 +29,5 @@ function _getBesselianElements(besselianElementsArray: BesselianElementsArray): 
         tanF2: besselianElementsArray[10],
         latGreatestEclipse: besselianElementsArray[11],
         lonGreatestEclipse: besselianElementsArray[12],
-    }
+    };
 }

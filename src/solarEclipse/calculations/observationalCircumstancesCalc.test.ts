@@ -36,7 +36,7 @@ const circumstancesNoEclipse = {
     l1Derived: 0.5399940994544585,
     l2Derived: -0.006113658680568816,
     n2: 0.1118409186857845,
-}
+};
 
 const circumstancesPartial = {
     t: 1.2555163742113822,
@@ -48,7 +48,7 @@ const circumstancesPartial = {
     l1Derived: 0.5400101652811893,
     l2Derived: -0.006097661736670686,
     n2: 0.13756588200894948,
-}
+};
 
 const circumstancesAnnular = {
     t: -1.024647932292263,
@@ -60,7 +60,7 @@ const circumstancesAnnular = {
     l1Derived: 0.5639161791727346,
     l2Derived: 0.0176895233963809,
     n2: 0.33443518561349084,
-}
+};
 
 const circumstancesTotal = {
     t: 0.15055890323155477,
@@ -72,7 +72,7 @@ const circumstancesTotal = {
     l1Derived: 0.5393443092306598,
     l2Derived: -0.006760247799288219,
     n2: 0.1407841631636039,
-}
+};
 
 const location = {
     lat: -39.53940,

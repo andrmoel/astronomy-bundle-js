@@ -5,4 +5,4 @@ export type Time = {
     hour: number,
     min: number,
     sec: number,
-}
+};

@@ -12,7 +12,7 @@ it('tests create local circumstances successfully', async () => {
         l1Derived: 0.53934912025566,
         l2Derived: -0.0067554588016498825,
         n2: 0.14223008338396062,
-    }
+    };
 
     const obsCircumstances = await createObservationalCircumstances(circumstances);
 

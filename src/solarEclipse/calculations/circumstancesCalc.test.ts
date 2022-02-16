@@ -28,7 +28,7 @@ const circumstances: TimeLocationCircumstances = {
     l1Derived: 0.53934912025566,
     l2Derived: -0.0067554588016498825,
     n2: 0.14223008338396062,
-}
+};
 
 it('tests getTimeCircumstances', () => {
     const t = 0.5;
@@ -55,7 +55,7 @@ describe('tests for getTimeLocationCircumstances', () => {
             lat: -39.53940,
             lon: -70.37216,
             elevation: 0,
-        }
+        };
 
         const circumstances = getTimeLocationCircumstances(besselianElements, location, 0);
 
@@ -75,7 +75,7 @@ describe('tests for getTimeLocationCircumstances', () => {
             lat: -39.53940,
             lon: -70.37216,
             elevation: 450,
-        }
+        };
 
         const circumstances = getTimeLocationCircumstances(besselianElements, location, 0);
 

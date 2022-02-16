@@ -35,14 +35,14 @@ export function getApparentMagnitudeMoon(
     if (signedPhaseAngle >= 0 && signedPhaseAngle < 40) {
         V += -12.861
             + 0.037 * phaseAngle
-            - 0.00012 * Math.pow(phaseAngle, 2)
+            - 0.00012 * Math.pow(phaseAngle, 2);
     }
 
     // Area C1
     if (signedPhaseAngle > -40 && signedPhaseAngle < 0) {
         V += -12.85
             - 0.037 * signedPhaseAngle
-            - 0.000235 * Math.pow(signedPhaseAngle, 2)
+            - 0.000235 * Math.pow(signedPhaseAngle, 2);
     }
 
     return V;

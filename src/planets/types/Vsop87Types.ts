@@ -6,4 +6,4 @@ export type Vsop87 = {
     VSOP87_X: Vsop87Group,
     VSOP87_Y: Vsop87Group,
     VSOP87_Z: Vsop87Group
-}
+};

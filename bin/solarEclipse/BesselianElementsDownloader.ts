@@ -17,7 +17,7 @@ export default class BesselianElementsDownloader {
 
         const promises = SOLAR_ECLIPSES.map((jd0: number) => limit(() => {
             if (BesselianElementsDownloader.isBetweenGivenTimePeriod(jd0)) {
-                this.downloadSingleBesselianElements(jd0)
+                this.downloadSingleBesselianElements(jd0);
             }
         }));
 
@@ -36,7 +36,7 @@ export default class BesselianElementsDownloader {
     private createGetterFunction(): void {
         let content = `export default function loadBesselianElements(jd0: number): any {
                 switch(jd0) {
-        `
+        `;
 
         for (let i = 0; i <= SOLAR_ECLIPSES.length; i++) {
             const jd0 = SOLAR_ECLIPSES[i];
@@ -78,7 +78,7 @@ export default class BesselianElementsDownloader {
 
                 BesselianElementsDownloader.onDownloadSuccess(data, url, file);
             } catch (error) {
-                console.log('Error while downloading: ' + url)
+                console.log('Error while downloading: ' + url);
             }
         }
     }
@@ -111,6 +111,6 @@ export default class BesselianElementsDownloader {
 
     private static isBetweenGivenTimePeriod(jd0: number): boolean {
         return jd0 >= time2julianDay({year: 1500, month: 1, day: 1, hour: 0, min: 0, sec: 0})
-            && jd0 < time2julianDay({year: 2500, month: 1, day: 1, hour: 0, min: 0, sec: 0})
+            && jd0 < time2julianDay({year: 2500, month: 1, day: 1, hour: 0, min: 0, sec: 0});
     }
 }

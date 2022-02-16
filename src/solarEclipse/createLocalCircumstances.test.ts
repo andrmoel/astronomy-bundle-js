@@ -17,7 +17,7 @@ it('tests creates local circumstances successfully', async () => {
         tanF2: 0.0047266,
         latGreatestEclipse: -40.3,
         lonGreatestEclipse: -67.9,
-    }
+    };
     const location = createLocation(-39.53940, -70.37216, 450);
 
     const localCircumstances = await createLocalCircumstances(besselianElements, location);

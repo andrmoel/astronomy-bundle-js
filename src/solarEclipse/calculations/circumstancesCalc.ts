@@ -24,7 +24,7 @@ export function getTimeCircumstances(
         dL1: populateD(l1, t),
         l2: populate(l2, t),
         dL2: populateD(l2, t),
-    }
+    };
 }
 
 export function getTimeLocationCircumstances(

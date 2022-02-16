@@ -19,12 +19,12 @@ describe('tests for getDistanceInKm', () => {
             lat: 52.520834,
             lon: 13.409365,
             elevation: 0,
-        }
+        };
         const location2 = {
             lat: 52.51964,
             lon: 13.4066,
             elevation: 0,
-        }
+        };
 
         const distance = getDistanceInKm(location1, location2);
 
@@ -36,12 +36,12 @@ describe('tests for getDistanceInKm', () => {
             lat: 48.836389,
             lon: 2.337222,
             elevation: 0,
-        }
+        };
         const location2 = {
             lat: 38.921389,
             lon: -77.065556,
             elevation: 0,
-        }
+        };
 
         const distance = getDistanceInKm(location1, location2);
 
@@ -53,12 +53,12 @@ describe('tests for getDistanceInKm', () => {
             lat: -37.798157,
             lon: 178.405194,
             elevation: 0,
-        }
+        };
         const location2 = {
             lat: -43.953282,
             lon: -176.56143,
             elevation: 0,
-        }
+        };
 
         const distance = getDistanceInKm(location1, location2);
 

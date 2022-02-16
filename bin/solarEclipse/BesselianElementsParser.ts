@@ -94,10 +94,10 @@ export default class BesselianElementsParser {
             return [
                 parseFloat(matches[1]),
                 parseFloat(matches[2]),
-            ]
+            ];
         }
 
-        return [0.0, 0.0]
+        return [0.0, 0.0];
     }
 
     private parseLatitudeGreatestEclipse(): number {

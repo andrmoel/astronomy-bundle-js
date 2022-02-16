@@ -7,5 +7,5 @@ export function getRingInclination(T: number): number {
 export function getLongitudeOfAscendingNode(T: number): number {
     return 169.508470
         + 1.394681 * T
-        + 0.000412 * Math.pow(T, 2)
+        + 0.000412 * Math.pow(T, 2);
 }
