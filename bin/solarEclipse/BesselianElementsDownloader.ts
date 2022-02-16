@@ -34,7 +34,9 @@ export default class BesselianElementsDownloader {
     }
 
     private createGetterFunction(): void {
-        let content = `export default function loadBesselianElements(jd0: number): any {
+        let content = `import {BesselianElementsArray} from '../types/besselianElementsTypes';
+
+        export default function loadBesselianElements(jd0: number): BesselianElementsArray | undefined {
                 switch(jd0) {
         `;
 

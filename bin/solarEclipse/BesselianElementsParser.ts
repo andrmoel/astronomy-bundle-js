@@ -1,3 +1,7 @@
+import {BesselianElementsArray} from '../../src/solarEclipse/types/besselianElementsTypes';
+
+type Polynomial = [number, number, number, number];
+
 export default class BesselianElementsParser {
     private rows: Array<string> = [];
 
@@ -5,7 +9,7 @@ export default class BesselianElementsParser {
         this.rows = this.content.split('\n');
     }
 
-    public parseBesselianElements(): Array<any> {
+    public parseBesselianElements(): BesselianElementsArray {
         const tMax = this.parseTMax();
         const t0 = this.parseT0();
         const dT = this.parseDeltaT();
@@ -18,8 +22,14 @@ export default class BesselianElementsParser {
             tMax,
             t0,
             dT,
-            ...polynomials,
-            ...tanF1F2,
+            polynomials[0],
+            polynomials[1],
+            polynomials[2],
+            polynomials[3],
+            polynomials[4],
+            polynomials[5],
+            tanF1F2[0],
+            tanF1F2[1],
             latGE,
             lonGE,
         ];
@@ -58,7 +68,7 @@ export default class BesselianElementsParser {
         return 0.0;
     }
 
-    private parsePolynomials(): Array<Array<number>> {
+    private parsePolynomials(): Array<Polynomial> {
         const polynomials: Array<Array<number>> = [
             [],
             [],
@@ -83,7 +93,7 @@ export default class BesselianElementsParser {
             }
         });
 
-        return polynomials;
+        return polynomials as Array<Polynomial>;
     }
 
     private parseTanF1F2(): Array<number> {

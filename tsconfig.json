@@ -8,6 +8,7 @@
     "declaration": true,
     "removeComments": true,
     "resolveJsonModule": true,
+    "useUnknownInCatchVariables": false,
     "allowJs": true
   },
   "include": [
