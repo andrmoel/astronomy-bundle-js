@@ -21,6 +21,7 @@ import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {Location} from '../earth/types/LocationTypes';
 import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
+import {AstronomicalObjectConstructor} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
 import {normalizeAngle} from '../utils/angleCalc';
 import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import {Vsop87} from './types/Vsop87Types';
@@ -38,8 +39,12 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
     private readonly earth: Earth;
 
-    public constructor(name: string, toi?: TimeOfInterest, protected useVsop87Short: boolean = false) {
-        super(name, toi);
+    protected constructor(
+        protected readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime(),
+        public readonly name = 'planet',
+        protected useVsop87Short: boolean = false,
+    ) {
+        super(toi, name);
 
         this.sun = createSun(toi);
         this.earth = createEarth(toi);
@@ -144,19 +149,33 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     }
 
     public async getTransit(location: Location): Promise<TimeOfInterest> {
-        const jd = await getTransit(this.constructor, location, this.jd0);
+        const jd = await getTransit(
+            this.constructor as AstronomicalObjectConstructor,
+            location,
+            this.jd0,
+        );
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getRise(location: Location): Promise<TimeOfInterest> {
-        const jd = await getRise(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
+        const jd = await getRise(
+            this.constructor as AstronomicalObjectConstructor,
+            location,
+            this.jd0,
+            STANDARD_ALTITUDE_PLANET_REFRACTION,
+        );
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
 
     public async getSet(location: Location): Promise<TimeOfInterest> {
-        const jd = await getSet(this.constructor, location, this.jd0, STANDARD_ALTITUDE_PLANET_REFRACTION);
+        const jd = await getSet(
+            this.constructor as AstronomicalObjectConstructor,
+            location,
+            this.jd0,
+            STANDARD_ALTITUDE_PLANET_REFRACTION,
+        );
 
         return createTimeOfInterest.fromJulianDay(jd);
     }

@@ -6,7 +6,7 @@ import {Vsop87} from './types/Vsop87Types';
 
 export default class Saturn extends Planet {
     public constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
-        super('saturn', toi, useVsop87Short);
+        super(toi, 'saturn', useVsop87Short);
     }
 
     public get diameter(): number {

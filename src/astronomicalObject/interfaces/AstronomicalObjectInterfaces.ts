@@ -1,4 +1,3 @@
-import TimeOfInterest from '../../time/TimeOfInterest';
 import {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
@@ -6,10 +5,13 @@ import {
     RectangularCoordinates,
 } from '../../coordinates/types/CoordinateTypes';
 import {Location} from '../../earth/types/LocationTypes';
+import TimeOfInterest from '../../time/TimeOfInterest';
 
-export default interface IAstronomicalObject {
-    toi: TimeOfInterest,
+export interface AstronomicalObjectConstructor {
+    new(toi?: TimeOfInterest): AstronomicalObjectInterface;
+}
 
+export interface AstronomicalObjectInterface {
     getGeocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
 
     getGeocentricEclipticRectangularDateCoordinates(): Promise<RectangularCoordinates>;

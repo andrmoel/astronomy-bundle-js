@@ -9,7 +9,7 @@ import {earthCalc} from './calculations';
 
 export default class Earth extends AstronomicalObject {
     public constructor(toi?: TimeOfInterest) {
-        super('earth', toi);
+        super(toi, 'earth');
     }
 
     public async getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates> {

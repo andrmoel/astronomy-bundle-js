@@ -32,7 +32,7 @@ export default class Moon extends AstronomicalObject {
     private readonly earth: Earth;
 
     public constructor(toi?: TimeOfInterest) {
-        super('moon', toi);
+        super(toi, 'moon');
 
         this.sun = createSun(toi);
         this.earth = createEarth(toi);
@@ -88,7 +88,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getTransit(location: Location): Promise<TimeOfInterest> {
-        const jd = await getTransit(this.constructor, location, this.jd0);
+        const jd = await getTransit(Moon, location, this.jd0);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
@@ -97,7 +97,7 @@ export default class Moon extends AstronomicalObject {
         location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
-        const jd = await getRise(this.constructor, location, this.jd0, standardAltitude);
+        const jd = await getRise(Moon, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }
@@ -106,7 +106,7 @@ export default class Moon extends AstronomicalObject {
         location: Location,
         standardAltitude: number = STANDARD_ALTITUDE_MOON_CENTER_REFRACTION,
     ): Promise<TimeOfInterest> {
-        const jd = await getSet(this.constructor, location, this.jd0, standardAltitude);
+        const jd = await getSet(Moon, location, this.jd0, standardAltitude);
 
         return createTimeOfInterest.fromJulianDay(jd);
     }

@@ -6,7 +6,7 @@ import {Vsop87} from './types/Vsop87Types';
 
 export default class Mars extends Planet {
     public constructor(toi?: TimeOfInterest, useVsop87Short?: boolean) {
-        super('mars', toi, useVsop87Short);
+        super(toi, 'mars', useVsop87Short);
     }
 
     public get diameter(): number {

@@ -18,9 +18,9 @@ import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
 import {Location} from '../earth/types/LocationTypes';
 import {correctEffectOfRefraction} from '../coordinates/calculations/apparentCoordinateCalc';
 import {Conjunction} from '../planets/types/PlanetTypes';
-import IAstronomicalObject from './interfaces/IAstronomicalObject';
+import {AstronomicalObjectConstructor, AstronomicalObjectInterface} from './interfaces/AstronomicalObjectInterfaces';
 
-export default abstract class AstronomicalObject implements IAstronomicalObject {
+export default abstract class AstronomicalObject implements AstronomicalObjectInterface {
     protected readonly jd: number = 0.0;
 
     protected readonly jd0: number = 0.0;
@@ -29,9 +29,9 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
 
     protected readonly t: number = 0.0;
 
-    public constructor(
-        private readonly _name = 'astronomical object',
-        public readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime(),
+    protected constructor(
+        protected readonly toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime(),
+        public readonly name = 'astronomical object',
     ) {
         this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
@@ -39,8 +39,8 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         this.t = toi.getJulianMillenniaJ2000();
     }
 
-    public get name(): string {
-        return this._name;
+    public getTimeOfInterest(): TimeOfInterest {
+        return this.toi;
     }
 
     public abstract getHeliocentricEclipticRectangularJ2000Coordinates(): Promise<RectangularCoordinates>;
@@ -139,11 +139,23 @@ export default abstract class AstronomicalObject implements IAstronomicalObject 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
     }
 
-    public async getConjunctionInRightAscensionTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
-        return await getConjunctionInRightAscension(this.constructor, astronomicalObjectConstructor, this.jd0);
+    public async getConjunctionInRightAscensionTo(
+        astronomicalObjectConstructor: AstronomicalObjectConstructor,
+    ): Promise<Conjunction> {
+        return await getConjunctionInRightAscension(
+            this.constructor as AstronomicalObjectConstructor,
+            astronomicalObjectConstructor,
+            this.jd0,
+        );
     }
 
-    public async getConjunctionInLongitudeTo(astronomicalObjectConstructor: any): Promise<Conjunction> {
-        return await getConjunctionInLongitude(this.constructor, astronomicalObjectConstructor, this.jd0);
+    public async getConjunctionInLongitudeTo(
+        astronomicalObjectConstructor: AstronomicalObjectConstructor,
+    ): Promise<Conjunction> {
+        return await getConjunctionInLongitude(
+            this.constructor as AstronomicalObjectConstructor,
+            astronomicalObjectConstructor,
+            this.jd0,
+        );
     }
 }

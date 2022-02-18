@@ -1,16 +1,17 @@
 import {createTimeOfInterest} from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
 import AstronomicalObject from './AstronomicalObject';
 
 class TestClass extends AstronomicalObject {
-    public constructor(toi) {
-        super('TestClass', toi);
+    public constructor(toi: TimeOfInterest = createTimeOfInterest.fromCurrentTime()) {
+        super(toi, 'Endor');
     }
 }
 
 it('tests get name', () => {
     const astronomicalObject = new TestClass();
 
-    expect(astronomicalObject.name).toBe('TestClass');
+    expect(astronomicalObject.name).toBe('Endor');
 });
 
 it('creates an AstronomicalObject with TimeOfInterest', () => {
@@ -18,7 +19,8 @@ it('creates an AstronomicalObject with TimeOfInterest', () => {
 
     const astronomicalObject = new TestClass(toi);
 
-    expect(astronomicalObject.toi.time).toEqual({year: 2000, month: 5, day: 10, min: 0, hour: 0, sec: 0});
+    expect(astronomicalObject.getTimeOfInterest().time)
+        .toEqual({year: 2000, month: 5, day: 10, min: 0, hour: 0, sec: 0});
 });
 
 it('creates an AstronomicalObject without TimeOfInterest', () => {
@@ -26,5 +28,6 @@ it('creates an AstronomicalObject without TimeOfInterest', () => {
 
     const astronomicalObject = new TestClass();
 
-    expect(astronomicalObject.toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
+    expect(astronomicalObject.getTimeOfInterest().time)
+        .toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
 });

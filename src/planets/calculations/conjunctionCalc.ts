@@ -8,10 +8,11 @@ import {
     getRightAscensionInterpolationArray,
     tabularInterpolation5,
 } from '../../utils/interpolationCalc';
+import {AstronomicalObjectConstructor} from '../../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
 
 export async function getConjunctionInRightAscension(
-    obj1Constructor: any,
-    obj2Constructor: any,
+    obj1Constructor: AstronomicalObjectConstructor,
+    obj2Constructor: AstronomicalObjectConstructor,
     jd0: number,
 ): Promise<Conjunction> {
     const raEphemerisObj1 = await getRightAscensionInterpolationArray(obj1Constructor, jd0, 2);
@@ -37,8 +38,8 @@ export async function getConjunctionInRightAscension(
 }
 
 export async function getConjunctionInLongitude(
-    obj1Constructor: any,
-    obj2Constructor: any,
+    obj1Constructor: AstronomicalObjectConstructor,
+    obj2Constructor: AstronomicalObjectConstructor,
     jd0: number,
 ): Promise<Conjunction> {
     const lonEphemerisObj1 = await getLongitudeInterpolationArray(obj1Constructor, jd0, 2);

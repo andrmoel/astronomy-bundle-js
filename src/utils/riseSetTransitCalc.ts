@@ -1,6 +1,9 @@
 import {Location} from '../earth/types/LocationTypes';
 import {createTimeOfInterest} from '../time';
-import IAstronomicalObject from '../astronomicalObject/interfaces/IAstronomicalObject';
+import {
+    AstronomicalObjectConstructor,
+    AstronomicalObjectInterface,
+} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
 import {
     getDeltaT,
     getGreenwichApparentSiderealTime,
@@ -16,7 +19,7 @@ import {
 import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export async function getTransit(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
 ): Promise<number> {
@@ -41,7 +44,7 @@ export async function getTransit(
 }
 
 export async function getRise(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
     h0: number,
@@ -78,7 +81,7 @@ export async function getRise(
 }
 
 export async function getSet(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
     h0: number,
@@ -115,7 +118,7 @@ export async function getSet(
 }
 
 async function _getApproximatedMTransit(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
 ): Promise<number> {
@@ -132,7 +135,7 @@ async function _getApproximatedMTransit(
 }
 
 async function _getApproximatedMRiseSet(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
     h0: number,
@@ -143,7 +146,7 @@ async function _getApproximatedMRiseSet(
 }
 
 async function _getCorrectionsTransit(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
     m: number,
@@ -159,7 +162,7 @@ async function _getCorrectionsTransit(
 }
 
 async function _getCorrectionsRiseSet(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     location: Location,
     jd0: number,
     h0: number,
@@ -200,7 +203,12 @@ function _getLocalHourAngle(
     return normalizeAngle(H + 180) - 180;
 }
 
-async function _getH0(ObjConstructor: any, location: Location, jd0: number, h0: number): Promise<number> {
+async function _getH0(
+    ObjConstructor: AstronomicalObjectConstructor,
+    location: Location,
+    jd0: number,
+    h0: number,
+): Promise<number> {
     const object = _createAstronomicalObject(ObjConstructor, jd0);
     const {declination} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -225,7 +233,10 @@ function _getN0(jd: number, m: number): number {
     return m + dT / 86400;
 }
 
-function _createAstronomicalObject(ObjConstructor: any, jd: number): IAstronomicalObject {
+function _createAstronomicalObject(
+    ObjConstructor: AstronomicalObjectConstructor,
+    jd: number,
+): AstronomicalObjectInterface {
     const toi = createTimeOfInterest.fromJulianDay(jd);
 
     return new ObjConstructor(toi);
