@@ -1,4 +1,5 @@
 import {createTimeOfInterest} from '../time';
+import {AstronomicalObjectConstructor} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
 
 export function tabularInterpolation3(values: Array<number>, n = 0.0): number {
     // Meeus 3.3
@@ -57,7 +58,7 @@ export function getInterpolateValue5(values: Array<number>, n = 0.0): number {
 }
 
 export async function getLongitudeInterpolationArray(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     jd0: number,
     nMax = 1.0,
 ): Promise<Array<number>> {
@@ -66,18 +67,18 @@ export async function getLongitudeInterpolationArray(
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new ObjConstructor(toi, true);
+        const object = new ObjConstructor(toi);
 
-        const {longitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
+        const {lon} = await object.getApparentGeocentricEclipticSphericalCoordinates();
 
-        result.push(longitude);
+        result.push(lon);
     }
 
     return _fix360Crossing(result);
 }
 
 export async function getLatitudeInterpolationArray(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     jd0: number,
     nMax = 1.0,
 ): Promise<Array<number>> {
@@ -86,18 +87,18 @@ export async function getLatitudeInterpolationArray(
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new ObjConstructor(toi, true);
+        const object = new ObjConstructor(toi);
 
-        const {latitude} = await object.getApparentGeocentricEclipticSphericalCoordinates();
+        const {lat} = await object.getApparentGeocentricEclipticSphericalCoordinates();
 
-        result.push(latitude);
+        result.push(lat);
     }
 
     return result;
 }
 
 export async function getRightAscensionInterpolationArray(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     jd0: number,
     nMax = 1.0,
 ): Promise<Array<number>> {
@@ -106,7 +107,7 @@ export async function getRightAscensionInterpolationArray(
     for (let n = -1 * nMax; n <= nMax; n++) {
         const jd = jd0 + n;
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const object = new ObjConstructor(toi, true);
+        const object = new ObjConstructor(toi);
 
         const {rightAscension} = await object.getApparentGeocentricEquatorialSphericalCoordinates();
 
@@ -117,7 +118,7 @@ export async function getRightAscensionInterpolationArray(
 }
 
 export async function getDeclinationInterpolationArray(
-    ObjConstructor: any,
+    ObjConstructor: AstronomicalObjectConstructor,
     jd0: number,
     nMax = 1.0,
 ): Promise<Array<number>> {
