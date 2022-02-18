@@ -2,15 +2,12 @@ import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
+import {createLocation} from '../earth';
 import createMoon from './createMoon';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
-
-const location = {
-    lat: 52.519,
-    lon: -122.4108,
-};
+const location = createLocation(52.519, -122.4108);
 
 it('tests if name is correct', () => {
     expect(moon.name).toBe('moon');

@@ -2,16 +2,12 @@ import {createTimeOfInterest} from '../time';
 import {round} from '../utils/math';
 import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
+import {createLocation} from '../earth';
 import Sun from './Sun';
 
 const toi = createTimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = new Sun(toi);
-
-const location = {
-    lat: 52.519,
-    lon: 13.408,
-    elevation: 0,
-};
+const location = createLocation(52.519, 13.408);
 
 it('tests if name is correct', () => {
     expect(sun.name).toBe('sun');

@@ -2,18 +2,14 @@ import {round} from '../utils/math';
 import {createTimeOfInterest} from '../time';
 import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
+import {createLocation} from '../earth';
 import Neptune from './Neptune';
 import Jupiter from './Jupiter';
 import {Position} from './types/PlanetTypes';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const neptune = new Neptune(toi);
-
-const location = {
-    lat: 52.519,
-    lon: 13.408,
-    elevation: 0,
-};
+const location = createLocation(52.519, 13.408);
 
 it('tests if name is correct', () => {
     expect(neptune.name).toBe('neptune');
