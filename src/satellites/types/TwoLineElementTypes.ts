@@ -1,4 +1,8 @@
-export type TwoLineElementTypes = {
+export type Name = {
+    name: string,
+};
+
+export type RowOneValues = {
     noradNr: number;
     classification: string;
     internationalDesignator: string;
@@ -9,6 +13,9 @@ export type TwoLineElementTypes = {
     dragTerm: number;
     ephemerisType: number;
     setNumber: number;
+};
+
+export type RowTwoValues = {
     catalogNumber: number;
     inclination: number;
     rightAscension: number;
@@ -18,3 +25,5 @@ export type TwoLineElementTypes = {
     meanMotion: number;
     revolution: number;
 };
+
+export type TwoLineElement = Name & RowOneValues & RowTwoValues;

@@ -1,92 +1,65 @@
 import {shortYear2longYear} from '../time/calculations/timeCalc';
-import {TwoLineElementTypes} from './types/TwoLineElementTypes';
+import {Name, RowOneValues, RowTwoValues, TwoLineElement} from './types/TwoLineElementTypes';
 
-export default function parseTwoLineElement(tleString: string): TwoLineElementTypes {
-    let result = {
-        noradNr: 0,
-        classification: '',
-        internationalDesignator: '',
-        epochYear: 0,
-        epochDayOfYear: 0,
-        firstDerivativeMeanMotion: 0,
-        secondDerivativeMeanMotion: 0,
-        dragTerm: 0,
-        ephemerisType: 0,
-        setNumber: 0,
-        catalogNumber: 0,
-        inclination: 0,
-        rightAscension: 0,
-        eccentricity: 0,
-        argumentOfPerigee: 0,
-        meanAnomaly: 0,
-        meanMotion: 0,
-        revolution: 0,
+export default function parseTwoLineElement(tleString: string): TwoLineElement {
+    const rows = tleString.trim().split('\n');
+
+    return {
+        ..._parseName(rows),
+        ..._parseRowOne(rows),
+        ..._parseRowTwo(rows),
     };
-
-    const rows = tleString.split('\n');
-
-    rows.forEach((row) => {
-        result = {
-            ...result,
-            ..._parseRow(row),
-        };
-    });
-
-    return result;
 }
 
-function _parseRow(row: string): any {
-    row = row.trim();
+function _parseName(rows: Array<string>): Name {
+    const row = rows.find((row) => row.match(/^[A-Za-z]/));
 
-    if (row.match(/^[A-Za-z]/)) {
-        return _parseName(row);
+    return {
+        name: row ? row.trim() : 'satellite',
+    };
+}
+
+function _parseRowOne(rows: Array<string>): RowOneValues {
+    const row = _findRow(rows, 1);
+
+    return {
+        noradNr: parseInt(row.slice(2, 7)),
+        classification: row.slice(7, 8).trim(),
+        internationalDesignator: row.slice(9, 17).trim(),
+        epochYear: shortYear2longYear(row.slice(18, 20)),
+        epochDayOfYear: parseFloat(row.slice(20, 32)),
+        firstDerivativeMeanMotion: parseFloat(row.slice(33, 43)),
+        secondDerivativeMeanMotion: _parseExpString(row.slice(44, 52)),
+        dragTerm: _parseExpString(row.slice(53, 61)),
+        ephemerisType: parseInt(row.slice(62, 63)),
+        setNumber: parseInt(row.slice(64, 68)),
+    };
+}
+
+function _parseRowTwo(rows: Array<string>): RowTwoValues {
+    const row = _findRow(rows, 2);
+
+    return {
+        catalogNumber: parseInt(row.slice(2, 7)),
+        inclination: parseFloat(row.slice(8, 16)),
+        rightAscension: parseFloat(row.slice(17, 25)),
+        eccentricity: parseFloat('0.' + row.slice(26, 33)),
+        argumentOfPerigee: parseFloat(row.slice(34, 42)),
+        meanAnomaly: parseFloat(row.slice(43, 51)),
+        meanMotion: parseFloat(row.slice(52, 63)),
+        revolution: parseInt(row.slice(63, 68)),
+    };
+}
+
+function _findRow(rows: Array<string>, rowNo: number): string {
+    const regExp = new RegExp(`^${rowNo} `);
+    const row = rows.find((row) => row.trim().match(regExp));
+
+    if (!row) {
+        throw Error('Missing TLE row ' + rowNo);
     }
 
-    const matches = row.match(/^([1|2]) /);
-    if (matches) {
-        switch (matches[1]) {
-            case '1':
-                return _parseRow1(row);
-            case '2':
-                return _parseRow2(row);
-        }
-    }
-
-    return {};
-}
-
-function _parseName(row: string): any {
-    return {
-        name: row.trim(),
-    };
-}
-
-function _parseRow1(row: string): any {
-    return {
-        noradNr: parseInt(row.substr(2, 5)),
-        classification: row.substr(7, 1).trim(),
-        internationalDesignator: row.substr(9, 8).trim(),
-        epochYear: shortYear2longYear(row.substr(18, 2)),
-        epochDayOfYear: parseFloat(row.substr(20, 12)),
-        firstDerivativeMeanMotion: parseFloat(row.substr(33, 10)),
-        secondDerivativeMeanMotion: _parseExpString(row.substr(44, 8)),
-        dragTerm: _parseExpString(row.substr(53, 8)),
-        ephemerisType: parseInt(row.substr(62, 1)),
-        setNumber: parseInt(row.substr(64, 4)),
-    };
-}
-
-function _parseRow2(row: string): any {
-    return {
-        catalogNumber: parseInt(row.substr(2, 5)),
-        inclination: parseFloat(row.substr(8, 8)),
-        rightAscension: parseFloat(row.substr(17, 8)),
-        eccentricity: parseFloat('0.' + row.substr(26, 7)),
-        argumentOfPerigee: parseFloat(row.substr(34, 8)),
-        meanAnomaly: parseFloat(row.substr(43, 8)),
-        meanMotion: parseFloat(row.substr(52, 11)),
-        revolution: parseInt(row.substr(63, 5)),
-    };
+    return row.trim();
 }
 
 function _parseExpString(expString: string): number {
