@@ -1,6 +1,11 @@
-const cache: {[index: string]: any} = {};
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
+const cache: { [index: string]: any } = {};
 
-export function getCachedCalculation<R>(cacheKey: string, time: number, callback: () => R): any {
+export function getCachedCalculation<R>(
+    cacheKey: string,
+    time: number,
+    callback: () => R,
+): R {
     cacheKey = _getGeneratedCacheKey(cacheKey, time);
 
     if (cache.hasOwnProperty(cacheKey)) {
@@ -12,7 +17,11 @@ export function getCachedCalculation<R>(cacheKey: string, time: number, callback
     return cache[cacheKey];
 }
 
-export async function getAsyncCachedCalculation<R>(cacheKey: string, time: number, callback: () => R): Promise<any> {
+export async function getAsyncCachedCalculation<R>(
+    cacheKey: string,
+    time: number,
+    callback: () => Promise<R>,
+): Promise<R> {
     cacheKey = _getGeneratedCacheKey(cacheKey, time);
 
     if (cache.hasOwnProperty(cacheKey)) {

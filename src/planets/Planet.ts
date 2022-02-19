@@ -59,27 +59,35 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
     protected abstract get vsop87DateShort(): Promise<Vsop87>;
 
     public async getHeliocentricEclipticSphericalJ2000Coordinates(): Promise<EclipticSphericalCoordinates> {
-        return await getAsyncCachedCalculation(this.name + '_heliocentric_spherical_j2000', this.t, async () => {
-            const vsop87 = await this.vsop87J2000;
+        return await getAsyncCachedCalculation<EclipticSphericalCoordinates>(
+            this.name + '_heliocentric_spherical_j2000',
+            this.t,
+            async () => {
+                const vsop87 = await this.vsop87J2000;
 
-            return {
-                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
-                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
-                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            };
-        });
+                return {
+                    lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                    lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                    radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+                };
+            },
+        );
     }
 
     public async getHeliocentricEclipticSphericalDateCoordinates(): Promise<EclipticSphericalCoordinates> {
-        return await getAsyncCachedCalculation(this.name + '_heliocentric_spherical_date', this.t, async () => {
-            const vsop87 = this.useVsop87Short ? await this.vsop87DateShort : await this.vsop87Date;
+        return await getAsyncCachedCalculation<EclipticSphericalCoordinates>(
+            this.name + '_heliocentric_spherical_date',
+            this.t,
+            async () => {
+                const vsop87 = this.useVsop87Short ? await this.vsop87DateShort : await this.vsop87Date;
 
-            return {
-                lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
-                lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
-                radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
-            };
-        });
+                return {
+                    lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
+                    lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
+                    radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+                };
+            },
+        );
     }
 
     public async getAngularDiameter(): Promise<number> {
