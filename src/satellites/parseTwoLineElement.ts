@@ -2,7 +2,10 @@ import {shortYear2longYear} from '../time/calculations/timeCalc';
 import {Name, RowOneValues, RowTwoValues, TwoLineElement} from './types/TwoLineElementTypes';
 
 export default function parseTwoLineElement(tleString: string): TwoLineElement {
-    const rows = tleString.trim().split('\n');
+    const rows = tleString
+        .trim()
+        .split('\n')
+        .map((row) => row.trim());
 
     return {
         ..._parseName(rows),
@@ -15,7 +18,7 @@ function _parseName(rows: Array<string>): Name {
     const row = rows.find((row) => row.match(/^[A-Za-z]/));
 
     return {
-        name: row ? row.trim() : 'satellite',
+        name: row || 'satellite',
     };
 }
 
@@ -53,13 +56,13 @@ function _parseRowTwo(rows: Array<string>): RowTwoValues {
 
 function _findRow(rows: Array<string>, rowNo: number): string {
     const regExp = new RegExp(`^${rowNo} `);
-    const row = rows.find((row) => row.trim().match(regExp));
+    const row = rows.find((row) => row.match(regExp));
 
     if (!row) {
         throw Error('Missing TLE row ' + rowNo);
     }
 
-    return row.trim();
+    return row;
 }
 
 function _parseExpString(expString: string): number {
