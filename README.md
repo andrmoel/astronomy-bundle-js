@@ -713,7 +713,7 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const {lon, lat} = await moon.getLibrationToEarth();
+const {lon, lat} = await moon.getLibration();
 ```
 
 The result of the calculation should be:\
