@@ -9,48 +9,50 @@ For a detailed see the table of contents.
 Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
 
 ## Table of Contents  
+
 1. [Installation](#installation)
 2. [Angle Utils](#angle-utils)
 3. [Time of Interest](#toi)
-    1. [Create Time Of Interest](#create-time-of-interest)
-    2. [Calendar methods](#time-of-interest-calendar)
-    3. [Julian Day, Centuries and Millennia](#time-of-interest-jd)
-    4. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
-    5. [Delta T](#time-of-interest-deltat)
+   1. [Create Time Of Interest](#create-time-of-interest)
+   2. [Calendar methods](#time-of-interest-calendar)
+   3. [Julian Day, Centuries and Millennia](#time-of-interest-jd)
+   4. [Greenwich and Local Sidereal Time](#time-of-interest-gmst)
+   5. [Delta T](#time-of-interest-deltat)
 4. [Location](#location)
    1. [Distance between two locations](#location-distance)
 5. [Astronomical Objects](#astronomical-objects)
-    1. [Coordinates](#astronomical-objects-coordinates)
+   1. [Coordinates](#astronomical-objects-coordinates)
 6. [Earth](#earth)
-    1. [Position of the Earth](#earth-position)
-    2. [Nutation in Longitude and Obliquity](#earth-nutation)
-    3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
+   1. [Position of the Earth](#earth-position)
+   2. [Nutation in Longitude and Obliquity](#earth-nutation)
+   3. [Obliquity of Ecliptic](#earth-obliquity-of-ecliptic)
 7. [Sun](#sun)
-    1. [Position of the Sun](#sun-position)
-    2. [Distance to Earth and Diameter](#sun-distance-diameter)
-    3. [Sunrise, Sunset and Transit](#sun-rise-set)
+   1. [Position of the Sun](#sun-position)
+   2. [Distance to Earth and Diameter](#sun-distance-diameter)
+   3. [Sunrise, Sunset and Transit](#sun-rise-set)
 8. [Moon](#moon)
-    1. [Position of the Moon](#moon-position)
-    2. [Distance to Earth and Diameter](#moon-distance-diameter)
-    3. [Moonrise, Moonset and Transit](#moon-rise-set)
-    3. [Phases](#moon-phases)
-    4. [Apparent Magnitude](#moon-magnitude)
-    5. [Physical Observation](#moon-observation)
+   1. [Position of the Moon](#moon-position)
+   2. [Distance to Earth and Diameter](#moon-distance-diameter)
+   3. [Moonrise, Moonset and Transit](#moon-rise-set)
+   4. [Phases](#moon-phases)
+   5. [Apparent Magnitude](#moon-magnitude)
+   6. [Physical Observation](#moon-observation)
+   7. [Libration](#moon-libration)
 9. [Planets](#planets)
-    1. [Position of Planets](#planets-position)
-    2. [Distance to Earth and Diameter](#planets-distance-diameter)
-    3. [Phases](#planets-phases)
-    4. [Apparent Magnitude](#planets-magnitude)
-    5. [Physical Observation](#planets-observation)
-    5. [Conjunction](#planets-conjunction)
+   1. [Position of Planets](#planets-position)
+   2. [Distance to Earth and Diameter](#planets-distance-diameter)
+   3. [Phases](#planets-phases)
+   4. [Apparent Magnitude](#planets-magnitude)
+   5. [Physical Observation](#planets-observation)
+   5. [Conjunction](#planets-conjunction)
 10. [Stars](#stars)
-     1. [Position of Stars](#stars-position)
+   1. [Position of Stars](#stars-position)
 11. [Solar Eclipse](#solar-eclipse)
-    1. [Solar Eclipse exists](#solar-eclipse-exists)
-    2. [Greatest Eclipse](#solar-eclipse-greatest)
-    3. [Observational Circumstances](#solar-eclipse-obs-circumstances)
+   1. [Solar Eclipse exists](#solar-eclipse-exists)
+   2. [Greatest Eclipse](#solar-eclipse-greatest)
+   3. [Observational Circumstances](#solar-eclipse-obs-circumstances)
 12. [Satellites](#satellites)
-    1. [Two Line Elements](#satellites-tle)
+   1. [Two Line Elements](#satellites-tle)
 
 ## <a name="installation"></a>Installation
 
@@ -696,6 +698,27 @@ The result of the calculation should be:\
 Elongation from Sun: *107.81°*\
 Phase Angle: *72.05°*\
 Position Angle of bright Limb: *100.58°*
+
+### <a name="moon-libration"></a> Libration of the moon
+
+The libration is the wagging or wavering of the Moon perceived by Earth-bound observers.
+
+**Example 1**: Get the libration (selenographic position of the earth on the moons surface) on 12th of April 1992
+(See Meeus Example 53.a)
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = createMoon(toi);
+
+const {lon, lat} = await moon.getLibrationToEarth();
+```
+
+The result of the calculation should be:\
+Longitude: *-1.23121°*\
+Latitude: *4.1998°*
 
 ## <a name="planets"></a> Planets
 
