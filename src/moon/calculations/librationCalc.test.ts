@@ -1,5 +1,5 @@
 import {round} from '../../utils/math';
-import {getLibration, getOpticalLibration, getPhysicalLibration, getQuantities} from './obsCalc';
+import {getLibration, getOpticalLibration, getPhysicalLibration, getQuantities} from './librationCalc';
 
 const T = -0.07722108145106092;
 const coords = {

@@ -1,11 +1,11 @@
 import {deg2rad, normalizeAngle, rad2deg} from '../../utils/angleCalc';
 import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '../constants/calculations';
 import * as sunCalc from '../../sun/calculations/sunCalc';
-import {Libration, Quantities, WandA} from '../types/CalculationTypes';
+import {Quantities, SelenographicCoordinates, WandA} from '../types/CalculationTypes';
 import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
 
-export function getLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+export function getLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
     const {lon: lonOpt, lat: latOpt} = getOpticalLibration(T, coords);
     const {lon: lonPhy, lat: latPhy} = getPhysicalLibration(T, coords);
 
@@ -15,7 +15,7 @@ export function getLibration(T: number, coords: EclipticSphericalCoordinates): L
     };
 }
 
-export function getPhysicalLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+export function getPhysicalLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
     const {lat: latOpt} = getOpticalLibration(T, coords);
     const {A} = getWandA(T, coords);
     const {rho, sigma, tau} = getQuantities(T);
@@ -30,7 +30,7 @@ export function getPhysicalLibration(T: number, coords: EclipticSphericalCoordin
     return {lon, lat};
 }
 
-export function getOpticalLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+export function getOpticalLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
     const F = getArgumentOfLatitude(T);
     const {W, A} = getWandA(T, coords);
 

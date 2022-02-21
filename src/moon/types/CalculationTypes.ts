@@ -1,4 +1,4 @@
-export type Libration = {
+export type SelenographicCoordinates = {
     lon: number,
     lat: number,
 };

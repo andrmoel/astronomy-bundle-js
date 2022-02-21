@@ -293,8 +293,8 @@ it('tests getUpcomingLastQuarter', () => {
     expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 40, sec: 37});
 });
 
-it('tests getLibrationToEarth', async () => {
-    const {lon, lat} = await moon.getLibrationToEarth();
+it('tests getSelenographicPositionOfEarth', async () => {
+    const {lon, lat} = await moon.getLibration();
 
     expect(round(lon, 5)).toBe(-1.23121);
     expect(round(lat, 5)).toBe(4.1998);

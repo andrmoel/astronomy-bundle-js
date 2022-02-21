@@ -33,9 +33,10 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
     1. [Position of the Moon](#moon-position)
     2. [Distance to Earth and Diameter](#moon-distance-diameter)
     3. [Moonrise, Moonset and Transit](#moon-rise-set)
-    3. [Phases](#moon-phases)
-    4. [Apparent Magnitude](#moon-magnitude)
-    5. [Physical Observation](#moon-observation)
+    4. [Phases](#moon-phases)
+    5. [Apparent Magnitude](#moon-magnitude)
+    6. [Physical Observation](#moon-observation)
+    7. [Libration](#moon-libration)
 9. [Planets](#planets)
     1. [Position of Planets](#planets-position)
     2. [Distance to Earth and Diameter](#planets-distance-diameter)
@@ -696,6 +697,27 @@ The result of the calculation should be:\
 Elongation from Sun: *107.81°*\
 Phase Angle: *72.05°*\
 Position Angle of bright Limb: *100.58°*
+
+### <a name="moon-libration"></a> Libration of the moon
+
+The libration is the wagging or wavering of the Moon perceived by Earth-bound observers.
+
+**Example 1**: Get the libration (selenographic position of the earth on the moons surface) on 12th of April 1992
+(See Meeus Example 53.a)
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = createMoon(toi);
+
+const {lon, lat} = await moon.getLibrationToEarth();
+```
+
+The result of the calculation should be:\
+Longitude: *-1.23121°*\
+Latitude: *4.1998°*
 
 ## <a name="planets"></a> Planets
 
