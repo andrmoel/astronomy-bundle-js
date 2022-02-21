@@ -1,3 +1,5 @@
+export const INCLINATION_OF_MEAN_LUNAR_EQUATOR = 1.54242;
+
 export const MOON_ARGUMENTS_LR = [
     [0, 0, 1, 0, 6288774, -20905355],
     [2, 0, -1, 0, 1274027, -3699111],
