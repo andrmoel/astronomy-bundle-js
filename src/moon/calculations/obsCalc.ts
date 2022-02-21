@@ -1,7 +1,51 @@
-import {deg2rad} from '../../utils/angleCalc';
+import {deg2rad, normalizeAngle, rad2deg} from '../../utils/angleCalc';
+import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '../constants/calculations';
 import * as sunCalc from '../../sun/calculations/sunCalc';
-import {Quantities} from '../types/CalculationTypes';
+import {Libration, Quantities, WandA} from '../types/CalculationTypes';
+import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
+
+export function getLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+    const {lon: lonOpt, lat: latOpt} = getOpticalLibration(T, coords);
+    const {lon: lonPhy, lat: latPhy} = getPhysicalLibration(T, coords);
+
+    return {
+        lon: lonOpt + lonPhy,
+        lat: latOpt + latPhy,
+    };
+}
+
+export function getPhysicalLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+    const {lat: latOpt} = getOpticalLibration(T, coords);
+    const {A} = getWandA(T, coords);
+    const {rho, sigma, tau} = getQuantities(T);
+
+    const latOptRad = deg2rad(latOpt);
+    const ARad = deg2rad(A);
+
+    // Meeus 53.2
+    const lon = -1 * tau + (rho * Math.cos(ARad) + sigma * Math.sin(ARad)) * Math.tan(latOptRad);
+    const lat = sigma * Math.cos(ARad) - rho * Math.sin(ARad);
+
+    return {lon, lat};
+}
+
+export function getOpticalLibration(T: number, coords: EclipticSphericalCoordinates): Libration {
+    const F = getArgumentOfLatitude(T);
+    const {W, A} = getWandA(T, coords);
+
+    const latMoonRad = deg2rad(coords.lat);
+    const WRad = deg2rad(W);
+    const IRad = deg2rad(INCLINATION_OF_MEAN_LUNAR_EQUATOR);
+
+    const lon = A - F;
+    const latRad = Math.asin(
+        -1 * Math.sin(WRad) * Math.cos(latMoonRad) * Math.sin(IRad) - Math.sin(latMoonRad) * Math.cos(IRad),
+    );
+    const lat = rad2deg(latRad);
+
+    return {lon, lat};
+}
 
 export function getQuantities(T: number): Quantities {
     const F = getArgumentOfLatitude(T);
@@ -71,4 +115,23 @@ export function getQuantities(T: number): Quantities {
         + 0.00011 * Math.sin(2 * MMoonRad - 2 * MSunRad - 2 * DRad);
 
     return {rho, sigma, tau};
+}
+
+function getWandA(T: number, coords: EclipticSphericalCoordinates): WandA {
+    const omega = getMeanLongitudeOfAscendingNode(T);
+
+    const latMoonRad = deg2rad(coords.lat);
+    const IRad = deg2rad(INCLINATION_OF_MEAN_LUNAR_EQUATOR);
+
+    // Meeus 53.1
+    const W = normalizeAngle(coords.lon - omega);
+    const WRad = deg2rad(W);
+
+    const numerator = Math.sin(WRad) * Math.cos(latMoonRad) * Math.cos(IRad) - Math.sin(latMoonRad) * Math.sin(IRad);
+    const denominator = Math.cos(WRad) * Math.cos(latMoonRad);
+
+    const ARad = Math.atan2(numerator, denominator);
+    const A = normalizeAngle(rad2deg(ARad));
+
+    return {W, A};
 }
