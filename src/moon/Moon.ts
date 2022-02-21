@@ -25,6 +25,8 @@ import {
     MOON_PHASE_NEW_MOON,
 } from './constants/moonPhases';
 import {DIAMETER_MOON} from './constants/diameters';
+import {Libration} from './types/CalculationTypes';
+import {getLibration} from './calculations/obsCalc';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;
@@ -229,5 +231,11 @@ export default class Moon extends AstronomicalObject {
         const decimalYear = this.toi.getDecimalYear();
 
         return moonPhaseCalc.getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_LAST_QUARTER);
+    }
+
+    public async getLibrationToEarth(): Promise<Libration> {
+        const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return getLibration(this.T, coords);
     }
 }
