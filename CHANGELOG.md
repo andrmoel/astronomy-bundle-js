@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.1.0 (2022-02-21)
+
+
+### Features
+
+* **moon:** calculate libration ([bc8720c](https://github.com/andrmoel/astronomy-bundle-js/commit/bc8720c1d4d1e25bff6d02c8823bf0b07ab821c2))
+
 ### 7.0.16 (2022-02-21)
 
 ### 7.0.15 (2022-02-19)
