@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.2.0 (2022-02-22)
+
+
+### Features
+
+* **moon:** get selenographic location of sun ([d8a0c68](https://github.com/andrmoel/astronomy-bundle-js/commit/d8a0c6890231d2fb0563fe7091e57e8af825462d))
+
 ### 7.1.2 (2022-02-22)
 
 ### 7.1.1 (2022-02-21)
