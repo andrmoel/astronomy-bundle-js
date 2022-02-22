@@ -4,6 +4,8 @@ import * as sunCalc from '../../sun/calculations/sunCalc';
 import {Quantities, WandA} from '../types/CalculationTypes';
 import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
 import {SelenographicLocation} from '../types/LocationTypes';
+import {createTimeOfInterest} from '../../time';
+import createMoon from '../createMoon';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
 
 export function getSelenographicLocation(
@@ -144,4 +146,55 @@ function getWandA(T: number, coords: EclipticSphericalCoordinates): WandA {
     const A = normalizeAngle(rad2deg(ARad));
 
     return {W, A};
+}
+
+export async function getSunrise(
+    selenographicLocation: SelenographicLocation,
+    T: number,
+): Promise<number> {
+    let h;
+
+    do {
+        const {lon, lat} = await _getSelenographicLocationOfSun(T);
+
+        const c0 = normalizeAngle(90 - lon);
+        h = getSunAltitude(selenographicLocation, lat, c0);
+
+        T -= _getCorrectionInDays(selenographicLocation, h) / 36525.0;
+    } while (Math.abs(h) > 0.001);
+
+    return T;
+}
+
+async function _getSelenographicLocationOfSun(T: number): Promise<SelenographicLocation> {
+    const toi = createTimeOfInterest.fromJulianCenturiesJ2000(T);
+    const moon = createMoon(toi);
+    const coords = await moon.getHeliocentricEclipticSphericalDateCoordinates();
+
+    return getSelenographicLocation(T, coords);
+}
+
+export function getSunAltitude(
+    selenographicLocation: SelenographicLocation,
+    selenographicLatOfSun: number,
+    c0: number,
+): number {
+    const {lon, lat} = selenographicLocation;
+
+    const lonRad = deg2rad(lon);
+    const latRad = deg2rad(lat);
+    const lat0Rad = deg2rad(selenographicLatOfSun);
+    const c0Rad = deg2rad(c0);
+
+    const hRad = Math.asin(
+        Math.sin(lat0Rad) * Math.sin(latRad) + Math.cos(lat0Rad) * Math.cos(latRad) * Math.sin(c0Rad + lonRad),
+    );
+
+    return rad2deg(hRad);
+}
+
+function _getCorrectionInDays(selenographicLocation: SelenographicLocation, h: number): number {
+    const latRad = deg2rad(selenographicLocation.lat);
+
+    return h / (12.19075 * Math.cos(latRad));
 }

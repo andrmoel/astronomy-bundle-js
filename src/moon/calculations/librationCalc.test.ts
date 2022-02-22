@@ -1,9 +1,11 @@
 import {round} from '../../utils/math';
+import {SelenographicLocation} from '../types/LocationTypes';
 import {
     getOpticalSelenographicLocation,
     getPhysicalSelenographicLocation,
     getQuantities,
     getSelenographicLocation,
+    getSunrise,
 } from './librationCalc';
 
 const T = -0.07722108145106092;
@@ -40,4 +42,15 @@ it('tests getQuantities', () => {
     expect(round(rho, 5)).toBe(-0.01042);
     expect(round(sigma, 5)).toBe(-0.01574);
     expect(round(tau, 5)).toBe(0.02673);
+});
+
+it('tests getSunrise', async () => {
+    const coords: SelenographicLocation = {
+        lon: -20.0,
+        lat: 9.7,
+    };
+
+    const TRise = await getSunrise(coords, T);
+
+    expect(round(TRise, 8)).toBe(-0.07722636);
 });
