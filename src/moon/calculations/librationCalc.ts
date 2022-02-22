@@ -9,11 +9,11 @@ import createMoon from '../createMoon';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
 
 export function getSelenographicLocation(
-    T: number,
     coords: EclipticSphericalCoordinates,
+    T: number,
 ): SelenographicLocation {
-    const {lon: lonOpt, lat: latOpt} = getOpticalSelenographicLocation(T, coords);
-    const {lon: lonPhy, lat: latPhy} = getPhysicalSelenographicLocation(T, coords);
+    const {lon: lonOpt, lat: latOpt} = getOpticalSelenographicLocation(coords, T);
+    const {lon: lonPhy, lat: latPhy} = getPhysicalSelenographicLocation(coords, T);
 
     return {
         lon: lonOpt + lonPhy,
@@ -22,11 +22,11 @@ export function getSelenographicLocation(
 }
 
 export function getOpticalSelenographicLocation(
-    T: number,
     coords: EclipticSphericalCoordinates,
+    T: number,
 ): SelenographicLocation {
     const F = getArgumentOfLatitude(T);
-    const {W, A} = getWandA(T, coords);
+    const {W, A} = getWA(coords, T);
 
     const latMoonRad = deg2rad(coords.lat);
     const WRad = deg2rad(W);
@@ -42,11 +42,11 @@ export function getOpticalSelenographicLocation(
 }
 
 export function getPhysicalSelenographicLocation(
-    T: number,
     coords: EclipticSphericalCoordinates,
+    T: number,
 ): SelenographicLocation {
-    const {lat: latOpt} = getOpticalSelenographicLocation(T, coords);
-    const {A} = getWandA(T, coords);
+    const {lat: latOpt} = getOpticalSelenographicLocation(coords, T);
+    const {A} = getWA(coords, T);
     const {rho, sigma, tau} = getQuantities(T);
 
     const latOptRad = deg2rad(latOpt);
@@ -129,7 +129,7 @@ export function getQuantities(T: number): Quantities {
     return {rho, sigma, tau};
 }
 
-function getWandA(T: number, coords: EclipticSphericalCoordinates): WandA {
+function getWA(coords: EclipticSphericalCoordinates, T: number): WandA {
     const omega = getMeanLongitudeOfAscendingNode(T);
 
     const latMoonRad = deg2rad(coords.lat);
@@ -171,7 +171,7 @@ async function _getSelenographicLocationOfSun(T: number): Promise<SelenographicL
     const moon = createMoon(toi);
     const coords = await moon.getHeliocentricEclipticSphericalDateCoordinates();
 
-    return getSelenographicLocation(T, coords);
+    return getSelenographicLocation(coords, T);
 }
 
 export function getSunAltitude(

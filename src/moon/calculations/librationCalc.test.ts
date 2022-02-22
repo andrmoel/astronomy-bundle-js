@@ -16,21 +16,21 @@ const coords = {
 };
 
 it('tests getSelenographicLocation', () => {
-    const {lon, lat} = getSelenographicLocation(T, coords);
+    const {lon, lat} = getSelenographicLocation(coords, T);
 
     expect(round(lon, 5)).toBe(-1.23121);
     expect(round(lat, 5)).toBe(4.1998);
 });
 
 it('tests getOpticalSelenographicLocation', () => {
-    const {lon, lat} = getOpticalSelenographicLocation(T, coords);
+    const {lon, lat} = getOpticalSelenographicLocation(coords, T);
 
     expect(round(lon, 5)).toBe(-1.20579);
     expect(round(lat, 5)).toBe(4.19403);
 });
 
 it('tests getPhysicalSelenographicLocation', () => {
-    const {lon, lat} = getPhysicalSelenographicLocation(T, coords);
+    const {lon, lat} = getPhysicalSelenographicLocation(coords, T);
 
     expect(round(lon, 5)).toBe(-0.02542);
     expect(round(lat, 5)).toBe(0.00577);
