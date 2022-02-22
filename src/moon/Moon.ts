@@ -234,7 +234,17 @@ export default class Moon extends AstronomicalObject {
     }
 
     public async getGeocentricLibration(): Promise<SelenographicLocation> {
+        return await this.getSelenographicLocationOfEarth();
+    }
+
+    public async getSelenographicLocationOfEarth(): Promise<SelenographicLocation> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return getSelenographicLocation(this.T, coords);
+    }
+
+    public async getSelenographicLocationOfSun(): Promise<SelenographicLocation> {
+        const coords = await this.getHeliocentricEclipticSphericalDateCoordinates();
 
         return getSelenographicLocation(this.T, coords);
     }

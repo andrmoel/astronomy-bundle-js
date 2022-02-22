@@ -713,12 +713,30 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
-const {lon, lat} = await moon.getLibration();
+const {lon, lat} = await moon.getGeocentricLibration();
+const {lon, lat} = await moon.getSelenographicLocationOfEarth(); // same as getGeocentricLibration()getGeocentricLibration
 ```
 
 The result of the calculation should be:\
 Longitude: *-1.23121°*\
 Latitude: *4.1998°*
+
+**Example 2**: Get the selenographic position of the sun on the moons surface on 12th of April 1992
+(See Meeus Example 53.b)
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = createMoon(toi);
+
+const {lon, lat} = await moon.getSelenographicLocationOfSun();
+```
+
+The result of the calculation should be:\
+Longitude: *67.89894°*\
+Latitude: *1.4615°*
 
 ## <a name="planets"></a> Planets
 

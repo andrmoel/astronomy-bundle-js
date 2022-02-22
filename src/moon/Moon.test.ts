@@ -299,3 +299,17 @@ it('tests getGeocentricLibration', async () => {
     expect(round(lon, 5)).toBe(-1.23121);
     expect(round(lat, 5)).toBe(4.1998);
 });
+
+it('tests getSelenographicLocationOfEarth', async () => {
+    const {lon, lat} = await moon.getSelenographicLocationOfEarth();
+
+    expect(round(lon, 5)).toBe(-1.23121);
+    expect(round(lat, 5)).toBe(4.1998);
+});
+
+it('tests getSelenographicLocationOfSun', async () => {
+    const {lon, lat} = await moon.getSelenographicLocationOfSun();
+
+    expect(round(lon, 5)).toBe(67.89894);
+    expect(round(lat, 5)).toBe(1.4615);
+});
