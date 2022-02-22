@@ -714,7 +714,7 @@ const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
 
 const {lon, lat} = await moon.getGeocentricLibration();
-const {lon, lat} = await moon.getSelenographicLocationOfEarth(); // same as getGeocentricLibration()getGeocentricLibration
+const {lon, lat} = await moon.getSelenographicLocationOfEarth(); // same as getGeocentricLibration()
 ```
 
 The result of the calculation should be:\
