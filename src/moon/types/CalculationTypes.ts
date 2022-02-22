@@ -1,8 +1,3 @@
-export type SelenographicCoordinates = {
-    lon: number,
-    lat: number,
-};
-
 export type Quantities = {
     rho: number,
     sigma: number,

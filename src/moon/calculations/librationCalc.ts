@@ -1,13 +1,17 @@
 import {deg2rad, normalizeAngle, rad2deg} from '../../utils/angleCalc';
 import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '../constants/calculations';
 import * as sunCalc from '../../sun/calculations/sunCalc';
-import {Quantities, SelenographicCoordinates, WandA} from '../types/CalculationTypes';
+import {Quantities, WandA} from '../types/CalculationTypes';
 import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
+import {SelenographicLocation} from '../types/LocationTypes';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
 
-export function getLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
-    const {lon: lonOpt, lat: latOpt} = getOpticalLibration(T, coords);
-    const {lon: lonPhy, lat: latPhy} = getPhysicalLibration(T, coords);
+export function getSelenographicLocation(
+    T: number,
+    coords: EclipticSphericalCoordinates,
+): SelenographicLocation {
+    const {lon: lonOpt, lat: latOpt} = getOpticalSelenographicLocation(T, coords);
+    const {lon: lonPhy, lat: latPhy} = getPhysicalSelenographicLocation(T, coords);
 
     return {
         lon: lonOpt + lonPhy,
@@ -15,22 +19,10 @@ export function getLibration(T: number, coords: EclipticSphericalCoordinates): S
     };
 }
 
-export function getPhysicalLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
-    const {lat: latOpt} = getOpticalLibration(T, coords);
-    const {A} = getWandA(T, coords);
-    const {rho, sigma, tau} = getQuantities(T);
-
-    const latOptRad = deg2rad(latOpt);
-    const ARad = deg2rad(A);
-
-    // Meeus 53.2
-    const lon = -1 * tau + (rho * Math.cos(ARad) + sigma * Math.sin(ARad)) * Math.tan(latOptRad);
-    const lat = sigma * Math.cos(ARad) - rho * Math.sin(ARad);
-
-    return {lon, lat};
-}
-
-export function getOpticalLibration(T: number, coords: EclipticSphericalCoordinates): SelenographicCoordinates {
+export function getOpticalSelenographicLocation(
+    T: number,
+    coords: EclipticSphericalCoordinates,
+): SelenographicLocation {
     const F = getArgumentOfLatitude(T);
     const {W, A} = getWandA(T, coords);
 
@@ -43,6 +35,24 @@ export function getOpticalLibration(T: number, coords: EclipticSphericalCoordina
         -1 * Math.sin(WRad) * Math.cos(latMoonRad) * Math.sin(IRad) - Math.sin(latMoonRad) * Math.cos(IRad),
     );
     const lat = rad2deg(latRad);
+
+    return {lon, lat};
+}
+
+export function getPhysicalSelenographicLocation(
+    T: number,
+    coords: EclipticSphericalCoordinates,
+): SelenographicLocation {
+    const {lat: latOpt} = getOpticalSelenographicLocation(T, coords);
+    const {A} = getWandA(T, coords);
+    const {rho, sigma, tau} = getQuantities(T);
+
+    const latOptRad = deg2rad(latOpt);
+    const ARad = deg2rad(A);
+
+    // Meeus 53.2
+    const lon = -1 * tau + (rho * Math.cos(ARad) + sigma * Math.sin(ARad)) * Math.tan(latOptRad);
+    const lat = sigma * Math.cos(ARad) - rho * Math.sin(ARad);
 
     return {lon, lat};
 }

@@ -17,7 +17,7 @@ import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
 import {getApparentMagnitudeMoon} from './calculations/magnitudeCalc';
-import {getLibration} from './calculations/librationCalc';
+import {getSelenographicLocation} from './calculations/librationCalc';
 import {moonCalc, moonPhaseCalc} from './calculations';
 import {
     MOON_PHASE_FIRST_QUARTER,
@@ -26,7 +26,7 @@ import {
     MOON_PHASE_NEW_MOON,
 } from './constants/moonPhases';
 import {DIAMETER_MOON} from './constants/diameters';
-import {SelenographicCoordinates} from './types/CalculationTypes';
+import {SelenographicLocation} from './types/LocationTypes';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;
@@ -233,9 +233,9 @@ export default class Moon extends AstronomicalObject {
         return moonPhaseCalc.getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_LAST_QUARTER);
     }
 
-    public async getLibration(): Promise<SelenographicCoordinates> {
+    public async getGeocentricLibration(): Promise<SelenographicLocation> {
         const coords = await this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return getLibration(this.T, coords);
+        return getSelenographicLocation(this.T, coords);
     }
 }
