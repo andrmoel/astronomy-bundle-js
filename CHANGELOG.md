@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.4.0 (2022-02-23)
+
+
+### Features
+
+* **moon:** calculate lunar x ([ce4c070](https://github.com/andrmoel/astronomy-bundle-js/commit/ce4c070e1d7fa8211e85d88445e4f686e8aed9e6))
+
 ## 7.3.0 (2022-02-23)
 
 
