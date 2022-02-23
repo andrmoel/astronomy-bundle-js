@@ -17,7 +17,7 @@ import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {createTimeOfInterest} from '../time';
 import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
 import {getApparentMagnitudeMoon} from './calculations/magnitudeCalc';
-import {getSelenographicLocation, getSunrise} from './calculations/librationCalc';
+import {getSelenographicLocation} from './calculations/librationCalc';
 import {moonCalc, moonPhaseCalc} from './calculations';
 import {
     MOON_PHASE_FIRST_QUARTER,
@@ -27,6 +27,8 @@ import {
 } from './constants/moonPhases';
 import {DIAMETER_MOON} from './constants/diameters';
 import {SelenographicLocation} from './types/LocationTypes';
+import LunarX from './events/LunarX';
+import LunarV from './events/LunarV';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;
@@ -249,14 +251,11 @@ export default class Moon extends AstronomicalObject {
         return getSelenographicLocation(coords, this.T);
     }
 
-    public async getTimeOfLunarX(): Promise<TimeOfInterest> {
-        const coords = {
-            lon: 1.25,
-            lat: -25,
-        };
+    public getLunarX(): LunarX {
+        return new LunarX(this.toi);
+    }
 
-        const T = await getSunrise(coords, this.T);
-
-        return createTimeOfInterest.fromJulianCenturiesJ2000(T);
+    public getLunarV(): LunarV {
+        return new LunarV(this.toi);
     }
 }

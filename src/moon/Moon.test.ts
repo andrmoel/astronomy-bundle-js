@@ -4,6 +4,8 @@ import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
 import {createLocation} from '../earth';
 import createMoon from './createMoon';
+import LunarX from './events/LunarX';
+import LunarV from './events/LunarV';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);
@@ -314,11 +316,10 @@ it('tests getSelenographicLocationOfSun', async () => {
     expect(round(lat, 5)).toBe(1.4615);
 });
 
-it('getTimeOfLunarX', async () => {
-    const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
-    const moon = createMoon(toi);
+it('tests getLunarX', () => {
+    expect(moon.getLunarX()).toBeInstanceOf(LunarX);
+});
 
-    const toiOfLunarX = await moon.getTimeOfLunarX();
-
-    expect(toiOfLunarX.getString()).toBe('2022-04-08 21:32:32');
+it('tests getLunarV', () => {
+    expect(moon.getLunarV()).toBeInstanceOf(LunarV);
 });

@@ -38,7 +38,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
    5. [Apparent Magnitude](#moon-magnitude)
    6. [Physical Observation](#moon-observation)
    7. [Libration](#moon-libration)
-   8. [Lunar X](#moon-events)
+   8. [Lunar X & Lunar V](#moon-events)
 9. [Planets](#planets)
    1. [Position of Planets](#planets-position)
    2. [Distance to Earth and Diameter](#planets-distance-diameter)
@@ -739,13 +739,11 @@ The result of the calculation should be:\
 Longitude: *67.89894°*\
 Latitude: *1.4615°*
 
-### <a name="moon-events"></a> Lunar X
+### <a name="moon-events"></a> Lunar X and Lunar V
 
 The [Lunar X](https://en.wikipedia.org/wiki/Lunar_X) is a clair-obscur effect in which light and shadow creates the appearance of a letter 'X' on the rim of the Blanchinus, La Caille and Purbach craters.
-The result of the calculation gives the time of the maximum visibility of the Lunar X.
-**To get the beginning or the end of the effect you need to substract or add ~1.5 hours**.
 
-**Example**: Get the time of the Lunar X for April 2022.
+**Example 1**: Get the time of the Lunar X for April 2022.
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -754,11 +752,41 @@ import {createMoon} from 'astronomy-bundle/moon';
 const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
 const moon = createMoon(toi);
 
-const toiOfLunarX = await moon.getTimeOfLunarX();
+const lunarX = moon.getLunarX();
+
+const toiStart = await lunarX.getStartTime();
+const toiMax = await lunarX.getMaximum();
+const toiEnd = await lunarX.getEndTime();
 ```
 
-The result of the calculation should be: *2022-04-08 21:32:32 UT*\
-So the Lunar X will be visible from ~19:00 UT until ~23:00 UT.
+The result of the calculation should be:\
+Start of visibility: *2022-04-08 20:02:32 UT*\
+Maximum visibility: *2022-04-08 21:32:32 UT*\
+End of visibility: *2022-04-08 23:02:32 UT*
+
+The Lunar V is another effect such as the Lunar X.
+The Lunar V is longer visible than the Lunar X and can be seen even 10 hour after it reached his highest contrast.
+
+**Example 2**: Get the time of the Lunar V for April 2022.
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
+const moon = createMoon(toi);
+
+const lunarV = moon.getLunarV();
+
+const toiStart = await lunarV.getStartTime();
+const toiMax = await lunarV.getMaximum();
+const toiEnd = await lunarV.getEndTime();
+```
+
+The result of the calculation should be:\
+Start of visibility: *2022-04-08 19:09:03 UT*\
+Maximum visibility: *2022-04-08 22:09:03 UT*\
+End of visibility: *2022-04-09 06:09:03 UT*
 
 ## <a name="planets"></a> Planets
 
