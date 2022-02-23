@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.5.0 (2022-02-23)
+
+
+### Features
+
+* **moon:** calculate golden handle ([3a90ecb](https://github.com/andrmoel/astronomy-bundle-js/commit/3a90ecb825fa0c5a6543dfb646f68d2592f34d6c))
+
 ## 7.4.0 (2022-02-23)
 
 
