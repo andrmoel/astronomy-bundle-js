@@ -38,6 +38,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
    5. [Apparent Magnitude](#moon-magnitude)
    6. [Physical Observation](#moon-observation)
    7. [Libration](#moon-libration)
+   8. [Lunar X](#moon-events)
 9. [Planets](#planets)
    1. [Position of Planets](#planets-position)
    2. [Distance to Earth and Diameter](#planets-distance-diameter)
@@ -737,6 +738,27 @@ const {lon, lat} = await moon.getSelenographicLocationOfSun();
 The result of the calculation should be:\
 Longitude: *67.89894°*\
 Latitude: *1.4615°*
+
+### <a name="moon-events"></a> Lunar X
+
+The [Lunar X](https://en.wikipedia.org/wiki/Lunar_X) is a clair-obscur effect in which light and shadow creates the appearance of a letter 'X' on the rim of the Blanchinus, La Caille and Purbach craters.
+The result of the calculation gives the time of the maximum visibility of the Lunar X.
+**To get the beginning or the end of the effect you need to substract or add ~1.5 hours**.
+
+**Example**: Get the time of the Lunar X for April 2022.
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
+const moon = createMoon(toi);
+
+const toiOfLunarX = await moon.getTimeOfLunarX();
+```
+
+The result of the calculation should be: *2022-04-08 21:32:32 UT*\
+So the Lunar X will be visible from ~19:00 UT until ~23:00 UT.
 
 ## <a name="planets"></a> Planets
 

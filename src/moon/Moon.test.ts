@@ -313,3 +313,12 @@ it('tests getSelenographicLocationOfSun', async () => {
     expect(round(lon, 5)).toBe(67.89894);
     expect(round(lat, 5)).toBe(1.4615);
 });
+
+it('getTimeOfLunarX', async () => {
+    const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
+    const moon = createMoon(toi);
+
+    const toiOfLunarX = await moon.getTimeOfLunarX();
+
+    expect(toiOfLunarX.getString()).toBe('2022-04-08 21:32:32');
+});
