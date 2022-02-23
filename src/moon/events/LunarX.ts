@@ -11,7 +11,7 @@ export default class LunarX implements EventInterface {
     }
 
     public async getStartTime(): Promise<TimeOfInterest> {
-        const T = await this.getTMax() - 1.5 / 24 / 36525.0;
+        const T = await this.getTMax() - 1.5 / 24 / 36525;
 
         return createTimeOfInterest.fromJulianCenturiesJ2000(T);
     }
@@ -23,7 +23,7 @@ export default class LunarX implements EventInterface {
     }
 
     public async getEndTime(): Promise<TimeOfInterest> {
-        const T = await this.getTMax() + 1.5 / 24 / 36525.0;
+        const T = await this.getTMax() + 1.5 / 24 / 36525;
 
         return createTimeOfInterest.fromJulianCenturiesJ2000(T);
     }

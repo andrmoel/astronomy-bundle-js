@@ -38,7 +38,7 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
    5. [Apparent Magnitude](#moon-magnitude)
    6. [Physical Observation](#moon-observation)
    7. [Libration](#moon-libration)
-   8. [Lunar X & Lunar V](#moon-events)
+   8. [Golden Handle, Lunar X and V](#moon-events)
 9. [Planets](#planets)
    1. [Position of Planets](#planets-position)
    2. [Distance to Earth and Diameter](#planets-distance-diameter)
@@ -739,11 +739,35 @@ The result of the calculation should be:\
 Longitude: *67.89894°*\
 Latitude: *1.4615°*
 
-### <a name="moon-events"></a> Lunar X and Lunar V
+### <a name="moon-events"></a> Golden Handle, Lunar X and V
+
+The [Golden Handle](https://www.fullmoon.info/en/blog/golden-handle-moon.html) occurs about 4 days before the Full Moon.
+The Jura Mountains catch the sunlight while Sinus Iridum below remains in shadow.
+
+**Example 1**: Get the time of the Golden Handle for April 2022.
+
+```javascript
+import {createTimeOfInterest} from 'astronomy-bundle/time';
+import {createMoon} from 'astronomy-bundle/moon';
+
+const toi = createTimeOfInterest.fromTime(2022, 4, 1, 0, 0, 0);
+const moon = createMoon(toi);
+
+const goldenHandle = moon.getGoldenHandle();
+
+const toiStart = await goldenHandle.getStartTime();
+const toiMax = await goldenHandle.getMaximum();
+const toiEnd = await goldenHandle.getEndTime();
+```
+
+The result of the calculation should be:\
+Start of visibility: *2022-04-11 18:19:36 UT*\
+Maximum visibility: *2022-04-11 21:19:36 UT*\
+End of visibility: *2022-04-12 03:19:36 UT*
 
 The [Lunar X](https://en.wikipedia.org/wiki/Lunar_X) is a clair-obscur effect in which light and shadow creates the appearance of a letter 'X' on the rim of the Blanchinus, La Caille and Purbach craters.
 
-**Example 1**: Get the time of the Lunar X for April 2022.
+**Example 2**: Get the time of the Lunar X for April 2022.
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';
@@ -767,7 +791,7 @@ End of visibility: *2022-04-08 23:02:32 UT*
 The Lunar V is another effect such as the Lunar X.
 The Lunar V is longer visible than the Lunar X and can be seen even 10 hour after it reached his highest contrast.
 
-**Example 2**: Get the time of the Lunar V for April 2022.
+**Example 3**: Get the time of the Lunar V for April 2022.
 
 ```javascript
 import {createTimeOfInterest} from 'astronomy-bundle/time';

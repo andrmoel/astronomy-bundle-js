@@ -29,6 +29,7 @@ import {DIAMETER_MOON} from './constants/diameters';
 import {SelenographicLocation} from './types/LocationTypes';
 import LunarX from './events/LunarX';
 import LunarV from './events/LunarV';
+import GoldenHandle from './events/GoldenHandle';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;
@@ -249,6 +250,10 @@ export default class Moon extends AstronomicalObject {
         const coords = await this.getHeliocentricEclipticSphericalDateCoordinates();
 
         return getSelenographicLocation(coords, this.T);
+    }
+
+    public getGoldenHandle(): GoldenHandle {
+        return new GoldenHandle(this.toi);
     }
 
     public getLunarX(): LunarX {
