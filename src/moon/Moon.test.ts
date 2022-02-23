@@ -4,6 +4,7 @@ import {deg2angle} from '../utils/angleCalc';
 import {sec2string} from '../time/calculations/timeCalc';
 import {createLocation} from '../earth';
 import createMoon from './createMoon';
+import GoldenHandle from './events/GoldenHandle';
 import LunarX from './events/LunarX';
 import LunarV from './events/LunarV';
 
@@ -314,6 +315,10 @@ it('tests getSelenographicLocationOfSun', async () => {
 
     expect(round(lon, 5)).toBe(67.89894);
     expect(round(lat, 5)).toBe(1.4615);
+});
+
+it('tests GoldenHandle', () => {
+    expect(moon.getGoldenHandle()).toBeInstanceOf(GoldenHandle);
 });
 
 it('tests getLunarX', () => {
