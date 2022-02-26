@@ -6,7 +6,7 @@ export enum Position {
 }
 
 export type Conjunction = {
-    toi: TimeOfInterest,
-    position: Position,
-    angularDistance: number,
+    toi: TimeOfInterest;
+    position: Position;
+    angularDistance: number;
 };

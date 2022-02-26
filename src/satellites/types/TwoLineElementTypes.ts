@@ -1,5 +1,5 @@
 export type Name = {
-    name: string,
+    name: string;
 };
 
 export type RowOneValues = {

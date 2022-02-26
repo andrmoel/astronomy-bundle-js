@@ -1,5 +1,5 @@
 export type Location = {
-    lat: number,
-    lon: number,
-    elevation: number,
+    lat: number;
+    lon: number;
+    elevation: number;
 };
