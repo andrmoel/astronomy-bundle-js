@@ -7,7 +7,7 @@ import createTimeOfInterest, {
     fromYearOfDay,
 } from './createTimeOfInterest';
 
-jest.spyOn(global.Date, 'now').mockReturnValue('2020-10-21 10:00:00Z');
+jest.spyOn(global.Date, 'now').mockReturnValue(1603274400000);
 
 it('tests default export', () => {
     const toi = createTimeOfInterest();
@@ -21,10 +21,18 @@ it('tests fromCurrentTime', () => {
     expect(toi.time).toEqual({year: 2020, month: 10, day: 21, hour: 10, min: 0, sec: 0});
 });
 
-it('tests fromTime', () => {
-    const toi = fromTime(2015, 3, 15, 8, 30, 55);
+describe('tests for fromTime', () => {
+    it('has time given', () => {
+        const toi = fromTime(2015, 3, 15, 8, 30, 55);
 
-    expect(toi.time).toEqual({year: 2015, month: 3, day: 15, hour: 8, min: 30, sec: 55});
+        expect(toi.time).toEqual({year: 2015, month: 3, day: 15, hour: 8, min: 30, sec: 55});
+    });
+
+    it('has no time', () => {
+        const toi = fromTime(2015, 3, 15);
+
+        expect(toi.time).toEqual({year: 2015, month: 3, day: 15, hour: 0, min: 0, sec: 0});
+    });
 });
 
 it('tests fromDate', () => {

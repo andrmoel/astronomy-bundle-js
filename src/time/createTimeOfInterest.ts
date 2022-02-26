@@ -22,9 +22,9 @@ export function fromTime(
     year: number,
     month: number,
     day: number,
-    hour: number,
-    min: number,
-    sec: number,
+    hour = 0,
+    min = 0,
+    sec = 0,
 ): TimeOfInterest {
     return new TimeOfInterest({year, month, day, hour, min, sec});
 }
