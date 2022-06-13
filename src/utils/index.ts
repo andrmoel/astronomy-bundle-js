@@ -1,6 +1,5 @@
 import {earthCalc} from '../earth/calculations';
-import {moonCalc} from '../moon/calculations';
-import {moonPhaseCalc} from '../moon/calculations';
+import {moonCalc, moonPhaseCalc} from '../moon/calculations';
 import {sunCalc} from '../sun/calculations';
 import {timeCalc} from '../time/calculations';
 import {starCalc} from '../stars/calculations';
