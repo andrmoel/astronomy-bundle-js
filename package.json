@@ -44,10 +44,10 @@
   "devDependencies": {
     "@andrmoel/eslint-config": "^1.11.0",
     "@andrmoel/eslint-config-typescript": "^1.11.0",
-    "@babel/core": "^7.19.0",
-    "@babel/preset-env": "^7.19.0",
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
     "@babel/preset-typescript": "^7.18.6",
-    "@types/jest": "^29.0.1",
+    "@types/jest": "^29.0.3",
     "axios": "^0.27.2",
     "babel-jest": "^29.0.3",
     "entities": "^4.4.0",
