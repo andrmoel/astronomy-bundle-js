@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "project": ["./tsconfig.eslint.json"]
+  },
   "extends": [
     "@andrmoel/eslint-config",
     "@andrmoel/eslint-config-typescript"

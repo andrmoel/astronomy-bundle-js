@@ -180,7 +180,7 @@ async function _getCorrectionsRiseSet(
     const decInterpolated = tabularInterpolation3(declinationArray, n0);
     const dRad = deg2rad(decInterpolated);
 
-    const H = await _getLocalHourAngle(raInterpolated, location.lon, jd0, m);
+    const H = _getLocalHourAngle(raInterpolated, location.lon, jd0, m);
     const HRad = deg2rad(H);
 
     const {altitude} = equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, decInterpolated, lat);

@@ -71,7 +71,7 @@ it('has missing row 1', () => {
 
     expect(() => {
         parseTwoLineElement(tleString);
-    }).toThrowError('Missing TLE row 1');
+    }).toThrow('Missing TLE row 1');
 });
 
 it('has missing row 2', () => {
@@ -81,5 +81,5 @@ it('has missing row 2', () => {
 
     expect(() => {
         parseTwoLineElement(tleString);
-    }).toThrowError('Missing TLE row 2');
+    }).toThrow('Missing TLE row 2');
 });

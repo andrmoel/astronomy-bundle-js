@@ -5,7 +5,7 @@ import loadBesselianElements from './besselianElements/loadBesselianElements';
 export default async function createBesselianElements(toi: TimeOfInterest): Promise<BesselianElements> {
     const jd0 = toi.getJulianDay0();
 
-    const besselianElementsArray = await loadBesselianElements(jd0);
+    const besselianElementsArray = loadBesselianElements(jd0);
 
     if (!besselianElementsArray) {
         throw new Error(`No besselian elements found for ${jd0}`);

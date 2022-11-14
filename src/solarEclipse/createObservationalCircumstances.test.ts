@@ -14,7 +14,7 @@ it('tests create local circumstances successfully', async () => {
         n2: 0.14223008338396062,
     };
 
-    const obsCircumstances = await createObservationalCircumstances(circumstances);
+    const obsCircumstances = createObservationalCircumstances(circumstances);
 
     expect(obsCircumstances).toBeInstanceOf(ObservationalCircumstances);
 });

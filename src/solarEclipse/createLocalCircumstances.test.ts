@@ -20,7 +20,7 @@ it('tests creates local circumstances successfully', async () => {
     };
     const location = createLocation(-39.53940, -70.37216, 450);
 
-    const localCircumstances = await createLocalCircumstances(besselianElements, location);
+    const localCircumstances = createLocalCircumstances(besselianElements, location);
 
     expect(localCircumstances).toBeInstanceOf(LocalCircumstances);
 });
