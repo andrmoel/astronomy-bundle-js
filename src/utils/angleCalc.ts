@@ -1,5 +1,10 @@
 import {pad, round} from './math';
 
+export type AnglePrefixes = {
+    positivePrefix: string;
+    negativePrefix: string;
+};
+
 export function deg2rad(degrees: number): number {
     return degrees * (Math.PI / 180);
 }
@@ -8,13 +13,49 @@ export function rad2deg(radians: number): number {
     return radians * (180 / Math.PI);
 }
 
+/**
+ * @deprecated use decimal2degreeMinutesSeconds instead
+ * @param deg
+ * @param short
+ */
 export function deg2angle(deg: number, short = false): string {
-    const sign = deg < 0 ? '-' : '';
-    deg = Math.abs(deg);
+    return decimal2degreeMinutesSeconds(deg, short);
+}
 
-    const degPart = Math.floor(deg);
-    const min = Math.floor((deg - degPart) * 60);
-    const sec = round((deg - degPart - min / 60) * 3600, 3);
+export function decimal2degreeMinutes(
+    decimal: number,
+    short = false,
+    prefixes?: AnglePrefixes,
+): string {
+    const sign = getSignPrefix(decimal, prefixes);
+
+    decimal = Math.abs(decimal);
+
+    const degPart = Math.floor(decimal);
+    const min = round((decimal - degPart) * 60, 8);
+
+    const degString = degPart + '° ';
+    const minString = pad(min, 2) + '\'';
+
+    if (short && degPart === 0.0) {
+        return sign + minString;
+    }
+
+    return sign + degString + minString;
+}
+
+export function decimal2degreeMinutesSeconds(
+    decimal: number,
+    short = false,
+    prefixes?: AnglePrefixes,
+): string {
+    const sign = getSignPrefix(decimal, prefixes);
+
+    decimal = Math.abs(decimal);
+
+    const degPart = Math.floor(decimal);
+    const min = Math.floor((decimal - degPart) * 60);
+    const sec = round((decimal - degPart - min / 60) * 3600, 3);
     const secParts = sec.toString().split('.');
 
     const degString = degPart + '° ';
@@ -92,4 +133,12 @@ export function normalizeAngle(degrees: number, baseAngle = 360.0): number {
 
 export function sec2deg(seconds: number): number {
     return seconds / 3600;
+}
+
+function getSignPrefix(decimal: number, prefixes?: AnglePrefixes): string {
+    if (prefixes) {
+        return decimal < 0 ? prefixes.negativePrefix : prefixes.positivePrefix;
+    }
+
+    return decimal < 0 ? '-' : '';
 }

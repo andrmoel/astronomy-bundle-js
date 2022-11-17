@@ -1,4 +1,15 @@
-import {angle2deg, deg2angle, deg2rad, deg2time, normalizeAngle, rad2deg, sec2deg, time2deg} from './angleCalc';
+import {
+    angle2deg,
+    decimal2degreeMinutes,
+    decimal2degreeMinutesSeconds,
+    deg2angle,
+    deg2rad,
+    deg2time,
+    normalizeAngle,
+    rad2deg,
+    sec2deg,
+    time2deg,
+} from './angleCalc';
 import {round} from './math';
 
 it('tests deg2rad', () => {
@@ -65,6 +76,69 @@ it('tests time2deg', () => {
     expect(round(time2deg('24h0m0s'), 6)).toBe(360);
     expect(round(time2deg('-3h1m36s'), 6)).toBe(-45.4);
     expect(round(time2deg('12h45m15.512s'), 6)).toBe(191.314633);
+});
+
+describe('tests for decimal2degreeMinutes', () => {
+    it('tests positive values', () => {
+        expect(decimal2degreeMinutes(0.0)).toBe('0° 00\'');
+        expect(decimal2degreeMinutes(45.2625)).toBe('45° 15.75\'');
+        expect(decimal2degreeMinutes(270.5)).toBe('270° 30\'');
+        expect(decimal2degreeMinutes(0.2625)).toBe('0° 15.75\'');
+        expect(decimal2degreeMinutes(0.00105222)).toBe('0° 0.0631332\'');
+    });
+
+    it('tests negative values', () => {
+        expect(decimal2degreeMinutes(-0.2625)).toBe('-0° 15.75\'');
+        expect(decimal2degreeMinutes(-0.00105222)).toBe('-0° 0.0631332\'');
+    });
+
+    it('tests prefix', () => {
+        const prefixes = {positivePrefix: 'N ', negativePrefix: 'S '};
+
+        expect(decimal2degreeMinutes(0.0, false, prefixes)).toBe('N 0° 00\'');
+        expect(decimal2degreeMinutes(45.2625, false, prefixes)).toBe('N 45° 15.75\'');
+        expect(decimal2degreeMinutes(-0.2625, false, prefixes)).toBe('S 0° 15.75\'');
+        expect(decimal2degreeMinutes(-0.00105222, false, prefixes)).toBe('S 0° 0.0631332\'');
+        expect(decimal2degreeMinutes(0.2625, true, prefixes)).toBe('N 15.75\'');
+        expect(decimal2degreeMinutes(-0.00105222, true, prefixes)).toBe('S 0.0631332\'');
+    });
+});
+
+describe('tests for decimal2degreeMinutesSeconds', () => {
+    it('tests positive values', () => {
+        expect(decimal2degreeMinutesSeconds(0.0)).toBe('0° 00\' 00"');
+        expect(decimal2degreeMinutesSeconds(45.2625)).toBe('45° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(270.5)).toBe('270° 30\' 00"');
+        expect(decimal2degreeMinutesSeconds(0.2625)).toBe('0° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(0.00105222)).toBe('0° 00\' 03.788"');
+    });
+
+    it('tests negative values', () => {
+        expect(decimal2degreeMinutesSeconds(-0.2625)).toBe('-0° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(-0.00105222)).toBe('-0° 00\' 03.788"');
+    });
+
+    it('tests shortened positive values', () => {
+        expect(decimal2degreeMinutesSeconds(0.0, true)).toBe('00"');
+        expect(decimal2degreeMinutesSeconds(45.2625, true)).toBe('45° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(0.2625, true)).toBe('15\' 45"');
+    });
+
+    it('tests shortened negative values', () => {
+        expect(decimal2degreeMinutesSeconds(-0.2625, true)).toBe('-15\' 45"');
+        expect(decimal2degreeMinutesSeconds(-0.00105222, true)).toBe('-03.788"');
+    });
+
+    it('tests prefix', () => {
+        const prefixes = {positivePrefix: 'N ', negativePrefix: 'S '};
+
+        expect(decimal2degreeMinutesSeconds(0.0, false, prefixes)).toBe('N 0° 00\' 00"');
+        expect(decimal2degreeMinutesSeconds(45.2625, false, prefixes)).toBe('N 45° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(-0.2625, false, prefixes)).toBe('S 0° 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(-0.00105222, false, prefixes)).toBe('S 0° 00\' 03.788"');
+        expect(decimal2degreeMinutesSeconds(0.2625, true, prefixes)).toBe('N 15\' 45"');
+        expect(decimal2degreeMinutesSeconds(-0.00105222, true, prefixes)).toBe('S 03.788"');
+    });
 });
 
 it('tests normalizeAngle', () => {
