@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.6.0 (2022-11-17)
+
+
+### Features
+
+* **angle-calc:** add decimal2degreeMinutes and decimal2degreeMinutesSeconds ([9c22d1e](https://github.com/andrmoel/astronomy-bundle-js/commit/9c22d1e0a71c207dd9d867bb00bc6aab694e513c))
+
 ### 7.5.6 (2022-11-14)
 
 ### 7.5.5 (2022-06-13)
