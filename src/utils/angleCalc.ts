@@ -32,7 +32,7 @@ export function decimal2degreeMinutes(
     decimal = Math.abs(decimal);
 
     const degPart = Math.floor(decimal);
-    const min = round((decimal - degPart) * 60, 8);
+    const min = round((decimal - degPart) * 60, 5);
 
     const degString = degPart + '° ';
     const minString = pad(min, 2) + '\'';

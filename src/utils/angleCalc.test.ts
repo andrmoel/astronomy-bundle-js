@@ -84,12 +84,12 @@ describe('tests for decimal2degreeMinutes', () => {
         expect(decimal2degreeMinutes(45.2625)).toBe('45° 15.75\'');
         expect(decimal2degreeMinutes(270.5)).toBe('270° 30\'');
         expect(decimal2degreeMinutes(0.2625)).toBe('0° 15.75\'');
-        expect(decimal2degreeMinutes(0.00105222)).toBe('0° 0.0631332\'');
+        expect(decimal2degreeMinutes(0.00105222)).toBe('0° 0.06313\'');
     });
 
     it('tests negative values', () => {
         expect(decimal2degreeMinutes(-0.2625)).toBe('-0° 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222)).toBe('-0° 0.0631332\'');
+        expect(decimal2degreeMinutes(-0.00105222)).toBe('-0° 0.06313\'');
     });
 
     it('tests prefix', () => {
@@ -98,9 +98,9 @@ describe('tests for decimal2degreeMinutes', () => {
         expect(decimal2degreeMinutes(0.0, false, prefixes)).toBe('N 0° 00\'');
         expect(decimal2degreeMinutes(45.2625, false, prefixes)).toBe('N 45° 15.75\'');
         expect(decimal2degreeMinutes(-0.2625, false, prefixes)).toBe('S 0° 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222, false, prefixes)).toBe('S 0° 0.0631332\'');
+        expect(decimal2degreeMinutes(-0.00105222, false, prefixes)).toBe('S 0° 0.06313\'');
         expect(decimal2degreeMinutes(0.2625, true, prefixes)).toBe('N 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222, true, prefixes)).toBe('S 0.0631332\'');
+        expect(decimal2degreeMinutes(-0.00105222, true, prefixes)).toBe('S 0.06313\'');
     });
 });
 
