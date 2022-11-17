@@ -1,8 +1,13 @@
 import {getDistanceInKm} from '../utils/distanceCalc';
+import {decimal2degreeMinutes, decimal2degreeMinutesSeconds} from '../utils/angleCalc';
 import {Location as LocationType} from './types/LocationTypes';
 
 export default class Location {
     private readonly location: LocationType;
+
+    private prefixesNorthSouth = {positivePrefix: 'N ', negativePrefix: 'S '};
+
+    private prefixesEastWest = {positivePrefix: 'E ', negativePrefix: 'W '};
 
     public constructor(
         public readonly lat: number,
@@ -18,6 +23,22 @@ export default class Location {
 
     public getLongitude(): number {
         return this.location.lon;
+    }
+
+    public getLatitudeInDegreeMinutes(): string {
+        return decimal2degreeMinutes(this.location.lat, false, this.prefixesNorthSouth);
+    }
+
+    public getLongitudeInDegreeMinutes(): string {
+        return decimal2degreeMinutes(this.location.lon, false, this.prefixesEastWest);
+    }
+
+    public getLatitudeInDegreeMinutesSeconds(): string {
+        return decimal2degreeMinutesSeconds(this.location.lat, false, this.prefixesNorthSouth);
+    }
+
+    public getLongitudeInDegreeMinutesSeconds(): string {
+        return decimal2degreeMinutesSeconds(this.location.lon, false, this.prefixesEastWest);
     }
 
     public getElevation(): number {
