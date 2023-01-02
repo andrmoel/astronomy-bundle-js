@@ -135,7 +135,7 @@ export function eclipticSpherical2equatorialSpherical(
     const latRad = deg2rad(lat);
 
     // Meeus 13.3
-    const n = Math.sin(lonRad) * Math.cos(epsRad) - (Math.sin(latRad) / Math.cos(latRad)) * Math.sin(epsRad);
+    const n = Math.sin(lonRad) * Math.cos(epsRad) - Math.sin(latRad) / Math.cos(latRad) * Math.sin(epsRad);
     const d = Math.cos(lonRad);
     const rightAscensionRad = Math.atan2(n, d);
     const rightAscension = normalize ? normalizeAngle(rad2deg(rightAscensionRad)) : rad2deg(rightAscensionRad);

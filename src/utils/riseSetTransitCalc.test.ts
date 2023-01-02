@@ -44,13 +44,9 @@ describe('test for getTransit', () => {
             lon: 13.408,
         };
 
-        try {
+        await expect(async () => {
             await getTransit(Moon, location, jd0);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('Astronomical object has no transit on given day 2459214.5.');
-        }
+        }).rejects.toThrow('Astronomical object has no transit on given day 2459214.5.');
     });
 });
 
@@ -85,13 +81,9 @@ describe('test for getRise', () => {
             lon: 0,
         };
 
-        try {
+        await expect(async () => {
             await getRise(Sun, location, jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('Astronomical object cannot rise on given day 2459001.5.');
-        }
+        }).rejects.toThrow('Astronomical object cannot rise on given day 2459001.5.');
     });
 
     it('is not possible to rise moon because rise happens the next day', async () => {
@@ -101,15 +93,11 @@ describe('test for getRise', () => {
             lon: 13.408,
         };
 
-        try {
+        await expect(async () => {
             await getRise(Moon, location, jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe(
-                'Astronomical object cannot rise on given day 2459163.5. Rise happens the next day.',
-            );
-        }
+        }).rejects.toThrow(
+            'Astronomical object cannot rise on given day 2459163.5. Rise happens the next day.',
+        );
     });
 });
 
@@ -132,13 +120,9 @@ describe('test for getSet', () => {
             lon: 0,
         };
 
-        try {
+        await expect(async () => {
             await getSet(Sun, location, jd0, STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('Astronomical object cannot set on given day 2459001.5.');
-        }
+        }).rejects.toThrow('Astronomical object cannot set on given day 2459001.5.');
     });
 
     it('is not possible to set moon because set happens the next day', async () => {
@@ -148,14 +132,10 @@ describe('test for getSet', () => {
             lon: 13.408,
         };
 
-        try {
+        await expect(async () => {
             await getSet(Moon, location, jd0, STANDARD_ALTITUDE_MOON_CENTER_REFRACTION);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe(
-                'Astronomical object cannot set on given day 2459177.5. Set happens the next day.',
-            );
-        }
+        }).rejects.toThrow(
+            'Astronomical object cannot set on given day 2459177.5. Set happens the next day.',
+        );
     });
 });

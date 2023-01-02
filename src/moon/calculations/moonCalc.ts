@@ -67,7 +67,7 @@ export function getLongitude(T: number): number {
     const L = getMeanLongitude(T);
     const sumL = _getSumL(T);
 
-    return L + (sumL / 1000000);
+    return L + sumL / 1000000;
 }
 
 export function getLatitude(T: number): number {
@@ -83,7 +83,7 @@ export function getRadiusVector(T: number): number {
 export function getDistanceToEarth(T: number): number {
     const sumR = _getSumR(T);
 
-    return 385000.56 + (sumR / 1000);
+    return 385000.56 + sumR / 1000;
 }
 
 function _getSumR(T: number): number {

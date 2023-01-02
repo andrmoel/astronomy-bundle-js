@@ -45,7 +45,7 @@ export function getTimeLocationCircumstances(
     const dDRad = deg2rad(dD);
     const lonRad = deg2rad(lon);
 
-    const hRad = muRad + lonRad - (dT / 13713.440924999626077);
+    const hRad = muRad + lonRad - dT / 13713.440924999626077;
     const h = rad2deg(hRad);
 
     const xi = rhoCosLat * Math.sin(hRad);
@@ -76,7 +76,7 @@ export function circumstancesToJulianDay(
     let {t} = circumstances;
 
     let jd = Math.floor(tMax - t0 / 24.0);
-    t = t + t0 - ((dT - 0.05) / 3600.0);
+    t = t + t0 - (dT - 0.05) / 3600.0;
 
     if (t < 0.0) {
         jd--;

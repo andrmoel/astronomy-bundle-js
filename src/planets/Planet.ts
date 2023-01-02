@@ -26,13 +26,6 @@ import {normalizeAngle} from '../utils/angleCalc';
 import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
 import {Vsop87} from './types/Vsop87Types';
 import IPlanet from './interfaces/IPlanet';
-import Mercury from './Mercury';
-import Venus from './Venus';
-import Mars from './Mars';
-import Jupiter from './Jupiter';
-import Saturn from './Saturn';
-import Uranus from './Uranus';
-import Neptune from './Neptune';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private readonly sun: Sun;
@@ -226,16 +219,9 @@ export default abstract class Planet extends AstronomicalObject implements IPlan
 
         const jd = getLightTimeCorrectedJulianDay(this.jd, radiusVector);
         const toi = createTimeOfInterest.fromJulianDay(jd);
-        const planet = new (<
-            typeof Mercury
-            | typeof Venus
-            | typeof Earth
-            | typeof Mars
-            | typeof Jupiter
-            | typeof Saturn
-            | typeof Uranus
-            | typeof Neptune
-            > this.constructor)(toi);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const planet = new this.constructor(toi);
 
         const helRecEarthCoords = await this.earth.getHeliocentricEclipticRectangularDateCoordinates();
         const helRecPlanetCoords = await planet.getHeliocentricEclipticRectangularDateCoordinates();

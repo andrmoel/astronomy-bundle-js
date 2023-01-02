@@ -51,10 +51,10 @@ export function getInterpolateValue5(values: Array<number>, n = 0.0): number {
     const J = G - F;
     const K = J - H;
 
-    return y3 + (n / 2) * (B + C)
-        + (Math.pow(n, 2) / 2) * F
-        + ((n * (Math.pow(n, 2) - 1)) / 12) * (H + J)
-        + ((Math.pow(n, 2) * (Math.pow(n, 2) - 1)) / 24) * K;
+    return y3 + n / 2 * (B + C)
+        + Math.pow(n, 2) / 2 * F
+        + n * (Math.pow(n, 2) - 1) / 12 * (H + J)
+        + Math.pow(n, 2) * (Math.pow(n, 2) - 1) / 24 * K;
 }
 
 export async function getLongitudeInterpolationArray(

@@ -19,13 +19,9 @@ describe('test for getConjunctionInRightAscension', () => {
     it('is no conjunction possible for the given date', async () => {
         const jd0 = 2459204.5;
 
-        try {
+        await expect(async () => {
             await getConjunctionInRightAscension(Jupiter, Venus, jd0);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('No conjunction in right ascension possible for given objects at 2459204.5');
-        }
+        }).rejects.toThrow('No conjunction in right ascension possible for given objects at 2459204.5');
     });
 });
 
@@ -37,12 +33,8 @@ describe('test for getConjunctionInLongitude', () => {
     it('is no conjunction possible for the given date', async () => {
         const jd0 = 2459204.5;
 
-        try {
+        await expect(async () => {
             await getConjunctionInLongitude(Jupiter, Venus, jd0);
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('No conjunction in longitude possible for given objects at 2459204.5');
-        }
+        }).rejects.toThrow('No conjunction in longitude possible for given objects at 2459204.5');
     });
 });

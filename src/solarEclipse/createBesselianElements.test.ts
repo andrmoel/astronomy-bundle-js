@@ -23,10 +23,10 @@ it('tests creates besselian elements successfully', async () => {
     });
 });
 
-it('has an error while creating besselian elements', () => {
+it('has an error while creating besselian elements', async () => {
     const toi = createTimeOfInterest.fromTime(2020, 12, 20, 0, 0, 0);
 
-    expect(async () => {
+    await expect(async () => {
         await createBesselianElements(toi);
     }).rejects.toThrow('No besselian elements found for 2459203.5');
 });

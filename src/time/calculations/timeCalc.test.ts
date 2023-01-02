@@ -85,13 +85,9 @@ describe('test for time2julianDay', () => {
     });
 
     it('has an invalid time', () => {
-        try {
+        expect(() => {
             time2julianDay({year: 1582, month: 10, day: 10, hour: 12, min: 0, sec: 0});
-
-            fail('Expected error was not thrown');
-        } catch (error) {
-            expect(error.message).toBe('Date between 1582-10-04 and 1582-10-15 is not defined.');
-        }
+        }).toThrow('Date between 1582-10-04 and 1582-10-15 is not defined.');
     });
 });
 

@@ -28,11 +28,9 @@ describe('test for fromTimeOfInterest', () => {
     it('has invalid TOI', async () => {
         const toi = createTimeOfInterest.fromTime(2020, 1, 1, 0, 0, 0);
 
-        try {
+        await expect(async () => {
             await fromTimeOfInterest(toi);
-        } catch (error) {
-            expect(error.message).toBe('Could not find Solar Eclipse for given date: 2020-01-01 00:00:00');
-        }
+        }).rejects.toThrow('Could not find Solar Eclipse for given date: 2020-01-01 00:00:00');
     });
 
     it('has valid TOI', async () => {

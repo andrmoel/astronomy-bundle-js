@@ -31,7 +31,7 @@ export function getDistanceInKm(location1: Location, location2: Location): numbe
 
     const omegaRad = Math.atan(Math.sqrt(S / C));
 
-    const R = Math.sqrt((S * C)) / omegaRad;
+    const R = Math.sqrt(S * C) / omegaRad;
     const D = 2 * omegaRad * EARTH_RADIUS / 1000;
     const H1 = (3 * R - 1) / (2 * C);
     const H2 = (3 * R + 1) / (2 * S);

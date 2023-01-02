@@ -127,8 +127,8 @@ export function getEpochIntervalToJ2000(startingEpoch: number): number {
 export function dayOfYear2time(year: number, dayOfYear: number): Time {
     // Meeus 7
     const K = isLeapYear(year) ? 1 : 2;
-    const month = dayOfYear < 32 ? 1 : Math.floor((9 * (K + dayOfYear)) / 275 + 0.98);
-    const day = Math.floor(dayOfYear - Math.floor((275 * month) / 9) + K * Math.floor((month + 9) / 12) + 30);
+    const month = dayOfYear < 32 ? 1 : Math.floor(9 * (K + dayOfYear) / 275 + 0.98);
+    const day = Math.floor(dayOfYear - Math.floor(275 * month / 9) + K * Math.floor((month + 9) / 12) + 30);
 
     const hourFloat = 24 * (dayOfYear - Math.floor(dayOfYear));
     const hour = Math.floor(hourFloat);
@@ -155,7 +155,7 @@ export function getDayOfYear(time: Time): number {
     const D = time.day;
 
     // Meeus 7.f
-    return Math.floor((275 * M) / 9) - K * Math.floor((M + 9) / 12) + D - 30;
+    return Math.floor(275 * M / 9) - K * Math.floor((M + 9) / 12) + D - 30;
 }
 
 export function getDayOfWeek(time: Time): number {

@@ -160,7 +160,7 @@ function getSign(
     circumstancesMax: TimeLocationCircumstances,
     eventType: SolarEclipseEventType,
 ): number {
-    const sign = (eventType === SolarEclipseEventType.C1 || eventType === SolarEclipseEventType.C2) ? -1 : 1;
+    const sign = eventType === SolarEclipseEventType.C1 || eventType === SolarEclipseEventType.C2 ? -1 : 1;
 
     if (eventType === SolarEclipseEventType.C2 || eventType === SolarEclipseEventType.C3) {
         const {l2Derived} = circumstancesMax;
