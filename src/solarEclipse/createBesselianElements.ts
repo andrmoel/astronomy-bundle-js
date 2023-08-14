@@ -1,6 +1,6 @@
 import TimeOfInterest from '../time/TimeOfInterest';
-import {BesselianElements, BesselianElementsArray} from './types/besselianElementsTypes';
 import loadBesselianElements from './besselianElements/loadBesselianElements';
+import {BesselianElements, BesselianElementsArray} from './types/besselianElementsTypes';
 
 export default async function createBesselianElements(toi: TimeOfInterest): Promise<BesselianElements> {
     const jd0 = toi.getJulianDay0();

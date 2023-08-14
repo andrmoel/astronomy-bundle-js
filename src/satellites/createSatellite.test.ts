@@ -1,7 +1,7 @@
 import {createTimeOfInterest} from '../time';
 import createSatellite from './createSatellite';
-import Satellite from './Satellite';
 import parseTwoLineElement from './parseTwoLineElement';
+import Satellite from './Satellite';
 
 const tleString = `
     ISS(ZARYA)

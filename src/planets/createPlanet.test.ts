@@ -8,13 +8,13 @@ import {
     createUranus,
     createVenus,
 } from './createPlanet';
-import Mercury from './Mercury';
-import Venus from './Venus';
 import Jupiter from './Jupiter';
 import Mars from './Mars';
+import Mercury from './Mercury';
+import Neptune from './Neptune';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
-import Neptune from './Neptune';
+import Venus from './Venus';
 
 describe('test for createMercury', () => {
     it('tests with TOI', () => {

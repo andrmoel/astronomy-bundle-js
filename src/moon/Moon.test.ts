@@ -1,12 +1,12 @@
-import {createTimeOfInterest} from '../time';
-import {round} from '../utils/math';
-import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../time/calculations/timeCalc';
 import {createLocation} from '../earth';
+import {createTimeOfInterest} from '../time';
+import {sec2string} from '../time/calculations/timeCalc';
+import {deg2angle} from '../utils/angleCalc';
+import {round} from '../utils/math';
 import createMoon from './createMoon';
 import GoldenHandle from './events/GoldenHandle';
-import LunarX from './events/LunarX';
 import LunarV from './events/LunarV';
+import LunarX from './events/LunarX';
 
 const toi = createTimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const moon = createMoon(toi);

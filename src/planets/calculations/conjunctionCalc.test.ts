@@ -1,8 +1,8 @@
+import {round} from '../../utils/math';
 import Jupiter from '../Jupiter';
 import Saturn from '../Saturn';
-import Venus from '../Venus';
-import {round} from '../../utils/math';
 import {Position} from '../types/PlanetTypes';
+import Venus from '../Venus';
 import {getConjunctionInLongitude, getConjunctionInRightAscension} from './conjunctionCalc';
 
 describe('test for getConjunctionInRightAscension', () => {

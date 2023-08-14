@@ -1,7 +1,7 @@
 import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../../constants/dayOfWeek';
 import {EPOCH_J1950, EPOCH_J2000} from '../../constants/epoch';
-import {round} from '../../utils/math';
 import {deg2time} from '../../utils/angleCalc';
+import {round} from '../../utils/math';
 import {
     dayOfYear2time,
     getDayOfWeek,

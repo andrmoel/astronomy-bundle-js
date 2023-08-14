@@ -1,22 +1,22 @@
-import {Location} from '../earth/types/LocationTypes';
-import {createTimeOfInterest} from '../time';
 import {
     AstronomicalObjectConstructor,
     AstronomicalObjectInterface,
 } from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
+import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from '../coordinates/calculations/coordinateCalc';
+import {Location} from '../earth/types/LocationTypes';
+import {createTimeOfInterest} from '../time';
 import {
     getDeltaT,
     getGreenwichApparentSiderealTime,
     julianDay2julianCenturiesJ2000,
     julianDay2time,
 } from '../time/calculations/timeCalc';
-import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from '../coordinates/calculations/coordinateCalc';
+import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 import {
     getDeclinationInterpolationArray,
     getRightAscensionInterpolationArray,
     tabularInterpolation3,
 } from './interpolationCalc';
-import {deg2rad, normalizeAngle, rad2deg} from './angleCalc';
 
 export async function getTransit(
     ObjConstructor: AstronomicalObjectConstructor,

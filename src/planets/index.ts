@@ -7,13 +7,13 @@ import {
     createUranus,
     createVenus,
 } from './createPlanet';
-import Mercury from './Mercury';
-import Venus from './Venus';
-import Mars from './Mars';
 import Jupiter from './Jupiter';
+import Mars from './Mars';
+import Mercury from './Mercury';
+import Neptune from './Neptune';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
-import Neptune from './Neptune';
+import Venus from './Venus';
 
 export {createMercury, createVenus, createMars, createJupiter, createSaturn, createUranus, createNeptune};
 export {Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune};

@@ -1,18 +1,18 @@
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {
-    EclipticSphericalCoordinates,
-    EquatorialSphericalCoordinates,
-    RectangularCoordinates,
-} from '../coordinates/types/CoordinateTypes';
-import TimeOfInterest from '../time/TimeOfInterest';
 import {EPOCH_J2000} from '../constants/epoch';
+import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2eclipticSpherical,
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
 import {correctPrecessionForEquatorialCoordinates} from '../coordinates/calculations/precessionCalc';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    RectangularCoordinates,
+} from '../coordinates/types/CoordinateTypes';
+import TimeOfInterest from '../time/TimeOfInterest';
 import {correctProperMotion} from './calculations/starCalc';
 import {ProperMotion} from './types/ProperMotionTypes';
 

@@ -1,4 +1,4 @@
-import {Conjunction, Position} from '../types/PlanetTypes';
+import {AstronomicalObjectConstructor} from '../../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
 import {createTimeOfInterest} from '../../time';
 import {
     getDeclinationInterpolationArray,
@@ -8,7 +8,7 @@ import {
     getRightAscensionInterpolationArray,
     tabularInterpolation5,
 } from '../../utils/interpolationCalc';
-import {AstronomicalObjectConstructor} from '../../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
+import {Conjunction, Position} from '../types/PlanetTypes';
 
 export async function getConjunctionInRightAscension(
     obj1Constructor: AstronomicalObjectConstructor,

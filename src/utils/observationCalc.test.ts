@@ -1,3 +1,4 @@
+import {deg2angle} from './angleCalc';
 import {round} from './math';
 import {
     getAngularDiameter,
@@ -7,7 +8,6 @@ import {
     getPositionAngleOfBrightLimb,
     isWaxing,
 } from './observationCalc';
-import {deg2angle} from './angleCalc';
 
 it('tests getPhaseAngle', () => {
     const equCoordsObj = {

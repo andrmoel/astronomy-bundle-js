@@ -1,6 +1,6 @@
-import {round} from '../utils/math';
 import {DAY_OF_WEEK_SATURDAY} from '../constants/dayOfWeek';
 import {createLocation} from '../earth';
+import {round} from '../utils/math';
 import TimeOfInterest from './TimeOfInterest';
 
 it('tests getTime', () => {

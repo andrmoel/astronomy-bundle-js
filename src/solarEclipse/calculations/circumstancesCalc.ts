@@ -1,8 +1,8 @@
-import {BesselianElements} from '../types/besselianElementsTypes';
-import {TimeCircumstances, TimeLocationCircumstances} from '../types/circumstancesTypes';
+import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
 import {Location} from '../../earth/types/LocationTypes';
 import {deg2rad, rad2deg} from '../../utils/angleCalc';
-import {getRhoCosLat, getRhoSinLat} from '../../coordinates/calculations/coordinateCalc';
+import {BesselianElements} from '../types/besselianElementsTypes';
+import {TimeCircumstances, TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {populate, populateD} from './besselianElementsCalc';
 
 export function getTimeCircumstances(

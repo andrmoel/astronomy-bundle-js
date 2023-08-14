@@ -1,5 +1,5 @@
-import {Location} from '../earth/types/LocationTypes';
 import {EARTH_FLATTENING, EARTH_RADIUS} from '../earth/constants/dimensions';
+import {Location} from '../earth/types/LocationTypes';
 import {deg2rad} from './angleCalc';
 import {cos2, sin2} from './math';
 

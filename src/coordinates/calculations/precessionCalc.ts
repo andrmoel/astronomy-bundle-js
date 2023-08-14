@@ -1,7 +1,7 @@
 import {EPOCH_J2000} from '../../constants/epoch';
-import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '../types/CoordinateTypes';
 import {getEpochInterval, getEpochIntervalToJ2000} from '../../time/calculations/timeCalc';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from '../../utils/angleCalc';
+import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '../types/CoordinateTypes';
 
 export function correctPrecessionForEclipticCoordinates(
     coords: EclipticSphericalCoordinates,

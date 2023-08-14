@@ -1,14 +1,13 @@
-import {SelenographicLocation} from '../types/LocationTypes';
+import {createTimeOfInterest} from '../../time';
 import TimeOfInterest from '../../time/TimeOfInterest';
 import {getSunrise} from '../calculations/librationCalc';
-import {createTimeOfInterest} from '../../time';
+import {SelenographicLocation} from '../types/LocationTypes';
 import EventInterface from './EventInterface';
 
 export default class LunarX implements EventInterface {
     private coords: SelenographicLocation = {lon: 1.25, lat: -25};
 
-    public constructor(private readonly toi: TimeOfInterest) {
-    }
+    public constructor(private readonly toi: TimeOfInterest) {}
 
     public async getStartTime(): Promise<TimeOfInterest> {
         const T = await this.getTMax() - 1.5 / 24 / 36525;

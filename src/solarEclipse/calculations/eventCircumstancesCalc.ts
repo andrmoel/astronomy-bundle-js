@@ -1,9 +1,9 @@
-import {BesselianElements} from '../types/besselianElementsTypes';
 import {Location} from '../../earth/types/LocationTypes';
-import {TimeLocationCircumstances} from '../types/circumstancesTypes';
-import {SolarEclipseEventType} from '../constants/solarEclipseEvents';
 import {round} from '../../utils/math';
+import {SolarEclipseEventType} from '../constants/solarEclipseEvents';
 import {SolarEclipseType} from '../constants/solarEclipseTypes';
+import {BesselianElements} from '../types/besselianElementsTypes';
+import {TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {getTimeLocationCircumstances} from './circumstancesCalc';
 import {getEclipseType} from './observationalCircumstancesCalc';
 

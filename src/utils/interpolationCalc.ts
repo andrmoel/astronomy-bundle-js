@@ -1,5 +1,5 @@
-import {createTimeOfInterest} from '../time';
 import {AstronomicalObjectConstructor} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
+import {createTimeOfInterest} from '../time';
 
 export function tabularInterpolation3(values: Array<number>, n = 0.0): number {
     // Meeus 3.3

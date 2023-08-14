@@ -1,12 +1,11 @@
-import Location from '../earth/Location';
 import createLocation from '../earth/createLocation';
-import {BesselianElements} from './types/besselianElementsTypes';
+import Location from '../earth/Location';
 import createLocalCircumstances from './createLocalCircumstances';
 import LocalCircumstances from './LocalCircumstances';
+import {BesselianElements} from './types/besselianElementsTypes';
 
 export default class SolarEclipse {
-    public constructor(private besselianElements: BesselianElements) {
-    }
+    public constructor(private besselianElements: BesselianElements) {}
 
     public getBesselianElements(): BesselianElements {
         return this.besselianElements;

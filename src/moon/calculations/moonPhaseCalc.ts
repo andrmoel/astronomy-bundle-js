@@ -1,13 +1,13 @@
 import * as createTimeOfInterest from '../../time/createTimeOfInterest';
 import TimeOfInterest from '../../time/TimeOfInterest';
+import {deg2rad} from '../../utils/angleCalc';
+import {round} from '../../utils/math';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON,
 } from '../constants/moonPhases';
-import {round} from '../../utils/math';
-import {deg2rad} from '../../utils/angleCalc';
 
 export function getTimeOfInterestOfUpcomingPhase(decimalYear: number, moonPhase: number): TimeOfInterest {
     const k = round((decimalYear - 2000) * 12.3685) + moonPhase;

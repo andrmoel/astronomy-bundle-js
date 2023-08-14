@@ -1,21 +1,21 @@
-import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
-import {
-    earthEclipticSpherical2sunEclipticSpherical,
-    spherical2rectangular,
-} from '../coordinates/calculations/coordinateCalc';
-import TimeOfInterest from '../time/TimeOfInterest';
-import Earth from '../earth/Earth';
-import {createEarth} from '../earth';
-import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
-import {Location} from '../earth/types/LocationTypes';
-import {createTimeOfInterest} from '../time';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {
     STANDARD_ALTITUDE_SUN_CENTER_REFRACTION,
     STANDARD_ALTITUDE_SUN_UPPER_LIMB_REFRACTION,
 } from '../constants/standardAltitude';
+import {correctEffectOfAberration, correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
+import {
+    earthEclipticSpherical2sunEclipticSpherical,
+    spherical2rectangular,
+} from '../coordinates/calculations/coordinateCalc';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {createEarth} from '../earth';
+import Earth from '../earth/Earth';
+import {Location} from '../earth/types/LocationTypes';
+import {createTimeOfInterest} from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import {observationCalc} from '../utils';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {DIAMETER_SUN} from './constants/diameters';
 
 export default class Sun extends AstronomicalObject {

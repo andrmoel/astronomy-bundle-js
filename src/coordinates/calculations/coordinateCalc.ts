@@ -1,18 +1,18 @@
-import {
-    EclipticSphericalCoordinates,
-    EquatorialSphericalCoordinates,
-    LocalHorizontalCoordinates,
-    RectangularCoordinates,
-} from '../types/CoordinateTypes';
-import {Location} from '../../earth/types/LocationTypes';
 import {earthCalc} from '../../earth/calculations';
+import {EARTH_AXIS_RATIO, EARTH_RADIUS} from '../../earth/constants/dimensions';
+import {Location} from '../../earth/types/LocationTypes';
 import {
     getLocalApparentSiderealTime,
     getLocalHourAngle,
     julianCenturiesJ20002julianDay,
 } from '../../time/calculations/timeCalc';
 import {deg2rad, normalizeAngle, rad2deg, sec2deg} from '../../utils/angleCalc';
-import {EARTH_AXIS_RATIO, EARTH_RADIUS} from '../../earth/constants/dimensions';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    LocalHorizontalCoordinates,
+    RectangularCoordinates,
+} from '../types/CoordinateTypes';
 import {correctPrecessionForEclipticCoordinates} from './precessionCalc';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {

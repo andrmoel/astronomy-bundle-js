@@ -4,12 +4,11 @@ import {
     getMoonSunRatio,
     getObscuration,
 } from './calculations/observationalCircumstancesCalc';
-import {TimeLocationCircumstances} from './types/circumstancesTypes';
 import {SolarEclipseType} from './constants/solarEclipseTypes';
+import {TimeLocationCircumstances} from './types/circumstancesTypes';
 
 export default class ObservationalCircumstances {
-    public constructor(private circumstances: TimeLocationCircumstances) {
-    }
+    public constructor(private circumstances: TimeLocationCircumstances) {}
 
     public getEclipseType(): SolarEclipseType {
         return getEclipseType(this.circumstances);

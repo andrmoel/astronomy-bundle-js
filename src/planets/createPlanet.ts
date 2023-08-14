@@ -1,11 +1,11 @@
 import TimeOfInterest from '../time/TimeOfInterest';
-import Mercury from './Mercury';
-import Venus from './Venus';
-import Mars from './Mars';
 import Jupiter from './Jupiter';
+import Mars from './Mars';
+import Mercury from './Mercury';
+import Neptune from './Neptune';
 import Saturn from './Saturn';
 import Uranus from './Uranus';
-import Neptune from './Neptune';
+import Venus from './Venus';
 
 export function createMercury(toi?: TimeOfInterest): Mercury {
     return new Mercury(toi);

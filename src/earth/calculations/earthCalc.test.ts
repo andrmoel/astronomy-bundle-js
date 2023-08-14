@@ -1,5 +1,5 @@
-import {round} from '../../utils/math';
 import {deg2angle} from '../../utils/angleCalc';
+import {round} from '../../utils/math';
 import {
     getEccentricity,
     getLongitudeOfPerihelionOfOrbit,

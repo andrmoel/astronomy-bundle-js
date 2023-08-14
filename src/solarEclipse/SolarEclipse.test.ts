@@ -1,6 +1,6 @@
 import {createLocation} from '../earth';
-import SolarEclipse from './SolarEclipse';
 import LocalCircumstances from './LocalCircumstances';
+import SolarEclipse from './SolarEclipse';
 
 const besselianElements = {
     tMax: 2459198.177,

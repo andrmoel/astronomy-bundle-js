@@ -59,7 +59,7 @@ function _findRow(rows: Array<string>, rowNo: number): string {
     const row = rows.find((row) => row.match(regExp));
 
     if (!row) {
-        throw Error('Missing TLE row ' + rowNo);
+        throw new Error('Missing TLE row ' + rowNo);
     }
 
     return row;

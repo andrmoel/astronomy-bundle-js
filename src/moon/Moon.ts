@@ -1,35 +1,35 @@
-import {observationCalc} from '../utils';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
-import TimeOfInterest from '../time/TimeOfInterest';
+import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
+import {correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
 import {
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
-import {correctEffectOfNutation} from '../coordinates/calculations/apparentCoordinateCalc';
-import Sun from '../sun/Sun';
-import Earth from '../earth/Earth';
-import createSun from '../sun/createSun';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import createEarth from '../earth/createEarth';
+import Earth from '../earth/Earth';
 import {Location} from '../earth/types/LocationTypes';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
+import createSun from '../sun/createSun';
+import Sun from '../sun/Sun';
 import {createTimeOfInterest} from '../time';
-import {STANDARD_ALTITUDE_MOON_CENTER_REFRACTION} from '../constants/standardAltitude';
-import {getApparentMagnitudeMoon} from './calculations/magnitudeCalc';
-import {getSelenographicLocation} from './calculations/librationCalc';
+import TimeOfInterest from '../time/TimeOfInterest';
+import {observationCalc} from '../utils';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {moonCalc, moonPhaseCalc} from './calculations';
+import {getSelenographicLocation} from './calculations/librationCalc';
+import {getApparentMagnitudeMoon} from './calculations/magnitudeCalc';
+import {DIAMETER_MOON} from './constants/diameters';
 import {
     MOON_PHASE_FIRST_QUARTER,
     MOON_PHASE_FULL_MOON,
     MOON_PHASE_LAST_QUARTER,
     MOON_PHASE_NEW_MOON,
 } from './constants/moonPhases';
-import {DIAMETER_MOON} from './constants/diameters';
-import {SelenographicLocation} from './types/LocationTypes';
-import LunarX from './events/LunarX';
-import LunarV from './events/LunarV';
 import GoldenHandle from './events/GoldenHandle';
+import LunarV from './events/LunarV';
+import LunarX from './events/LunarX';
+import {SelenographicLocation} from './types/LocationTypes';
 
 export default class Moon extends AstronomicalObject {
     private readonly sun: Sun;

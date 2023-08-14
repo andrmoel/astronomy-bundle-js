@@ -1,6 +1,6 @@
 import {round} from '../utils/math';
-import ObservationalCircumstances from './ObservationalCircumstances';
 import {SolarEclipseType} from './constants/solarEclipseTypes';
+import ObservationalCircumstances from './ObservationalCircumstances';
 
 const circumstances = {
     t: 0.15055890323155477,

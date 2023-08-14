@@ -1,10 +1,10 @@
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
 import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {calculateVSOP87, calculateVSOP87Angle} from '../planets/calculations/vsop87Calc';
-import {normalizeAngle} from '../utils/angleCalc';
 import {spherical2rectangular} from '../coordinates/calculations/coordinateCalc';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {calculateVSOP87, calculateVSOP87Angle} from '../planets/calculations/vsop87Calc';
 import TimeOfInterest from '../time/TimeOfInterest';
+import {normalizeAngle} from '../utils/angleCalc';
 import {earthCalc} from './calculations';
 
 export default class Earth extends AstronomicalObject {

@@ -1,11 +1,11 @@
+import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
+import * as sunCalc from '../../sun/calculations/sunCalc';
+import {createTimeOfInterest} from '../../time';
 import {deg2rad, normalizeAngle, rad2deg} from '../../utils/angleCalc';
 import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '../constants/calculations';
-import * as sunCalc from '../../sun/calculations/sunCalc';
-import {Quantities, WandA} from '../types/CalculationTypes';
-import {EclipticSphericalCoordinates} from '../../coordinates/types/CoordinateTypes';
-import {SelenographicLocation} from '../types/LocationTypes';
-import {createTimeOfInterest} from '../../time';
 import createMoon from '../createMoon';
+import {Quantities, WandA} from '../types/CalculationTypes';
+import {SelenographicLocation} from '../types/LocationTypes';
 import {getArgumentOfLatitude, getMeanAnomaly, getMeanElongation, getMeanLongitudeOfAscendingNode} from './moonCalc';
 
 export function getSelenographicLocation(

@@ -1,6 +1,4 @@
 import Location from '../earth/Location';
-import {BesselianElements} from './types/besselianElementsTypes';
-import ObservationalCircumstances from './ObservationalCircumstances';
 import {
     getTimeLocationCircumstancesC1,
     getTimeLocationCircumstancesC2,
@@ -9,10 +7,11 @@ import {
     getTimeLocationCircumstancesMaxEclipse,
 } from './calculations/eventCircumstancesCalc';
 import createObservationalCircumstances from './createObservationalCircumstances';
+import ObservationalCircumstances from './ObservationalCircumstances';
+import {BesselianElements} from './types/besselianElementsTypes';
 
 export default class LocalCircumstances {
-    public constructor(private besselianElements: BesselianElements, private location: Location) {
-    }
+    public constructor(private besselianElements: BesselianElements, private location: Location) {}
 
     public getObservationalCircumstancesForC1(): ObservationalCircumstances {
         const circumstances = getTimeLocationCircumstancesC1(this.besselianElements, this.location);

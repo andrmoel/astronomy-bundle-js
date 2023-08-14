@@ -1,31 +1,31 @@
-import {
-    rectangular2spherical,
-    rectangularHeliocentric2rectangularGeocentric,
-    spherical2rectangular,
-} from '../coordinates/calculations/coordinateCalc';
 import AstronomicalObject from '../astronomicalObject/AstronomicalObject';
-import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
-import {observationCalc} from '../utils';
-import {createSun} from '../sun';
-import TimeOfInterest from '../time/TimeOfInterest';
-import {createEarth} from '../earth';
-import Earth from '../earth/Earth';
-import Sun from '../sun/Sun';
+import {AstronomicalObjectConstructor} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
+import {getAsyncCachedCalculation} from '../cache/calculationCache';
+import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
 import {
     correctEffectOfAberration,
     correctEffectOfNutation,
     getLightTimeCorrectedJulianDay,
 } from '../coordinates/calculations/apparentCoordinateCalc';
-import {createTimeOfInterest} from '../time';
-import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
+import {
+    rectangular2spherical,
+    rectangularHeliocentric2rectangularGeocentric,
+    spherical2rectangular,
+} from '../coordinates/calculations/coordinateCalc';
+import {EclipticSphericalCoordinates, RectangularCoordinates} from '../coordinates/types/CoordinateTypes';
+import {createEarth} from '../earth';
+import Earth from '../earth/Earth';
 import {Location} from '../earth/types/LocationTypes';
-import {STANDARD_ALTITUDE_PLANET_REFRACTION} from '../constants/standardAltitude';
-import {getAsyncCachedCalculation} from '../cache/calculationCache';
-import {AstronomicalObjectConstructor} from '../astronomicalObject/interfaces/AstronomicalObjectInterfaces';
+import {createSun} from '../sun';
+import Sun from '../sun/Sun';
+import {createTimeOfInterest} from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import {observationCalc} from '../utils';
 import {normalizeAngle} from '../utils/angleCalc';
+import {getRise, getSet, getTransit} from '../utils/riseSetTransitCalc';
 import {calculateVSOP87, calculateVSOP87Angle} from './calculations/vsop87Calc';
-import {Vsop87} from './types/Vsop87Types';
 import IPlanet from './interfaces/IPlanet';
+import {Vsop87} from './types/Vsop87Types';
 
 export default abstract class Planet extends AstronomicalObject implements IPlanet {
     private readonly sun: Sun;

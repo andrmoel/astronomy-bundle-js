@@ -1,5 +1,5 @@
-import {getDistanceInKm} from '../utils/distanceCalc';
 import {decimal2degreeMinutes, decimal2degreeMinutesSeconds} from '../utils/angleCalc';
+import {getDistanceInKm} from '../utils/distanceCalc';
 import {Location as LocationType} from './types/LocationTypes';
 
 export default class Location {

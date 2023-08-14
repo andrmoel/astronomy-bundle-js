@@ -1,23 +1,23 @@
-import TimeOfInterest from '../time/TimeOfInterest';
-import {createTimeOfInterest} from '../time';
-import {
-    EclipticSphericalCoordinates,
-    EquatorialSphericalCoordinates,
-    LocalHorizontalCoordinates,
-    RectangularCoordinates,
-} from '../coordinates/types/CoordinateTypes';
-import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../planets/calculations/conjunctionCalc';
+import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
+import {correctEffectOfRefraction} from '../coordinates/calculations/apparentCoordinateCalc';
 import {
     eclipticSpherical2equatorialSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
     spherical2rectangular,
 } from '../coordinates/calculations/coordinateCalc';
-import {au2km} from '../utils/distanceCalc';
-import {LIGHT_SPEED_KM_PER_SEC} from '../constants/lightSpeed';
+import {
+    EclipticSphericalCoordinates,
+    EquatorialSphericalCoordinates,
+    LocalHorizontalCoordinates,
+    RectangularCoordinates,
+} from '../coordinates/types/CoordinateTypes';
 import {Location} from '../earth/types/LocationTypes';
-import {correctEffectOfRefraction} from '../coordinates/calculations/apparentCoordinateCalc';
+import {getConjunctionInLongitude, getConjunctionInRightAscension} from '../planets/calculations/conjunctionCalc';
 import {Conjunction} from '../planets/types/PlanetTypes';
+import {createTimeOfInterest} from '../time';
+import TimeOfInterest from '../time/TimeOfInterest';
+import {au2km} from '../utils/distanceCalc';
 import {AstronomicalObjectConstructor, AstronomicalObjectInterface} from './interfaces/AstronomicalObjectInterfaces';
 
 export default abstract class AstronomicalObject implements AstronomicalObjectInterface {

@@ -1,7 +1,7 @@
 import TimeOfInterest from '../time/TimeOfInterest';
+import createBesselianElements from './createBesselianElements';
 import SolarEclipse from './SolarEclipse';
 import solarEclipseExists from './solarEclipseExists';
-import createBesselianElements from './createBesselianElements';
 import {BesselianElements} from './types/besselianElementsTypes';
 
 export function fromBesselianElements(besselianElements: BesselianElements): SolarEclipse {

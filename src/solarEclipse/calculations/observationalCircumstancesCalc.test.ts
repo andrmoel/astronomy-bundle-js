@@ -1,5 +1,5 @@
-import {SolarEclipseType} from '../constants/solarEclipseTypes';
 import {round} from '../../utils/math';
+import {SolarEclipseType} from '../constants/solarEclipseTypes';
 import {
     getEclipseType,
     getMagnitude,

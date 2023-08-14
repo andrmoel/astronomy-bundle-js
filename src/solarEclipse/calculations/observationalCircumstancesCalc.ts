@@ -1,9 +1,9 @@
-import {TimeLocationCircumstances} from '../types/circumstancesTypes';
-import {SolarEclipseType} from '../constants/solarEclipseTypes';
-import {Location} from '../../earth/types/LocationTypes';
-import {BesselianElements} from '../types/besselianElementsTypes';
-import {LocalHorizontalCoordinates} from '../../coordinates/types/CoordinateTypes';
 import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from '../../coordinates/calculations/coordinateCalc';
+import {LocalHorizontalCoordinates} from '../../coordinates/types/CoordinateTypes';
+import {Location} from '../../earth/types/LocationTypes';
+import {SolarEclipseType} from '../constants/solarEclipseTypes';
+import {BesselianElements} from '../types/besselianElementsTypes';
+import {TimeLocationCircumstances} from '../types/circumstancesTypes';
 import {getTimeCircumstances} from './circumstancesCalc';
 
 export function getEclipseType(circumstances: TimeLocationCircumstances): SolarEclipseType {

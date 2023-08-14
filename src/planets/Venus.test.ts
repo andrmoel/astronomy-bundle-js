@@ -1,11 +1,11 @@
-import {round} from '../utils/math';
-import {createTimeOfInterest} from '../time';
-import {deg2angle} from '../utils/angleCalc';
-import {sec2string} from '../time/calculations/timeCalc';
 import {createLocation} from '../earth';
-import Venus from './Venus';
+import {createTimeOfInterest} from '../time';
+import {sec2string} from '../time/calculations/timeCalc';
+import {deg2angle} from '../utils/angleCalc';
+import {round} from '../utils/math';
 import Neptune from './Neptune';
 import {Position} from './types/PlanetTypes';
+import Venus from './Venus';
 
 const toi = createTimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
 const venus = new Venus(toi);

@@ -1,12 +1,12 @@
-import {existsSync, writeFileSync} from 'fs';
 import axios from 'axios';
-import pLimit from 'p-limit';
 import {decodeHTML} from 'entities';
+import {existsSync, writeFileSync} from 'fs';
+import pLimit from 'p-limit';
+
+import {time2julianDay} from '../../dist/time/calculations/timeCalc';
 import {SOLAR_ECLIPSES} from '../../src/solarEclipse/constants/solarEclipseList';
 import {createTimeOfInterest} from '../../src/time';
 import {pad} from '../../src/utils/math';
-
-import {time2julianDay} from '../../dist/time/calculations/timeCalc';
 import BesselianElementsParser from './BesselianElementsParser';
 
 export default class BesselianElementsDownloader {
@@ -108,7 +108,7 @@ export default class BesselianElementsDownloader {
             return decodeHTML(html);
         }
 
-        throw Error(`Could not parse besselian elements string: ${url}`);
+        throw new Error(`Could not parse besselian elements string: ${url}`);
     }
 
     private static isBetweenGivenTimePeriod(jd0: number): boolean {
