@@ -28,7 +28,7 @@ jobs:
         run: yarn upgrade --latest
 
       - name: 'Check code style'
-        run: yarn lint
+        run: yarn lint:fix
 
       - name: 'Run unit tests'
         run: yarn test
