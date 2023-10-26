@@ -143,9 +143,7 @@ function _fix360Crossing(raArray: Array<number>): Array<number> {
     let add = 0;
     let previousValue = 0;
 
-    for (let i = 0; i < raArray.length; i++) {
-        const currentValue = raArray[i];
-
+    for (const [i, currentValue] of raArray.entries()) {
         if (i > 0 && previousValue - currentValue > 270) {
             add += 360;
         }
