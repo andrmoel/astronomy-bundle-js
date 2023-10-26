@@ -66,7 +66,7 @@ function _findRow(rows: Array<string>, rowNo: number): string {
 }
 
 function _parseExpString(expString: string): number {
-    const matches = expString.match(/^([ -]?)([0-9]+)(-[0-9])$/);
+    const matches = expString.match(/^([ -]?)(\d+)(-\d)$/);
 
     if (matches) {
         const fixedString = matches[1] + '.' + matches[2] + 'e' + matches[3];

@@ -36,7 +36,7 @@ export default class BesselianElementsParser {
     }
 
     private parseTMax(): number {
-        const regExp = new RegExp(/Instant of.*J[.]?D[.]? = ([0-9.]+)/si);
+        const regExp = new RegExp(/instant of.*j\.?d\.? = ([\d.]+)/is);
         const matches = this.content.match(regExp);
 
         if (matches) {
@@ -47,7 +47,7 @@ export default class BesselianElementsParser {
     }
 
     private parseT0(): number {
-        const regExp = new RegExp(/t0 =.*?([0-9.]+).*?TDT/si);
+        const regExp = new RegExp(/t0 =.*?([\d.]+).*?tdt/is);
         const matches = this.content.match(regExp);
 
         if (matches) {
@@ -58,7 +58,7 @@ export default class BesselianElementsParser {
     }
 
     private parseDeltaT(): number {
-        const regExp = new RegExp(/ΔT =.*?([0-9.]+).*?s/si);
+        const regExp = new RegExp(/δt =.*?([\d.]+).*?s/is);
         const matches = this.content.match(regExp);
 
         if (matches) {
@@ -78,7 +78,7 @@ export default class BesselianElementsParser {
             [],
         ];
 
-        const regExp = new RegExp(/[0-9]{1} +[0-9.-]+ +[0-9.-]+/si);
+        const regExp = new RegExp(/\d(?: +[\d.-]+){2}/is);
 
         this.rows.forEach((row: string) => {
             if (row.match(regExp)) {
@@ -97,7 +97,7 @@ export default class BesselianElementsParser {
     }
 
     private parseTanF1F2(): Array<number> {
-        const regExp = new RegExp(/Tan [f|ƒ]1 = ([0-9.]+).*?Tan [f|ƒ]2 = ([0-9.]+)/si);
+        const regExp = new RegExp(/tan [f|ƒ]1 = ([\d.]+).*?tan [f|ƒ]2 = ([\d.]+)/is);
         const matches = this.content.match(regExp);
 
         if (matches) {
@@ -111,7 +111,7 @@ export default class BesselianElementsParser {
     }
 
     private parseLatitudeGreatestEclipse(): number {
-        const regExp = new RegExp(/Latitude:([0-9. ]+)° ([NS])/si);
+        const regExp = new RegExp(/latitude:([\d .]+)° ([ns])/is);
         const matches = this.content.match(regExp);
 
         if (matches) {
@@ -122,7 +122,7 @@ export default class BesselianElementsParser {
     }
 
     private parseLongitudeGreatestEclipse(): number {
-        const regExp = new RegExp(/Longitude:([0-9. ]+)° ([WE])/si);
+        const regExp = new RegExp(/longitude:([\d .]+)° ([ew])/is);
         const matches = this.content.match(regExp);
 
         if (matches) {

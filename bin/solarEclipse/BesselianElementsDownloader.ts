@@ -99,7 +99,7 @@ export default class BesselianElementsDownloader {
     }
 
     private static parseBesselianElementsString(content: string, url: string): string {
-        const regExp = new RegExp(/<pre>(.*?)<\/pre>/si);
+        const regExp = new RegExp(/<pre>(.*?)<\/pre>/is);
         const matches = content.match(regExp);
 
         if (matches) {

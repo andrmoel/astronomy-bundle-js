@@ -74,7 +74,7 @@ export function decimal2degreeMinutesSeconds(
 }
 
 export function angle2deg(angle: string): number {
-    const matches = angle.match(/(-?)([0-9]+)°.*?([0-9]+)'.*?([0-9.]+)"/);
+    const matches = angle.match(/(-?)(\d+)°.*?(\d+)'.*?([\d.]+)"/);
 
     if (!matches) {
         throw new Error('false angle format');
@@ -105,7 +105,7 @@ export function deg2time(angle: number): string {
 }
 
 export function time2deg(timeAngle: string): number {
-    const matches = timeAngle.match(/(-?)([0-9]+)h.*?([0-9]+)m.*?([0-9.]+)s/);
+    const matches = timeAngle.match(/(-?)(\d+)h.*?(\d+)m.*?([\d.]+)s/);
 
     if (!matches) {
         throw new Error('false time angle format');
