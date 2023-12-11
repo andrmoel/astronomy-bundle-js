@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "esnext",
+    "module": "esnext",
     "outDir": "./dist/",
-    "esModuleInterop": true,
+    "moduleResolution": "node",
     "strict": true,
     "declaration": true,
     "removeComments": true,
     "resolveJsonModule": true,
-    "useUnknownInCatchVariables": false,
-    "allowJs": true
+    "useUnknownInCatchVariables": false
   },
   "include": [
     "src/**/*",

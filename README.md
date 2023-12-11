@@ -59,12 +59,12 @@ Most of the calculations base on Jean Meeus 'Astronomical Algorithms' book and t
 
 You can install the astronomy-bundle using npm:
 ```
-npm i astronomy-bundle
+npm i @niwa/astronomy-bundle
 ```
 or yarn:
 
 ```
-yarn add astronomy-bundle
+yarn add @niwa/astronomy-bundle
 ```
 
 ## <a name="angle-utils"></a> Angle Utils
