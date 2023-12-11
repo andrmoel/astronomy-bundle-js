@@ -47,7 +47,7 @@
     "@babel/core": "^7.23.5",
     "@babel/preset-env": "^7.23.5",
     "@babel/preset-typescript": "^7.23.3",
-    "@types/jest": "^29.5.10",
+    "@types/jest": "^29.5.11",
     "axios": "^1.6.2",
     "babel-jest": "^29.7.0",
     "entities": "^4.5.0",
@@ -57,8 +57,8 @@
     "jest": "^29.7.0",
     "p-limit": "^5.0.0",
     "standard-version": "^9.5.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.3.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "husky": {
     "hooks": {
