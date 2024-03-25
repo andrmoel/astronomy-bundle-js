@@ -44,9 +44,9 @@
   "devDependencies": {
     "@andrmoel/eslint-config": "^1.14.0",
     "@andrmoel/eslint-config-typescript": "^1.14.0",
-    "@babel/core": "^7.24.0",
-    "@babel/preset-env": "^7.24.0",
-    "@babel/preset-typescript": "^7.23.3",
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-typescript": "^7.24.1",
     "@types/jest": "^29.5.12",
     "axios": "^1.6.8",
     "babel-jest": "^29.7.0",
@@ -58,7 +58,7 @@
     "p-limit": "^5.0.0",
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "husky": {
     "hooks": {
