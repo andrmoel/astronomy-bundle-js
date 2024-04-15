@@ -25,7 +25,9 @@ jobs:
           git branch -u origin/master master
 
       - name: 'Upgrade dependencies'
-        run: yarn upgrade --latest
+        run: |
+          yarn upgrade --latest
+          yarn add eslint 8.57.0
 
       - name: 'Check code style'
         run: yarn lint:fix
