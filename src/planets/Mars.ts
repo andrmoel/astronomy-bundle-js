@@ -32,4 +32,8 @@ export default class Mars extends Planet {
     ): number {
         return getApparentMagnitudeMars(distanceSun, distanceEarth, phaseAngle);
     }
+
+    public async getCentralMeridian(): Promise<number> {
+        return 0.0;
+    }
 }
