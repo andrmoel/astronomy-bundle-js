@@ -36,7 +36,7 @@ it('tests getMeanLongitudeOfAscendingNode', () => {
 });
 
 it('tests getEquatorialHorizontalParallax', () => {
-    expect(getEquatorialHorizontalParallax(T)).toBeCloseTo(0.991990);
+    expect(getEquatorialHorizontalParallax(T)).toBeCloseTo(0.99199);
 });
 
 it('tests getLongitude', () => {

@@ -53,11 +53,7 @@ it('tests equatorialSpherical2topocentricSpherical', () => {
         elevation: 1705,
     };
 
-    const {rightAscension, declination, radiusVector} = equatorialSpherical2topocentricSpherical(
-        coords,
-        location,
-        T,
-    );
+    const {rightAscension, declination, radiusVector} = equatorialSpherical2topocentricSpherical(coords, location, T);
 
     expect(rightAscension).toBeCloseTo(339.5356);
     expect(declination).toBeCloseTo(-15.775012);
@@ -77,11 +73,7 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
         elevation: 100,
     };
 
-    const {azimuth, altitude, radiusVector} = equatorialSpherical2topocentricHorizontal(
-        coords,
-        location,
-        T,
-    );
+    const {azimuth, altitude, radiusVector} = equatorialSpherical2topocentricHorizontal(coords, location, T);
 
     expect(azimuth).toBeCloseTo(248.033688);
     expect(altitude).toBeCloseTo(15.124862);

@@ -1,17 +1,17 @@
+import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS} from '@app/constants/earth';
+import {DEG, RAD} from '@app/constants/math';
+import type {Location} from '@app/types/LocationTypes';
+import {normalizeAngle, sec2deg} from '@app/utils/angle';
 import * as earth from '@app/utils/earth';
-import {
+import {correctPrecessionForEclipticCoordinates} from '@app/utils/precession';
+import {getLocalApparentSiderealTime, getLocalHourAngle} from '@app/utils/siderealTime';
+import {julianCenturiesJ20002julianDay} from '@package/time/utils/dateTime';
+import type {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
     LocalHorizontalCoordinates,
     RectangularCoordinates,
 } from '../types/CoordinateTypes';
-import {DEG, RAD} from '@app/constants/math';
-import {normalizeAngle, sec2deg} from '@app/utils/angle';
-import {Location} from '@app/types/LocationTypes';
-import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS} from '@app/constants/earth';
-import {correctPrecessionForEclipticCoordinates} from '@app/utils/precession';
-import {getLocalApparentSiderealTime, getLocalHourAngle} from '@app/utils/siderealTime';
-import {julianCenturiesJ20002julianDay} from '@package/time/utils/dateTime';
 
 export function rectangular2spherical(coords: RectangularCoordinates): EclipticSphericalCoordinates {
     const {x, y, z} = coords;
@@ -20,10 +20,10 @@ export function rectangular2spherical(coords: RectangularCoordinates): EclipticS
     const lonRad = Math.atan2(y, x);
     const lon = normalizeAngle(lonRad * RAD);
 
-    const latRad = Math.atan(z / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    const latRad = Math.atan(z / Math.sqrt(x ** 2 + y ** 2));
     const lat = latRad * RAD;
 
-    const radiusVector = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+    const radiusVector = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
 
     return {lon, lat, radiusVector};
 }
@@ -105,10 +105,7 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     const latRad = lat * DEG;
 
     // Meeus 13.5
-    const ARad = Math.atan2(
-        Math.sin(HRad),
-        Math.cos(HRad) * Math.sin(latRad) - Math.tan(dRad) * Math.cos(latRad),
-    );
+    const ARad = Math.atan2(Math.sin(HRad), Math.cos(HRad) * Math.sin(latRad) - Math.tan(dRad) * Math.cos(latRad));
 
     // Meeus 13.6
     const hRad = Math.asin(Math.sin(latRad) * Math.sin(dRad) + Math.cos(latRad) * Math.cos(dRad) * Math.cos(HRad));
@@ -133,12 +130,10 @@ export function eclipticSpherical2equatorialSpherical(
     const latRad = lat * DEG;
 
     // Meeus 13.3
-    const n = Math.sin(lonRad) * Math.cos(epsRad) - Math.sin(latRad) / Math.cos(latRad) * Math.sin(epsRad);
+    const n = Math.sin(lonRad) * Math.cos(epsRad) - (Math.sin(latRad) / Math.cos(latRad)) * Math.sin(epsRad);
     const d = Math.cos(lonRad);
     const rightAscensionRad = Math.atan2(n, d);
-    const rightAscension = normalize
-        ? normalizeAngle(rightAscensionRad * RAD)
-        : rightAscensionRad * RAD;
+    const rightAscension = normalize ? normalizeAngle(rightAscensionRad * RAD) : rightAscensionRad * RAD;
 
     // Meeus 13.4
     const declinationRad = Math.asin(
@@ -169,7 +164,7 @@ export function equatorialSpherical2eclipticSpherical(
     // Meeus 13.2
     const latRad = Math.asin(
         Math.sin(declinationRad) * Math.cos(epsRad)
-        - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad),
+            - Math.cos(declinationRad) * Math.sin(epsRad) * Math.sin(rightAscensionRad),
     );
     const lat = latRad * RAD;
 
@@ -238,7 +233,7 @@ export function getRhoSinLat(lat: number, elevation: number): number {
     // Meeus 11
     const uRad = Math.atan(EARTH_AXIS_RATIO * Math.tan(latRad));
 
-    return EARTH_AXIS_RATIO * Math.sin(uRad) + elevation / EARTH_EQUATORIAL_RADIUS_METERS * Math.sin(latRad);
+    return EARTH_AXIS_RATIO * Math.sin(uRad) + (elevation / EARTH_EQUATORIAL_RADIUS_METERS) * Math.sin(latRad);
 }
 
 export function getRhoCosLat(lat: number, elevation: number): number {
@@ -247,5 +242,5 @@ export function getRhoCosLat(lat: number, elevation: number): number {
     // Meeus 11
     const uRad = Math.atan(EARTH_AXIS_RATIO * Math.tan(latRad));
 
-    return Math.cos(uRad) + elevation / EARTH_EQUATORIAL_RADIUS_METERS * Math.cos(latRad);
+    return Math.cos(uRad) + (elevation / EARTH_EQUATORIAL_RADIUS_METERS) * Math.cos(latRad);
 }

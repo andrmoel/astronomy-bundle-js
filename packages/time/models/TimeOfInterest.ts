@@ -1,6 +1,11 @@
-import {Time} from '../types/TimeTypes';
+import type {LatLon} from '@app/types/LocationTypes';
 import {pad} from '@app/utils/math';
-import {LatLon} from '@app/types/LocationTypes';
+import {
+    getGreenwichApparentSiderealTime,
+    getGreenwichMeanSiderealTime,
+    getLocalApparentSiderealTime,
+    getLocalMeanSiderealTime,
+} from '@app/utils/siderealTime';
 import {
     dayOfYear2time,
     getDayOfWeek,
@@ -12,15 +17,10 @@ import {
     julianDay2julianDay0,
     julianDay2julianMillenniaJ2000,
     julianDay2time,
-    time2julianDay
+    time2julianDay,
 } from '@package/time/utils/dateTime';
-import {
-    getGreenwichApparentSiderealTime,
-    getGreenwichMeanSiderealTime,
-    getLocalApparentSiderealTime,
-    getLocalMeanSiderealTime,
-} from '@app/utils/siderealTime';
 import {getDeltaT} from '@package/time/utils/deltaT';
+import type {Time} from '../types/TimeTypes';
 
 export default class TimeOfInterest {
     public readonly jd: number = 0.0;
@@ -45,14 +45,7 @@ export default class TimeOfInterest {
         });
     }
 
-    public static fromTime(
-        year: number,
-        month: number,
-        day: number,
-        hour = 0,
-        min = 0,
-        sec = 0,
-    ): TimeOfInterest {
+    public static fromTime(year: number, month: number, day: number, hour = 0, min = 0, sec = 0): TimeOfInterest {
         return new TimeOfInterest({year, month, day, hour, min, sec});
     }
 

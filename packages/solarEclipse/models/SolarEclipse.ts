@@ -1,14 +1,13 @@
-import {BesselianElements} from '../types/BesselianElementTypes';
-import LocalSolarEclipse from './LocalSolarEclipse';
 import Location from '@package/location/models/Location';
-import {SolarEclipseType} from '../enums/SolarEclipseType';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import loadBesselianElements from '../resources/besselianElements/loadBesselianElements';
 import {parseBesselianElements} from '@package/solarEclipse/utils/besselianElements';
+import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import {SolarEclipseType} from '../enums/SolarEclipseType';
+import loadBesselianElements from '../resources/besselianElements/loadBesselianElements';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import LocalSolarEclipse from './LocalSolarEclipse';
 
 export default class SolarEclipse {
-    private constructor(private readonly elements: BesselianElements) {
-    }
+    private constructor(private readonly elements: BesselianElements) {}
 
     public static createFromDate(date: string): SolarEclipse {
         const [yearStr, monthStr, dayStr] = date.split('-');

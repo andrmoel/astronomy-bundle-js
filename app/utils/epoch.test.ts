@@ -1,5 +1,5 @@
-import {getEpochInterval, getEpochIntervalToJ2000} from '@app/utils/epoch';
 import {EPOCH_J1950, EPOCH_J2000} from '@app/constants/epoch';
+import {getEpochInterval, getEpochIntervalToJ2000} from '@app/utils/epoch';
 
 it('tests getEpochInterval', () => {
     expect(getEpochInterval(2451545, EPOCH_J2000)).toBe(0);

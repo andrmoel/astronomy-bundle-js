@@ -1,52 +1,56 @@
 {
-  "name": "astronomy-bundle",
-  "version": "8.0.1",
-  "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
-  "keywords": [
-    "astronomy",
-    "calculations",
-    "sun",
-    "sunrise",
-    "sunset",
-    "solar eclipse",
-    "moon",
-    "moonrise",
-    "moonset",
-    "libration",
-    "planets",
-    "mercury",
-    "venus",
-    "mars",
-    "jupiter",
-    "saturn",
-    "uranus",
-    "neptune",
-    "VSOP87",
-    "satellite",
-    "two line elements",
-    "tle"
-  ],
-  "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
-  "author": "Andreas Moeller <andrmoel@gmail.com>",
-  "license": "MIT",
-  "main": "./index.js",
-  "types": "./index.d.js",
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "app/*"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
-  },
-  "devDependencies": {
-    "@swc/core": "^1.15.40",
-    "@swc/jest": "^0.2.39",
-    "@types/jest": "^30.0.0",
-    "jest": "^30.4.2",
-    "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
-  }
+    "name": "astronomy-bundle",
+    "version": "8.0.1",
+    "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
+    "keywords": [
+        "astronomy",
+        "calculations",
+        "sun",
+        "sunrise",
+        "sunset",
+        "solar eclipse",
+        "moon",
+        "moonrise",
+        "moonset",
+        "libration",
+        "planets",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "VSOP87",
+        "satellite",
+        "two line elements",
+        "tle"
+    ],
+    "repository": "git@github.com:andrmoel/astronomy-bundle-js.git",
+    "author": "Andreas Moeller <andrmoel@gmail.com>",
+    "license": "MIT",
+    "main": "./index.js",
+    "types": "./index.d.js",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "app/*"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "test": "jest",
+        "test:coverage": "jest --coverage",
+        "lint": "biome check",
+        "lint:fix": "biome check --write --unsafe",
+        "check:typescript": "tsc"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.4.16",
+        "@swc/core": "^1.15.40",
+        "@swc/jest": "^0.2.39",
+        "@types/jest": "^30.0.0",
+        "jest": "^30.4.2",
+        "tsup": "^8.5.1",
+        "typescript": "^6.0.3"
+    }
 }

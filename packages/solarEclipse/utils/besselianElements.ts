@@ -1,6 +1,6 @@
 import {DEG} from '@app/constants/math';
 import {polynomial} from '@app/utils/polynoms';
-import {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
+import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
 
 export function parseBesselianElements(raw: Array<number>): BesselianElements {
     if (raw.length !== 28) {
@@ -24,10 +24,7 @@ export function parseBesselianElements(raw: Array<number>): BesselianElements {
     };
 }
 
-export function getBesselianElementsAtTime(
-    elements: BesselianElements,
-    tau: number
-): BesselianElementsAtTime {
+export function getBesselianElementsAtTime(elements: BesselianElements, tau: number): BesselianElementsAtTime {
     const d = polynomial(elements.d, tau) * DEG;
     const mu = polynomial(elements.mu, tau) * DEG;
 

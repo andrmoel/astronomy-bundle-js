@@ -1,7 +1,7 @@
-import {parseBesselianElements} from './besselianElements';
-import {getTauFromToi, getLocalSnapshot, getMagnitude, getObscuration, getSunAltitudeDeg} from './localCircumstances';
-import {Location} from '@app/types/LocationTypes';
+import type {Location} from '@app/types/LocationTypes';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import {parseBesselianElements} from './besselianElements';
+import {getLocalSnapshot, getMagnitude, getObscuration, getSunAltitudeDeg, getTauFromToi} from './localCircumstances';
 
 // 2021-12-04 total solar eclipse — Union Glacier, Antarctica
 const raw: Array<number> = require('../resources/besselianElements/2459552.5.json');
@@ -77,7 +77,7 @@ describe('getMagnitude', () => {
 
     it('returns 0 when distance equals or exceeds l1', () => {
         expect(getMagnitude(0.54, -0.004, 0.54)).toBe(0);
-        expect(getMagnitude(0.54, -0.004, 0.60)).toBe(0);
+        expect(getMagnitude(0.54, -0.004, 0.6)).toBe(0);
     });
 });
 
@@ -88,7 +88,8 @@ describe('getObscuration', () => {
     });
 
     it('returns the moon-to-sun area ratio in deep annular phase', () => {
-        const l1 = 0.544, l2 = 0.004;
+        const l1 = 0.544,
+            l2 = 0.004;
         const rs = (l1 + l2) / 2;
         const rm = (l1 - l2) / 2;
         expect(getObscuration(l1, l2, 0)).toBeCloseTo((rm * rm) / (rs * rs), 6);
@@ -96,7 +97,7 @@ describe('getObscuration', () => {
 
     it('returns 0 when the observer is outside the penumbra', () => {
         expect(getObscuration(0.54, -0.004, 0.54)).toBe(0);
-        expect(getObscuration(0.54, -0.004, 0.60)).toBe(0);
+        expect(getObscuration(0.54, -0.004, 0.6)).toBe(0);
     });
 
     it('returns a value between 0 and 1 in the partial phase', () => {
@@ -106,8 +107,8 @@ describe('getObscuration', () => {
     });
 
     it('increases as the distance decreases from l1 toward |l2|', () => {
-        const o1 = getObscuration(0.54, -0.004, 0.40);
-        const o2 = getObscuration(0.54, -0.004, 0.20);
+        const o1 = getObscuration(0.54, -0.004, 0.4);
+        const o2 = getObscuration(0.54, -0.004, 0.2);
         const o3 = getObscuration(0.54, -0.004, 0.05);
         expect(o2).toBeGreaterThan(o1);
         expect(o3).toBeGreaterThan(o2);

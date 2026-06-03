@@ -1,6 +1,6 @@
-import SolarEclipse from './SolarEclipse';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {BesselianElements} from '../types/BesselianElementTypes';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import SolarEclipse from './SolarEclipse';
 
 const minimalElements: BesselianElements = {
     t0Jde: 2457986.5,
@@ -31,7 +31,7 @@ describe('SolarEclipse.createFromDate', () => {
 
     it('throws for a date with no eclipse data', () => {
         expect(() => SolarEclipse.createFromDate('2017-08-22')).toThrow(
-            'No solar eclipse data found for date 2017-08-22'
+            'No solar eclipse data found for date 2017-08-22',
         );
     });
 

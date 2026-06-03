@@ -1,31 +1,36 @@
-import {normalizeAngle, sec2deg} from '@app/utils/angle';
-import {getEpochInterval, getEpochIntervalToJ2000} from '@app/utils/epoch';
 import {EPOCH_J2000} from '@app/constants/epoch';
 import {DEG, RAD} from '@app/constants/math';
-import {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '@app/types/CoordinateTypes';
+import type {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '@app/types/CoordinateTypes';
+import {normalizeAngle, sec2deg} from '@app/utils/angle';
+import {getEpochInterval, getEpochIntervalToJ2000} from '@app/utils/epoch';
 
 export function correctPrecessionForEclipticCoordinates(
     coords: EclipticSphericalCoordinates,
     jd: number,
     startingEpoch: number = EPOCH_J2000,
 ): EclipticSphericalCoordinates {
-    const lonRad = coords.lon  * DEG;
-    const latRad = coords.lat  * DEG;
+    const lonRad = coords.lon * DEG;
+    const latRad = coords.lat * DEG;
 
     const T = getEpochIntervalToJ2000(startingEpoch);
     const t = getEpochInterval(jd, startingEpoch);
 
-    const eta = (sec2deg(47.0029) - sec2deg(0.06603) * T + sec2deg(0.00006) * Math.pow(T, 2)) * t
-        + (sec2deg(-0.03302) + sec2deg(0.000598) * T) * Math.pow(t, 2)
-        + sec2deg(0.00006) * Math.pow(t, 3);
+    const eta =
+        (sec2deg(47.0029) - sec2deg(0.06603) * T + sec2deg(0.00006) * T ** 2) * t
+        + (sec2deg(-0.03302) + sec2deg(0.000598) * T) * t ** 2
+        + sec2deg(0.00006) * t ** 3;
 
-    const Pi = 174.876384 + sec2deg(3289.4789) * T + sec2deg(0.60622) * Math.pow(T, 2)
+    const Pi =
+        174.876384
+        + sec2deg(3289.4789) * T
+        + sec2deg(0.60622) * T ** 2
         - (sec2deg(869.8089) + sec2deg(0.50498) * T) * t
-        + sec2deg(0.03536) * Math.pow(t, 2);
+        + sec2deg(0.03536) * t ** 2;
 
-    const p = (sec2deg(5029.0966) + sec2deg(2.22226) * T - sec2deg(0.000042) * Math.pow(T, 2)) * t
-        + (sec2deg(1.11113) - sec2deg(0.000042) * T) * Math.pow(t, 2)
-        + sec2deg(0.000006) * Math.pow(t, 3);
+    const p =
+        (sec2deg(5029.0966) + sec2deg(2.22226) * T - sec2deg(0.000042) * T ** 2) * t
+        + (sec2deg(1.11113) - sec2deg(0.000042) * T) * t ** 2
+        + sec2deg(0.000006) * t ** 3;
 
     const etaRad = eta * DEG;
     const PiRad = Pi * DEG;
@@ -56,17 +61,20 @@ export function correctPrecessionForEquatorialCoordinates(
     const T = getEpochIntervalToJ2000(startingEpoch);
     const t = getEpochInterval(jd, startingEpoch);
 
-    const xi = (sec2deg(2306.2181) + sec2deg(1.39656) * T - sec2deg(0.000139) * Math.pow(T, 2)) * t
-        + (sec2deg(0.30188) - sec2deg(0.000344) * T) * Math.pow(t, 2)
-        + sec2deg(0.017988) * Math.pow(t, 3);
+    const xi =
+        (sec2deg(2306.2181) + sec2deg(1.39656) * T - sec2deg(0.000139) * T ** 2) * t
+        + (sec2deg(0.30188) - sec2deg(0.000344) * T) * t ** 2
+        + sec2deg(0.017988) * t ** 3;
 
-    const zeta = (sec2deg(2306.2181) + sec2deg(1.39656) * T - sec2deg(0.000139) * Math.pow(T, 2)) * t
-        + (sec2deg(1.09468) + sec2deg(0.000066) * T) * Math.pow(t, 2)
-        + sec2deg(0.018203) * Math.pow(t, 3);
+    const zeta =
+        (sec2deg(2306.2181) + sec2deg(1.39656) * T - sec2deg(0.000139) * T ** 2) * t
+        + (sec2deg(1.09468) + sec2deg(0.000066) * T) * t ** 2
+        + sec2deg(0.018203) * t ** 3;
 
-    const theta = (sec2deg(2004.3109) - sec2deg(0.8533) * T - sec2deg(0.000217) * Math.pow(T, 2)) * t
-        - (sec2deg(0.42665) + sec2deg(0.000217) * T) * Math.pow(t, 2)
-        - sec2deg(0.041833) * Math.pow(t, 3);
+    const theta =
+        (sec2deg(2004.3109) - sec2deg(0.8533) * T - sec2deg(0.000217) * T ** 2) * t
+        - (sec2deg(0.42665) + sec2deg(0.000217) * T) * t ** 2
+        - sec2deg(0.041833) * t ** 3;
 
     const xiRad = xi * DEG;
     const thetaRad = theta * DEG;

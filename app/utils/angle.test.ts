@@ -8,8 +8,6 @@ import {
     sec2deg,
     time2deg,
 } from './angle';
-import {round} from './math';
-import {DEG, RAD} from '@app/constants/math';
 
 it('tests deg2angle', () => {
     expect(deg2angle(0.0)).toBe('0° 00\' 00"');
@@ -53,27 +51,27 @@ it('tests time2deg', () => {
 
 describe('tests for decimal2degreeMinutes', () => {
     it('tests positive values', () => {
-        expect(decimal2degreeMinutes(0.0)).toBe('0° 00\'');
-        expect(decimal2degreeMinutes(45.2625)).toBe('45° 15.75\'');
-        expect(decimal2degreeMinutes(270.5)).toBe('270° 30\'');
-        expect(decimal2degreeMinutes(0.2625)).toBe('0° 15.75\'');
-        expect(decimal2degreeMinutes(0.00105222)).toBe('0° 0.06313\'');
+        expect(decimal2degreeMinutes(0.0)).toBe("0° 00'");
+        expect(decimal2degreeMinutes(45.2625)).toBe("45° 15.75'");
+        expect(decimal2degreeMinutes(270.5)).toBe("270° 30'");
+        expect(decimal2degreeMinutes(0.2625)).toBe("0° 15.75'");
+        expect(decimal2degreeMinutes(0.00105222)).toBe("0° 0.06313'");
     });
 
     it('tests negative values', () => {
-        expect(decimal2degreeMinutes(-0.2625)).toBe('-0° 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222)).toBe('-0° 0.06313\'');
+        expect(decimal2degreeMinutes(-0.2625)).toBe("-0° 15.75'");
+        expect(decimal2degreeMinutes(-0.00105222)).toBe("-0° 0.06313'");
     });
 
     it('tests prefix', () => {
         const prefixes = {positivePrefix: 'N ', negativePrefix: 'S '};
 
-        expect(decimal2degreeMinutes(0.0, false, prefixes)).toBe('N 0° 00\'');
-        expect(decimal2degreeMinutes(45.2625, false, prefixes)).toBe('N 45° 15.75\'');
-        expect(decimal2degreeMinutes(-0.2625, false, prefixes)).toBe('S 0° 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222, false, prefixes)).toBe('S 0° 0.06313\'');
-        expect(decimal2degreeMinutes(0.2625, true, prefixes)).toBe('N 15.75\'');
-        expect(decimal2degreeMinutes(-0.00105222, true, prefixes)).toBe('S 0.06313\'');
+        expect(decimal2degreeMinutes(0.0, false, prefixes)).toBe("N 0° 00'");
+        expect(decimal2degreeMinutes(45.2625, false, prefixes)).toBe("N 45° 15.75'");
+        expect(decimal2degreeMinutes(-0.2625, false, prefixes)).toBe("S 0° 15.75'");
+        expect(decimal2degreeMinutes(-0.00105222, false, prefixes)).toBe("S 0° 0.06313'");
+        expect(decimal2degreeMinutes(0.2625, true, prefixes)).toBe("N 15.75'");
+        expect(decimal2degreeMinutes(-0.00105222, true, prefixes)).toBe("S 0.06313'");
     });
 });
 
@@ -130,5 +128,5 @@ it('tests sec2deg', () => {
     expect(sec2deg(90)).toBeCloseTo(0.025);
     expect(sec2deg(15.5)).toBeCloseTo(0.00430556);
     expect(sec2deg(0.04)).toBeCloseTo(0.00001111);
-    expect(sec2deg(-5.40)).toBeCloseTo(-0.0015);
+    expect(sec2deg(-5.4)).toBeCloseTo(-0.0015);
 });

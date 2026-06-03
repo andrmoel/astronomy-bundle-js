@@ -1,9 +1,9 @@
-import {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from './besselianElements';
 import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
-import {Location} from '@app/types/LocationTypes';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import type {Location} from '@app/types/LocationTypes';
+import type TimeOfInterest from '@package/time/models/TimeOfInterest';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import {getBesselianElementsAtTime} from './besselianElements';
 
 export interface LocalSnapshot {
     u: number;
@@ -22,7 +22,7 @@ export function getTauFromToi(elements: BesselianElements, toi: TimeOfInterest):
 
 export function getLocalSnapshot(elements: BesselianElements, location: Location, tau: number): LocalSnapshot {
     const e = getBesselianElementsAtTime(elements, tau);
-    const deltaTCorrection = EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
     const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
 
     const latRad = location.lat * DEG;
@@ -88,7 +88,7 @@ export function getObscuration(l1: number, l2: number, distance: number): number
 // Altitude of the sun in degrees, computed from the Besselian elements at the given tau.
 export function getSunAltitudeDeg(elements: BesselianElements, location: Location, tau: number): number {
     const e = getBesselianElementsAtTime(elements, tau);
-    const deltaTCorrection = EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
     const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
     const latRad = location.lat * DEG;
     const sinAlt = Math.sin(latRad) * e.sinD + Math.cos(latRad) * e.cosD * Math.cos(hourAngle);

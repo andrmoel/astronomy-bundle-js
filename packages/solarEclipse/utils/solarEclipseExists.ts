@@ -1,5 +1,5 @@
+import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 import {SOLAR_ECLIPSES} from '../resources/solarEclipseList';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
 
 export default function solarEclipseExists(toi?: TimeOfInterest): boolean {
     if (!toi) {

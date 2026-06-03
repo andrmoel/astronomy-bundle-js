@@ -1,8 +1,15 @@
-import Location from '@package/location/models/Location';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import type Location from '@package/location/models/Location';
+import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
-import {BesselianElements} from '../types/BesselianElementTypes';
-import {LocalSnapshot, getMagnitude, getLocalSnapshot, getObscuration, getSunAltitudeDeg, getTauFromToi} from '../utils/localCircumstances';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import {
+    getLocalSnapshot,
+    getMagnitude,
+    getObscuration,
+    getSunAltitudeDeg,
+    getTauFromToi,
+    type LocalSnapshot,
+} from '../utils/localCircumstances';
 
 export default class LocalEclipseCircumstances {
     private readonly tau: number;
@@ -17,7 +24,11 @@ export default class LocalEclipseCircumstances {
         this.snap = getLocalSnapshot(elements, location, this.tau);
     }
 
-    public static create(elements: BesselianElements, location: Location, toi: TimeOfInterest): LocalEclipseCircumstances {
+    public static create(
+        elements: BesselianElements,
+        location: Location,
+        toi: TimeOfInterest,
+    ): LocalEclipseCircumstances {
         return new LocalEclipseCircumstances(elements, location, toi);
     }
 

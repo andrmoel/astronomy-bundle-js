@@ -1,5 +1,5 @@
-import {getDeltaT} from './deltaT';
 import {round} from '@app/utils/math';
+import {getDeltaT} from './deltaT';
 
 it('tests getDeltaT', () => {
     expect(round(getDeltaT(2050), 1)).toBe(149.2);

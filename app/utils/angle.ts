@@ -14,11 +14,7 @@ export function deg2angle(deg: number, short = false): string {
     return decimal2degreeMinutesSeconds(deg, short);
 }
 
-export function decimal2degreeMinutes(
-    decimal: number,
-    short = false,
-    prefixes?: AnglePrefixes,
-): string {
+export function decimal2degreeMinutes(decimal: number, short = false, prefixes?: AnglePrefixes): string {
     const sign = getSignPrefix(decimal, prefixes);
 
     decimal = Math.abs(decimal);
@@ -26,8 +22,8 @@ export function decimal2degreeMinutes(
     const degPart = Math.floor(decimal);
     const min = round((decimal - degPart) * 60, 5);
 
-    const degString = degPart + '° ';
-    const minString = pad(min, 2) + '\'';
+    const degString = `${degPart}° `;
+    const minString = `${pad(min, 2)}'`;
 
     if (short && degPart === 0.0) {
         return sign + minString;
@@ -36,11 +32,7 @@ export function decimal2degreeMinutes(
     return sign + degString + minString;
 }
 
-export function decimal2degreeMinutesSeconds(
-    decimal: number,
-    short = false,
-    prefixes?: AnglePrefixes,
-): string {
+export function decimal2degreeMinutesSeconds(decimal: number, short = false, prefixes?: AnglePrefixes): string {
     const sign = getSignPrefix(decimal, prefixes);
 
     decimal = Math.abs(decimal);
@@ -50,9 +42,9 @@ export function decimal2degreeMinutesSeconds(
     const sec = round((decimal - degPart - min / 60) * 3600, 3);
     const secParts = sec.toString().split('.');
 
-    const degString = degPart + '° ';
-    const minString = pad(min, 2) + '\' ';
-    const secString = (secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1]) + '"';
+    const degString = `${degPart}° `;
+    const minString = `${pad(min, 2)}' `;
+    const secString = `${secParts.length === 1 ? pad(sec, 2) : `${pad(secParts[0], 2)}.${secParts[1]}`}"`;
 
     if (short && degPart === 0.0 && min === 0.0) {
         return sign + secString;
@@ -73,8 +65,8 @@ export function angle2deg(angle: string): number {
     }
 
     const sign = matches[1].trim() === '-' ? -1 : 1;
-    const deg = parseInt(matches[2]);
-    const min = parseInt(matches[3]);
+    const deg = parseInt(matches[2], 10);
+    const min = parseInt(matches[3], 10);
     const sec = parseFloat(matches[4]);
 
     return sign * (deg + min / 60 + sec / 3600);
@@ -91,7 +83,7 @@ export function deg2time(angle: number): string {
 
     const hourString = sign + hour;
     const minString = pad(min, 2);
-    const secString = secParts.length === 1 ? pad(sec, 2) : pad(secParts[0], 2) + '.' + secParts[1];
+    const secString = secParts.length === 1 ? pad(sec, 2) : `${pad(secParts[0], 2)}.${secParts[1]}`;
 
     return `${hourString}h ${minString}m ${secString}s`;
 }
@@ -104,8 +96,8 @@ export function time2deg(timeAngle: string): number {
     }
 
     const sign = matches[1].trim() === '-' ? -1 : 1;
-    const deg = parseInt(matches[2]);
-    const min = parseInt(matches[3]);
+    const deg = parseInt(matches[2], 10);
+    const min = parseInt(matches[3], 10);
     const sec = parseFloat(matches[4]);
 
     const angleDeg = sign * (deg + min / 60 + sec / 3600);

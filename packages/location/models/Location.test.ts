@@ -20,15 +20,15 @@ describe('tests location in degrees and minutes', () => {
     it('has north and east bounded coordinates', () => {
         const location = new Location(52.519, 13.408);
 
-        expect(location.getLatitudeInDegreeMinutes()).toBe('N 52° 31.14\'');
-        expect(location.getLongitudeInDegreeMinutes()).toBe('E 13° 24.48\'');
+        expect(location.getLatitudeInDegreeMinutes()).toBe("N 52° 31.14'");
+        expect(location.getLongitudeInDegreeMinutes()).toBe("E 13° 24.48'");
     });
 
     it('has south and west bounded coordinates', () => {
         const location = new Location(-22.908, -68.202);
 
-        expect(location.getLatitudeInDegreeMinutes()).toBe('S 22° 54.48\'');
-        expect(location.getLongitudeInDegreeMinutes()).toBe('W 68° 12.12\'');
+        expect(location.getLatitudeInDegreeMinutes()).toBe("S 22° 54.48'");
+        expect(location.getLongitudeInDegreeMinutes()).toBe("W 68° 12.12'");
     });
 });
 

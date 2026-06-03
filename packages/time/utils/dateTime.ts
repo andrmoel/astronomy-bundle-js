@@ -1,6 +1,5 @@
-import {Time} from '../types/TimeTypes';
 import {round} from '@app/utils/math';
-import {EPOCH_J2000} from '@app/constants/epoch';
+import type {Time} from '../types/TimeTypes';
 
 export function sec2string(sec: number, short = false): string {
     const sign = sec < 0 ? '-' : '';
@@ -11,21 +10,22 @@ export function sec2string(sec: number, short = false): string {
     const secPart = round(sec - hour * 3600 - min * 60, 2);
 
     if (short && hour === 0.0 && min === 0.0) {
-        return sign + secPart + 's';
+        return `${sign + secPart}s`;
     }
 
     if (short && hour === 0.0) {
-        return sign + min + 'm ' + secPart + 's';
+        return `${sign + min}m ${secPart}s`;
     }
 
-    return sign + hour + 'h ' + min + 'm ' + secPart + 's';
+    return `${sign + hour}h ${min}m ${secPart}s`;
 }
 
 export function time2julianDay(time: Time): number {
-    const tmpYear = parseFloat(time.year + '.' + getDayOfYear(time));
+    const tmpYear = parseFloat(`${time.year}.${getDayOfYear(time)}`);
 
-    let Y;
-    let M;
+    let Y: number;
+    let M: number;
+
     if (time.month > 2) {
         Y = time.year;
         M = time.month;
@@ -37,12 +37,15 @@ export function time2julianDay(time: Time): number {
     const D = time.day;
     const H = time.hour / 24 + time.min / 1440 + time.sec / 86400;
 
-    let A;
-    let B;
-    if (tmpYear >= 1582.288) { // YYYY-MM-DD >= 1582-10-15
+    let A: number;
+    let B: number;
+
+    if (tmpYear >= 1582.288) {
+        // YYYY-MM-DD >= 1582-10-15
         A = Math.floor(Y / 100);
         B = 2 - A + Math.floor(A / 4);
-    } else if (tmpYear <= 1582.277) { // YY-MM-DD <= 1582-10-04
+    } else if (tmpYear <= 1582.277) {
+        // YY-MM-DD <= 1582-10-04
         B = 0;
     } else {
         throw new Error('Date between 1582-10-04 and 1582-10-15 is not defined.');
@@ -117,8 +120,8 @@ export function julianMillenniaJ20002julianDay(t: number): number {
 export function dayOfYear2time(year: number, dayOfYear: number): Time {
     // Meeus 7
     const K = isLeapYear(year) ? 1 : 2;
-    const month = dayOfYear < 32 ? 1 : Math.floor(9 * (K + dayOfYear) / 275 + 0.98);
-    const day = Math.floor(dayOfYear - Math.floor(275 * month / 9) + K * Math.floor((month + 9) / 12) + 30);
+    const month = dayOfYear < 32 ? 1 : Math.floor((9 * (K + dayOfYear)) / 275 + 0.98);
+    const day = Math.floor(dayOfYear - Math.floor((275 * month) / 9) + K * Math.floor((month + 9) / 12) + 30);
 
     const hourFloat = 24 * (dayOfYear - Math.floor(dayOfYear));
     const hour = Math.floor(hourFloat);
@@ -131,10 +134,7 @@ export function dayOfYear2time(year: number, dayOfYear: number): Time {
 
 export function getDecimalYear(time: Time): number {
     const daysInYear = isLeapYear(time.year) ? 366 : 365;
-    const dayOfYear = getDayOfYear(time) - 1
-        + time.hour / 24
-        + time.min / 1440
-        + time.sec / 86400;
+    const dayOfYear = getDayOfYear(time) - 1 + time.hour / 24 + time.min / 1440 + time.sec / 86400;
 
     return time.year + dayOfYear / daysInYear;
 }
@@ -145,7 +145,7 @@ export function getDayOfYear(time: Time): number {
     const D = time.day;
 
     // Meeus 7.f
-    return Math.floor(275 * M / 9) - K * Math.floor((M + 9) / 12) + D - 30;
+    return Math.floor((275 * M) / 9) - K * Math.floor((M + 9) / 12) + D - 30;
 }
 
 export function getDayOfWeek(time: Time): number {
@@ -173,12 +173,12 @@ export function shortYear2longYear(shortYearString: string): number {
     const currentYearStr = currentYear.toString();
 
     const currentYearFirstDigitsStr = currentYearStr.substr(0, currentYearStr.length - 2);
-    const currentYearFirstDigits = parseInt(currentYearFirstDigitsStr);
+    const currentYearFirstDigits = parseInt(currentYearFirstDigitsStr, 10);
 
     const year1Str = currentYearFirstDigits + shortYearString;
-    const year1 = parseInt(year1Str);
+    const year1 = parseInt(year1Str, 10);
     const year2Str = (currentYearFirstDigits - 1).toString() + shortYearString;
-    const year2 = parseInt(year2Str);
+    const year2 = parseInt(year2Str, 10);
 
     return year1 <= currentYear ? year1 : year2;
 }

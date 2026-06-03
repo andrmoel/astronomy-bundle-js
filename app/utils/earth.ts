@@ -1,48 +1,42 @@
+import {EARTH_ARGUMENTS_OF_NUTATION} from '@app/constants/earth';
+import {DEG} from '@app/constants/math';
+import {normalizeAngle} from '@app/utils/angle';
 import * as moon from '@app/utils/moon';
 import * as sun from '@app/utils/sun';
-import {EARTH_ARGUMENTS_OF_NUTATION} from '@app/constants/earth';
-import {normalizeAngle} from '@app/utils/angle';
-import {DEG} from '@app/constants/math';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
-    const M = 357.5291092
-        + 35999.0502909 * T
-        - 0.0001536 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 2449000;
+    const M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T ** 2 + T ** 3 / 2449000;
 
     return normalizeAngle(M);
 }
 
 export function getEccentricity(T: number): number {
     // Meeus 25.4
-    return 0.016708634
-        - 0.000042037 * T
-        - 0.0000001267 * Math.pow(T, 2);
+    return 0.016708634 - 0.000042037 * T - 0.0000001267 * T ** 2;
 }
 
 export function getLongitudeOfPerihelionOfOrbit(T: number): number {
     // Meeus 23
-    return 102.93735
-        + 1.71946 * T
-        + 0.00046 * Math.pow(T, 2);
+    return 102.93735 + 1.71946 * T + 0.00046 * T ** 2;
 }
 
 export function getMeanObliquityOfEcliptic(T: number): number {
     const U = T / 100;
 
     // Meeus 22.3
-    const eps0 = 84381.448
+    const eps0 =
+        84381.448
         - 4680.93 * U
-        - 1.55 * Math.pow(U, 2)
-        + 1999.25 * Math.pow(U, 3)
-        - 51.38 * Math.pow(U, 4)
-        - 249.67 * Math.pow(U, 5)
-        - 39.05 * Math.pow(U, 6)
-        + 7.12 * Math.pow(U, 7)
-        + 27.87 * Math.pow(U, 8)
-        + 5.79 * Math.pow(U, 9)
-        + 2.45 * Math.pow(U, 10);
+        - 1.55 * U ** 2
+        + 1999.25 * U ** 3
+        - 51.38 * U ** 4
+        - 249.67 * U ** 5
+        - 39.05 * U ** 6
+        + 7.12 * U ** 7
+        + 27.87 * U ** 8
+        + 5.79 * U ** 9
+        + 2.45 * U ** 10;
 
     return eps0 / 3600;
 }
@@ -63,10 +57,7 @@ export function getNutationInLongitude(T: number): number {
     const F = moon.getArgumentOfLatitude(T);
 
     // Longitude of the ascending node of moon's mean orbit on ecliptic
-    const O = 125.04452
-        - 1934.136261 * T
-        + 0.0020708 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 450000;
+    const O = 125.04452 - 1934.136261 * T + 0.0020708 * T ** 2 + T ** 3 / 450000;
 
     let sumPhi = 0;
     EARTH_ARGUMENTS_OF_NUTATION.forEach((args) => {
@@ -83,7 +74,7 @@ export function getNutationInLongitude(T: number): number {
         sumPhi += Math.sin(tmpSum * DEG) * (argPhi1 + argPhi2 * T);
     });
 
-    return sumPhi * 0.0001 / 3600;
+    return (sumPhi * 0.0001) / 3600;
 }
 
 export function getNutationInObliquity(T: number): number {
@@ -94,10 +85,7 @@ export function getNutationInObliquity(T: number): number {
     const F = moon.getArgumentOfLatitude(T);
 
     // Longitude of the ascending node of moon's mean orbit on ecliptic
-    const O = 125.04452
-        - 1934.136261 * T
-        + 0.0020708 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 450000;
+    const O = 125.04452 - 1934.136261 * T + 0.0020708 * T ** 2 + T ** 3 / 450000;
 
     let sumEps = 0;
     EARTH_ARGUMENTS_OF_NUTATION.forEach((args) => {
@@ -114,5 +102,5 @@ export function getNutationInObliquity(T: number): number {
         sumEps += Math.cos(tmpSum * DEG) * (argEps1 + argEps2 * T);
     });
 
-    return sumEps * 0.0001 / 3600;
+    return (sumEps * 0.0001) / 3600;
 }

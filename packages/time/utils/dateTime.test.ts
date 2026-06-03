@@ -1,10 +1,10 @@
+import {round} from '@app/utils/math';
+import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '@package/time/constants/dayOfWeek';
 import {
     dayOfYear2time,
     getDayOfWeek,
     getDayOfYear,
     getDecimalYear,
-    getEpochInterval,
-    getEpochIntervalToJ2000,
     isLeapYear,
     julianCenturiesJ20002julianDay,
     julianDay2julianCenturiesJ2000,
@@ -17,66 +17,41 @@ import {
     shortYear2longYear,
     time2julianDay,
 } from './dateTime';
-import {round} from '@app/utils/math';
-import {EPOCH_J1950, EPOCH_J2000} from '@app/constants/epoch';
-import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '@package/time/constants/dayOfWeek';
+
+beforeEach(() => {
+    jest.useFakeTimers();
+});
+
+afterEach(() => {
+    jest.useRealTimers();
+});
 
 describe('tests for sec2string', () => {
     it('tests sec2string', () => {
         expect(sec2string(9434.3570044)).toBe('2h 37m 14.36s');
     });
-})
+});
 
 describe('test for time2julianDay', () => {
     it('has valid times', () => {
-        expect(
-            time2julianDay({year: 2000, month: 1, day: 1, hour: 12, min: 0, sec: 0}),
-        ).toBe(2451545.0);
-        expect(
-            time2julianDay({year: 1999, month: 1, day: 1, hour: 0, min: 0, sec: 0}),
-        ).toBe(2451179.5);
-        expect(
-            time2julianDay({year: 1987, month: 1, day: 27, hour: 0, min: 0, sec: 0}),
-        ).toBe(2446822.5);
-        expect(
-            time2julianDay({year: 1987, month: 6, day: 19, hour: 12, min: 0, sec: 0}),
-        ).toBe(2446966.0);
-        expect(
-            time2julianDay({year: 1988, month: 1, day: 27, hour: 0, min: 0, sec: 0}),
-        ).toBe(2447187.5);
-        expect(
-            time2julianDay({year: 1988, month: 6, day: 19, hour: 12, min: 0, sec: 0}),
-        ).toBe(2447332.0);
-        expect(
-            time2julianDay({year: 1900, month: 1, day: 1, hour: 0, min: 0, sec: 0}),
-        ).toBe(2415020.5);
-        expect(
-            time2julianDay({year: 1600, month: 1, day: 1, hour: 0, min: 0, sec: 0}),
-        ).toBe(2305447.5);
-        expect(
-            time2julianDay({year: 1600, month: 12, day: 31, hour: 0, min: 0, sec: 0}),
-        ).toBe(2305812.5);
-        expect(
-            round(time2julianDay({year: 837, month: 4, day: 10, hour: 8, min: 0, sec: 0}), 6),
-        ).toBe(2026871.833333);
-        expect(
-            time2julianDay({year: -123, month: 12, day: 31, hour: 0, min: 0, sec: 0}),
-        ).toBe(1676496.5);
-        expect(
-            time2julianDay({year: -122, month: 1, day: 1, hour: 0, min: 0, sec: 0}),
-        ).toBe(1676497.5);
-        expect(
-            time2julianDay({year: -1000, month: 7, day: 12, hour: 12, min: 0, sec: 0}),
-        ).toBe(1356001.0);
-        expect(
-            time2julianDay({year: -1000, month: 2, day: 29, hour: 0, min: 0, sec: 0}),
-        ).toBe(1355866.5);
-        expect(
-            round(time2julianDay({year: -1001, month: 8, day: 17, hour: 21, min: 30, sec: 0}), 6),
-        ).toBe(1355671.395833);
-        expect(
-            time2julianDay({year: -4712, month: 1, day: 1, hour: 12, min: 0, sec: 0}),
-        ).toBe(0.0);
+        expect(time2julianDay({year: 2000, month: 1, day: 1, hour: 12, min: 0, sec: 0})).toBe(2451545.0);
+        expect(time2julianDay({year: 1999, month: 1, day: 1, hour: 0, min: 0, sec: 0})).toBe(2451179.5);
+        expect(time2julianDay({year: 1987, month: 1, day: 27, hour: 0, min: 0, sec: 0})).toBe(2446822.5);
+        expect(time2julianDay({year: 1987, month: 6, day: 19, hour: 12, min: 0, sec: 0})).toBe(2446966.0);
+        expect(time2julianDay({year: 1988, month: 1, day: 27, hour: 0, min: 0, sec: 0})).toBe(2447187.5);
+        expect(time2julianDay({year: 1988, month: 6, day: 19, hour: 12, min: 0, sec: 0})).toBe(2447332.0);
+        expect(time2julianDay({year: 1900, month: 1, day: 1, hour: 0, min: 0, sec: 0})).toBe(2415020.5);
+        expect(time2julianDay({year: 1600, month: 1, day: 1, hour: 0, min: 0, sec: 0})).toBe(2305447.5);
+        expect(time2julianDay({year: 1600, month: 12, day: 31, hour: 0, min: 0, sec: 0})).toBe(2305812.5);
+        expect(round(time2julianDay({year: 837, month: 4, day: 10, hour: 8, min: 0, sec: 0}), 6)).toBe(2026871.833333);
+        expect(time2julianDay({year: -123, month: 12, day: 31, hour: 0, min: 0, sec: 0})).toBe(1676496.5);
+        expect(time2julianDay({year: -122, month: 1, day: 1, hour: 0, min: 0, sec: 0})).toBe(1676497.5);
+        expect(time2julianDay({year: -1000, month: 7, day: 12, hour: 12, min: 0, sec: 0})).toBe(1356001.0);
+        expect(time2julianDay({year: -1000, month: 2, day: 29, hour: 0, min: 0, sec: 0})).toBe(1355866.5);
+        expect(round(time2julianDay({year: -1001, month: 8, day: 17, hour: 21, min: 30, sec: 0}), 6)).toBe(
+            1355671.395833,
+        );
+        expect(time2julianDay({year: -4712, month: 1, day: 1, hour: 12, min: 0, sec: 0})).toBe(0.0);
     });
 
     it('has an invalid time', () => {
@@ -195,7 +170,7 @@ it('tests isLeapYear', () => {
 
 describe('test for shortYear2longYear', () => {
     it('tests shortYear2longYear for current year 2020', () => {
-        jest.spyOn(global.Date, 'now').mockReturnValue('2020-01-01');
+        jest.setSystemTime(new Date('2020-01-01'));
 
         expect(shortYear2longYear('75')).toBe(1975);
         expect(shortYear2longYear('85')).toBe(1985);
@@ -209,7 +184,7 @@ describe('test for shortYear2longYear', () => {
     });
 
     it('tests shortYear2longYear for current year 2090', () => {
-        jest.spyOn(global.Date, 'now').mockReturnValue('2090-01-01');
+        jest.setSystemTime(new Date('2090-01-01'));
 
         expect(shortYear2longYear('75')).toBe(2075);
         expect(shortYear2longYear('85')).toBe(2085);

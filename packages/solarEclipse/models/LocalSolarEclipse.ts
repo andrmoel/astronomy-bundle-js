@@ -1,11 +1,11 @@
-import Location from '@package/location/models/Location';
-import {BesselianElements} from '../types/BesselianElementTypes';
-import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
-import {EclipseContacts, EclipseContactsTau} from '../types/EclipseContactTypes';
-import LocalEclipseCircumstances from './LocalEclipseCircumstances';
+import type Location from '@package/location/models/Location';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import type {EclipseContacts, EclipseContactsTau} from '../types/EclipseContactTypes';
 import {getContactTaus} from '../utils/contacts';
 import {getLocalSnapshot} from '../utils/localCircumstances';
+import LocalEclipseCircumstances from './LocalEclipseCircumstances';
 
 export default class LocalSolarEclipse {
     private constructor(

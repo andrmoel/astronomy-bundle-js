@@ -1,60 +1,40 @@
+import {DEG, RAD} from '@app/constants/math';
+import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '@app/constants/moon';
+import {normalizeAngle} from '@app/utils/angle';
+import {km2au} from '@app/utils/distance';
 import * as earth from '@app/utils/earth';
 import * as sun from '@app/utils/sun';
-import {normalizeAngle} from '@app/utils/angle';
-import {DEG, RAD} from '@app/constants/math';
-import {km2au} from '@app/utils/distance';
-import {MOON_ARGUMENTS_B, MOON_ARGUMENTS_LR} from '@app/constants/moon';
 
 export function getMeanElongation(T: number): number {
     // Meeus 47.2
-    const D = 297.8501921
-        + 445267.1114034 * T
-        - 0.0018819 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 545868
-        - Math.pow(T, 4) / 113065000;
+    const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T ** 2 + T ** 3 / 545868 - T ** 4 / 113065000;
 
     return normalizeAngle(D);
 }
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.2
-    const Mmoon = 134.9633964
-        + 477198.8675055 * T
-        + 0.0087414 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 69699
-        - Math.pow(T, 4) / 1471200;
+    const Mmoon = 134.9633964 + 477198.8675055 * T + 0.0087414 * T ** 2 + T ** 3 / 69699 - T ** 4 / 1471200;
 
     return normalizeAngle(Mmoon);
 }
 
 export function getArgumentOfLatitude(T: number): number {
     // Meeus 47.5
-    const F = 93.2720950
-        + 483202.0175233 * T
-        - 0.0036539 * Math.pow(T, 2)
-        - Math.pow(T, 3) / 352600
-        + Math.pow(T, 4) / 86331000;
+    const F = 93.272095 + 483202.0175233 * T - 0.0036539 * T ** 2 - T ** 3 / 352600 + T ** 4 / 86331000;
 
     return normalizeAngle(F);
 }
 
 export function getMeanLongitude(T: number): number {
     // Meeus 47.1
-    const L = 218.3164477
-        + 481267.88123421 * T
-        - 0.0015786 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 538841
-        - Math.pow(T, 4) / 65194000;
+    const L = 218.3164477 + 481267.88123421 * T - 0.0015786 * T ** 2 + T ** 3 / 538841 - T ** 4 / 65194000;
 
     return normalizeAngle(L);
 }
 
 export function getMeanLongitudeOfAscendingNode(T: number): number {
-    return 125.0445479
-        - 1934.1362891 * T
-        + 0.0020754 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 467441
-        - Math.pow(T, 4) / 60616000;
+    return 125.0445479 - 1934.1362891 * T + 0.0020754 * T ** 2 + T ** 3 / 467441 - T ** 4 / 60616000;
 }
 
 export function getEquatorialHorizontalParallax(T: number): number {
@@ -95,7 +75,7 @@ function _getSumR(T: number): number {
     const F = getArgumentOfLatitude(T);
 
     // Action of jupiter
-    const E = 1 - 0.002516 * T - 0.0000074 * Math.pow(T, 2);
+    const E = 1 - 0.002516 * T - 0.0000074 * T ** 2;
 
     let sumR = 0;
     MOON_ARGUMENTS_LR.forEach((args: Array<number>) => {
@@ -138,12 +118,10 @@ function _getSumL(T: number): number {
     // Action of venus
     const A1 = 119.75 + 131.849 * T;
     // Action of jupiter
-    const A2 = 53.09 + 479264.290 * T;
-    const E = 1 - 0.002516 * T - 0.0000074 * Math.pow(T, 2);
+    const A2 = 53.09 + 479264.29 * T;
+    const E = 1 - 0.002516 * T - 0.0000074 * T ** 2;
 
-    let sumL = 3958 * Math.sin(A1 * DEG)
-        + 1962 * Math.sin((L - F) * DEG)
-        + 318 * Math.sin(A2 * DEG);
+    let sumL = 3958 * Math.sin(A1 * DEG) + 1962 * Math.sin((L - F) * DEG) + 318 * Math.sin(A2 * DEG);
 
     MOON_ARGUMENTS_LR.forEach((args: Array<number>) => {
         const argD = args[0];
@@ -186,9 +164,10 @@ function _getSumB(T: number): number {
     const A1 = 119.75 + 131.849 * T;
     // Action of jupiter
     const A3 = 313.45 + 481266.484 * T;
-    const E = 1 - 0.002516 * T - 0.0000074 * Math.pow(T, 2);
+    const E = 1 - 0.002516 * T - 0.0000074 * T ** 2;
 
-    let sumB = -2235 * Math.sin(L * DEG)
+    let sumB =
+        -2235 * Math.sin(L * DEG)
         + 382 * Math.sin(A3 * DEG)
         + 175 * Math.sin((A1 - F) * DEG)
         + 175 * Math.sin((A1 + F) * DEG)
@@ -211,7 +190,7 @@ function _getSumB(T: number): number {
                 break;
             case 2:
             case -2:
-                tmpSumB = tmpSumB * argSumB * Math.pow(E, 2);
+                tmpSumB = tmpSumB * argSumB * E ** 2;
                 break;
             default:
                 tmpSumB = tmpSumB * argSumB;
@@ -260,9 +239,7 @@ export function getOpticalLiberationInLatitude(longitude: number, latitude: numb
     const W = normalizeAngle(longitude - phi - Omega);
     const WRad = W * DEG;
 
-    const bRad = Math.asin(
-        -1 * Math.sin(WRad) * Math.cos(latRad) * Math.sin(iRad) - Math.sin(latRad) * Math.cos(iRad),
-    );
+    const bRad = Math.asin(-1 * Math.sin(WRad) * Math.cos(latRad) * Math.sin(iRad) - Math.sin(latRad) * Math.cos(iRad));
 
     return bRad * RAD;
 }

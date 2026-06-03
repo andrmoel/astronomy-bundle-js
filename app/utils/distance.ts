@@ -1,8 +1,8 @@
-import {cos2, sin2} from './math';
-import {EARTH_FLATTENING, EARTH_EQUATORIAL_RADIUS_METERS} from '../constants/earth';
-import {LatLon} from '../types/LocationTypes';
-import {ASTRONOMICAL_UNIT_IN_METERS} from '../constants/units';
 import {DEG} from '@app/constants/math';
+import {EARTH_EQUATORIAL_RADIUS_METERS, EARTH_FLATTENING} from '../constants/earth';
+import {ASTRONOMICAL_UNIT_IN_METERS} from '../constants/units';
+import type {LatLon} from '../types/LocationTypes';
+import {cos2, sin2} from './math';
 
 export function au2km(R: number): number {
     return R * (ASTRONOMICAL_UNIT_IN_METERS / 1000);
@@ -31,7 +31,7 @@ export function getDistanceInKm(location1: LatLon, location2: LatLon): number {
     const omegaRad = Math.atan(Math.sqrt(S / C));
 
     const R = Math.sqrt(S * C) / omegaRad;
-    const D = 2 * omegaRad * EARTH_EQUATORIAL_RADIUS_METERS / 1000;
+    const D = (2 * omegaRad * EARTH_EQUATORIAL_RADIUS_METERS) / 1000;
     const H1 = (3 * R - 1) / (2 * C);
     const H2 = (3 * R + 1) / (2 * S);
 

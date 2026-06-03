@@ -1,10 +1,10 @@
-import {BesselianElements} from '../types/BesselianElementTypes';
-import {EclipseContactsTau} from '../types/EclipseContactTypes';
 import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
-import {getBesselianElementsAtTime} from './besselianElements';
+import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
-import {Location} from '@app/types/LocationTypes';
+import type {BesselianElements} from '../types/BesselianElementTypes';
+import type {EclipseContactsTau} from '../types/EclipseContactTypes';
+import {getBesselianElementsAtTime} from './besselianElements';
 
 const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
@@ -29,10 +29,7 @@ interface FundamentalSnapshot {
     l2: number;
 }
 
-export function getContactTaus(
-    besselianElements: BesselianElements,
-    location: Location,
-): EclipseContactsTau | null {
+export function getContactTaus(besselianElements: BesselianElements, location: Location): EclipseContactsTau | null {
     const obs = computeObserverGeocentric(location);
 
     const max = findMaximum(besselianElements, obs, 0);
@@ -78,11 +75,7 @@ function computeObserverGeocentric(location: Location): ObserverGeocentric {
     };
 }
 
-function findMaximum(
-    elements: BesselianElements,
-    obs: ObserverGeocentric,
-    startTau: number,
-): number | null {
+function findMaximum(elements: BesselianElements, obs: ObserverGeocentric, startTau: number): number | null {
     let tau = startTau;
     for (let i = 0; i < MAX_ITERATIONS; i++) {
         const s = snapshot(elements, tau, obs);
@@ -102,16 +95,12 @@ function findMaximum(
     return inBounds(elements, tau) ? tau : null;
 }
 
-function snapshot(
-    elements: BesselianElements,
-    tau: number,
-    obs: ObserverGeocentric,
-): FundamentalSnapshot {
+function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocentric): FundamentalSnapshot {
     const e = getBesselianElementsAtTime(elements, tau);
     const dMuDt = polynomialDerivative(elements.mu, tau) * DEG;
     const dDDt = polynomialDerivative(elements.d, tau) * DEG;
 
-    const deltaTCorrection = EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
     const hourAngle = e.mu + (obs.lon - deltaTCorrection) * DEG;
     const sinH = Math.sin(hourAngle);
     const cosH = Math.cos(hourAngle);

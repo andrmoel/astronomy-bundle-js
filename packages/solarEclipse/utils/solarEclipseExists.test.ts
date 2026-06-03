@@ -1,5 +1,5 @@
-import solarEclipseExists from './solarEclipseExists';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import solarEclipseExists from './solarEclipseExists';
 
 it('has no valid TOI', () => {
     expect(solarEclipseExists()).toBe(false);

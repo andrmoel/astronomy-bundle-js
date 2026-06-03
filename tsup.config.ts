@@ -1,6 +1,7 @@
-import {defineConfig, Options} from 'tsup';
-import path from 'path';
-import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'fs';
+import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'node:fs';
+import path from 'node:path';
+import type {OnResolveArgs, PluginBuild} from 'esbuild';
+import {defineConfig, type Options} from 'tsup';
 
 const root = process.cwd();
 
@@ -9,11 +10,9 @@ const OMIT_FROM_DIST = ['private', 'workspaces', 'scripts', 'devDependencies'];
 
 const aliasPlugin = {
     name: 'path-aliases',
-    setup(build: any) {
-        build.onResolve({filter: /^@(app|package)\//}, async (args: any) => {
-            const mapped = args.path
-                .replace(/^@app\//, './app/')
-                .replace(/^@package\//, './packages/');
+    setup(build: PluginBuild) {
+        build.onResolve({filter: /^@(app|package)\//}, async (args: OnResolveArgs) => {
+            const mapped = args.path.replace(/^@app\//, './app/').replace(/^@package\//, './packages/');
             return build.resolve(mapped, {kind: args.kind, resolveDir: root});
         });
     },
@@ -56,11 +55,9 @@ function copyReadme(packageDir: string): void {
 }
 
 function writeDistPackageJson(packageDir: string): void {
-    const srcPkg = JSON.parse(
-        readFileSync(path.join(root, packageDir, 'package.json'), 'utf-8'),
-    );
+    const srcPkg = JSON.parse(readFileSync(path.join(root, packageDir, 'package.json'), 'utf-8'));
     const distPkg = {...rootPkg, ...srcPkg};
-    OMIT_FROM_DIST.forEach((key) => delete distPkg[key]);
+    for (const key of OMIT_FROM_DIST) delete distPkg[key];
     Object.assign(distPkg, {
         main: './index.js',
         module: './index.mjs',
@@ -75,9 +72,5 @@ function writeDistPackageJson(packageDir: string): void {
         files: ['*'],
         publishConfig: {access: 'public'},
     });
-    writeFileSync(
-        path.join(root, packageDir, 'dist/package.json'),
-        JSON.stringify(distPkg, null, 2) + '\n',
-    );
+    writeFileSync(path.join(root, packageDir, 'dist/package.json'), `${JSON.stringify(distPkg, null, 2)}\n`);
 }
-

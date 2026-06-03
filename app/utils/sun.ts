@@ -1,12 +1,9 @@
-import {normalizeAngle} from '@app/utils/angle';
 import {DEG} from '@app/constants/math';
+import {normalizeAngle} from '@app/utils/angle';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
-    const M = 357.5291092
-        + 35999.0502909 * T
-        - 0.0001536 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 2449000;
+    const M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T ** 2 + T ** 3 / 2449000;
 
     return normalizeAngle(M);
 }
@@ -23,12 +20,8 @@ export function getMeanLongitude(T: number): number {
     const t = T / 10;
 
     // Meeus 28.2
-    const L0 = 280.4664567
-        + 360007.6982779 * t
-        + 0.03042028 * Math.pow(t, 2)
-        + Math.pow(t, 3) / 49931
-        - Math.pow(t, 4) / 15300
-        + Math.pow(t, 5) / 2000000;
+    const L0 =
+        280.4664567 + 360007.6982779 * t + 0.03042028 * t ** 2 + t ** 3 / 49931 - t ** 4 / 15300 + t ** 5 / 2000000;
 
     return normalizeAngle(L0);
 }
@@ -55,7 +48,7 @@ export function getEquationOfCenter(T: number): number {
     const M = getMeanAnomaly(T);
 
     // Meeus 25.4
-    let C = (1.914602 - 0.004817 * T - 0.000014 * Math.pow(T, 2)) * Math.sin(M * DEG);
+    let C = (1.914602 - 0.004817 * T - 0.000014 * T ** 2) * Math.sin(M * DEG);
     C += (0.019993 - 0.000101 * T) * Math.sin(2 * M * DEG);
     C += 0.000289 * Math.sin(3 * M * DEG);
 

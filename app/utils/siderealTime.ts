@@ -1,16 +1,13 @@
-import {normalizeAngle} from '@app/utils/angle';
-import {julianCenturiesJ20002julianDay} from '@package/time/utils/dateTime';
 import {DEG} from '@app/constants/math';
+import {normalizeAngle} from '@app/utils/angle';
 import * as earth from '@app/utils/earth';
+import {julianCenturiesJ20002julianDay} from '@package/time/utils/dateTime';
 
 export function getGreenwichMeanSiderealTime(T: number): number {
     const jd = julianCenturiesJ20002julianDay(T);
 
     // Meeus 12.4
-    const GMST = 280.46061837
-        + 360.98564736629 * (jd - 2451545)
-        + 0.000387933 * Math.pow(T, 2)
-        + Math.pow(T, 3) / 38710000;
+    const GMST = 280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T ** 2 + T ** 3 / 38710000;
 
     return normalizeAngle(GMST);
 }
@@ -45,4 +42,3 @@ export function getLocalHourAngle(T: number, lon: number, rightAscension: number
 
     return normalizeAngle(LAST - rightAscension);
 }
-

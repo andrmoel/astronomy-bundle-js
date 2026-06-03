@@ -1,3 +1,5 @@
+import {deg2time} from '@app/utils/angle';
+import {round} from '@app/utils/math';
 import {
     getGreenwichApparentSiderealTime,
     getGreenwichMeanSiderealTime,
@@ -5,8 +7,6 @@ import {
     getLocalHourAngle,
     getLocalMeanSiderealTime,
 } from './siderealTime';
-import {deg2time} from '@app/utils/angle';
-import {round} from '@app/utils/math';
 
 it('tests getGreenwichMeanSiderealTime', () => {
     const T = -0.127296372348;

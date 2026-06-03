@@ -1,6 +1,6 @@
-import {Location as LocationType} from '../types/LocationTypes';
 import {decimal2degreeMinutes, decimal2degreeMinutesSeconds} from '@app/utils/angle';
 import {getDistanceInKm} from '@app/utils/distance';
+import type {Location as LocationType} from '../types/LocationTypes';
 
 export default class Location {
     private readonly location: LocationType;

@@ -23,7 +23,7 @@ describe('test for correctPrecessionForEclipticCoordinates', () => {
 
     const coords = {
         rightAscension: 41.054063,
-        declination: 49.227750,
+        declination: 49.22775,
         radiusVector: 1,
     };
 
