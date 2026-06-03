@@ -42,7 +42,14 @@
         "test:coverage": "jest --coverage",
         "lint": "biome check",
         "lint:fix": "biome check --write --unsafe",
-        "check:typescript": "tsc"
+        "check:typescript": "tsc",
+        "release": "standard-version",
+        "release:push": "git push --follow-tags origin master"
+    },
+    "standard-version": {
+        "skip": {
+            "changelog": true
+        }
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.16",
@@ -50,7 +57,9 @@
         "@swc/jest": "^0.2.39",
         "@types/jest": "^30.0.0",
         "jest": "^30.4.2",
+        "standard-version": "^9.5.0",
         "tsup": "^8.5.1",
+        "tsx": "^4.22.4",
         "typescript": "^6.0.3"
     }
 }

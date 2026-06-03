@@ -9,8 +9,6 @@ A TypeScript library for astronomical calculations including the position of the
 - [`@astronomy-bundle/core`](https://www.npmjs.com/package/@astronomy-bundle/core)
 - [`@astronomy-bundle/solar-eclipse`](https://www.npmjs.com/package/@astronomy-bundle/solar-eclipse)
 
----
-
 ## API Reference
 
 | Package | Description | Docs |

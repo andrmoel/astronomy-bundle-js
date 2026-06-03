@@ -2,6 +2,7 @@ import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import type {OnResolveArgs, PluginBuild} from 'esbuild';
 import {defineConfig, type Options} from 'tsup';
+import packages from './packages.config';
 
 const root = process.cwd();
 
@@ -27,26 +28,17 @@ const shared: Partial<Options> = {
     esbuildPlugins: [aliasPlugin],
 };
 
-export default defineConfig([
-    {
+export default defineConfig(
+    packages.map((pkg) => ({
         ...shared,
-        entry: {index: 'packages/core/index.ts'},
-        outDir: 'packages/core/dist',
+        entry: {index: `${pkg}/index.ts`},
+        outDir: `${pkg}/dist`,
         async onSuccess() {
-            writeDistPackageJson('packages/core');
-            copyReadme('packages/core');
+            writeDistPackageJson(pkg);
+            copyReadme(pkg);
         },
-    },
-    {
-        ...shared,
-        entry: {index: 'packages/solarEclipse/index.ts'},
-        outDir: 'packages/solarEclipse/dist',
-        async onSuccess() {
-            writeDistPackageJson('packages/solarEclipse');
-            copyReadme('packages/solarEclipse');
-        },
-    },
-]);
+    })),
+);
 
 function copyReadme(packageDir: string): void {
     const pkgReadme = path.join(root, packageDir, 'README.md');

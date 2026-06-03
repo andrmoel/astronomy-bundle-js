@@ -2,15 +2,11 @@
 
 The `time` package provides the `TimeOfInterest` (TOI) object — the central time representation used throughout the astronomy-bundle library. It wraps a UTC moment in time and exposes conversions to Julian Day, Julian Centuries/Millennia, Greenwich and Local Sidereal Time, Delta T, and common calendar calculations.
 
----
-
 ## Install
 
 With npm: `npm install @astronomy-bundle/core`\
 With yarn: `yarn add @astronomy-bundle/core`\
 With pnpm: `pnpm add @astronomy-bundle/core`
-
----
 
 ## API Reference
 
