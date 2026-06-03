@@ -1,8 +1,8 @@
-name: Release new version
+name: 'Release new version'
 
 on:
   push:
-    branches: [ master ]
+    branches: [ _master ]
 
 jobs:
   build:
