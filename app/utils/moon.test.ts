@@ -16,55 +16,55 @@ import {
 const T = -0.077221081451;
 
 it('tests getMeanElongation', () => {
-    expect(getMeanElongation(T)).toBeCloseTo(113.842304);
+    expect(getMeanElongation(T)).toBeCloseTo(113.842304, 6);
 });
 
 it('tests getMeanAnomaly', () => {
-    expect(getMeanAnomaly(T)).toBeCloseTo(5.150833);
+    expect(getMeanAnomaly(T)).toBeCloseTo(5.150833, 6);
 });
 
 it('tests getArgumentOfLatitude', () => {
-    expect(getArgumentOfLatitude(T)).toBeCloseTo(219.889721);
+    expect(getArgumentOfLatitude(T)).toBeCloseTo(219.889721, 6);
 });
 
 it('tests getMeanLongitude', () => {
-    expect(getMeanLongitude(T)).toBeCloseTo(134.290182);
+    expect(getMeanLongitude(T)).toBeCloseTo(134.290182, 6);
 });
 
 it('tests getMeanLongitudeOfAscendingNode', () => {
-    expect(getMeanLongitudeOfAscendingNode(T)).toBeCloseTo(274.400656);
+    expect(getMeanLongitudeOfAscendingNode(T)).toBeCloseTo(274.400656, 6);
 });
 
 it('tests getEquatorialHorizontalParallax', () => {
-    expect(getEquatorialHorizontalParallax(T)).toBeCloseTo(0.99199);
+    expect(getEquatorialHorizontalParallax(T)).toBeCloseTo(0.99199, 6);
 });
 
 it('tests getLongitude', () => {
-    expect(getLongitude(T)).toBeCloseTo(133.162655);
+    expect(getLongitude(T)).toBeCloseTo(133.162655, 6);
 });
 
 it('tests getLatitude', () => {
-    expect(getLatitude(T)).toBeCloseTo(-3.229126);
+    expect(getLatitude(T)).toBeCloseTo(-3.229126, 6);
 });
 
 it('tests getRadiusVector', () => {
-    expect(getRadiusVector(T)).toBeCloseTo(0.002463);
+    expect(getRadiusVector(T)).toBeCloseTo(0.002463, 6);
 });
 
 it('tests getDistanceToEarth', () => {
-    expect(getDistanceToEarth(T)).toBeCloseTo(368409.68);
+    expect(getDistanceToEarth(T)).toBeCloseTo(368409.68, 2);
 });
 
 it('tests getOpticalLiberationInLongitude', () => {
     const lon = 133.167265;
     const lat = -3.229126;
 
-    expect(getOpticalLiberationInLongitude(lon, lat, T)).toBeCloseTo(-1.205789);
+    expect(getOpticalLiberationInLongitude(lon, lat, T)).toBeCloseTo(-1.205789, 6);
 });
 
 it('tests getOpticalLiberationInLatitude', () => {
     const lon = 133.167265;
     const lat = -3.229126;
 
-    expect(getOpticalLiberationInLatitude(lon, lat, T)).toBeCloseTo(4.194031);
+    expect(getOpticalLiberationInLatitude(lon, lat, T)).toBeCloseTo(4.194031, 6);
 });

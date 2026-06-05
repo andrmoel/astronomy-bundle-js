@@ -22,7 +22,8 @@
         "rules": {
             "recommended": true,
             "correctness": {
-                "noUnusedImports": "error"
+                "noUnusedImports": "error",
+                "noPrecisionLoss": "off"
             }
         }
     },

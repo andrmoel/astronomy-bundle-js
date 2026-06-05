@@ -12,9 +12,9 @@ describe('test for correctPrecessionForEquatorialCoordinates', () => {
     it('tests correctPrecessionForEquatorialCoordinates', () => {
         const correctedCoords = correctPrecessionForEclipticCoordinates(coords, jd);
 
-        expect(correctedCoords.lon).toBeCloseTo(118.704132);
-        expect(correctedCoords.lat).toBeCloseTo(1.615332);
-        expect(correctedCoords.radiusVector).toBeCloseTo(1);
+        expect(correctedCoords.lon).toBeCloseTo(118.704132, 6);
+        expect(correctedCoords.lat).toBeCloseTo(1.615332, 6);
+        expect(correctedCoords.radiusVector).toBeCloseTo(1, 6);
     });
 });
 
@@ -30,8 +30,8 @@ describe('test for correctPrecessionForEclipticCoordinates', () => {
     it('uses the default starting epoch J2000', () => {
         const correctedCoords = correctPrecessionForEquatorialCoordinates(coords, jd);
 
-        expect(correctedCoords.rightAscension).toBeCloseTo(41.547214);
-        expect(correctedCoords.declination).toBeCloseTo(49.348483);
-        expect(correctedCoords.radiusVector).toBeCloseTo(1);
+        expect(correctedCoords.rightAscension).toBeCloseTo(41.547214, 6);
+        expect(correctedCoords.declination).toBeCloseTo(49.348483, 6);
+        expect(correctedCoords.radiusVector).toBeCloseTo(1, 6);
     });
 });

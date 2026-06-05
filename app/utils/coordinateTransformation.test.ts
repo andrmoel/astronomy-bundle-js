@@ -21,9 +21,9 @@ it('tests rectangular2spherical', () => {
 
     const spherical = rectangular2spherical(coords);
 
-    expect(spherical.lon).toBeCloseTo(313.082894);
-    expect(spherical.lat).toBeCloseTo(-2.084721);
-    expect(spherical.radiusVector).toBeCloseTo(0.910845);
+    expect(spherical.lon).toBeCloseTo(313.082894, 6);
+    expect(spherical.lat).toBeCloseTo(-2.084721, 6);
+    expect(spherical.radiusVector).toBeCloseTo(0.910845, 6);
 });
 
 it('tests spherical2rectangular', () => {
@@ -35,9 +35,9 @@ it('tests spherical2rectangular', () => {
 
     const rectangular = spherical2rectangular(coords);
 
-    expect(rectangular.x).toBeCloseTo(0.621746);
-    expect(rectangular.y).toBeCloseTo(-0.66481);
-    expect(rectangular.z).toBeCloseTo(-0.033134);
+    expect(rectangular.x).toBeCloseTo(0.621746, 6);
+    expect(rectangular.y).toBeCloseTo(-0.66481, 6);
+    expect(rectangular.z).toBeCloseTo(-0.033134, 6);
 });
 
 it('tests equatorialSpherical2topocentricSpherical', () => {
@@ -55,9 +55,9 @@ it('tests equatorialSpherical2topocentricSpherical', () => {
 
     const {rightAscension, declination, radiusVector} = equatorialSpherical2topocentricSpherical(coords, location, T);
 
-    expect(rightAscension).toBeCloseTo(339.5356);
-    expect(declination).toBeCloseTo(-15.775012);
-    expect(radiusVector).toBeCloseTo(0.372755);
+    expect(rightAscension).toBeCloseTo(339.5356, 6);
+    expect(declination).toBeCloseTo(-15.775012, 6);
+    expect(radiusVector).toBeCloseTo(0.372755, 6);
 });
 
 it('tests equatorialSpherical2topocentricHorizontal', () => {
@@ -75,9 +75,9 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
 
     const {azimuth, altitude, radiusVector} = equatorialSpherical2topocentricHorizontal(coords, location, T);
 
-    expect(azimuth).toBeCloseTo(248.033688);
-    expect(altitude).toBeCloseTo(15.124862);
-    expect(radiusVector).toBeCloseTo(0.372749);
+    expect(azimuth).toBeCloseTo(248.033688, 6);
+    expect(altitude).toBeCloseTo(15.124862, 6);
+    expect(radiusVector).toBeCloseTo(0.372749, 6);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {
@@ -90,9 +90,9 @@ it('tests eclipticSpherical2equatorialSpherical', () => {
 
     const {rightAscension, declination, radiusVector} = eclipticSpherical2equatorialSpherical(coords, T);
 
-    expect(rightAscension).toBeCloseTo(316.174262);
-    expect(declination).toBeCloseTo(-18.887468);
-    expect(radiusVector).toBeCloseTo(0.910845);
+    expect(rightAscension).toBeCloseTo(316.174262, 6);
+    expect(declination).toBeCloseTo(-18.887468, 6);
+    expect(radiusVector).toBeCloseTo(0.910845, 6);
 });
 
 it('tests equatorialSpherical2eclipticSpherical', () => {
@@ -105,9 +105,9 @@ it('tests equatorialSpherical2eclipticSpherical', () => {
 
     const {lon, lat, radiusVector} = equatorialSpherical2eclipticSpherical(coords, T);
 
-    expect(lon).toBeCloseTo(313.082894);
-    expect(lat).toBeCloseTo(-2.084721);
-    expect(radiusVector).toBeCloseTo(0.910845);
+    expect(lon).toBeCloseTo(313.082894, 6);
+    expect(lat).toBeCloseTo(-2.084721, 6);
+    expect(radiusVector).toBeCloseTo(0.910845, 6);
 });
 
 it('tests rectangularHeliocentric2rectangularGeocentric', () => {
@@ -154,13 +154,13 @@ it('tests eclipticJ20002eclipticDate', () => {
 
     const coords = eclipticJ20002eclipticDate(lon, lat, radiusVector, t);
 
-    expect(coords.lon).toBeCloseTo(118.70413153);
-    expect(coords.lat).toBeCloseTo(1.61533201);
-    expect(coords.radiusVector).toBeCloseTo(1);
+    expect(coords.lon).toBeCloseTo(118.70413153, 8);
+    expect(coords.lat).toBeCloseTo(1.61533201, 8);
+    expect(coords.radiusVector).toBeCloseTo(1, 8);
 });
 
 it('tests getEquatorialParallax', () => {
     const pi = getEquatorialParallax(0.37276);
 
-    expect(pi).toBeCloseTo(0.006553);
+    expect(pi).toBeCloseTo(0.006553, 6);
 });

@@ -27,7 +27,7 @@ describe('tests for getDistanceInKm', () => {
 
         const distance = getDistanceInKm(location1, location2);
 
-        expect(distance).toBeCloseTo(0.23);
+        expect(distance).toBeCloseTo(0.23, 2);
     });
 
     it('has a large distance', () => {
@@ -44,7 +44,7 @@ describe('tests for getDistanceInKm', () => {
 
         const distance = getDistanceInKm(location1, location2);
 
-        expect(distance).toBeCloseTo(6181.63);
+        expect(distance).toBeCloseTo(6181.63, 2);
     });
 
     it('has a large distance passing 360° line', () => {
@@ -61,6 +61,6 @@ describe('tests for getDistanceInKm', () => {
 
         const distance = getDistanceInKm(location1, location2);
 
-        expect(distance).toBeCloseTo(804.13);
+        expect(distance).toBeCloseTo(804.13, 2);
     });
 });

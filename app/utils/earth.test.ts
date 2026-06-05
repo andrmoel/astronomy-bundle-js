@@ -12,31 +12,31 @@ import {
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;
 
-    expect(getMeanAnomaly(T)).toBeCloseTo(94.980597);
+    expect(getMeanAnomaly(T)).toBeCloseTo(94.980597, 6);
 });
 
 it('tests getEccentricity', () => {
     const T = -0.072183436;
 
-    expect(getEccentricity(T)).toBeCloseTo(0.016712);
+    expect(getEccentricity(T)).toBeCloseTo(0.016712, 6);
 });
 
 it('tests getLongitudeOfPerihelionOfOrbit', () => {
     const T = 0.2886705;
 
-    expect(getLongitudeOfPerihelionOfOrbit(T)).toBeCloseTo(103.433746);
+    expect(getLongitudeOfPerihelionOfOrbit(T)).toBeCloseTo(103.433746, 6);
 });
 
 it('tests getMeanObliquityOfEcliptic', () => {
     const T = -0.127296372458;
 
-    expect(getMeanObliquityOfEcliptic(T)).toBeCloseTo(23.440946);
+    expect(getMeanObliquityOfEcliptic(T)).toBeCloseTo(23.440946, 6);
 });
 
 it('tests getTrueObliquityOfEcliptic', () => {
     const T = -0.127296372458;
 
-    expect(getTrueObliquityOfEcliptic(T)).toBeCloseTo(23.443569);
+    expect(getTrueObliquityOfEcliptic(T)).toBeCloseTo(23.443569, 6);
 });
 
 it('tests getNutationInLongitude', () => {

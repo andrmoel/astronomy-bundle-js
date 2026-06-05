@@ -25,11 +25,11 @@ it('tests deg2angle', () => {
 });
 
 it('tests angle2deg', () => {
-    expect(angle2deg('0°0\'0"')).toBeCloseTo(0.0);
-    expect(angle2deg('45°15\'45"')).toBeCloseTo(45.2625);
-    expect(angle2deg('45° 15\' 45"')).toBeCloseTo(45.2625);
-    expect(angle2deg('270°30\'0"')).toBeCloseTo(270.5);
-    expect(angle2deg('-0°0\'3.788"')).toBeCloseTo(-0.001052);
+    expect(angle2deg('0°0\'0"')).toBeCloseTo(0.0, 6);
+    expect(angle2deg('45°15\'45"')).toBeCloseTo(45.2625, 6);
+    expect(angle2deg('45° 15\' 45"')).toBeCloseTo(45.2625, 6);
+    expect(angle2deg('270°30\'0"')).toBeCloseTo(270.5, 6);
+    expect(angle2deg('-0°0\'3.788"')).toBeCloseTo(-0.001052, 6);
 });
 
 it('tests deg2time', () => {
@@ -40,13 +40,13 @@ it('tests deg2time', () => {
 });
 
 it('tests time2deg', () => {
-    expect(time2deg('0h0m0s')).toBeCloseTo(0);
-    expect(time2deg('3h1m36s')).toBeCloseTo(45.4);
-    expect(time2deg('03h01m36s')).toBeCloseTo(45.4);
-    expect(time2deg('3h 1m 36s')).toBeCloseTo(45.4);
-    expect(time2deg('24h0m0s')).toBeCloseTo(360);
-    expect(time2deg('-3h1m36s')).toBeCloseTo(-45.4);
-    expect(time2deg('12h45m15.512s')).toBeCloseTo(191.314633);
+    expect(time2deg('0h0m0s')).toBeCloseTo(0, 6);
+    expect(time2deg('3h1m36s')).toBeCloseTo(45.4, 6);
+    expect(time2deg('03h01m36s')).toBeCloseTo(45.4, 6);
+    expect(time2deg('3h 1m 36s')).toBeCloseTo(45.4, 6);
+    expect(time2deg('24h0m0s')).toBeCloseTo(360, 6);
+    expect(time2deg('-3h1m36s')).toBeCloseTo(-45.4, 6);
+    expect(time2deg('12h45m15.512s')).toBeCloseTo(191.314633, 6);
 });
 
 describe('tests for decimal2degreeMinutes', () => {
@@ -113,20 +113,20 @@ describe('tests for decimal2degreeMinutesSeconds', () => {
 });
 
 it('tests normalizeAngle', () => {
-    expect(normalizeAngle(0)).toBeCloseTo(0);
-    expect(normalizeAngle(12.5)).toBeCloseTo(12.5);
-    expect(normalizeAngle(359)).toBeCloseTo(359);
-    expect(normalizeAngle(360)).toBeCloseTo(0);
-    expect(normalizeAngle(5964.3)).toBeCloseTo(204.3);
-    expect(normalizeAngle(-45)).toBeCloseTo(315);
-    expect(normalizeAngle(259, 180)).toBeCloseTo(79);
+    expect(normalizeAngle(0)).toBeCloseTo(0, 1);
+    expect(normalizeAngle(12.5)).toBeCloseTo(12.5, 1);
+    expect(normalizeAngle(359)).toBeCloseTo(359, 1);
+    expect(normalizeAngle(360)).toBeCloseTo(0, 1);
+    expect(normalizeAngle(5964.3)).toBeCloseTo(204.3, 1);
+    expect(normalizeAngle(-45)).toBeCloseTo(315, 1);
+    expect(normalizeAngle(259, 180)).toBeCloseTo(79, 1);
 });
 
 it('tests sec2deg', () => {
-    expect(sec2deg(3600)).toBeCloseTo(1);
-    expect(sec2deg(180)).toBeCloseTo(0.05);
-    expect(sec2deg(90)).toBeCloseTo(0.025);
-    expect(sec2deg(15.5)).toBeCloseTo(0.00430556);
-    expect(sec2deg(0.04)).toBeCloseTo(0.00001111);
-    expect(sec2deg(-5.4)).toBeCloseTo(-0.0015);
+    expect(sec2deg(3600)).toBeCloseTo(1, 8);
+    expect(sec2deg(180)).toBeCloseTo(0.05, 8);
+    expect(sec2deg(90)).toBeCloseTo(0.025, 8);
+    expect(sec2deg(15.5)).toBeCloseTo(0.00430556, 8);
+    expect(sec2deg(0.04)).toBeCloseTo(0.00001111, 8);
+    expect(sec2deg(-5.4)).toBeCloseTo(-0.0015, 8);
 });

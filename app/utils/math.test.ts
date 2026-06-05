@@ -26,9 +26,9 @@ it('tests pad', () => {
 });
 
 it('tests sin2', () => {
-    expect(sin2(154.34)).toBeCloseTo(0.15305532);
+    expect(sin2(154.34)).toBeCloseTo(0.15305532, 8);
 });
 
 it('tests cos2', () => {
-    expect(cos2(154.34)).toBeCloseTo(0.84694468);
+    expect(cos2(154.34)).toBeCloseTo(0.84694468, 8);
 });
