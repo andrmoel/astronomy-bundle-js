@@ -46,13 +46,13 @@ export function getEquatorialHorizontalParallax(T: number): number {
 
 export function getLongitude(T: number): number {
     const L = getMeanLongitude(T);
-    const sumL = _getSumL(T);
+    const sumL = getSumL(T);
 
     return L + sumL / 1000000;
 }
 
 export function getLatitude(T: number): number {
-    const sumB = _getSumB(T);
+    const sumB = getSumB(T);
 
     return sumB / 1000000;
 }
@@ -62,12 +62,12 @@ export function getRadiusVector(T: number): number {
 }
 
 export function getDistanceToEarth(T: number): number {
-    const sumR = _getSumR(T);
+    const sumR = getSumR(T);
 
     return 385000.56 + sumR / 1000;
 }
 
-function _getSumR(T: number): number {
+function getSumR(T: number): number {
     // Meeus 47.b
     const D = getMeanElongation(T);
     const Msun = sun.getMeanAnomaly(T);
@@ -107,7 +107,7 @@ function _getSumR(T: number): number {
     return sumR;
 }
 
-function _getSumL(T: number): number {
+function getSumL(T: number): number {
     // Meeus 47.b
     const L = getMeanLongitude(T);
     const D = getMeanElongation(T);
@@ -152,7 +152,7 @@ function _getSumL(T: number): number {
     return sumL;
 }
 
-function _getSumB(T: number): number {
+function getSumB(T: number): number {
     // Meeus 47.B
     const L = getMeanLongitude(T);
     const D = getMeanElongation(T);
