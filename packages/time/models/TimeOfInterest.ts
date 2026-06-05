@@ -6,6 +6,7 @@ import {
     getLocalApparentSiderealTime,
     getLocalMeanSiderealTime,
 } from '@app/utils/siderealTime';
+import type {Time} from '../types/TimeTypes';
 import {
     dayOfYear2time,
     getDayOfWeek,
@@ -18,9 +19,8 @@ import {
     julianDay2julianMillenniaJ2000,
     julianDay2time,
     time2julianDay,
-} from '@package/time/utils/dateTime';
-import {getDeltaT} from '@package/time/utils/deltaT';
-import type {Time} from '../types/TimeTypes';
+} from '../utils/dateTime';
+import {getDeltaT} from '../utils/deltaT';
 
 export default class TimeOfInterest {
     public readonly jd: number = 0.0;

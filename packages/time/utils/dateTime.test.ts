@@ -1,5 +1,5 @@
 import {round} from '@app/utils/math';
-import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '@package/time/constants/dayOfWeek';
+import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 import {
     dayOfYear2time,
     getDayOfWeek,
