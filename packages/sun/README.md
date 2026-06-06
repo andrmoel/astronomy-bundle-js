@@ -6,9 +6,9 @@ The `sun` package provides the `Sun` object for computing the Sun's position as 
 
 ## Install
 
-With npm: `npm install @astronomy-bundle/sun`\
-With yarn: `yarn add @astronomy-bundle/sun`\
-With pnpm: `pnpm add @astronomy-bundle/sun`
+With npm: `npm install @astronomy-bundle/sun @astronomy-bundle/core`\
+With yarn: `yarn add @astronomy-bundle/sun @astronomy-bundle/core`\
+With pnpm: `pnpm add @astronomy-bundle/sun @astronomy-bundle/core`
 
 ## High precision
 
@@ -29,11 +29,10 @@ import {Sun} from '@astronomy-bundle/sun/high-precision';
 **Example**: Create a Sun object for 22 October 2020 at 06:15 UTC
 
 ```javascript
+import {TimeOfInterest} from '@astronomy-bundle/core';
 import {Sun} from '@astronomy-bundle/sun';
 // or for high precision:
 // import {Sun} from '@astronomy-bundle/sun/high-precision';
-
-import {TimeOfInterest} from '@astronomy-bundle/core';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -48,8 +47,8 @@ const sun = Sun.create(toi);
 **Example**: Get geocentric ecliptic spherical coordinates for 22 October 2020 at 06:15 UTC
 
 ```javascript
-import {Sun} from '@astronomy-bundle/sun';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -76,8 +75,8 @@ Date radius vector: *0.99514386 AU*
 **Example**: Get geocentric ecliptic rectangular coordinates for 22 October 2020 at 06:15 UTC
 
 ```javascript
-import {Sun} from '@astronomy-bundle/sun';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -104,8 +103,8 @@ Date z: *-0.00000243 AU*
 **Example**: Get geocentric equatorial spherical coordinates for 22 October 2020 at 06:15 UTC
 
 ```javascript
-import {Sun} from '@astronomy-bundle/sun';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -132,8 +131,8 @@ Date radius vector: *0.99514386 AU*
 **Example**: Get apparent geocentric coordinates for 22 October 2020 at 06:15 UTC
 
 ```javascript
-import {Sun} from '@astronomy-bundle/sun';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -160,9 +159,8 @@ Apparent radius vector: *0.99514386 AU*
 **Example**: Get topocentric coordinates for 22 October 2020 at 06:15 UTC, observer in Berlin (52.519°N, 13.408°E)
 
 ```javascript
+import {TimeOfInterest, Location} from '@astronomy-bundle/core';
 import {Sun} from '@astronomy-bundle/sun';
-import {TimeOfInterest} from '@astronomy-bundle/core';
-import {Location} from '@astronomy-bundle/location';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const location = Location.create(52.519, 13.408);
@@ -190,9 +188,8 @@ Apparent altitude (with refraction): *3.643379°*
 **Example**: Get the distance to Earth for 22 October 2020 at 06:15 UTC
 
 ```javascript
+import {TimeOfInterest, Location} from '@astronomy-bundle/core';
 import {Sun} from '@astronomy-bundle/sun';
-import {TimeOfInterest} from '@astronomy-bundle/core';
-import {Location} from '@astronomy-bundle/location';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const location = Location.create(52.519, 13.408);
@@ -215,8 +212,8 @@ Topocentric distance: *148,871,013.47 km*
 **Example**: Get light time for 22 October 2020 at 06:15 UTC
 
 ```javascript
-import {Sun} from '@astronomy-bundle/sun';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const sun = Sun.create(toi);
@@ -236,9 +233,8 @@ Light time: *0h 8m 16.58s*
 **Example**: Get the angular diameter for 22 October 2020 at 06:15 UTC
 
 ```javascript
+import {TimeOfInterest, Location} from '@astronomy-bundle/core';
 import {Sun} from '@astronomy-bundle/sun';
-import {TimeOfInterest} from '@astronomy-bundle/core';
-import {Location} from '@astronomy-bundle/location';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const location = Location.create(52.519, 13.408);

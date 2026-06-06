@@ -6,9 +6,9 @@ The `earth` package provides the `Earth` object — the reference body used thro
 
 ## Install
 
-With npm: `npm install @astronomy-bundle/earth`\
-With yarn: `yarn add @astronomy-bundle/earth`\
-With pnpm: `pnpm add @astronomy-bundle/earth`
+With npm: `npm install @astronomy-bundle/earth @astronomy-bundle/core`\
+With yarn: `yarn add @astronomy-bundle/earth @astronomy-bundle/core`\
+With pnpm: `pnpm add @astronomy-bundle/earth @astronomy-bundle/core`
 
 ## High precision
 
@@ -29,11 +29,10 @@ import {Earth} from '@astronomy-bundle/earth/high-precision';
 **Example**: Create an Earth object for 10 December 2017 at 00:00 UTC
 
 ```javascript
+import {TimeOfInterest} from '@astronomy-bundle/core';
 import {Earth} from '@astronomy-bundle/earth';
 // or for high precision:
 // import {Earth} from '@astronomy-bundle/earth/high-precision';
-
-import {TimeOfInterest} from '@astronomy-bundle/core';
 
 const toi = TimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = Earth.create(toi);
@@ -48,8 +47,8 @@ const earth = Earth.create(toi);
 **Example**: Get heliocentric ecliptic spherical coordinates for 10 December 2017 at 00:00 UTC
 
 ```javascript
-import {Earth} from '@astronomy-bundle/earth';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Earth} from '@astronomy-bundle/earth';
 
 const toi = TimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = Earth.create(toi);
@@ -76,8 +75,8 @@ Date radius vector: *0.98482663 AU*
 **Example**: Get heliocentric ecliptic rectangular coordinates for 10 December 2017 at 00:00 UTC
 
 ```javascript
-import {Earth} from '@astronomy-bundle/earth';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Earth} from '@astronomy-bundle/earth';
 
 const toi = TimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
 const earth = Earth.create(toi);
@@ -104,8 +103,8 @@ Date z: *-0.00000246 AU*
 **Example**: Get nutation for 02 October 2020 at 22:19:44 UTC
 
 ```javascript
-import {Earth} from '@astronomy-bundle/earth';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Earth} from '@astronomy-bundle/earth';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
 const earth = Earth.create(toi);
@@ -127,8 +126,8 @@ Nutation in obliquity (Δε): *0.000478°*
 **Example**: Get obliquity of the ecliptic for 02 October 2020 at 22:19:44 UTC
 
 ```javascript
-import {Earth} from '@astronomy-bundle/earth';
 import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Earth} from '@astronomy-bundle/earth';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
 const earth = Earth.create(toi);
