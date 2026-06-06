@@ -7,6 +7,7 @@ A TypeScript library for astronomical calculations including the position of the
 ## Packages
 
 - [`@astronomy-bundle/core`](https://www.npmjs.com/package/@astronomy-bundle/core)
+- [`@astronomy-bundle/earth`](https://www.npmjs.com/package/@astronomy-bundle/earth)
 - [`@astronomy-bundle/solar-eclipse`](https://www.npmjs.com/package/@astronomy-bundle/solar-eclipse)
 
 ## API Reference
@@ -15,4 +16,5 @@ A TypeScript library for astronomical calculations including the position of the
 | ------- | ----------- | ---- |
 | **Time** | The `TimeOfInterest` object — the central time representation for all calculations. Supports Julian Day, sidereal time, Delta T, and more. | [README](packages/time/README.md) |
 | **Location** | The `Location` object — a geographic coordinate container with formatting and distance helpers. | [README](packages/location/README.md) |
+| **Earth** | The `Earth` object — heliocentric VSOP87 coordinates, nutation, and obliquity of the ecliptic. | [README](packages/earth/README.md) |
 | **Solar Eclipse** | Solar eclipse calculations using Besselian elements. Provides global and local eclipse circumstances for any observer position. | — |

@@ -1,1 +1,1 @@
-export default ['packages/core', 'packages/solarEclipse'];
+export default ['packages/core', 'packages/earth', 'packages/solarEclipse'];
