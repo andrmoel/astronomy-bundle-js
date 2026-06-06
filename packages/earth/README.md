@@ -1,3 +1,5 @@
+Part of the [Astronomy Bundle](../../README.md).
+
 # Earth
 
 The `earth` package provides the `Earth` object — the reference body used throughout the astronomy-bundle library. It computes Earth's heliocentric position in the ecliptic coordinate frame using the VSOP87 theory, and exposes Earth-specific quantities such as nutation and the obliquity of the ecliptic.
@@ -16,7 +18,7 @@ By default the `Earth` class uses a reduced VSOP87 series that is accurate enoug
 import {Earth} from '@astronomy-bundle/earth/high-precision';
 ```
 
-> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **much larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
+> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x  larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
 
 ## API Reference
 

@@ -1,3 +1,5 @@
+Part of the [Astronomy Bundle](../../README.md).
+
 # Time of Interest
 
 The `time` package provides the `TimeOfInterest` (TOI) object — the central time representation used throughout the astronomy-bundle library. It wraps a UTC moment in time and exposes conversions to Julian Day, Julian Centuries/Millennia, Greenwich and Local Sidereal Time, Delta T, and common calendar calculations.

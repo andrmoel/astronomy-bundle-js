@@ -1,3 +1,5 @@
+Part of the [Astronomy Bundle](../../README.md).
+
 # Location
 
 The `location` package provides the `Location` object — a geographic coordinate container used throughout the astronomy-bundle library wherever an observer's position on Earth is required. It holds latitude, longitude, and optional elevation, and exposes helpers for coordinate formatting and distance calculations.
