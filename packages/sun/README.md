@@ -58,13 +58,13 @@ const coordsDate  = sun.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *209.02487179°*\
-J2000 latitude: *0.00138647°*\
-J2000 radius vector: *0.99514386 AU*
+J2000 longitude: *209.02485979°*\
+J2000 latitude: *0.00145256°*\
+J2000 radius vector: *0.99514567 AU*
 
-Date longitude: *209.31555315°*\
-Date latitude: *-0.00014017°*\
-Date radius vector: *0.99514386 AU*
+Date longitude: *209.31554093°*\
+Date latitude: *-0.00011635°*\
+Date radius vector: *0.99514567 AU*
 
 ---
 
@@ -86,13 +86,13 @@ const coordsDate  = sun.getGeocentricEclipticRectangularDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 x: *-0.87016292 AU*\
-J2000 y: *-0.4828331 AU*\
-J2000 z: *0.00002408 AU*
+J2000 x: *-0.87016460 AU*\
+J2000 y: *-0.48283379 AU*\
+J2000 z: *0.00002523 AU*
 
-Date x: *-0.86770215 AU*\
-Date y: *-0.4872415 AU*\
-Date z: *-0.00000243 AU*
+Date x: *-0.86770383 AU*\
+Date y: *-0.48724220 AU*\
+Date z: *-0.00000202 AU*
 
 ---
 
@@ -114,13 +114,13 @@ const coordsDate  = sun.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 right ascension: *206.9810651°*\
-J2000 declination: *-11.1254097°*\
-J2000 radius vector: *0.99514386 AU*
+J2000 right ascension: *206.98107755°*\
+J2000 declination: *-11.12534365°*\
+J2000 radius vector: *0.99514567 AU*
 
-Date right ascension: *207.25762788°*\
-Date declination: *-11.22974218°*\
-Date radius vector: *0.99514386 AU*
+Date right ascension: *207.25762482°*\
+Date declination: *-11.22971558°*\
+Date radius vector: *0.99514567 AU*
 
 ---
 
@@ -142,13 +142,13 @@ const equatorialSpherical = sun.getApparentGeocentricEquatorialSphericalCoordina
 ```
 
 The result of the calculation should be:\
-Apparent ecliptic longitude: *209.30479579°*\
-Apparent ecliptic latitude: *-0.00014017°*\
-Apparent ecliptic radius vector: *0.99514386 AU*
+Apparent ecliptic longitude: *209.30478357°*\
+Apparent ecliptic latitude: *-0.00011635°*\
+Apparent ecliptic radius vector: *0.99514567 AU*
 
-Apparent right ascension: *207.2473691°*\
-Apparent declination: *-11.22593849°*\
-Apparent radius vector: *0.99514386 AU*
+Apparent right ascension: *207.24736604°*\
+Apparent declination: *-11.22591188°*\
+Apparent radius vector: *0.99514567 AU*
 
 ---
 
@@ -172,12 +172,12 @@ const apparentAlt = sun.getApparentTopocentricHorizontalCoordinates(location);
 ```
 
 The result of the calculation should be:\
-Topocentric right ascension: *207.248793°*\
-Topocentric declination: *-11.227945°*
+Topocentric right ascension: *207.248790°*\
+Topocentric declination: *-11.227918°*
 
-Azimuth: *113.50076°*\
-Geometric altitude: *3.433893°*\
-Apparent altitude (with refraction): *3.643379°*
+Azimuth: *113.500747°*\
+Geometric altitude: *3.433916°*\
+Apparent altitude (with refraction): *3.643402°*
 
 ---
 
@@ -200,8 +200,8 @@ const topocentricDistance = sun.getTopocentricDistanceToEarth(location);
 ```
 
 The result of the calculation should be:\
-Geocentric distance: *148,871,402.78 km*\
-Topocentric distance: *148,871,013.47 km*
+Geocentric distance: *148,871,672.60 km*\
+Topocentric distance: *148,871,283.29 km*
 
 ---
 
@@ -245,14 +245,14 @@ const topocentricDiameter = sun.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 32' 09.582"*\
-Topocentric angular diameter: *0° 32' 09.587"*
+Geocentric angular diameter: *0° 32' 09.579"*\
+Topocentric angular diameter: *0° 32' 09.584"*
 
 ---
 
 ### Apparent magnitude
 
-**Description:** Returns the apparent visual magnitude of the Sun. The value is constant at *-26.74*.
+**Description:** Returns the apparent visual magnitude of the Sun. The value is constant at *-26.74* for both the geocentric and topocentric variants.
 
 **Example**: Get the apparent magnitude
 
@@ -261,8 +261,10 @@ import {Sun} from '@astronomy-bundle/sun';
 
 const sun = Sun.create();
 
-const magnitude = sun.getApparentMagnitude();
+const magnitude            = sun.getApparentMagnitude();
+const topocentricMagnitude = sun.getTopocentricApparentMagnitude();
 ```
 
 The result of the calculation should be:\
-Apparent magnitude: *-26.74*
+Apparent magnitude: *-26.74*\
+Topocentric apparent magnitude: *-26.74*

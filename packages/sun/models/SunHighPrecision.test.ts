@@ -1,12 +1,16 @@
+import * as vsop87Date from '@app/resources/vsop87/vsop87EarthSphericalDate';
+import * as vsop87J2000 from '@app/resources/vsop87/vsop87EarthSphericalJ2000';
 import {decimal2degreeMinutesSeconds} from '@app/utils/angle';
+import Earth from '@package/earth/models/Earth';
 import Location from '@package/location/models/Location';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import {sec2string} from '@package/time/utils/dateTime';
-import Sun from './SunHighPrecision';
+import Sun from './Sun';
 
 const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const location = Location.create(52.519, 13.408);
-const sun = new Sun(toi);
+const earth = new Earth(toi, vsop87Date, vsop87J2000);
+const sun = new Sun(toi, earth);
 
 it('tests if name is correct', () => {
     expect(sun.name).toBe('sun');
@@ -157,36 +161,6 @@ it('tests getTopocentricDistanceToEarth', () => {
 
     expect(d).toBeCloseTo(148871013.470838, 6);
 });
-//
-// it('tests getTransit',  () => {
-//     const toi =  sun.getTransit(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
-// });
-//
-// it('tests getRise',  () => {
-//     const toi =  sun.getRise(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 44});
-// });
-//
-// it('tests getRiseUpperLimb',  () => {
-//     const toi =  sun.getRiseUpperLimb(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
-// });
-//
-// it('tests getSet',  () => {
-//     const toi =  sun.getSet(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 59});
-// });
-//
-// it('tests getSetUpperLimb',  () => {
-//     const toi =  sun.getSetUpperLimb(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
-// });
 
 it('tests getLightTime', () => {
     const lt = sun.getLightTime();

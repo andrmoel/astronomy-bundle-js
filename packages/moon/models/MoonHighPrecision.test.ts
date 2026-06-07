@@ -1,11 +1,16 @@
+import * as vsop87Date from '@app/resources/vsop87/vsop87EarthSphericalDate';
+import * as vsop87J2000 from '@app/resources/vsop87/vsop87EarthSphericalJ2000';
 import type {Location} from '@app/types/LocationTypes';
 import {decimal2degreeMinutesSeconds} from '@app/utils/angle';
+import Earth from '@package/earth/models/Earth';
+import Sun from '@package/sun/models/Sun';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import {sec2string} from '@package/time/utils/dateTime';
-import Moon from './MoonHighPrecision';
+import Moon from './Moon';
 
 const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
-const moon = Moon.create(toi);
+const earth = new Earth(toi, vsop87Date, vsop87J2000);
+const moon = new Moon(toi, new Sun(toi, earth), earth);
 const location: Location = {lat: 52.519, lon: -122.4108, elevation: 0};
 
 it('tests if name is correct', () => {

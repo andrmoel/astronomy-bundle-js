@@ -18,13 +18,13 @@ By default the `Earth` class uses a reduced VSOP87 series that is accurate enoug
 import {Earth} from '@astronomy-bundle/earth/high-precision';
 ```
 
-> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x  larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
+> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
 
 ## API Reference
 
 ### Create the Earth object
 
-**Description:** The `Earth` object represents Earth at a specific point in time, given as a `TimeOfInterest`. If no TOI is provided it defaults to the current time. Two precision variants are available: `Earth` for standard use cases (VSOP87 reduced series) and `EarthHighPrecision` for maximum accuracy (full VSOP87 series).
+**Description:** The `Earth` object represents Earth at a specific point in time, given as a `TimeOfInterest`. If no TOI is provided it defaults to the current time. Two precision variants are available: `Earth` from the standard entry point for standard use cases (VSOP87 reduced series), and `Earth` from the `high-precision` entry point for maximum accuracy (full VSOP87 series).
 
 **Example**: Create an Earth object for 10 December 2017 at 00:00 UTC
 

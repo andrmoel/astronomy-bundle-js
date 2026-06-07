@@ -1,8 +1,10 @@
+import * as vsop87Date from '@app/resources/vsop87/vsop87EarthSphericalDate';
+import * as vsop87J2000 from '@app/resources/vsop87/vsop87EarthSphericalJ2000';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import Earth from './EarthHighPrecision';
+import Earth from './Earth';
 
 const toi = TimeOfInterest.fromTime(2017, 12, 10, 0, 0, 0);
-const earth = new Earth(toi);
+const earth = new Earth(toi, vsop87Date, vsop87J2000);
 
 it('tests if name is correct', () => {
     expect(earth.name).toBe('earth');
@@ -82,28 +84,28 @@ it('test getApparentGeocentricEclipticSphericalCoordinates', () => {
 
 it('tests getNutationInLongitude', () => {
     const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
-    const earth = new Earth(toi);
+    const earth = new Earth(toi, vsop87Date, vsop87J2000);
 
     expect(earth.getNutationInLongitude()).toBeCloseTo(-0.004946, 6);
 });
 
 it('tests getNutationInObliquity', () => {
     const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
-    const earth = new Earth(toi);
+    const earth = new Earth(toi, vsop87Date, vsop87J2000);
 
     expect(earth.getNutationInObliquity()).toBeCloseTo(0.000478, 6);
 });
 
 it('tests getMeanObliquityOfEcliptic', () => {
     const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
-    const earth = new Earth(toi);
+    const earth = new Earth(toi, vsop87Date, vsop87J2000);
 
     expect(earth.getMeanObliquityOfEcliptic()).toBeCloseTo(23.436593, 6);
 });
 
 it('tests getTrueObliquityOfEcliptic', () => {
     const toi = TimeOfInterest.fromTime(2020, 10, 2, 22, 19, 44);
-    const earth = new Earth(toi);
+    const earth = new Earth(toi, vsop87Date, vsop87J2000);
 
     expect(earth.getTrueObliquityOfEcliptic()).toBeCloseTo(23.43707, 6);
 });

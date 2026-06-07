@@ -257,8 +257,8 @@ const topocentricElongation = moon.getTopocentricElongation(location);
 ```
 
 The result of the calculation should be:\
-Elongation: *110.792882°*\
-Topocentric elongation: *111.462793°*
+Elongation: *110.792854°*\
+Topocentric elongation: *111.462765°*
 
 ---
 
@@ -281,8 +281,8 @@ const topocentricPhaseAngle = moon.getTopocentricPhaseAngle(location);
 ```
 
 The result of the calculation should be:\
-Phase angle: *69.075651°*\
-Topocentric phase angle: *68.407484°*
+Phase angle: *69.075679°*\
+Topocentric phase angle: *68.407512°*
 
 ---
 
@@ -353,7 +353,8 @@ const topocentricWaxing = moon.isTopocentricWaxing(location);
 ```
 
 The result of the calculation should be:\
-Waxing: *true*
+Waxing: *true*\
+Topocentric waxing: *true*
 
 ---
 
@@ -383,7 +384,7 @@ Topocentric apparent magnitude: *-11.08*
 
 ### Upcoming lunar phases
 
-**Description:** These methods return the `TimeOfInterest` of the next occurrence of each lunar phase after the Moon's current date. The four phases are new moon, first quarter, full moon, and last quarter.
+**Description:** These methods return the `TimeOfInterest` of the principal lunar phases in the lunation selected from the Moon's current date. Depending on the phase, the result can be before or after the Moon's current date. The four phases are new moon, first quarter, full moon, and last quarter.
 
 **Example**: Get upcoming lunar phases for 12 April 1992 at 00:00 UTC
 
