@@ -1,5 +1,13 @@
 export const INCLINATION_OF_MEAN_LUNAR_EQUATOR = 1.54242;
 
+// Source: https://nssdc.gsfc.nasa.gov/planetary/factsheet/
+export const MOON_DIAMETER_KM = 3474.8;
+
+export const MOON_PHASE_NEW_MOON = 0;
+export const MOON_PHASE_FIRST_QUARTER = 0.25;
+export const MOON_PHASE_FULL_MOON = 0.5;
+export const MOON_PHASE_LAST_QUARTER = 0.75;
+
 export const MOON_ARGUMENTS_LR = [
     [0, 0, 1, 0, 6288774, -20905355],
     [2, 0, -1, 0, 1274027, -3699111],

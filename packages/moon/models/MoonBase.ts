@@ -1,0 +1,209 @@
+import {
+    MOON_DIAMETER_KM,
+    MOON_PHASE_FIRST_QUARTER,
+    MOON_PHASE_FULL_MOON,
+    MOON_PHASE_LAST_QUARTER,
+    MOON_PHASE_NEW_MOON,
+} from '@app/constants/moon';
+import type {EclipticSphericalCoordinates, RectangularCoordinates} from '@app/types/CoordinateTypes';
+import type {Location} from '@app/types/LocationTypes';
+import {correctEffectOfNutation} from '@app/utils/apparentPositionCorrections';
+import {
+    rectangular2spherical,
+    rectangularGeocentric2rectangularHeliocentric,
+    spherical2rectangular,
+} from '@app/utils/coordinateTransformation';
+import * as moon from '@app/utils/moon';
+import {
+    getAngularDiameter,
+    getElongation,
+    getIlluminatedFraction,
+    getPhaseAngle,
+    getPositionAngleOfBrightLimb,
+    isWaxing,
+} from '@app/utils/observation';
+import AstronomicalObject from '@package/core/models/models/AstronomicalObject';
+import type EarthBase from '@package/earth/models/EarthBase';
+import {getApparentMagnitudeMoon} from '@package/moon/utils/magnitude';
+import {getTimeOfInterestOfUpcomingPhase} from '@package/moon/utils/phases';
+import type SunBase from '@package/sun/models/SunBase';
+import type TimeOfInterest from '@package/time/models/TimeOfInterest';
+
+export default abstract class MoonBase extends AstronomicalObject {
+    protected constructor(
+        toi: TimeOfInterest | undefined,
+        private readonly sun: SunBase,
+        private readonly earth: EarthBase,
+    ) {
+        super(toi, 'moon');
+    }
+
+    public getHeliocentricEclipticRectangularJ2000Coordinates(): RectangularCoordinates {
+        return this.getHeliocentricEclipticRectangularDateCoordinates();
+    }
+
+    public getHeliocentricEclipticRectangularDateCoordinates(): RectangularCoordinates {
+        const geocentricCoords = this.getGeocentricEclipticRectangularDateCoordinates();
+        const heliocentricCoordsEarth = this.earth.getHeliocentricEclipticRectangularDateCoordinates();
+
+        return rectangularGeocentric2rectangularHeliocentric(geocentricCoords, heliocentricCoordsEarth);
+    }
+
+    public getHeliocentricEclipticSphericalJ2000Coordinates(): EclipticSphericalCoordinates {
+        return this.getHeliocentricEclipticSphericalDateCoordinates();
+    }
+
+    public getHeliocentricEclipticSphericalDateCoordinates(): EclipticSphericalCoordinates {
+        const coords = this.getHeliocentricEclipticRectangularDateCoordinates();
+
+        return rectangular2spherical(coords);
+    }
+
+    public getGeocentricEclipticRectangularJ2000Coordinates(): RectangularCoordinates {
+        return this.getGeocentricEclipticRectangularDateCoordinates();
+    }
+
+    public getGeocentricEclipticRectangularDateCoordinates(): RectangularCoordinates {
+        const coords = this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return spherical2rectangular(coords);
+    }
+
+    public getGeocentricEclipticSphericalJ2000Coordinates(): EclipticSphericalCoordinates {
+        return this.getGeocentricEclipticSphericalDateCoordinates();
+    }
+
+    public getGeocentricEclipticSphericalDateCoordinates(): EclipticSphericalCoordinates {
+        const lon = moon.getLongitude(this.T);
+        const lat = moon.getLatitude(this.T);
+        const radiusVector = moon.getRadiusVector(this.T);
+
+        return {lon, lat, radiusVector};
+    }
+
+    public getApparentGeocentricEclipticSphericalCoordinates(): EclipticSphericalCoordinates {
+        const coords = this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return correctEffectOfNutation(coords, this.T);
+    }
+
+    public getAngularDiameter(): number {
+        const distance = this.getApparentDistanceToEarth();
+
+        return getAngularDiameter(distance, MOON_DIAMETER_KM);
+    }
+
+    public getTopocentricAngularDiameter(location: Location): number {
+        const distance = this.getTopocentricDistanceToEarth(location);
+
+        return getAngularDiameter(distance, MOON_DIAMETER_KM);
+    }
+
+    public getElongation(): number {
+        const coordsMoon = this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getElongation(coordsMoon, coordsSun);
+    }
+
+    public getTopocentricElongation(location: Location): number {
+        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getElongation(coordsMoon, coordsSun);
+    }
+
+    public getPhaseAngle(): number {
+        const coordsMoon = this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getPhaseAngle(coordsMoon, coordsSun);
+    }
+
+    public getTopocentricPhaseAngle(location: Location): number {
+        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getPhaseAngle(coordsMoon, coordsSun);
+    }
+
+    public getIlluminatedFraction(): number {
+        const i = this.getPhaseAngle();
+
+        return getIlluminatedFraction(i);
+    }
+
+    public getTopocentricIlluminatedFraction(location: Location): number {
+        const i = this.getTopocentricPhaseAngle(location);
+
+        return getIlluminatedFraction(i);
+    }
+
+    public getPositionAngleOfBrightLimb(): number {
+        const coordsMoon = this.getApparentGeocentricEquatorialSphericalCoordinates();
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
+    }
+
+    public getTopocentricPositionAngleOfBrightLimb(location: Location): number {
+        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
+    }
+
+    public isWaxing(): boolean {
+        const chi = this.getPositionAngleOfBrightLimb();
+
+        return isWaxing(chi);
+    }
+
+    public isTopocentricWaxing(location: Location): boolean {
+        const chi = this.getTopocentricPositionAngleOfBrightLimb(location);
+
+        return isWaxing(chi);
+    }
+
+    public getApparentMagnitude(): number {
+        const coordsHelio = this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = this.getGeocentricEclipticSphericalDateCoordinates();
+        const i = this.getPhaseAngle();
+        const waxing = this.isWaxing();
+
+        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i, waxing);
+    }
+
+    public getTopocentricApparentMagnitude(location: Location): number {
+        const coordsHelio = this.getHeliocentricEclipticSphericalDateCoordinates();
+        const coordsGeo = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const i = this.getTopocentricPhaseAngle(location);
+        const waxing = this.isTopocentricWaxing(location);
+
+        return getApparentMagnitudeMoon(coordsHelio.radiusVector, coordsGeo.radiusVector, i, waxing);
+    }
+
+    public getUpcomingNewMoon(): TimeOfInterest {
+        const decimalYear = this.toi.getDecimalYear();
+
+        return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_NEW_MOON);
+    }
+
+    public getUpcomingFirstQuarter(): TimeOfInterest {
+        const decimalYear = this.toi.getDecimalYear();
+
+        return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_FIRST_QUARTER);
+    }
+
+    public getUpcomingFullMoon(): TimeOfInterest {
+        const decimalYear = this.toi.getDecimalYear();
+
+        return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_FULL_MOON);
+    }
+
+    public getUpcomingLastQuarter(): TimeOfInterest {
+        const decimalYear = this.toi.getDecimalYear();
+
+        return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_LAST_QUARTER);
+    }
+}
