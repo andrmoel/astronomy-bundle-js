@@ -18,7 +18,7 @@ By default the `Moon` class uses the standard `Sun` and `Earth` models (VSOP87 r
 import {Moon} from '@astronomy-bundle/moon/high-precision';
 ```
 
-> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
+> **⚠️ Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
 
 ## API Reference
 

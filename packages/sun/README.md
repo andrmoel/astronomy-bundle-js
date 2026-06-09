@@ -18,7 +18,7 @@ By default the `Sun` class uses a reduced VSOP87 series (via the standard `Earth
 import {Sun} from '@astronomy-bundle/sun/high-precision';
 ```
 
-> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
+> **⚠️ Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
 
 ## API Reference
 

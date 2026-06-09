@@ -18,7 +18,7 @@ By default the `Earth` class uses a reduced VSOP87 series that is accurate enoug
 import {Earth} from '@astronomy-bundle/earth/high-precision';
 ```
 
-> **Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
+> **⚠️ Warning:** The full VSOP87 series used by the high-precision variant contains significantly more terms than the reduced version. This results in a **~10x larger bundle size** and slower parse time. Only use this variant when the extra accuracy is required.
 
 ## API Reference
 
