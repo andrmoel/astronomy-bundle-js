@@ -1,7 +1,10 @@
+import type {Location} from '@app/types/LocationTypes';
 import {polynomial, polynomialDerivative} from '@app/utils/polynoms';
-import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import {LocalSolarEclipseType, SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getContactTaus} from '@package/solarEclipse/utils/contacts';
+import {getLocalSnapshot} from '@package/solarEclipse/utils/localCircumstances';
 
 const ECLIPSE_SEARCH_RANGE_HOURS = 4;
 const NEWTON_CONVERGENCE_TOLERANCE = 1e-8;
@@ -21,6 +24,22 @@ export function getEclipseType(elements: BesselianElements): SolarEclipseType {
 
     const zetaGE = Math.sqrt(Math.max(0, 1 - e.x * e.x - e.y * e.y));
     return e.l2 - zetaGE * elements.tanF2 < 0 ? SolarEclipseType.Total : SolarEclipseType.Annular;
+}
+
+export function getLocalEclipseType(elements: BesselianElements, location: Location): LocalSolarEclipseType {
+    const contacts = getContactTaus(elements, location);
+
+    if (!contacts) {
+        return LocalSolarEclipseType.None;
+    }
+
+    if (contacts.c2 === null) {
+        return LocalSolarEclipseType.Partial;
+    }
+
+    const snapshot = getLocalSnapshot(elements, location, contacts.max);
+
+    return snapshot.l2 < 0 ? LocalSolarEclipseType.Total : LocalSolarEclipseType.Annular;
 }
 
 function findGreatestEclipseTau(elements: BesselianElements): number {
