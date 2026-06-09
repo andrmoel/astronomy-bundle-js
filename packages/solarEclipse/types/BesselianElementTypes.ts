@@ -1,3 +1,5 @@
+export type Catalogue = Record<number, Array<number>>;
+
 export interface BesselianElements {
     t0Jde: number;
     t0Hours: number;

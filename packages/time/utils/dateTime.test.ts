@@ -1,6 +1,7 @@
 import {round} from '@app/utils/math';
 import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 import {
+    dateStringToJulianDay,
     dayOfYear2time,
     getDayOfWeek,
     getDayOfYear,
@@ -59,6 +60,12 @@ describe('test for time2julianDay', () => {
             time2julianDay({year: 1582, month: 10, day: 10, hour: 12, min: 0, sec: 0});
         }).toThrow('Date between 1582-10-04 and 1582-10-15 is not defined.');
     });
+});
+
+it('tests dateStringToJulianDay', () => {
+    expect(dateStringToJulianDay('2000-01-01')).toBe(2451544.5);
+    expect(dateStringToJulianDay('2000-01-01T12:00:30Z')).toBe(2451545.000347222);
+    expect(dateStringToJulianDay('2000-01-01T12:00Z')).toBe(2451545);
 });
 
 it('tests for julianDay2time', () => {

@@ -1,6 +1,16 @@
 import {DEG} from '@app/constants/math';
 import {polynomial} from '@app/utils/polynoms';
-import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
+import type {BesselianElements, BesselianElementsAtTime, Catalogue} from '../types/BesselianElementTypes';
+
+export function getBesselianElementsFromCatalogue(catalogue: Catalogue, julianDay: number): BesselianElements {
+    const raw = catalogue[julianDay];
+
+    if (!raw) {
+        throw new Error(`No Besselian elements found for eclipse on JD ${julianDay}`);
+    }
+
+    return parseBesselianElements(raw);
+}
 
 export function parseBesselianElements(raw: Array<number>): BesselianElements {
     if (raw.length !== 28) {

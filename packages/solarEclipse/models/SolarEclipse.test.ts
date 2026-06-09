@@ -1,5 +1,4 @@
 import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import SolarEclipse from './SolarEclipse';
 
@@ -21,52 +20,6 @@ const elements: BesselianElements = {
 };
 
 const eclipse = SolarEclipse.createFromBesselianElements(elements);
-
-describe('createFromDate', () => {
-    it('returns a SolarEclipse instance for a valid eclipse date', () => {
-        const eclipse = SolarEclipse.createFromDate('2017-08-21');
-
-        expect(eclipse).toBeInstanceOf(SolarEclipse);
-    });
-
-    it('returns a SolarEclipse instance for another valid eclipse date', () => {
-        const eclipse = SolarEclipse.createFromDate('2021-12-04');
-
-        expect(eclipse).toBeInstanceOf(SolarEclipse);
-    });
-
-    it('throws for a date with no eclipse data', () => {
-        expect(() => SolarEclipse.createFromDate('2017-08-22')).toThrow(
-            'No solar eclipse data found for date 2017-08-22',
-        );
-    });
-
-    it('throws for an arbitrary non-eclipse date', () => {
-        expect(() => SolarEclipse.createFromDate('2000-01-01')).toThrow();
-    });
-});
-
-describe('createFromToi', () => {
-    it('returns a SolarEclipse instance for a TOI on an eclipse date', () => {
-        const toi = TimeOfInterest.fromTime(2017, 8, 21, 0, 0, 0);
-        const eclipse = SolarEclipse.createFromToi(toi);
-
-        expect(eclipse).toBeInstanceOf(SolarEclipse);
-    });
-
-    it('returns a SolarEclipse instance for a TOI with time on an eclipse date', () => {
-        const toi = TimeOfInterest.fromTime(2017, 8, 21, 18, 26, 40);
-        const eclipse = SolarEclipse.createFromToi(toi);
-
-        expect(eclipse).toBeInstanceOf(SolarEclipse);
-    });
-
-    it('throws for a TOI on a non-eclipse date', () => {
-        const toi = TimeOfInterest.fromTime(2017, 8, 22, 0, 0, 0);
-
-        expect(() => SolarEclipse.createFromToi(toi)).toThrow();
-    });
-});
 
 it('tests getType', () => {
     const result = eclipse.getType();

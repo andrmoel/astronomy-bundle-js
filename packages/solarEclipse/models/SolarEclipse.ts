@@ -1,7 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import type Location from '@package/location/models/Location';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
-import {parseBesselianElements} from '@package/solarEclipse/utils/besselianElements';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
 import {
@@ -17,7 +16,6 @@ import {
 } from '@package/solarEclipse/utils/localCircumstances';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {SolarEclipseType} from '../enums/SolarEclipseType';
-import loadBesselianElements from '../resources/besselianElements/loadBesselianElements';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import LocalSolarEclipse from './LocalSolarEclipse';
 
@@ -34,27 +32,6 @@ export default class SolarEclipse {
             {...this.locationOfGreatestEclipse, elevation: 0},
             this.tauOfGreatestEclipse,
         );
-    }
-
-    public static createFromDate(date: string): SolarEclipse {
-        const [yearStr, monthStr, dayStr] = date.split('-');
-        const toi = TimeOfInterest.fromTime(Number(yearStr), Number(monthStr), Number(dayStr));
-
-        const raw = loadBesselianElements(toi.getJulianDay0());
-        if (!raw) {
-            throw new Error(`No solar eclipse data found for date ${date}`);
-        }
-
-        return new SolarEclipse(parseBesselianElements(raw));
-    }
-
-    public static createFromToi(toi: TimeOfInterest): SolarEclipse {
-        const raw = loadBesselianElements(toi.getJulianDay0());
-        if (!raw) {
-            throw new Error(`No solar eclipse data found for date ${toi.getDecimalYear()}`);
-        }
-
-        return new SolarEclipse(parseBesselianElements(raw));
     }
 
     public static createFromBesselianElements(elements: BesselianElements): SolarEclipse {

@@ -1,7 +1,8 @@
 import {DEG} from '@app/constants/math';
-import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import type {BesselianElements, Catalogue} from '@package/solarEclipse/types/BesselianElementTypes';
 import {
     getBesselianElementsAtTime,
+    getBesselianElementsFromCatalogue,
     julianDay2tau,
     parseBesselianElements,
     tau2julianDay,
@@ -30,6 +31,53 @@ const besselianElements: BesselianElements = {
     tanF1: 0.0047434,
     tanF2: 0.0047198,
 };
+
+describe('getBesselianElementsFromCatalogue', () => {
+    const catalogue: Catalogue = {
+        2457987.5: rawElements,
+    };
+
+    it('returns parsed Besselian elements for a known julian day', () => {
+        const result = getBesselianElementsFromCatalogue(catalogue, 2457987.5);
+
+        expect(result.t0Jde).toBeCloseTo(2457987.27083, 5);
+        expect(result.t0Hours).toBe(18.5);
+        expect(result.x).toEqual([0.025209, 0.56830281, 0.0000391, -0.00000965]);
+        expect(result.y).toEqual([-0.98365301, -0.13151421, 0.0002213, 0.0000024]);
+    });
+
+    it('throws for an unknown julian day', () => {
+        expect(() => getBesselianElementsFromCatalogue(catalogue, 9999999.5)).toThrow(
+            'No Besselian elements found for eclipse on JD 9999999.5',
+        );
+    });
+});
+
+describe('parseBesselianElements', () => {
+    it('parses all fields from a 28-element array', () => {
+        const result = parseBesselianElements(rawElements);
+
+        expect(result.t0Jde).toBe(2457987.27083);
+        expect(result.t0Hours).toBe(18.5);
+        expect(result.tMin).toBe(-2.0);
+        expect(result.tMax).toBe(2.0);
+        expect(result.deltaT).toBe(69.1);
+        expect(result.x).toEqual([0.025209, 0.56830281, 0.0000391, -0.00000965]);
+        expect(result.y).toEqual([-0.98365301, -0.13151421, 0.0002213, 0.0000024]);
+        expect(result.d).toEqual([-22.27471924, -0.005178, 0.000006]);
+        expect(result.mu).toEqual([302.45217896, 14.99728012, 0.0]);
+        expect(result.l1).toEqual([0.53780502, -0.000016, -0.0000131]);
+        expect(result.l2).toEqual([-0.008292, -0.000016, -0.0000131]);
+        expect(result.tanF1).toBe(0.0046);
+        expect(result.tanF2).toBe(0.0046);
+    });
+
+    it('throws when the array does not have exactly 28 elements', () => {
+        expect(() => parseBesselianElements(rawElements.slice(0, 27))).toThrow(
+            'Expected 28 Besselian element values, got 27',
+        );
+    });
+});
 
 describe('getBesselianElementsAtTime', () => {
     const elements = parseBesselianElements(rawElements);

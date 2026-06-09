@@ -28,7 +28,7 @@ const shared: Partial<Options> = {
     esbuildPlugins: [aliasPlugin],
 };
 
-const EXTRA_ENTRIES = ['high-precision'];
+const EXTRA_ENTRIES = ['high-precision', 'catalogue', 'catalogue-full'];
 
 export default defineConfig(
     packages.map((pkg) => {

@@ -55,6 +55,19 @@ export function time2julianDay(time: Time): number {
     return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + H + B - 1524.5;
 }
 
+export function dateStringToJulianDay(dateStr: string): number {
+    const date = new Date(dateStr);
+
+    return time2julianDay({
+        year: date.getUTCFullYear(),
+        month: date.getUTCMonth() + 1,
+        day: date.getUTCDate(),
+        hour: date.getUTCHours(),
+        min: date.getUTCMinutes(),
+        sec: date.getUTCSeconds(),
+    });
+}
+
 export function julianDay2time(jd: number): Time {
     jd = jd + 0.5;
 

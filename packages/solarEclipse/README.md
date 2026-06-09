@@ -12,9 +12,42 @@ With pnpm: `pnpm add @astronomy-bundle/solar-eclipse @astronomy-bundle/core`
 
 ## API Reference
 
+- [Eclipse Catalogue](#eclipse-catalogue)
 - [SolarEclipse](#solareclipse)
 - [LocalSolarEclipse](#localsolareclipse-eclipse--location)
 - [LocalEclipseCircumstances](#localeclipsecircumstances-eclipse--location--time)
+
+### Eclipse Catalogue
+
+Two pre-computed eclipse catalogues are provided as separate subpath exports. Use them to look up Besselian elements by date and pass the result to [`SolarEclipse.createFromBesselianElements`](#createfrombesselianelements-static).
+
+#### Standard catalogue (1900–2100)
+
+Import from `@astronomy-bundle/solar-eclipse/catalogue`. Throws if the date is outside 1900–2100 or if no eclipse exists on that date.
+
+```javascript
+import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {getBesselianElementsForEclipse} from '@astronomy-bundle/solar-eclipse/catalogue';
+
+const elements = getBesselianElementsForEclipse('2026-08-12');
+const eclipse = SolarEclipse.createFromBesselianElements(elements);
+```
+
+#### Full catalogue (−1999–3000)
+
+> **⚠️ Warning:** The full catalogue is over 3 MB uncompressed. Avoid importing it in browser bundles or size-sensitive environments unless necessary.
+
+For eclipses outside the standard range, import from `@astronomy-bundle/solar-eclipse/catalogue-full`. The function signature is identical.
+
+```javascript
+import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {getBesselianElementsForEclipse} from '@astronomy-bundle/solar-eclipse/catalogue-full';
+
+const elements = getBesselianElementsForEclipse('-0500-03-14');
+const eclipse = SolarEclipse.createFromBesselianElements(elements);
+```
+
+---
 
 ### SolarEclipse
 
