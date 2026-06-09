@@ -39,3 +39,9 @@ export function getBesselianElementsAtTime(elements: BesselianElements, tau: num
         cosD: Math.cos(d),
     };
 }
+
+export function tau2julianDay(elements: BesselianElements, tau: number): number {
+    const polyRefJd = Math.floor(elements.t0Jde - elements.t0Hours / 24) + 0.5 + elements.t0Hours / 24;
+
+    return polyRefJd + (tau - elements.deltaT / 3600) / 24;
+}
