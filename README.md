@@ -10,6 +10,7 @@ A TypeScript library for astronomical calculations including the position of the
 - [`@astronomy-bundle/earth`](https://www.npmjs.com/package/@astronomy-bundle/earth)
 - [`@astronomy-bundle/moon`](https://www.npmjs.com/package/@astronomy-bundle/moon)
 - [`@astronomy-bundle/sun`](https://www.npmjs.com/package/@astronomy-bundle/sun)
+- [`@astronomy-bundle/planets`](https://www.npmjs.com/package/@astronomy-bundle/planets)
 - [`@astronomy-bundle/solar-eclipse`](https://www.npmjs.com/package/@astronomy-bundle/solar-eclipse)
 
 ## API Reference
@@ -21,4 +22,4 @@ A TypeScript library for astronomical calculations including the position of the
 | **Earth** | The `Earth` object — heliocentric VSOP87 coordinates, nutation, and obliquity of the ecliptic. | [README](packages/earth/README.md) |
 | **Moon** | The `Moon` object — geocentric and topocentric coordinates, phase angle, illuminated fraction, upcoming lunar phases, and apparent magnitude. | [README](packages/moon/README.md) |
 | **Sun** | The `Sun` object — geocentric and topocentric coordinates, angular diameter, light time, and apparent magnitude. | [README](packages/sun/README.md) |
-| **Solar Eclipse** | Solar eclipse calculations using Besselian elements. Provides global and local eclipse circumstances for any observer position. | — |
+| **Solar Eclipse** | Solar eclipse calculations using Besselian elements. Provides global and local eclipse circumstances for any observer position. | [README](packages/solarEclipse/README.md) |
