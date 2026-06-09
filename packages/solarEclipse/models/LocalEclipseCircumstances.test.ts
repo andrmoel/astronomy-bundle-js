@@ -4,6 +4,7 @@ import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseTyp
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 
+// TSE 2027-08-02
 const elements: BesselianElements = {
     t0Jde: 2461619.92211,
     t0Hours: 10,
@@ -37,6 +38,7 @@ describe('getType', () => {
 
         expect(result).toBe(LocalSolarEclipseType.None);
     });
+
     it('returns the eclipse type if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getEclipseType();
 

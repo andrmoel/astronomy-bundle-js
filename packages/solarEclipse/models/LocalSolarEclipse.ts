@@ -1,18 +1,30 @@
 import type Location from '@package/location/models/Location';
+import type {LocalEclipseCircumstances as LocalEclipseCircumstancesType} from '@package/solarEclipse/types/EclipseCircumstances';
+import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
+import {
+    getLocalEclipseCircumstances,
+    getLocalEclipseType,
+    getMagnitude,
+    getMoonSunRatio,
+    getObscuration,
+} from '@package/solarEclipse/utils/localCircumstances';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
+import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
 import type {BesselianElements} from '../types/BesselianElementTypes';
-import type {EclipseContacts, EclipseContactsTau} from '../types/EclipseContactTypes';
-import {getContactTaus} from '../utils/contacts';
-import {getLocalSnapshot} from '../utils/localCircumstances';
+import type {EclipseContacts, EclipseContactsToi} from '../types/EclipseContactTypes';
+import {contactTausToContactJulianDays, getContactTaus} from '../utils/contacts';
 import LocalEclipseCircumstances from './LocalEclipseCircumstances';
 
 export default class LocalSolarEclipse {
+    private readonly greatestEclipseCircumstances: LocalEclipseCircumstancesType;
+
     private constructor(
         private readonly elements: BesselianElements,
         private readonly location: Location,
-        private readonly contactTaus: EclipseContactsTau,
-    ) {}
+        private readonly contactTaus: EclipseContacts,
+    ) {
+        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(elements, location, contactTaus.max);
+    }
 
     public static create(elements: BesselianElements, location: Location): LocalSolarEclipse {
         const contactTaus = getContactTaus(elements, location);
@@ -27,42 +39,46 @@ export default class LocalSolarEclipse {
     }
 
     public getType(): LocalSolarEclipseType {
-        if (this.contactTaus.c2 === null) {
-            return LocalSolarEclipseType.Partial;
-        }
-        const snap = getLocalSnapshot(this.elements, this.location, this.contactTaus.max);
-        return snap.l2 < 0 ? LocalSolarEclipseType.Total : LocalSolarEclipseType.Annular;
+        return getLocalEclipseType(this.greatestEclipseCircumstances);
     }
 
-    public getContactTaus(): EclipseContactsTau | null {
+    public getContactTaus(): EclipseContacts | null {
         return this.contactTaus;
     }
 
-    public getContactTimes(): EclipseContacts {
-        const tauToDate = (tau: number): Date => {
-            const jde = this.elements.t0Jde + tau / 24;
-            return TimeOfInterest.fromJulianDay(jde).getDate();
-        };
+    public getContactTimes(): EclipseContactsToi | null {
+        const contactsJd = contactTausToContactJulianDays(this.elements, this.contactTaus);
 
-        return {
-            c1: tauToDate(this.contactTaus.c1),
-            c2: this.contactTaus.c2 !== null ? tauToDate(this.contactTaus.c2) : null,
-            max: tauToDate(this.contactTaus.max),
-            c3: this.contactTaus.c3 !== null ? tauToDate(this.contactTaus.c3) : null,
-            c4: tauToDate(this.contactTaus.c4),
-        };
-    }
-
-    // Duration of the eclipse (C1 to C4) in seconds.
-    public getDuration(): number {
-        return (this.contactTaus.c4 - this.contactTaus.c1) * 3600;
-    }
-
-    // Duration of the central phase (C2 to C3) in seconds, or null for partial eclipses.
-    public getCentralDuration(): number | null {
-        if (this.contactTaus.c2 === null || this.contactTaus.c3 === null) {
+        if (!contactsJd) {
             return null;
         }
-        return (this.contactTaus.c3 - this.contactTaus.c2) * 3600;
+
+        return {
+            c1: TimeOfInterest.fromJulianDay(contactsJd.c1),
+            c2: contactsJd.c2 ? TimeOfInterest.fromJulianDay(contactsJd.c2) : null,
+            max: TimeOfInterest.fromJulianDay(contactsJd.max),
+            c3: contactsJd.c3 ? TimeOfInterest.fromJulianDay(contactsJd.c3) : null,
+            c4: TimeOfInterest.fromJulianDay(contactsJd.c4),
+        };
+    }
+
+    public getMaxMagnitude(): number {
+        return getMagnitude(this.greatestEclipseCircumstances);
+    }
+
+    public getMaxMoonSunRatio(): number {
+        return getMoonSunRatio(this.greatestEclipseCircumstances);
+    }
+
+    public getMaxObscuration(): number {
+        return getObscuration(this.greatestEclipseCircumstances);
+    }
+
+    public getDuration(): number {
+        return getDuration(this.elements, this.location);
+    }
+
+    public getCentralDuration(): number {
+        return getCentralDuration(this.elements, this.location);
     }
 }

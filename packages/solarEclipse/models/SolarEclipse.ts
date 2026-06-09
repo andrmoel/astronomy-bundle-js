@@ -1,13 +1,40 @@
-import Location from '@package/location/models/Location';
+import type {LatLon} from '@app/types/LocationTypes';
+import type Location from '@package/location/models/Location';
+import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {parseBesselianElements} from '@package/solarEclipse/utils/besselianElements';
+import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
+import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
+import {
+    getJulianDayOfGreatestEclipse,
+    getLocationOfGreatestEclipse,
+    getTauOfGreatestEclipse,
+} from '@package/solarEclipse/utils/greatestEclipse';
+import {
+    getLocalEclipseCircumstances,
+    getMagnitude,
+    getMoonSunRatio,
+    getObscuration,
+} from '@package/solarEclipse/utils/localCircumstances';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {SolarEclipseType} from '../enums/SolarEclipseType';
+import type {SolarEclipseType} from '../enums/SolarEclipseType';
 import loadBesselianElements from '../resources/besselianElements/loadBesselianElements';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import LocalSolarEclipse from './LocalSolarEclipse';
 
 export default class SolarEclipse {
-    private constructor(private readonly elements: BesselianElements) {}
+    private readonly locationOfGreatestEclipse: LatLon;
+    private readonly tauOfGreatestEclipse: number;
+    private readonly greatestEclipseCircumstances: LocalEclipseCircumstances;
+
+    private constructor(private readonly elements: BesselianElements) {
+        this.locationOfGreatestEclipse = getLocationOfGreatestEclipse(elements);
+        this.tauOfGreatestEclipse = getTauOfGreatestEclipse(elements);
+        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(
+            this.elements,
+            {...this.locationOfGreatestEclipse, elevation: 0},
+            this.tauOfGreatestEclipse,
+        );
+    }
 
     public static createFromDate(date: string): SolarEclipse {
         const [yearStr, monthStr, dayStr] = date.split('-');
@@ -39,32 +66,47 @@ export default class SolarEclipse {
     }
 
     public getType(): SolarEclipseType {
-        // TODO
-        return SolarEclipseType.Hybrid;
+        return getEclipseType(this.elements);
+    }
+
+    public getLocationOfGreatestEclipse(): LatLon {
+        return this.locationOfGreatestEclipse;
+    }
+
+    public getTimeOfGreatestEclipse(): TimeOfInterest {
+        const jd = getJulianDayOfGreatestEclipse(this.elements);
+
+        return TimeOfInterest.fromJulianDay(jd);
+    }
+
+    public getMaxMagnitude(): number {
+        return getMagnitude(this.greatestEclipseCircumstances);
+    }
+
+    public getMaxMoonSunRatio(): number {
+        return getMoonSunRatio(this.greatestEclipseCircumstances);
     }
 
     public getMaxObscuration(): number {
-        // TODO
-        return 0;
+        return getObscuration(this.greatestEclipseCircumstances);
     }
 
     public getMaxDuration(): number {
-        // TODO
-        return 0;
+        return getDuration(this.elements, {
+            ...this.locationOfGreatestEclipse,
+            elevation: 0,
+        });
     }
 
     public getMaxCentralDuration(): number {
-        // TODO
-        return 0;
+        return getCentralDuration(this.elements, {
+            ...this.locationOfGreatestEclipse,
+            elevation: 0,
+        });
     }
 
-    public getSarosNumber(): number {
-        // TODO
-        return 0;
-    }
-
-    public getLocationOfGreatestEclipse(): Location {
-        // TODO
-        return Location.create(0, 0);
-    }
+    // TODO
+    // public getSarosNumber(): number {
+    //     return 0; // TODO implement
+    // }
 }
