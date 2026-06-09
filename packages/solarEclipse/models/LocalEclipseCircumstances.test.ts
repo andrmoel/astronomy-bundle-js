@@ -33,18 +33,18 @@ const circumstancesTotal = LocalEclipseCircumstances.create(elements, location, 
 
 describe('getType', () => {
     it('returns the eclipse type if eclipse has not started', () => {
-        const result = circumstancesNoEclipse.getType();
+        const result = circumstancesNoEclipse.getEclipseType();
 
         expect(result).toBe(LocalSolarEclipseType.None);
     });
     it('returns the eclipse type if eclipse is in partial phase', () => {
-        const result = circumstancesPartial.getType();
+        const result = circumstancesPartial.getEclipseType();
 
         expect(result).toBe(LocalSolarEclipseType.Partial);
     });
 
     it('returns the eclipse type if eclipse is in total phase', () => {
-        const result = circumstancesTotal.getType();
+        const result = circumstancesTotal.getEclipseType();
 
         expect(result).toBe(LocalSolarEclipseType.Total);
     });

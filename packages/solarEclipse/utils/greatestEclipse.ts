@@ -11,7 +11,7 @@ const ITERATION_TOLERANCE_HOURS = 1e-8;
 const ECLIPSE_SEARCH_RANGE_HOURS = 4;
 
 export function getLocationOfGreatestEclipse(elements: BesselianElements): LatLon {
-    const tau = findShadowMinimum(elements) ?? 0;
+    const tau = getTauOfGreatestEclipse(elements);
     const e = getBesselianElementsAtTime(elements, tau);
     const {sinD, cosD} = e;
 
@@ -45,18 +45,20 @@ export function getJulianDayOfGreatestEclipse(elements: BesselianElements): numb
     return elements.t0Jde - elements.deltaT / 86400;
 }
 
-function findShadowMinimum(elements: BesselianElements): number | null {
+export function getTauOfGreatestEclipse(elements: BesselianElements): number {
     let tau = 0;
+
     for (let i = 0; i < MAX_ITERATIONS; i++) {
         const e = getBesselianElementsAtTime(elements, tau);
         const xp = polynomialDerivative(elements.x, tau);
         const yp = polynomialDerivative(elements.y, tau);
         const nSq = xp * xp + yp * yp;
-        if (nSq < 1e-20) return null;
+        if (nSq < 1e-20) return 0;
         const delta = -(e.x * xp + e.y * yp) / nSq;
         tau += delta;
-        if (Math.abs(tau) > ECLIPSE_SEARCH_RANGE_HOURS) return null;
+        if (Math.abs(tau) > ECLIPSE_SEARCH_RANGE_HOURS) return 0;
         if (Math.abs(delta) < ITERATION_TOLERANCE_HOURS) return tau;
     }
-    return null;
+
+    return 0;
 }

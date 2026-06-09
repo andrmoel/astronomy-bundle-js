@@ -27,7 +27,7 @@ export default class LocalEclipseCircumstances {
         return new LocalEclipseCircumstances(elements, location, toi);
     }
 
-    public getType(): LocalSolarEclipseType {
+    public getEclipseType(): LocalSolarEclipseType {
         return getLocalEclipseType(this.circumstances);
     }
 
