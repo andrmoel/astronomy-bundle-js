@@ -349,12 +349,20 @@ import {TimeOfInterest, Location} from '@astronomy-bundle/core';
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
 
 const location = Location.create(21.52854, 39.14387, 6);
-const toi = TimeOfInterest.fromTime(2027, 8, 2, 10, 23, 13);
+const toiPartial = TimeOfInterest.fromTime(2027, 8, 2, 10, 1, 5);
+const toiTotal   = TimeOfInterest.fromTime(2027, 8, 2, 10, 23, 13);
 
-const circumstances = SolarEclipse
+// Local circumstances during partial phase in Jeddah
+const circumstancesPartial = SolarEclipse
     .createFromDate('2027-08-02')
     .getLocalEclipse(location)
-    .getCircumstances(toi);
+    .getCircumstances(toiPartial);
+
+// Local circumstances during total phase in Jeddah
+const circumstancesTotal = SolarEclipse
+    .createFromDate('2027-08-02')
+    .getLocalEclipse(location)
+    .getCircumstances(toiTotal);
 ```
 
 ---
