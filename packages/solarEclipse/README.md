@@ -61,10 +61,20 @@ const eclipse = SolarEclipse.createFromToi(toi);
 **Description:** Creates a `SolarEclipse` instance directly from a `BesselianElements` object. Use this when you have pre-computed Besselian elements that are not in the built-in dataset.
 
 ```javascript
-import type {BesselianElements} from '@astronomy-bundle/solar-eclipse';
-import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {SolarEclipse, parseBesselianElements} from '@astronomy-bundle/solar-eclipse';
 
-const elements: BesselianElements = { /* ... */ };
+// ASE 2016-09-01
+const elements = parseBesselianElements([
+    2457632.88058,  9.0,  -3.0,  3.0,  68.4,  68.4,
+    -0.16139600,    0.50406349,  -0.00002140,  -0.00000631,
+    -0.29965001,   -0.14815210,  -0.00002580,   0.00000178,
+     8.06330013,   -0.01480200,  -0.00000200,
+     315.03155518,  15.00454044,  0.00000000,
+     0.55792803,    0.00011150,  -0.00001050,
+     0.01173100,    0.00011100,  -0.00001040,
+     0.00463390,    0.00461090
+]);
+
 const eclipse = SolarEclipse.createFromBesselianElements(elements);
 ```
 
@@ -219,6 +229,7 @@ The result of the calculation should be: *annular*
 
 ```javascript
 const contacts = localEclipse.getContactTaus();
+
 const {c1, c2, max, c3, c4} = contacts;
 ```
 
@@ -237,6 +248,7 @@ c4: *2.730092*
 
 ```javascript
 const contacts = localEclipse.getContactTimes();
+
 const {year: y1, month: mo1, day: d1, hour: h1, min: m1, sec: s1} = contacts.c1.getTime();
 const {year: y2, month: mo2, day: d2, hour: h2, min: m2, sec: s2} = contacts.c2.getTime();
 const {year: ym, month: mom, day: dm, hour: hm, min: mm, sec: sm} = contacts.max.getTime();
@@ -354,8 +366,6 @@ const circumstances = SolarEclipse
 **Example**: Get eclipse type during partial and total phases
 
 ```javascript
-import {LocalSolarEclipseType} from '@astronomy-bundle/solar-eclipse';
-
 const typePartial = circumstancesPartial.getEclipseType();
 const typeTotal   = circumstancesTotal.getEclipseType();
 ```
