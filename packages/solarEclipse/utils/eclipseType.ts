@@ -38,7 +38,10 @@ function findGreatestEclipseTau(elements: BesselianElements): number {
         const f = x * xp + y * yp;
         const fp = xp * xp + x * xpp + yp * yp + y * ypp;
 
-        if (Math.abs(fp) < 1e-12) break;
+        if (Math.abs(fp) < 1e-12) {
+            break;
+        }
+
         const delta = -f / fp;
         tau += delta;
 
@@ -46,7 +49,10 @@ function findGreatestEclipseTau(elements: BesselianElements): number {
             tau = Math.sign(tau) * ECLIPSE_SEARCH_RANGE_HOURS;
             break;
         }
-        if (Math.abs(delta) < NEWTON_CONVERGENCE_TOLERANCE) break;
+
+        if (Math.abs(delta) < NEWTON_CONVERGENCE_TOLERANCE) {
+            break;
+        }
     }
 
     return tau;
@@ -67,12 +73,25 @@ function isHybridEclipse(elements: BesselianElements): boolean {
         const x = polynomial(elements.x, tau);
         const y = polynomial(elements.y, tau);
         const r2 = x * x + y * y;
-        if (r2 >= 1) continue;
+
+        if (r2 >= 1) {
+            continue;
+        }
+
         const l2 = polynomial(elements.l2, tau);
         const zeta = Math.sqrt(1 - r2);
-        if (l2 - zeta * elements.tanF2 < 0) hasUmbra = true;
-        if (l2 > 0) hasAntumbra = true;
-        if (hasUmbra && hasAntumbra) return true;
+
+        if (l2 - zeta * elements.tanF2 < 0) {
+            hasUmbra = true;
+        }
+
+        if (l2 > 0) {
+            hasAntumbra = true;
+        }
+
+        if (hasUmbra && hasAntumbra) {
+            return true;
+        }
     }
 
     return false;

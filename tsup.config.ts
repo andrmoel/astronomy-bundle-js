@@ -59,7 +59,11 @@ function copyReadme(packageDir: string): void {
 function writeDistPackageJson(packageDir: string): void {
     const srcPkg = JSON.parse(readFileSync(path.join(root, packageDir, 'package.json'), 'utf-8'));
     const distPkg = {...rootPkg, ...srcPkg};
-    for (const key of OMIT_FROM_DIST) delete distPkg[key];
+
+    for (const key of OMIT_FROM_DIST) {
+        delete distPkg[key];
+    }
+
     const exports: Record<string, object> = {
         '.': {
             types: './index.d.ts',

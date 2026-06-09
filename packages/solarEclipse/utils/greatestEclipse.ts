@@ -53,11 +53,21 @@ export function getTauOfGreatestEclipse(elements: BesselianElements): number {
         const xp = polynomialDerivative(elements.x, tau);
         const yp = polynomialDerivative(elements.y, tau);
         const nSq = xp * xp + yp * yp;
-        if (nSq < 1e-20) return 0;
+
+        if (nSq < 1e-20) {
+            return 0;
+        }
+
         const delta = -(e.x * xp + e.y * yp) / nSq;
         tau += delta;
-        if (Math.abs(tau) > ECLIPSE_SEARCH_RANGE_HOURS) return 0;
-        if (Math.abs(delta) < ITERATION_TOLERANCE_HOURS) return tau;
+
+        if (Math.abs(tau) > ECLIPSE_SEARCH_RANGE_HOURS) {
+            return 0;
+        }
+
+        if (Math.abs(delta) < ITERATION_TOLERANCE_HOURS) {
+            return tau;
+        }
     }
 
     return 0;

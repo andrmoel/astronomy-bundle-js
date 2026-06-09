@@ -24,6 +24,9 @@
             "correctness": {
                 "noUnusedImports": "error",
                 "noPrecisionLoss": "off"
+            },
+            "style": {
+                "useBlockStatements": "error"
             }
         }
     },
