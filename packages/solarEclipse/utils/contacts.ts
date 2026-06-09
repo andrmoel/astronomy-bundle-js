@@ -3,14 +3,12 @@ import {DEG} from '@app/constants/math';
 import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
 import type {BesselianElements} from '../types/BesselianElementTypes';
-import type {EclipseContactsTau} from '../types/EclipseContactTypes';
-import {getBesselianElementsAtTime} from './besselianElements';
+import type {EclipseContacts} from '../types/EclipseContactTypes';
+import {getBesselianElementsAtTime, tau2julianDay} from './besselianElements';
 
 const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
 const TIME_MARGIN_HOURS = 0.5;
-// raw[2]/raw[3] in the Besselian data are the lat/lon of greatest eclipse, not time bounds.
-// We use a fixed ±4 h search window, which covers any real eclipse duration.
 const SEARCH_RANGE_HOURS = 4;
 
 interface ObserverGeocentric {
@@ -29,22 +27,22 @@ interface FundamentalSnapshot {
     l2: number;
 }
 
-export function getContactTaus(besselianElements: BesselianElements, location: Location): EclipseContactsTau | null {
+export function getContactTaus(elements: BesselianElements, location: Location): EclipseContacts | null {
     const obs = computeObserverGeocentric(location);
 
-    const max = findMaximum(besselianElements, obs, 0);
+    const max = findMaximum(elements, obs, 0);
     if (max === null) {
         return null;
     }
 
-    const atMax = snapshot(besselianElements, max, obs);
+    const atMax = snapshot(elements, max, obs);
     const minDistSq = atMax.u * atMax.u + atMax.v * atMax.v;
     if (minDistSq > atMax.l1 * atMax.l1) {
         return null;
     }
 
-    const c1 = findContact(besselianElements, obs, max, false, false);
-    const c4 = findContact(besselianElements, obs, max, false, true);
+    const c1 = findContact(elements, obs, max, false, false);
+    const c4 = findContact(elements, obs, max, false, true);
     if (c1 === null || c4 === null) {
         return null;
     }
@@ -52,8 +50,8 @@ export function getContactTaus(besselianElements: BesselianElements, location: L
     let c2: number | null = null;
     let c3: number | null = null;
     if (minDistSq < atMax.l2 * atMax.l2) {
-        const tauC2 = findContact(besselianElements, obs, max, true, false);
-        const tauC3 = findContact(besselianElements, obs, max, true, true);
+        const tauC2 = findContact(elements, obs, max, true, false);
+        const tauC3 = findContact(elements, obs, max, true, true);
         if (tauC2 !== null && tauC3 !== null) {
             c2 = tauC2;
             c3 = tauC3;
@@ -61,6 +59,23 @@ export function getContactTaus(besselianElements: BesselianElements, location: L
     }
 
     return {c1, c2, max, c3, c4};
+}
+
+export function contactTausToContactJulianDays(
+    elements: BesselianElements,
+    contactTaus: EclipseContacts,
+): EclipseContacts | null {
+    if (!contactTaus) {
+        return null;
+    }
+
+    return {
+        c1: tau2julianDay(elements, contactTaus.c1),
+        c2: contactTaus.c2 ? tau2julianDay(elements, contactTaus.c2) : null,
+        max: tau2julianDay(elements, contactTaus.max),
+        c3: contactTaus.c3 ? tau2julianDay(elements, contactTaus.c3) : null,
+        c4: tau2julianDay(elements, contactTaus.c4),
+    };
 }
 
 function computeObserverGeocentric(location: Location): ObserverGeocentric {
@@ -84,7 +99,7 @@ function findMaximum(elements: BesselianElements, obs: ObserverGeocentric, start
         }
         const delta = -(s.u * s.uDot + s.v * s.vDot) / s.nSq;
         tau += delta;
-        if (!inBounds(elements, tau)) {
+        if (!inBounds(tau)) {
             return null;
         }
         if (Math.abs(delta) < ITERATION_TOLERANCE_HOURS) {
@@ -92,7 +107,7 @@ function findMaximum(elements: BesselianElements, obs: ObserverGeocentric, start
         }
     }
 
-    return inBounds(elements, tau) ? tau : null;
+    return inBounds(tau) ? tau : null;
 }
 
 function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocentric): FundamentalSnapshot {
@@ -154,7 +169,7 @@ function findContact(
         const sqrtDisc = Math.sqrt(discriminant);
         const delta = (-(s.u * s.uDot + s.v * s.vDot) + sign * sqrtDisc) / s.nSq;
         tau += delta;
-        if (!inBounds(elements, tau)) {
+        if (!inBounds(tau)) {
             return null;
         }
         if (Math.abs(delta) < ITERATION_TOLERANCE_HOURS) {
@@ -162,9 +177,9 @@ function findContact(
         }
     }
 
-    return inBounds(elements, tau) ? tau : null;
+    return inBounds(tau) ? tau : null;
 }
 
-function inBounds(_elements: BesselianElements, tau: number): boolean {
+function inBounds(tau: number): boolean {
     return Math.abs(tau) <= SEARCH_RANGE_HOURS + TIME_MARGIN_HOURS;
 }

@@ -1,26 +1,16 @@
 import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
 import type {Location} from '@app/types/LocationTypes';
-import type TimeOfInterest from '@package/time/models/TimeOfInterest';
+import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from './besselianElements';
 
-export interface LocalSnapshot {
-    u: number;
-    v: number;
-    l1: number;
-    l2: number;
-    distance: number;
-    hourAngle: number;
-    sinD: number;
-    cosD: number;
-}
-
-export function getTauFromToi(elements: BesselianElements, toi: TimeOfInterest): number {
-    return (toi.getJulianDay() - elements.t0Jde) * 24;
-}
-
-export function getLocalSnapshot(elements: BesselianElements, location: Location, tau: number): LocalSnapshot {
+export function getLocalEclipseCircumstances(
+    elements: BesselianElements,
+    location: Location,
+    tau: number,
+): LocalEclipseCircumstances {
     const e = getBesselianElementsAtTime(elements, tau);
     const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
     const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
@@ -53,44 +43,71 @@ export function getLocalSnapshot(elements: BesselianElements, location: Location
     };
 }
 
-// Eclipse magnitude: fraction of solar diameter covered. Values > 1 indicate totality.
-// Convention: l2 < 0 for total eclipses (umbra), l2 > 0 for annular (antumbra).
-export function getMagnitude(l1: number, l2: number, distance: number): number {
-    if (distance >= l1) return 0;
+export function getLocalEclipseType(circumstances: LocalEclipseCircumstances): LocalSolarEclipseType {
+    const {l2, distance} = circumstances;
+    const magnitude = getMagnitude(circumstances);
+
+    if (magnitude <= 0.0) {
+        return LocalSolarEclipseType.None;
+    }
+
+    if (distance < l2 || distance < -1 * l2) {
+        if (l2 < 0.0) {
+            return LocalSolarEclipseType.Total;
+        }
+
+        return LocalSolarEclipseType.Annular;
+    }
+
+    return LocalSolarEclipseType.Partial;
+}
+
+export function getMaximumEclipse(circumstances: LocalEclipseCircumstances): number {
+    return circumstances.distance;
+}
+
+export function getMagnitude(circumstances: LocalEclipseCircumstances): number {
+    const {l1, l2, distance} = circumstances;
+
     return (l1 - distance) / (l1 + l2);
 }
 
-// Fraction of the solar disk area covered by the moon, in [0, 1].
-export function getObscuration(l1: number, l2: number, distance: number): number {
-    if (distance >= l1) return 0;
+export function getMoonSunRatio(circumstances: LocalEclipseCircumstances): number {
+    const {l1, l2} = circumstances;
 
-    // Apparent radii derived from the shadow cone radii.
-    // rs = sun, rm = moon in fundamental-plane units.
-    const rs = (l1 + l2) / 2;
-    const rm = (l1 - l2) / 2;
-
-    // Total: moon larger than sun and fully overlapping
-    if (rm >= rs && distance <= rm - rs) return 1;
-    // Annular: sun larger than moon and moon fully inside sun
-    if (rs > rm && distance <= rs - rm) return (rm * rm) / (rs * rs);
-
-    // Partial phase: circle–circle intersection area / sun disk area
-    const cosA = (distance * distance + rs * rs - rm * rm) / (2 * distance * rs);
-    const cosB = (distance * distance + rm * rm - rs * rs) / (2 * distance * rm);
-    if (Math.abs(cosA) > 1 || Math.abs(cosB) > 1) return 0;
-
-    const A = Math.acos(cosA);
-    const B = Math.acos(cosB);
-    const area = rs * rs * (A - Math.sin(A) * cosA) + rm * rm * (B - Math.sin(B) * cosB);
-    return area / (Math.PI * rs * rs);
+    return (l1 - l2) / (l1 + l2);
 }
 
-// Altitude of the sun in degrees, computed from the Besselian elements at the given tau.
-export function getSunAltitudeDeg(elements: BesselianElements, location: Location, tau: number): number {
-    const e = getBesselianElementsAtTime(elements, tau);
-    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
-    const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
-    const latRad = location.lat * DEG;
-    const sinAlt = Math.sin(latRad) * e.sinD + Math.cos(latRad) * e.cosD * Math.cos(hourAngle);
-    return Math.asin(Math.max(-1, Math.min(1, sinAlt))) / DEG;
+export function getObscuration(circumstances: LocalEclipseCircumstances): number {
+    const {l1, l2, distance} = circumstances;
+
+    const eclipseType = getLocalEclipseType(circumstances);
+    const magnitude = getMagnitude(circumstances);
+    const moonSunRatio = getMoonSunRatio(circumstances);
+
+    if (magnitude <= 0.0) {
+        return 0.0;
+    }
+
+    if (magnitude >= 1.0) {
+        return 1.0;
+    }
+
+    if (eclipseType === LocalSolarEclipseType.Annular) {
+        return moonSunRatio ** 2;
+    }
+
+    const cNumerator = l1 ** 2 + l2 ** 2 - 2 * distance ** 2;
+    const cDenominator = l1 ** 2 - l2 ** 2;
+    const c = Math.acos(cNumerator / cDenominator);
+
+    const bNumerator = (l1 * l2 + distance ** 2) / distance;
+    const bDenominator = l1 + l2;
+    const b = Math.acos(bNumerator / bDenominator);
+
+    const a = Math.PI - b - c;
+
+    const result = moonSunRatio ** 2 * a + b - moonSunRatio * Math.sin(c);
+
+    return result / Math.PI;
 }

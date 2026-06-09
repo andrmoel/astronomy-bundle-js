@@ -1,6 +1,11 @@
 import {DEG} from '@app/constants/math';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime, parseBesselianElements, tau2julianDay} from '../utils/besselianElements';
+import {
+    getBesselianElementsAtTime,
+    julianDay2tau,
+    parseBesselianElements,
+    tau2julianDay,
+} from '../utils/besselianElements';
 
 // 28-element raw Besselian data for the 2017-08-21 total solar eclipse.
 const rawElements: Array<number> = [
@@ -8,6 +13,23 @@ const rawElements: Array<number> = [
     0.0002213, 0.0000024, -22.27471924, -0.005178, 0.000006, 302.45217896, 14.99728012, 0.0, 0.53780502, -0.000016,
     -0.0000131, -0.008292, -0.000016, -0.0000131, 0.0046, 0.0046,
 ];
+
+// 2021-12-04 total solar eclipse
+const besselianElements: BesselianElements = {
+    t0Jde: 2459552.816,
+    t0Hours: 8,
+    tMin: -76.8,
+    tMax: -46.2,
+    deltaT: 72.6,
+    x: [0.025209, 0.5683028, 0.0000391, -0.0000097],
+    y: [-0.983653, -0.1315142, 0.0002213, 0.0000024],
+    d: [-22.2747192, -0.005178, 0.000006],
+    mu: [302.452179, 14.99728, 0],
+    l1: [0.537805, -0.000016, -0.0000131],
+    l2: [-0.008292, -0.000016, -0.0000131],
+    tanF1: 0.0047434,
+    tanF2: 0.0047198,
+};
 
 describe('getBesselianElementsAtTime', () => {
     const elements = parseBesselianElements(rawElements);
@@ -61,32 +83,37 @@ describe('getBesselianElementsAtTime', () => {
 });
 
 describe('tau2julianDay', () => {
-    // 2021-12-04 total solar eclipse
-    const besselianElements: BesselianElements = {
-        t0Jde: 2459552.816,
-        t0Hours: 8,
-        tMin: -76.8,
-        tMax: -46.2,
-        deltaT: 72.6,
-        x: [0.025209, 0.5683028, 0.0000391, -0.0000097],
-        y: [-0.983653, -0.1315142, 0.0002213, 0.0000024],
-        d: [-22.2747192, -0.005178, 0.000006],
-        mu: [302.452179, 14.99728, 0],
-        l1: [0.537805, -0.000016, -0.0000131],
-        l2: [-0.008292, -0.000016, -0.0000131],
-        tanF1: 0.0047434,
-        tanF2: 0.0047198,
-    };
-
     it('returns the correct julian day for tau=0', () => {
-        const result = tau2julianDay(besselianElements, 0);
+        const tau = 0;
+
+        const result = tau2julianDay(besselianElements, tau);
 
         expect(result).toBeCloseTo(2459552.832493, 6);
     });
 
     it('returns the correct julian day for tau=-0.232001', () => {
-        const result = tau2julianDay(besselianElements, -0.232001);
+        const tau = -0.232001;
+
+        const result = tau2julianDay(besselianElements, tau);
 
         expect(result).toBeCloseTo(2459552.822826, 6);
+    });
+});
+
+describe('tau2julianDay', () => {
+    it('returns the correct tau for jd 2459552.832493', () => {
+        const jd = 2459552.832493;
+
+        const result = julianDay2tau(besselianElements, jd);
+
+        expect(result).toBeCloseTo(0, 5);
+    });
+
+    it('returns the correct tau for jd 2459552.822826', () => {
+        const jd = 2459552.822826;
+
+        const result = julianDay2tau(besselianElements, jd);
+
+        expect(result).toBeCloseTo(-0.232009, 5);
     });
 });

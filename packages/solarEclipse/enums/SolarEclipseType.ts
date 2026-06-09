@@ -6,6 +6,7 @@ export enum SolarEclipseType {
 }
 
 export enum LocalSolarEclipseType {
+    None = 'none',
     Partial = 'partial',
     Total = 'total',
     Annular = 'annular',

@@ -45,3 +45,8 @@ export function tau2julianDay(elements: BesselianElements, tau: number): number 
 
     return polyRefJd + (tau - elements.deltaT / 3600) / 24;
 }
+
+export function julianDay2tau(elements: BesselianElements, jd: number): number {
+    const polyRefJd = Math.floor(elements.t0Jde - elements.t0Hours / 24) + 0.5 + elements.t0Hours / 24;
+    return (jd - polyRefJd) * 24 + elements.deltaT / 3600;
+}

@@ -1,129 +1,161 @@
 import type {Location} from '@app/types/LocationTypes';
-import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {parseBesselianElements} from './besselianElements';
-import {getLocalSnapshot, getMagnitude, getObscuration, getSunAltitudeDeg, getTauFromToi} from './localCircumstances';
+import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {
+    getLocalEclipseCircumstances,
+    getLocalEclipseType,
+    getMagnitude,
+    getMaximumEclipse,
+    getMoonSunRatio,
+    getObscuration,
+} from './localCircumstances';
 
-// 2021-12-04 total solar eclipse — Union Glacier, Antarctica
-const raw: Array<number> = require('../resources/besselianElements/2459552.5.json');
-const elements = parseBesselianElements(raw);
+// HSE 2023-04-20
+const elements: BesselianElements = {
+    t0Jde: 2460054.67912,
+    t0Hours: 4,
+    tMin: -3,
+    tMax: 3,
+    deltaT: 69.2,
+    x: [0.02685, 0.49501821, 0.0000135, -0.00000706],
+    y: [-0.42736599, 0.2441992, -0.0000494, -0.00000368],
+    d: [11.41178989, 0.013741, -0.000003],
+    mu: [240.24293518, 15.00341988, 0],
+    l1: [0.54680401, 0.0001216, -0.0000116],
+    l2: [0.000663, 0.000121, -0.0000115],
+    tanF1: 0.004655,
+    tanF2: 0.0046318,
+};
 
-const location: Location = {lat: -79.738991, lon: -82.736597, elevation: 718};
+// Exmouth, Australia
+const locationTotal: Location = {
+    lat: -21.9542,
+    lon: 114.14018,
+    elevation: 1,
+};
+const locationAnnular: Location = {
+    lat: -48.06043,
+    lon: 65.43736,
+    elevation: 0,
+};
 
-// tau of maximum eclipse at Union Glacier (from contacts.test.ts expected value)
-const tauMax = -0.225928;
-// tau of C1 (first external contact)
-const tauC1 = -1.084899;
+const circumstancesNoEclipseExmouth = {
+    u: -0.39948361901158014,
+    v: -0.38564272651783593,
+    l1: 0.5433953509227093,
+    l2: -0.002728524444233197,
+    distance: 0.5552544231023286,
+    hourAngle: 5.673427471091657,
+    sinD: 0.19740396390033055,
+    cosD: 0.9803222302061894,
+};
 
-describe('getTauFromToi', () => {
-    // TimeOfInterest stores time in integer seconds, so the JD round-trip
-    // has ~0.5 s precision (≈ 0.00014 h). Tests use precision 3 (±0.0005 h).
+const circumstancesPartialEclipseExmouth = {
+    u: -0.15301704950032158,
+    v: -0.15173442441239315,
+    l1: 0.5430725593441962,
+    l2: -0.003049812550998987,
+    distance: 0.21549374234428276,
+    hourAngle: 5.902618197841479,
+    sinD: 0.19760986972363895,
+    cosD: 0.9802807451887476,
+};
 
-    it('returns approximately 0 at the Besselian reference epoch', () => {
-        const toi = TimeOfInterest.fromJulianDay(elements.t0Jde);
-        expect(getTauFromToi(elements, toi)).toBeCloseTo(0, 3);
-    });
+const circumstancesMaximumEclipseExmouth = {
+    u: 0.0006822685435502185,
+    v: -0.0006902970430300304,
+    l1: 0.542960673183228,
+    l2: -0.003161175368268852,
+    distance: 0.0009705670369089092,
+    hourAngle: 6.05543018850995,
+    sinD: 0.19774710806100118,
+    cosD: 0.9802530700046345,
+};
 
-    it('returns approximately 1 hour after advancing 1 hour from reference epoch', () => {
-        const toi = TimeOfInterest.fromJulianDay(elements.t0Jde + 1 / 24);
-        expect(getTauFromToi(elements, toi)).toBeCloseTo(1, 3);
-    });
+describe('getLocalEclipseCircumstances', () => {
+    it('returns the local eclipse circumstances for a given time', () => {
+        const tauMaxEclipse = -0.4761180790383499;
 
-    it('returns the correct tau for a known eclipse time within 1 second', () => {
-        const toi = TimeOfInterest.fromJulianDay(elements.t0Jde + tauC1 / 24);
-        expect(getTauFromToi(elements, toi)).toBeCloseTo(tauC1, 3);
+        const result = getLocalEclipseCircumstances(elements, locationTotal, tauMaxEclipse);
+
+        expect(result).toEqual(circumstancesMaximumEclipseExmouth);
     });
 });
 
-describe('getLocalSnapshot', () => {
-    it('returns a distance less than l1 at the maximum (observer is in eclipse)', () => {
-        const snap = getLocalSnapshot(elements, location, tauMax);
-        expect(snap.distance).toBeLessThan(snap.l1);
+describe('getEclipseType', () => {
+    it('returns none if no eclipse is given', () => {
+        const tau = -1.93492838; // no eclipse
+
+        const result = getLocalEclipseCircumstances(elements, locationTotal, tau);
+
+        expect(getLocalEclipseType(result)).toBe(LocalSolarEclipseType.None);
     });
 
-    it('returns a distance less than |l2| at maximum (observer is in totality)', () => {
-        const snap = getLocalSnapshot(elements, location, tauMax);
-        expect(snap.distance).toBeLessThan(Math.abs(snap.l2));
+    it('returns partial for Exmouth during partial phase', () => {
+        const tau = -1.059683839; // Partial eclipse
+
+        const result = getLocalEclipseCircumstances(elements, locationAnnular, tau);
+
+        expect(getLocalEclipseType(result)).toBe(LocalSolarEclipseType.Partial);
     });
 
-    it('returns l2 < 0 at maximum (total eclipse convention)', () => {
-        const snap = getLocalSnapshot(elements, location, tauMax);
-        expect(snap.l2).toBeLessThan(0);
+    it('returns annular for ocean during eclipse maximum', () => {
+        const tau = -1.3610733592236008; // Maximum eclipse
+
+        const result = getLocalEclipseCircumstances(elements, locationAnnular, tau);
+
+        expect(getLocalEclipseType(result)).toBe(LocalSolarEclipseType.Annular);
     });
 
-    it('returns a distance approximately equal to l1 at C1 (penumbra edge)', () => {
-        const snap = getLocalSnapshot(elements, location, tauC1);
-        expect(Math.abs(snap.distance - snap.l1)).toBeLessThan(0.002);
+    it('returns total for Exmouth during eclipse maximum', () => {
+        const tau = -0.4761180790383499; // Maximum eclipse
+
+        const result = getLocalEclipseCircumstances(elements, locationTotal, tau);
+
+        expect(getLocalEclipseType(result)).toBe(LocalSolarEclipseType.Total);
+    });
+});
+
+describe('getMaximumEclipse', () => {
+    it('returns maximum eclipse for maximum eclipse in Exmouth', () => {
+        const result = getMaximumEclipse(circumstancesMaximumEclipseExmouth);
+
+        expect(result).toBeCloseTo(0.00097, 5);
     });
 });
 
 describe('getMagnitude', () => {
-    it('returns 0 when distance equals l1 (penumbra edge)', () => {
-        expect(getMagnitude(0.54, -0.004, 0.54)).toBeCloseTo(0, 6);
-    });
+    it('returns the magnitude for maximum eclipse in Exmouth', () => {
+        const result = getMagnitude(circumstancesMaximumEclipseExmouth);
 
-    it('returns > 1 at the axis for a total eclipse (l2 < 0)', () => {
-        // mag = l1 / (l1 + l2) = 0.54 / (0.54 - 0.004) > 1
-        expect(getMagnitude(0.54, -0.004, 0)).toBeGreaterThan(1);
+        expect(result).toBeCloseTo(1.00406, 5);
     });
+});
 
-    it('returns 1 exactly at the umbra edge for a total eclipse', () => {
-        // At distance = |l2|: mag = (l1 - |l2|) / (l1 + l2) = 1
-        expect(getMagnitude(0.54, -0.004, 0.004)).toBeCloseTo(1, 6);
-    });
+describe('getMoonSunRatio', () => {
+    it('gets the moon-sun-ratio for maximum eclipse in Exmouth', () => {
+        const result = getMoonSunRatio(circumstancesMaximumEclipseExmouth);
 
-    it('returns < 1 for an annular eclipse at the axis', () => {
-        expect(getMagnitude(0.54, 0.004, 0)).toBeLessThan(1);
-    });
-
-    it('returns 0 when distance equals or exceeds l1', () => {
-        expect(getMagnitude(0.54, -0.004, 0.54)).toBe(0);
-        expect(getMagnitude(0.54, -0.004, 0.6)).toBe(0);
+        expect(result).toBeCloseTo(1.01171, 5);
     });
 });
 
 describe('getObscuration', () => {
-    it('returns 1 in totality (l2 < 0, distance < |l2|)', () => {
-        expect(getObscuration(0.54, -0.004, 0)).toBe(1);
-        expect(getObscuration(0.54, -0.004, 0.003)).toBe(1);
+    it('gets the obscuration for no eclipse in Exmouth', () => {
+        const result = getObscuration(circumstancesNoEclipseExmouth);
+
+        expect(result).toBeCloseTo(0, 5);
     });
 
-    it('returns the moon-to-sun area ratio in deep annular phase', () => {
-        const l1 = 0.544,
-            l2 = 0.004;
-        const rs = (l1 + l2) / 2;
-        const rm = (l1 - l2) / 2;
-        expect(getObscuration(l1, l2, 0)).toBeCloseTo((rm * rm) / (rs * rs), 6);
+    it('gets the obscuration for partial eclipse in Exmouth', () => {
+        const result = getObscuration(circumstancesPartialEclipseExmouth);
+
+        expect(result).toBeCloseTo(0.5141, 5);
     });
 
-    it('returns 0 when the observer is outside the penumbra', () => {
-        expect(getObscuration(0.54, -0.004, 0.54)).toBe(0);
-        expect(getObscuration(0.54, -0.004, 0.6)).toBe(0);
-    });
+    it('gets the obscuration for maximum eclipse in Exmouth', () => {
+        const result = getObscuration(circumstancesMaximumEclipseExmouth);
 
-    it('returns a value between 0 and 1 in the partial phase', () => {
-        const obs = getObscuration(0.54, -0.004, 0.27);
-        expect(obs).toBeGreaterThan(0);
-        expect(obs).toBeLessThan(1);
-    });
-
-    it('increases as the distance decreases from l1 toward |l2|', () => {
-        const o1 = getObscuration(0.54, -0.004, 0.4);
-        const o2 = getObscuration(0.54, -0.004, 0.2);
-        const o3 = getObscuration(0.54, -0.004, 0.05);
-        expect(o2).toBeGreaterThan(o1);
-        expect(o3).toBeGreaterThan(o2);
-    });
-});
-
-describe('getSunAltitudeDeg', () => {
-    it('returns a positive altitude at Union Glacier during the eclipse', () => {
-        const alt = getSunAltitudeDeg(elements, location, tauMax);
-        expect(alt).toBeGreaterThan(0);
-    });
-
-    it('returns an altitude between -90 and 90 degrees', () => {
-        const alt = getSunAltitudeDeg(elements, location, tauMax);
-        expect(alt).toBeGreaterThan(-90);
-        expect(alt).toBeLessThan(90);
+        expect(result).toBeCloseTo(1, 5);
     });
 });

@@ -1,27 +1,22 @@
 import type Location from '@package/location/models/Location';
+import {julianDay2tau} from '@package/solarEclipse/utils/besselianElements';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
+import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
 import type {BesselianElements} from '../types/BesselianElementTypes';
+import type {LocalEclipseCircumstances as LocalEclipseCircumstancesType} from '../types/EclipseCircumstances';
 import {
-    getLocalSnapshot,
+    getLocalEclipseCircumstances,
+    getLocalEclipseType,
     getMagnitude,
     getObscuration,
-    getSunAltitudeDeg,
-    getTauFromToi,
-    type LocalSnapshot,
 } from '../utils/localCircumstances';
 
 export default class LocalEclipseCircumstances {
-    private readonly tau: number;
-    private readonly snap: LocalSnapshot;
+    private readonly circumstances: LocalEclipseCircumstancesType;
 
-    private constructor(
-        private readonly elements: BesselianElements,
-        private readonly location: Location,
-        private readonly toi: TimeOfInterest,
-    ) {
-        this.tau = getTauFromToi(elements, toi);
-        this.snap = getLocalSnapshot(elements, location, this.tau);
+    private constructor(elements: BesselianElements, location: Location, toi: TimeOfInterest) {
+        const tau = julianDay2tau(elements, toi.getJulianDay());
+        this.circumstances = getLocalEclipseCircumstances(elements, location, tau);
     }
 
     public static create(
@@ -32,42 +27,34 @@ export default class LocalEclipseCircumstances {
         return new LocalEclipseCircumstances(elements, location, toi);
     }
 
-    public getLocation(): Location {
-        return this.location;
-    }
-
-    public getTimeOfInterest(): TimeOfInterest {
-        return this.toi;
-    }
-
     public getType(): LocalSolarEclipseType {
-        const {l1, l2, distance} = this.snap;
-        if (distance >= l1 || distance >= Math.abs(l2)) return LocalSolarEclipseType.Partial;
-        return l2 < 0 ? LocalSolarEclipseType.Total : LocalSolarEclipseType.Annular;
+        return getLocalEclipseType(this.circumstances);
     }
 
     public isInEclipse(): boolean {
-        return this.snap.distance < this.snap.l1;
+        return this.circumstances.distance < this.circumstances.l1;
     }
 
     public isInCentralEclipse(): boolean {
-        return this.snap.distance < Math.abs(this.snap.l2);
+        return this.circumstances.distance < Math.abs(this.circumstances.l2);
     }
 
     public getMagnitude(): number {
-        return getMagnitude(this.snap.l1, this.snap.l2, this.snap.distance);
+        return getMagnitude(this.circumstances);
     }
 
     public getObscuration(): number {
-        return getObscuration(this.snap.l1, this.snap.l2, this.snap.distance);
+        return getObscuration(this.circumstances);
     }
 
-    public getSunAltitude(): number {
-        return getSunAltitudeDeg(this.elements, this.location, this.tau);
-    }
+    // TODO
+    // public getSunAltitude(): number {
+    //     return getSunAltitudeDeg(this.elements, this.location, this.tau);
+    // }
 
+    // TODO
     // During a solar eclipse the moon and sun share essentially the same altitude.
-    public getMoonAltitude(): number {
-        return this.getSunAltitude();
-    }
+    // public getMoonAltitude(): number {
+    //     return this.getSunAltitude();
+    // }
 }
