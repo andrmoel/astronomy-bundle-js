@@ -56,6 +56,13 @@ export function time2julianDay(time: Time): number {
 }
 
 export function dateStringToJulianDay(dateStr: string): number {
+    const isoDate = parseIsoDateString(dateStr);
+
+    if (isoDate !== null) {
+        const {offsetMinutes, ...time} = isoDate;
+        return time2julianDay(time) - offsetMinutes / 1440;
+    }
+
     const date = new Date(dateStr);
 
     return time2julianDay({
@@ -66,6 +73,30 @@ export function dateStringToJulianDay(dateStr: string): number {
         min: date.getUTCMinutes(),
         sec: date.getUTCSeconds(),
     });
+}
+
+function parseIsoDateString(dateStr: string): (Time & {offsetMinutes: number}) | null {
+    const match =
+        /^([+-]?\d+)-(\d{2})-(\d{2})(?:[T ](\d{2})(?::(\d{2})(?::(\d{2}(?:\.\d+)?))?)?(?:Z|([+-])(\d{2}):?(\d{2}))?)?$/.exec(
+            dateStr,
+        );
+
+    if (!match) {
+        return null;
+    }
+
+    const [, year, month, day, hour = '0', min = '0', sec = '0', offsetSign, offsetHour = '0', offsetMin = '0'] = match;
+    const offsetFactor = offsetSign === '-' ? -1 : 1;
+
+    return {
+        year: Number(year),
+        month: Number(month),
+        day: Number(day),
+        hour: Number(hour),
+        min: Number(min),
+        sec: Number(sec),
+        offsetMinutes: offsetSign ? offsetFactor * (Number(offsetHour) * 60 + Number(offsetMin)) : 0,
+    };
 }
 
 export function julianDay2time(jd: number): Time {

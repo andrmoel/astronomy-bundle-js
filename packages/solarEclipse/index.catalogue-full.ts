@@ -1,10 +1,15 @@
-import {BESSELIAN_ELEMENTS_CATALOGUE_FULL} from '@package/solarEclipse/resources/catalogueFull';
-import {dateStringToJulianDay} from '@package/time/utils/dateTime';
-import type {BesselianElements} from './types/BesselianElementTypes';
-import {getBesselianElementsFromCatalogue} from './utils/besselianElements';
+import CatalogueClass from './models/Catalogue';
+import {BESSELIAN_ELEMENTS_CATALOGUE_FULL} from './resources/catalogueFull';
+import type {Catalogue as CatalogueType} from './types/BesselianElementTypes';
+import type {CatalogueRange} from './utils/catalogue';
 
-export function getBesselianElementsForEclipse(dateStr: string): BesselianElements {
-    const jd = dateStringToJulianDay(dateStr);
+class Catalogue extends CatalogueClass {
+    protected static readonly catalogue: CatalogueType = BESSELIAN_ELEMENTS_CATALOGUE_FULL;
 
-    return getBesselianElementsFromCatalogue(BESSELIAN_ELEMENTS_CATALOGUE_FULL, jd);
+    protected static readonly range: CatalogueRange = {
+        dateFrom: -1999,
+        dateTo: 3000,
+    };
 }
+
+export {Catalogue};

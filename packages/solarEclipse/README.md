@@ -19,31 +19,38 @@ With pnpm: `pnpm add @astronomy-bundle/solar-eclipse @astronomy-bundle/core`
 
 ### Eclipse Catalogue
 
-Two pre-computed eclipse catalogues are provided as separate subpath exports. Use them to look up Besselian elements by date and pass the result to [`SolarEclipse.createFromBesselianElements`](#createfrombesselianelements-static).
+Two pre-computed eclipse catalogues are provided as separate subpath exports. Use them to list available eclipse dates, look up Besselian elements by date, and pass the result to [`SolarEclipse.createFromBesselianElements`](#createfrombesselianelements-static).
+
+Both catalogue entrypoints export a `Catalogue` class with the same methods:
+
+- `Catalogue.getAvailableEclipseDates(dateFrom?, dateTo?)`: returns sorted eclipse dates in `YYYY-MM-DD` format. The optional boundaries are inclusive.
+- `Catalogue.getBesselianElements(date)`: returns the parsed Besselian elements for an eclipse date. It throws when the date is outside the catalogue range or when no eclipse exists on that date.
 
 #### Standard catalogue (1900–2100)
 
-Import from `@astronomy-bundle/solar-eclipse/catalogue`. Throws if the date is outside 1900–2100 or if no eclipse exists on that date.
+Import from `@astronomy-bundle/solar-eclipse/catalogue` for the standard catalogue. It contains 454 eclipses, from `1900-05-28` to `2100-09-04`, and is the default choice for modern dates. Requests outside the 1900–2100 catalogue range throw with a hint to use the full catalogue instead.
 
 ```javascript
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
-import {getBesselianElementsForEclipse} from '@astronomy-bundle/solar-eclipse/catalogue';
+import {Catalogue} from '@astronomy-bundle/solar-eclipse/catalogue';
 
-const elements = getBesselianElementsForEclipse('2026-08-12');
+const availableDates = Catalogue.getAvailableEclipseDates('2026-01-01', '2026-12-31');
+const elements = Catalogue.getBesselianElements('2026-08-12');
 const eclipse = SolarEclipse.createFromBesselianElements(elements);
 ```
 
 #### Full catalogue (−1999–3000)
 
-> **⚠️ Warning:** The full catalogue is over 3 MB uncompressed. Avoid importing it in browser bundles or size-sensitive environments unless necessary.
+> **⚠️ Warning:** The full catalogue is about 1 MB uncompressed. Avoid importing it in browser bundles or size-sensitive environments unless necessary.
 
-For eclipses outside the standard range, import from `@astronomy-bundle/solar-eclipse/catalogue-full`. The function signature is identical.
+For eclipses outside the standard range, import from `@astronomy-bundle/solar-eclipse/catalogue-full`. It contains 11,898 eclipses, from `-1999-06-12` to `3000-10-19`, while leaving the standard catalogue entrypoint unchanged. Negative years use signed astronomical year numbering.
 
 ```javascript
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
-import {getBesselianElementsForEclipse} from '@astronomy-bundle/solar-eclipse/catalogue-full';
+import {Catalogue} from '@astronomy-bundle/solar-eclipse/catalogue-full';
 
-const elements = getBesselianElementsForEclipse('-0500-03-14');
+const availableDates = Catalogue.getAvailableEclipseDates(); // All dates from -1999-06-12 to 3000-10-19
+const elements = Catalogue.getBesselianElements('-0500-03-14');
 const eclipse = SolarEclipse.createFromBesselianElements(elements);
 ```
 

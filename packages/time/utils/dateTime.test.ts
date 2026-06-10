@@ -66,6 +66,15 @@ it('tests dateStringToJulianDay', () => {
     expect(dateStringToJulianDay('2000-01-01')).toBe(2451544.5);
     expect(dateStringToJulianDay('2000-01-01T12:00:30Z')).toBe(2451545.000347222);
     expect(dateStringToJulianDay('2000-01-01T12:00Z')).toBe(2451545);
+    expect(dateStringToJulianDay('-0500-03-14')).toBe(dateStringToJulianDay('-000500-03-14'));
+    expect(julianDay2time(dateStringToJulianDay('-0500-03-14'))).toEqual({
+        year: -500,
+        month: 3,
+        day: 14,
+        hour: 0,
+        min: 0,
+        sec: 0,
+    });
 });
 
 it('tests for julianDay2time', () => {

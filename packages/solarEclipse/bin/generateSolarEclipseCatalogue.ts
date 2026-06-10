@@ -325,15 +325,127 @@ async function fetchAllBesselian(
     return entries;
 }
 
-function formatCatalogue(entries: Array<{jd: number; raw: number[]}>, exportName: string): string {
-    const lines: string[] = [`export const ${exportName}: Record<number, number[]> = {`];
+// ── Binary catalogue encoding ─────────────────────────────────────────────────
+// Each entry is packed into 63 bytes (see catalogueDecoder.ts for full layout).
+// Fields with narrow physical ranges are quantized to uint16/int16 to halve
+// their storage cost; fields covering wide or unbounded ranges stay as float32.
+// mu2 is always 0 across the entire NASA catalogue and is omitted entirely.
 
-    for (const {jd, raw} of entries) {
-        lines.push(`    ${jd}: [${raw.join(', ')}],`);
+const X1_OFF = 0.43,
+    X1_SC = 65535 / 0.16; // x1  ∈ [0.43, 0.59]
+const MU1_OFF = 14.99,
+    MU1_SC = 65535 / 0.017; // mu1 ∈ [14.99, 15.006]
+const L10_OFF = 0.528,
+    L10_SC = 65535 / 0.049; // l10 ∈ [0.528, 0.577]
+const TF1_OFF = 0.00455,
+    TF1_SC = 65535 / 0.00025; // tanF1
+const TF2_OFF = 0.00452,
+    TF2_SC = 65535 / 0.00025; // tanF2
+
+const X2_SC = 32767 / 1.0e-4;
+const X3_SC = 32767 / 1.1e-5;
+const Y1_SC = 32767 / 0.3;
+const Y2_SC = 32767 / 3.0e-4;
+const Y3_SC = 32767 / 5.5e-6;
+const D1_SC = 32767 / 0.017;
+const D2_SC = 32767 / 7.5e-6;
+const L11_SC = 32767 / 1.5e-4;
+const L12_SC = 32767 / 1.4e-5;
+const L20_SC = 32767 / 0.031;
+const L21_SC = 32767 / 1.5e-4;
+const L22_SC = 32767 / 1.4e-5;
+
+function encodeU16(val: number, off: number, sc: number, field: string): number {
+    const e = Math.round((val - off) * sc);
+    if (e < 0 || e > 65535) {
+        throw new Error(`uint16 overflow in ${field}: value=${val} → encoded=${e}`);
     }
+    return e;
+}
 
-    lines.push('};', '');
-    return lines.join('\n');
+function encodeI16(val: number, sc: number, field: string): number {
+    const e = Math.round(val * sc);
+    if (e < -32768 || e > 32767) {
+        throw new Error(`int16 overflow in ${field}: value=${val} → encoded=${e}`);
+    }
+    return e;
+}
+
+const ENTRY_BYTES = 63;
+
+function encodeEntry(jd: number, raw: number[]): Buffer {
+    const keyInt = Math.round(jd - 0.5);
+    const t0Offset = raw[0] - jd;
+    const buf = Buffer.allocUnsafe(ENTRY_BYTES);
+    let o = 0;
+
+    buf.writeUInt32LE(keyInt, o);
+    o += 4;
+    buf.writeFloatLE(t0Offset, o);
+    o += 4;
+    buf.writeUInt8(raw[1], o);
+    o += 1;
+    buf.writeFloatLE(raw[4], o);
+    o += 4;
+    buf.writeFloatLE(raw[6], o);
+    o += 4; // x0
+    buf.writeUInt16LE(encodeU16(raw[7], X1_OFF, X1_SC, 'x1'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[8], X2_SC, 'x2'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[9], X3_SC, 'x3'), o);
+    o += 2;
+    buf.writeFloatLE(raw[10], o);
+    o += 4; // y0
+    buf.writeInt16LE(encodeI16(raw[11], Y1_SC, 'y1'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[12], Y2_SC, 'y2'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[13], Y3_SC, 'y3'), o);
+    o += 2;
+    buf.writeFloatLE(raw[14], o);
+    o += 4; // d0
+    buf.writeInt16LE(encodeI16(raw[15], D1_SC, 'd1'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[16], D2_SC, 'd2'), o);
+    o += 2;
+    buf.writeFloatLE(raw[17], o);
+    o += 4; // mu0
+    buf.writeUInt16LE(encodeU16(raw[18], MU1_OFF, MU1_SC, 'mu1'), o);
+    o += 2;
+    // raw[19] = mu2, always 0, omitted
+    buf.writeUInt16LE(encodeU16(raw[20], L10_OFF, L10_SC, 'l10'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[21], L11_SC, 'l11'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[22], L12_SC, 'l12'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[23], L20_SC, 'l20'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[24], L21_SC, 'l21'), o);
+    o += 2;
+    buf.writeInt16LE(encodeI16(raw[25], L22_SC, 'l22'), o);
+    o += 2;
+    buf.writeUInt16LE(encodeU16(raw[26], TF1_OFF, TF1_SC, 'tanF1'), o);
+    o += 2;
+    buf.writeUInt16LE(encodeU16(raw[27], TF2_OFF, TF2_SC, 'tanF2'), o);
+    o += 2;
+
+    return buf;
+}
+
+function generateCatalogueFile(entries: Array<{jd: number; raw: number[]}>, exportName: string): string {
+    const chunks = entries.map(({jd, raw}) => encodeEntry(jd, raw));
+    const encoded = Buffer.concat(chunks).toString('base64');
+    return [
+        `import {decodeCatalogue} from '../utils/catalogueDecoder';`,
+        ``,
+        `const ENCODED_DATA =`,
+        `    '${encoded}';`,
+        ``,
+        `export const ${exportName} = decodeCatalogue(ENCODED_DATA);`,
+        ``,
+    ].join('\n');
 }
 
 async function main() {
@@ -365,13 +477,13 @@ async function main() {
     const catalogueEntries = allEntries.filter((e) => e.jd >= JD_1900 && e.jd < JD_2101);
     fs.writeFileSync(
         path.join(resourcesDir, 'catalogue.ts'),
-        formatCatalogue(catalogueEntries, 'BESSELIAN_ELEMENTS_CATALOGUE'),
+        generateCatalogueFile(catalogueEntries, 'BESSELIAN_ELEMENTS_CATALOGUE'),
     );
     console.log(`Generated catalogue.ts with ${catalogueEntries.length} entries (1900–2100)`);
 
     fs.writeFileSync(
         path.join(resourcesDir, 'catalogueFull.ts'),
-        formatCatalogue(allEntries, 'BESSELIAN_ELEMENTS_CATALOGUE_FULL'),
+        generateCatalogueFile(allEntries, 'BESSELIAN_ELEMENTS_CATALOGUE_FULL'),
     );
     console.log(`Generated catalogueFull.ts with ${allEntries.length} entries (full range)`);
 }
