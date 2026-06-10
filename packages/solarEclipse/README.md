@@ -212,6 +212,20 @@ The result of the calculation should be: *272.8*
 
 ---
 
+#### getCentralLine
+
+**Description:** Returns the path of the central eclipse (totality or annularity) as an array of `{lat, lon}` coordinate objects in decimal degrees. Points are computed by stepping through the eclipse duration and projecting the Moon's shadow axis onto Earth's surface. Points where the shadow axis misses Earth are omitted. The optional `stepsInSeconds` parameter (default: `10`) controls the time resolution between points — smaller values produce a denser path.
+
+```javascript
+const path = eclipse.getCentralLine();
+// [{lat: ..., lon: ...}, ...]
+
+// Higher resolution (1-second steps)
+const densePath = eclipse.getCentralLine(1);
+```
+
+---
+
 #### getLocalEclipse
 
 **Description:** Returns a [`LocalSolarEclipse`](#localsolareclipse-eclipse--location) instance for a specific observer location. Use this to calculate contact times, local eclipse type, magnitude, and obscuration as seen from that location.

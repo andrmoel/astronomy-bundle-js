@@ -2,6 +2,7 @@ import type {LatLon} from '@app/types/LocationTypes';
 import type Location from '@package/location/models/Location';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
+import {getCentralLine} from '@package/solarEclipse/utils/eclipsePaths';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
 import {
     getJulianDayOfGreatestEclipse,
@@ -80,6 +81,10 @@ export default class SolarEclipse {
             ...this.locationOfGreatestEclipse,
             elevation: 0,
         });
+    }
+
+    public getCentralLine(stepsInSeconds = 10): Array<LatLon> {
+        return getCentralLine(this.elements, stepsInSeconds);
     }
 
     // TODO
