@@ -1,3 +1,5 @@
+import type {LocalHorizontalCoordinates} from '@app/types/CoordinateTypes';
+import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import type Location from '@package/location/models/Location';
 import {julianDay2tau} from '@package/solarEclipse/utils/besselianElements';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
@@ -7,6 +9,7 @@ import type {LocalEclipseCircumstances as LocalEclipseCircumstancesType} from '.
 import {
     getLocalEclipseCircumstances,
     getLocalEclipseType,
+    getLocalHorizontalCoordinates,
     getMagnitude,
     getObscuration,
 } from '../utils/localCircumstances';
@@ -14,7 +17,11 @@ import {
 export default class LocalEclipseCircumstances {
     private readonly circumstances: LocalEclipseCircumstancesType;
 
-    private constructor(elements: BesselianElements, location: Location, toi: TimeOfInterest) {
+    private constructor(
+        elements: BesselianElements,
+        private readonly location: Location,
+        toi: TimeOfInterest,
+    ) {
         const tau = julianDay2tau(elements, toi.getJulianDay());
         this.circumstances = getLocalEclipseCircumstances(elements, location, tau);
     }
@@ -47,14 +54,17 @@ export default class LocalEclipseCircumstances {
         return getObscuration(this.circumstances);
     }
 
-    // TODO
-    // public getSunAltitude(): number {
-    //     return getSunAltitudeDeg(this.elements, this.location, this.tau);
-    // }
+    public getTopocentricHorizontalCoordinates(): LocalHorizontalCoordinates {
+        return getLocalHorizontalCoordinates(this.circumstances, this.location);
+    }
 
-    // TODO
-    // During a solar eclipse the moon and sun share essentially the same altitude.
-    // public getMoonAltitude(): number {
-    //     return this.getSunAltitude();
-    // }
+    public getApparentTopocentricHorizontalCoordinates(): LocalHorizontalCoordinates {
+        const {azimuth, altitude, radiusVector} = this.getTopocentricHorizontalCoordinates();
+
+        return {
+            azimuth: azimuth,
+            altitude: correctEffectOfRefraction(altitude),
+            radiusVector: radiusVector,
+        };
+    }
 }

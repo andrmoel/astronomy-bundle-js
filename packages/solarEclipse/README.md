@@ -481,3 +481,35 @@ const obscurationTotal   = circumstancesTotal.getObscuration();
 The result of the calculation should be:\
 During partial phase: *0.684328*\
 During total phase: *1*
+
+---
+
+#### getTopocentricHorizontalCoordinates
+
+**Description:** Returns the geometric topocentric horizontal coordinates of the Sun for the observer's location and given moment. The result contains azimuth and altitude in degrees, plus `radiusVector` set to `0`.
+
+**Example**: Get geometric Sun coordinates during totality
+
+```javascript
+const horizontal = circumstancesTotal.getTopocentricHorizontalCoordinates();
+```
+
+The result of the calculation should be:\
+Azimuth: *255.664318°*\
+Geometric altitude: *76.861319°*
+
+---
+
+#### getApparentTopocentricHorizontalCoordinates
+
+**Description:** Returns the apparent topocentric horizontal coordinates of the Sun for the observer's location and given moment. The altitude includes atmospheric refraction correction; azimuth and `radiusVector` are unchanged from the geometric coordinates.
+
+**Example**: Get refraction-corrected Sun coordinates during totality
+
+```javascript
+const apparentHorizontal = circumstancesTotal.getApparentTopocentricHorizontalCoordinates();
+```
+
+The result of the calculation should be:\
+Azimuth: *255.664318°*\
+Apparent altitude (with refraction): *76.865248°*

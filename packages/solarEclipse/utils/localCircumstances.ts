@@ -1,6 +1,8 @@
 import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
-import {DEG} from '@app/constants/math';
+import {DEG, RAD} from '@app/constants/math';
+import type {LocalHorizontalCoordinates} from '@app/types/CoordinateTypes';
 import type {Location} from '@app/types/LocationTypes';
+import {normalizeAngle} from '@app/utils/angle';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import type {BesselianElements} from '../types/BesselianElementTypes';
@@ -110,4 +112,24 @@ export function getObscuration(circumstances: LocalEclipseCircumstances): number
     const result = moonSunRatio ** 2 * a + b - moonSunRatio * Math.sin(c);
 
     return result / Math.PI;
+}
+
+export function getLocalHorizontalCoordinates(
+    circumstances: LocalEclipseCircumstances,
+    location: Location,
+): LocalHorizontalCoordinates {
+    const {hourAngle, sinD, cosD} = circumstances;
+    const lat = location.lat * DEG;
+    const sinAltitude = Math.sin(lat) * sinD + Math.cos(lat) * cosD * Math.cos(hourAngle);
+    const altitude = Math.asin(Math.max(-1, Math.min(1, sinAltitude))) * RAD;
+    const azimuth = Math.atan2(
+        Math.sin(hourAngle),
+        Math.cos(hourAngle) * Math.sin(lat) - (sinD / cosD) * Math.cos(lat),
+    );
+
+    return {
+        azimuth: normalizeAngle(azimuth * RAD + 180),
+        altitude,
+        radiusVector: 0,
+    };
 }

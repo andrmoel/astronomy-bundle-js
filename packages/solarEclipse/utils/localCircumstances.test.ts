@@ -4,6 +4,7 @@ import type {BesselianElements} from '@package/solarEclipse/types/BesselianEleme
 import {
     getLocalEclipseCircumstances,
     getLocalEclipseType,
+    getLocalHorizontalCoordinates,
     getMagnitude,
     getMaximumEclipse,
     getMoonSunRatio,
@@ -157,5 +158,15 @@ describe('getObscuration', () => {
         const result = getObscuration(circumstancesMaximumEclipseExmouth);
 
         expect(result).toBeCloseTo(1, 5);
+    });
+});
+
+describe('getLocalHorizontalCoordinates', () => {
+    it('returns the geometric Sun horizontal coordinates in degrees for maximum eclipse in Exmouth', () => {
+        const result = getLocalHorizontalCoordinates(circumstancesMaximumEclipseExmouth, locationTotal);
+
+        expect(result.azimuth).toBeCloseTo(22.271663, 6);
+        expect(result.altitude).toBeCloseTo(54.268116, 6);
+        expect(result.radiusVector).toBe(0);
     });
 });
