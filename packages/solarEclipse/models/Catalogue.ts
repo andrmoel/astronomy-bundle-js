@@ -12,10 +12,10 @@ export default class Catalogue {
     };
 
     public static getAvailableEclipseDates(dateFrom?: string, dateTo?: string): Array<string> {
-        return getAvailableEclipseDates(Catalogue.catalogue, dateFrom, dateTo);
+        return getAvailableEclipseDates(this.catalogue, dateFrom, dateTo);
     }
 
     public static getBesselianElements(dateStr: string): BesselianElements {
-        return getBesselianElements(Catalogue.catalogue, dateStr, Catalogue.range);
+        return getBesselianElements(this.catalogue, dateStr, this.range);
     }
 }

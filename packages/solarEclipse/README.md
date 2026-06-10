@@ -64,41 +64,17 @@ const eclipse = SolarEclipse.createFromBesselianElements(elements);
 
 ```javascript
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {Catalogue} from '@astronomy-bundle/solar-eclipse/catalogue';
 
-const eclipse = SolarEclipse.createFromDate('2019-07-02');
-```
-
----
-
-#### createFromDate *(static)*
-
-**Description:** Creates a `SolarEclipse` instance for the eclipse occurring on the given date. The date must be in `YYYY-MM-DD` format. Throws if no eclipse data exists for that date.
-
-```javascript
-import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
-
-const eclipse = SolarEclipse.createFromDate('2019-07-02');
-```
-
----
-
-#### createFromToi *(static)*
-
-**Description:** Creates a `SolarEclipse` instance using a `TimeOfInterest` object. Only the date part is used to look up the eclipse; time of day is ignored. Throws if no eclipse data exists for that date.
-
-```javascript
-import {TimeOfInterest} from '@astronomy-bundle/core';
-import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
-
-const toi = TimeOfInterest.fromTime(2019, 7, 2, 19, 22, 58);
-const eclipse = SolarEclipse.createFromToi(toi);
+const elements = Catalogue.getBesselianElements('2019-07-02');
+const eclipse = SolarEclipse.createFromBesselianElements(elements);
 ```
 
 ---
 
 #### createFromBesselianElements *(static)*
 
-**Description:** Creates a `SolarEclipse` instance directly from a `BesselianElements` object. Use this when you have pre-computed Besselian elements that are not in the built-in dataset.
+**Description:** Creates a `SolarEclipse` instance from a `BesselianElements` object. This is the only static constructor on `SolarEclipse`. Use the built-in [`Catalogue`](#eclipse-catalogue) entrypoints for date-based lookup, or pass custom pre-computed Besselian elements.
 
 ```javascript
 import {SolarEclipse, parseBesselianElements} from '@astronomy-bundle/solar-eclipse';
@@ -255,11 +231,13 @@ const localEclipse = eclipse.getLocalEclipse(location);
 ```javascript
 import {Location} from '@astronomy-bundle/core';
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {Catalogue} from '@astronomy-bundle/solar-eclipse/catalogue';
 
 const location = Location.create(-21.32947, 55.45174, 43);
+const elements = Catalogue.getBesselianElements('2016-09-01');
 
 const localEclipse = SolarEclipse
-    .createFromDate('2016-09-01')
+    .createFromBesselianElements(elements);
     .getLocalEclipse(location);
 ```
 
@@ -401,22 +379,22 @@ const circumstances = localEclipse.getCircumstances(toi);
 ```javascript
 import {TimeOfInterest, Location} from '@astronomy-bundle/core';
 import {SolarEclipse} from '@astronomy-bundle/solar-eclipse';
+import {Catalogue} from '@astronomy-bundle/solar-eclipse/catalogue';
 
 const location = Location.create(21.52854, 39.14387, 6);
 const toiPartial = TimeOfInterest.fromTime(2027, 8, 2, 10, 1, 5);
 const toiTotal   = TimeOfInterest.fromTime(2027, 8, 2, 10, 23, 13);
+const elements = Catalogue.getBesselianElements('2027-08-02');
+
+const localEclipse = SolarEclipse
+    .createFromBesselianElements(elements)
+    .getLocalEclipse(location);
 
 // Local circumstances during partial phase in Jeddah
-const circumstancesPartial = SolarEclipse
-    .createFromDate('2027-08-02')
-    .getLocalEclipse(location)
-    .getCircumstances(toiPartial);
+const circumstancesPartial = localEclipse.getCircumstances(toiPartial);
 
 // Local circumstances during total phase in Jeddah
-const circumstancesTotal = SolarEclipse
-    .createFromDate('2027-08-02')
-    .getLocalEclipse(location)
-    .getCircumstances(toiTotal);
+const circumstancesTotal = localEclipse.getCircumstances(toiTotal);
 ```
 
 ---
