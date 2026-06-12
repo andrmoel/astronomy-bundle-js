@@ -111,7 +111,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public getTopocentricElongation(location: Location): number {
-        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsMoon = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return getElongation(coordsMoon, coordsSun);
@@ -125,7 +125,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public getTopocentricPhaseAngle(location: Location): number {
-        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsMoon = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return getPhaseAngle(coordsMoon, coordsSun);
@@ -151,7 +151,7 @@ export default class Moon extends AstronomicalObject {
     }
 
     public getTopocentricPositionAngleOfBrightLimb(location: Location): number {
-        const coordsMoon = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsMoon = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
         const coordsSun = this.sun.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return getPositionAngleOfBrightLimb(coordsMoon, coordsSun);
@@ -180,7 +180,7 @@ export default class Moon extends AstronomicalObject {
 
     public getTopocentricApparentMagnitude(location: Location): number {
         const coordsHelio = this.getHeliocentricEclipticSphericalDateCoordinates();
-        const coordsGeo = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coordsGeo = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
         const i = this.getTopocentricPhaseAngle(location);
         const waxing = this.isTopocentricWaxing(location);
 

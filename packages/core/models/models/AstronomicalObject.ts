@@ -82,20 +82,20 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
         return eclipticSpherical2equatorialSpherical(coords, this.T);
     }
 
-    public getTopocentricEquatorialSphericalCoordinates(location: Location): EquatorialSphericalCoordinates {
+    public getApparentTopocentricEquatorialSphericalCoordinates(location: Location): EquatorialSphericalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return equatorialSpherical2topocentricSpherical(coords, location, this.T);
     }
 
-    public getTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
+    public getApparentTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
         return equatorialSpherical2topocentricHorizontal(coords, location, this.T);
     }
 
-    public getApparentTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
-        const {azimuth, altitude, radiusVector} = this.getTopocentricHorizontalCoordinates(location);
+    public getRefractionCorrectedTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
+        const {azimuth, altitude, radiusVector} = this.getApparentTopocentricHorizontalCoordinates(location);
 
         return {
             azimuth: azimuth,
@@ -117,7 +117,7 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     }
 
     public getTopocentricDistanceToEarth(location: Location): number {
-        const coords = this.getTopocentricEquatorialSphericalCoordinates(location);
+        const coords = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
         return au2km(coords.radiusVector);
     }

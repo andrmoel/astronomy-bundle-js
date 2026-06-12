@@ -2,7 +2,7 @@ Part of the [Astronomy Bundle](../../README.md).
 
 # Moon
 
-The `moon` package provides the `Moon` object for computing the Moon's position as seen from Earth. Geocentric coordinates are derived from the Moon's mean orbital elements with corrections for the principal perturbations, and apparent coordinates apply nutation corrections. Observation quantities such as elongation, phase angle, illuminated fraction, and upcoming lunar phases are also available.
+The `moon` package provides the `Moon` object for computing the Moon's position as seen from Earth. Geocentric coordinates are derived from the Moon's mean orbital elements with corrections for the principal perturbations, and apparent coordinates apply nutation corrections. Topocentric results are exposed as apparent coordinates and, for horizontal altitude, as observed coordinates with atmospheric refraction applied. Observation quantities such as elongation, phase angle, illuminated fraction, and upcoming lunar phases are also available.
 
 ## Install
 
@@ -142,7 +142,7 @@ Apparent radius vector: *0.002463 AU*
 
 ### Topocentric coordinates
 
-**Description:** Topocentric coordinates shift the geocentric position to match the perspective of an observer at a specific location on Earth's surface. A `Location` (geographic latitude and longitude in degrees) is required. Available as equatorial spherical and horizontal (azimuth/altitude) coordinates.
+**Description:** Topocentric coordinates shift the geocentric position to match the perspective of an observer at a specific location on Earth's surface. A `Location` (geographic latitude and longitude in degrees) is required. The API exposes apparent topocentric equatorial coordinates, apparent topocentric horizontal coordinates with geometric altitude, and observed topocentric horizontal coordinates with atmospheric refraction applied to the altitude.
 
 **Example**: Get topocentric coordinates for 12 April 1992 at 00:00 UTC, observer at 52.519°N, 122.4108°W
 
@@ -154,18 +154,18 @@ const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
 const location = Location.create(52.519, -122.4108);
 const moon = Moon.create(toi);
 
-const equatorial  = moon.getTopocentricEquatorialSphericalCoordinates(location);
-const horizontal  = moon.getTopocentricHorizontalCoordinates(location);
-const apparentAlt = moon.getApparentTopocentricHorizontalCoordinates(location);
+const apparentEquatorial = moon.getApparentTopocentricEquatorialSphericalCoordinates(location);
+const apparentHorizontal = moon.getApparentTopocentricHorizontalCoordinates(location);
+const observedHorizontal = moon.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 ```
 
 The result of the calculation should be:\
-Topocentric right ascension: *135.211802°*\
-Topocentric declination: *13.079873°*
+Apparent topocentric right ascension: *135.211802°*\
+Apparent topocentric declination: *13.079873°*
 
-Azimuth: *108.968405°*\
+Apparent topocentric azimuth: *108.968405°*\
 Geometric altitude: *30.91398°*\
-Apparent altitude (with refraction): *30.94205°*
+Observed altitude (with refraction): *30.94205°*
 
 ---
 

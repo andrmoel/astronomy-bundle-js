@@ -2,7 +2,7 @@ Part of the [Astronomy Bundle](../../README.md).
 
 # Sun
 
-The `sun` package provides the `Sun` object for computing the Sun's position as seen from Earth. Geocentric and topocentric coordinates are derived from Earth's heliocentric VSOP87 position, with corrections for aberration and nutation applied to the apparent coordinates.
+The `sun` package provides the `Sun` object for computing the Sun's position as seen from Earth. Geocentric and topocentric coordinates are derived from Earth's heliocentric VSOP87 position, with corrections for aberration and nutation applied to the apparent coordinates. Topocentric results are exposed as apparent coordinates and, for horizontal altitude, as observed coordinates with atmospheric refraction applied.
 
 ## Install
 
@@ -154,7 +154,7 @@ Apparent radius vector: *0.99514567 AU*
 
 ### Topocentric coordinates
 
-**Description:** Topocentric coordinates shift the geocentric position to match the perspective of an observer at a specific location on Earth's surface. A `Location` (geographic latitude and longitude in degrees) is required. Available as equatorial spherical and horizontal (azimuth/altitude) coordinates.
+**Description:** Topocentric coordinates shift the geocentric position to match the perspective of an observer at a specific location on Earth's surface. A `Location` (geographic latitude and longitude in degrees) is required. The API exposes apparent topocentric equatorial coordinates, apparent topocentric horizontal coordinates with geometric altitude, and observed topocentric horizontal coordinates with atmospheric refraction applied to the altitude.
 
 **Example**: Get topocentric coordinates for 22 October 2020 at 06:15 UTC, observer in Berlin (52.519°N, 13.408°E)
 
@@ -166,18 +166,18 @@ const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
 const location = Location.create(52.519, 13.408);
 const sun = Sun.create(toi);
 
-const equatorial  = sun.getTopocentricEquatorialSphericalCoordinates(location);
-const horizontal  = sun.getTopocentricHorizontalCoordinates(location);
-const apparentAlt = sun.getApparentTopocentricHorizontalCoordinates(location);
+const apparentEquatorial = sun.getApparentTopocentricEquatorialSphericalCoordinates(location);
+const apparentHorizontal = sun.getApparentTopocentricHorizontalCoordinates(location);
+const observedHorizontal = sun.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 ```
 
 The result of the calculation should be:\
-Topocentric right ascension: *207.248790°*\
-Topocentric declination: *-11.227918°*
+Apparent topocentric right ascension: *207.248790°*\
+Apparent topocentric declination: *-11.227918°*
 
-Azimuth: *113.500747°*\
+Apparent topocentric azimuth: *113.500747°*\
 Geometric altitude: *3.433916°*\
-Apparent altitude (with refraction): *3.643402°*
+Observed altitude (with refraction): *3.643402°*
 
 ---
 

@@ -117,7 +117,8 @@ it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
 });
 
 it('tests getTopocentricEquatorialSphericalCoordinates', () => {
-    const {rightAscension, declination, radiusVector} = moon.getTopocentricEquatorialSphericalCoordinates(location);
+    const {rightAscension, declination, radiusVector} =
+        moon.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
     expect(rightAscension).toBeCloseTo(135.211802, 6);
     expect(declination).toBeCloseTo(13.079873, 6);
@@ -125,7 +126,7 @@ it('tests getTopocentricEquatorialSphericalCoordinates', () => {
 });
 
 it('tests getTopocentricHorizontalCoordinates', () => {
-    const {azimuth, altitude, radiusVector} = moon.getTopocentricHorizontalCoordinates(location);
+    const {azimuth, altitude, radiusVector} = moon.getApparentTopocentricHorizontalCoordinates(location);
 
     expect(azimuth).toBeCloseTo(108.968405, 6);
     expect(altitude).toBeCloseTo(30.91398, 6);
@@ -133,7 +134,7 @@ it('tests getTopocentricHorizontalCoordinates', () => {
 });
 
 it('tests getApparentTopocentricHorizontalCoordinates', () => {
-    const {azimuth, altitude, radiusVector} = moon.getApparentTopocentricHorizontalCoordinates(location);
+    const {azimuth, altitude, radiusVector} = moon.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 
     expect(azimuth).toBeCloseTo(108.968405, 6);
     expect(altitude).toBeCloseTo(30.94205, 6);
