@@ -2,9 +2,7 @@ import {decimal2degreeMinutes, decimal2degreeMinutesSeconds} from '@app/utils/an
 import {getDistanceInKm} from '@app/utils/distance';
 import type {Location as LocationType} from '../types/LocationTypes';
 
-export default class Location {
-    private readonly location: LocationType;
-
+export default class Location implements LocationType {
     private prefixesNorthSouth = {positivePrefix: 'N ', negativePrefix: 'S '};
 
     private prefixesEastWest = {positivePrefix: 'E ', negativePrefix: 'W '};
@@ -13,43 +11,41 @@ export default class Location {
         public readonly lat: number,
         public readonly lon: number,
         public readonly elevation: number = 0,
-    ) {
-        this.location = {lat, lon, elevation};
-    }
+    ) {}
 
     public static create(lat: number, lon: number, elevation = 0): Location {
         return new Location(lat, lon, elevation);
     }
 
     public getLatitude(): number {
-        return this.location.lat;
+        return this.lat;
     }
 
     public getLongitude(): number {
-        return this.location.lon;
-    }
-
-    public getLatitudeInDegreeMinutes(): string {
-        return decimal2degreeMinutes(this.location.lat, false, this.prefixesNorthSouth);
-    }
-
-    public getLongitudeInDegreeMinutes(): string {
-        return decimal2degreeMinutes(this.location.lon, false, this.prefixesEastWest);
-    }
-
-    public getLatitudeInDegreeMinutesSeconds(): string {
-        return decimal2degreeMinutesSeconds(this.location.lat, false, this.prefixesNorthSouth);
-    }
-
-    public getLongitudeInDegreeMinutesSeconds(): string {
-        return decimal2degreeMinutesSeconds(this.location.lon, false, this.prefixesEastWest);
+        return this.lon;
     }
 
     public getElevation(): number {
-        return this.location.elevation;
+        return this.elevation;
+    }
+
+    public getLatitudeInDegreeMinutes(): string {
+        return decimal2degreeMinutes(this.lat, false, this.prefixesNorthSouth);
+    }
+
+    public getLongitudeInDegreeMinutes(): string {
+        return decimal2degreeMinutes(this.lon, false, this.prefixesEastWest);
+    }
+
+    public getLatitudeInDegreeMinutesSeconds(): string {
+        return decimal2degreeMinutesSeconds(this.lat, false, this.prefixesNorthSouth);
+    }
+
+    public getLongitudeInDegreeMinutesSeconds(): string {
+        return decimal2degreeMinutesSeconds(this.lon, false, this.prefixesEastWest);
     }
 
     public getDistanceToInKm(location: Location): number {
-        return getDistanceInKm(this.location, location);
+        return getDistanceInKm(this, location);
     }
 }
