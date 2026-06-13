@@ -1,6 +1,6 @@
 import type {LocalHorizontalCoordinates} from '@app/types/CoordinateTypes';
+import type {Location} from '@app/types/LocationTypes';
 import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
-import type Location from '@package/location/models/Location';
 import {julianDay2tau} from '@package/solarEclipse/utils/besselianElements';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
