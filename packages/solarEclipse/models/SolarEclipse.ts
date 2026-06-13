@@ -1,5 +1,5 @@
 import type {LatLon} from '@app/types/LocationTypes';
-import type Location from '@package/location/models/Location';
+import type {Location} from '@app/types/LocationTypes';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
 import {getCentralLine} from '@package/solarEclipse/utils/eclipsePaths';
