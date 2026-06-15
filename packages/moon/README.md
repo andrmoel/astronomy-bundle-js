@@ -4,6 +4,29 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `moon` package provides the `Moon` object for computing the Moon's position as seen from Earth. Geocentric coordinates are derived from the Moon's mean orbital elements with corrections for the principal perturbations, and apparent coordinates apply nutation corrections. Topocentric results are exposed as apparent coordinates and, for horizontal altitude, as observed coordinates with atmospheric refraction applied. Observation quantities such as elongation, phase angle, illuminated fraction, and upcoming lunar phases are also available.
 
+## Contents
+
+- [Install](#install)
+- [High precision](#high-precision)
+- [API Reference](#api-reference)
+  - [Create the Moon object](#create-the-moon-object)
+  - [Geocentric ecliptic spherical coordinates](#geocentric-ecliptic-spherical-coordinates)
+  - [Geocentric ecliptic rectangular coordinates](#geocentric-ecliptic-rectangular-coordinates)
+  - [Geocentric equatorial spherical coordinates](#geocentric-equatorial-spherical-coordinates)
+  - [Apparent geocentric coordinates](#apparent-geocentric-coordinates)
+  - [Topocentric coordinates](#topocentric-coordinates)
+  - [Distance to Earth](#distance-to-earth)
+  - [Light time](#light-time)
+  - [Angular diameter](#angular-diameter)
+  - [Elongation](#elongation)
+  - [Phase angle](#phase-angle)
+  - [Illuminated fraction](#illuminated-fraction)
+  - [Position angle of bright limb](#position-angle-of-bright-limb)
+  - [Waxing / waning](#waxing--waning)
+  - [Apparent magnitude](#apparent-magnitude)
+  - [Upcoming lunar phases](#upcoming-lunar-phases)
+  - [Sub-Earth, optical libration, and sub-Solar points](#sub-earth-optical-libration-and-sub-solar-points)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/moon @astronomy-bundle/core`\
