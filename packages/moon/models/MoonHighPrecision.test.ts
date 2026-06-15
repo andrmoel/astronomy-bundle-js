@@ -310,6 +310,13 @@ it('tests getOpticalLibration', () => {
     expect(lat).toBeCloseTo(4.19403, 5);
 });
 
+it('tests getTopocentricLibration', () => {
+    const {lon, lat} = moon.getTopocentricLibration(location);
+
+    expect(lon).toBeCloseTo(-0.55307, 5);
+    expect(lat).toBeCloseTo(4.73118, 5);
+});
+
 it('tests getSubSolarPoint', () => {
     const {lon, lat} = moon.getSubSolarPoint();
 

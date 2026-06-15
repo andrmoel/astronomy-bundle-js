@@ -298,6 +298,13 @@ it('tests getSubEarthPoint', () => {
     expect(lat).toBeCloseTo(4.1998, 5);
 });
 
+it('tests getSubSolarPoint', () => {
+    const {lon, lat} = moon.getSubSolarPoint();
+
+    expect(lon).toBeCloseTo(67.89891, 5);
+    expect(lat).toBeCloseTo(1.46152, 5);
+});
+
 it('tests getOpticalLibration', () => {
     const {lon, lat} = moon.getOpticalLibration();
 
@@ -305,11 +312,11 @@ it('tests getOpticalLibration', () => {
     expect(lat).toBeCloseTo(4.19403, 5);
 });
 
-it('tests getSubSolarPoint', () => {
-    const {lon, lat} = moon.getSubSolarPoint();
+it('tests getTopocentricLibration', () => {
+    const {lon, lat} = moon.getTopocentricLibration(location);
 
-    expect(lon).toBeCloseTo(67.89891, 5);
-    expect(lat).toBeCloseTo(1.46152, 5);
+    expect(lon).toBeCloseTo(-0.55307, 5);
+    expect(lat).toBeCloseTo(4.73118, 5);
 });
 
 // it('tests GoldenHandle', () => {

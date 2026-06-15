@@ -9,6 +9,7 @@ import type {EclipticSphericalCoordinates, RectangularCoordinates} from '@app/ty
 import type {Location} from '@app/types/LocationTypes';
 import {correctEffectOfNutation} from '@app/utils/apparentPositionCorrections';
 import {
+    equatorialSpherical2eclipticSpherical,
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     spherical2rectangular,
@@ -229,5 +230,14 @@ export default class Moon extends AstronomicalObject {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
         return getOpticalSelenographicLocation(coords, this.T);
+    }
+
+    public getTopocentricLibration(location: Location): SelenographicLocation {
+        const coords = equatorialSpherical2eclipticSpherical(
+            this.getApparentTopocentricEquatorialSphericalCoordinates(location),
+            this.T,
+        );
+
+        return getSelenographicLocation(coords, this.T);
     }
 }
