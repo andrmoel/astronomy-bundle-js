@@ -406,3 +406,32 @@ Next new moon: *1992-04-03 05:02:03 UTC*\
 Next first quarter: *1992-04-10 10:06:42 UTC*\
 Next full moon: *1992-04-17 04:43:22 UTC*\
 Next last quarter: *1992-04-24 21:40:37 UTC*
+
+---
+
+### Sub-Earth, optical libration, and sub-Solar points
+
+**Description:** These methods describe how the Moon is oriented toward the Earth and Sun at a given time.
+
+- `getSubEarthPoint()` returns the selenographic point on the Moon's surface that lies directly under the Earth's center. This is the combined Earth-facing point, including optical and physical libration.
+- `getSubSolarPoint()` returns the selenographic point on the Moon's surface that lies directly under the Sun. This is useful for identifying the lunar point receiving the Sun at zenith.
+- `getOpticalLibration()` returns the optical part of the Earth-facing offset only. It describes the apparent wobble caused by the Moon's varying orbital motion and viewing geometry.
+
+**Example**: Get the Moon's Earth-facing and Sun-facing reference points for 12 April 1992 at 00:00 UTC
+
+```javascript
+import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Moon} from '@astronomy-bundle/moon';
+
+const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = Moon.create(toi);
+
+const subEarthPoint = moon.getSubEarthPoint();
+const subSolarPoint = moon.getSubSolarPoint();
+const opticalLibration = moon.getOpticalLibration();
+```
+
+The result of the calculation should be:\
+Sub-Earth point: *lon -1.23121°, lat 4.1998°*\
+Sub-Solar point: *lon 67.89894°, lat 1.4615°*
+Optical libration: *lon -1.20579°, lat 4.19403°*\

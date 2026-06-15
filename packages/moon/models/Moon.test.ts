@@ -290,28 +290,28 @@ it('tests getUpcomingLastQuarter', () => {
 
     expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 40, sec: 37});
 });
-//
-// it('tests getGeocentricLibration',  () => {
-//     const {lon, lat} =  moon.getGeocentricLibration();
-//
-//     expect(lon).toBeCloseTo(-1.23121, 5);
-//     expect(lat).toBeCloseTo(4.1998, 5);
-// });
-//
-// it('tests getSelenographicLocationOfEarth',  () => {
-//     const {lon, lat} =  moon.getSelenographicLocationOfEarth();
-//
-//     expect(lon).toBeCloseTo(-1.23121, 5);
-//     expect(lat).toBeCloseTo(4.1998, 5);
-// });
-//
-// it('tests getSelenographicLocationOfSun',  () => {
-//     const {lon, lat} =  moon.getSelenographicLocationOfSun();
-//
-//     expect(lon).toBeCloseTo(67.89894, 5);
-//     expect(lat).toBeCloseTo(1.4615, 5);
-// });
-//
+
+it('tests getSubEarthPoint', () => {
+    const {lon, lat} = moon.getSubEarthPoint();
+
+    expect(lon).toBeCloseTo(-1.23121, 5);
+    expect(lat).toBeCloseTo(4.1998, 5);
+});
+
+it('tests getOpticalLibration', () => {
+    const {lon, lat} = moon.getOpticalLibration();
+
+    expect(lon).toBeCloseTo(-1.20579, 5);
+    expect(lat).toBeCloseTo(4.19403, 5);
+});
+
+it('tests getSubSolarPoint', () => {
+    const {lon, lat} = moon.getSubSolarPoint();
+
+    expect(lon).toBeCloseTo(67.89891, 5);
+    expect(lat).toBeCloseTo(1.46152, 5);
+});
+
 // it('tests GoldenHandle', () => {
 //     expect(moon.getGoldenHandle()).toBeInstanceOf(GoldenHandle);
 // });

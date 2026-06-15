@@ -24,6 +24,8 @@ import {
 } from '@app/utils/observation';
 import AstronomicalObject from '@package/core/models/models/AstronomicalObject';
 import Earth from '@package/earth/models/Earth';
+import type {SelenographicLocation} from '@package/moon/types/LibrationTypes';
+import {getOpticalSelenographicLocation, getSelenographicLocation} from '@package/moon/utils/libration';
 import {getApparentMagnitudeMoon} from '@package/moon/utils/magnitude';
 import {getTimeOfInterestOfUpcomingPhase} from '@package/moon/utils/phases';
 import Sun from '@package/sun/models/Sun';
@@ -209,5 +211,23 @@ export default class Moon extends AstronomicalObject {
         const decimalYear = this.toi.getDecimalYear();
 
         return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_LAST_QUARTER);
+    }
+
+    public getSubEarthPoint(): SelenographicLocation {
+        const coords = this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return getSelenographicLocation(coords, this.T);
+    }
+
+    public getSubSolarPoint(): SelenographicLocation {
+        const coords = this.getHeliocentricEclipticSphericalDateCoordinates();
+
+        return getSelenographicLocation(coords, this.T);
+    }
+
+    public getOpticalLibration(): SelenographicLocation {
+        const coords = this.getGeocentricEclipticSphericalDateCoordinates();
+
+        return getOpticalSelenographicLocation(coords, this.T);
     }
 }
