@@ -303,11 +303,24 @@ it('tests getSubEarthPoint', () => {
     expect(lat).toBeCloseTo(4.1998, 5);
 });
 
-it('tests getOpticalLibration', () => {
-    const {lon, lat} = moon.getOpticalLibration();
+it('tests getSubSolarPoint', () => {
+    const {lon, lat} = moon.getSubSolarPoint();
+
+    expect(lon).toBeCloseTo(67.89894, 5);
+    expect(lat).toBeCloseTo(1.46150, 5);
+});
+
+it('tests getGeocentricLibration', () => {
+    const {lon, lat} = moon.getGeocentricLibration();
 
     expect(lon).toBeCloseTo(-1.20579, 5);
     expect(lat).toBeCloseTo(4.19403, 5);
+});
+
+it('tests getGeocentricLibrationMagnitude', () => {
+    const liberation = moon.getGeocentricLibrationMagnitude();
+
+    expect(liberation).toBeCloseTo(4.36392, 5);
 });
 
 it('tests getTopocentricLibration', () => {
@@ -317,11 +330,10 @@ it('tests getTopocentricLibration', () => {
     expect(lat).toBeCloseTo(4.73118, 5);
 });
 
-it('tests getSubSolarPoint', () => {
-    const {lon, lat} = moon.getSubSolarPoint();
+it('tests getTopocentricLibrationMagnitude', () => {
+    const liberation = moon.getTopocentricLibrationMagnitude(location);
 
-    expect(lon).toBeCloseTo(67.89894, 5);
-    expect(lat).toBeCloseTo(1.4615, 5);
+    expect(liberation).toBeCloseTo(4.7634, 5);
 });
 
 // it('tests GoldenHandle', () => {

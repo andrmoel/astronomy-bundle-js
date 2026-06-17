@@ -1,10 +1,12 @@
 import {DEG, RAD} from '@app/constants/math';
 import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '@app/constants/moon';
-import type {EclipticSphericalCoordinates} from '@app/types/CoordinateTypes';
+import type {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '@app/types/CoordinateTypes';
 import {normalizeAngle} from '@app/utils/angle';
+import {equatorialSpherical2eclipticSpherical} from '@app/utils/coordinateTransformation';
+import {normalizeLongitude} from '@app/utils/location';
 import * as moon from '@app/utils/moon';
 import * as sun from '@app/utils/sun';
-import type {SelenographicLocation} from '../types/LibrationTypes';
+import type {SelenographicPoint} from '../types/LibrationTypes';
 
 type Quantities = {
     rho: number;
@@ -17,20 +19,17 @@ type WandA = {
     A: number;
 };
 
-export function getSelenographicLocation(coords: EclipticSphericalCoordinates, T: number): SelenographicLocation {
+export function getSelenographicLocation(coords: EclipticSphericalCoordinates, T: number): SelenographicPoint {
     const {lon: lonOpt, lat: latOpt} = getOpticalSelenographicLocation(coords, T);
     const {lon: lonPhy, lat: latPhy} = getPhysicalSelenographicLocation(coords, T);
 
     return {
-        lon: lonOpt + lonPhy,
+        lon: normalizeLongitude(lonOpt + lonPhy),
         lat: latOpt + latPhy,
     };
 }
 
-export function getOpticalSelenographicLocation(
-    coords: EclipticSphericalCoordinates,
-    T: number,
-): SelenographicLocation {
+export function getOpticalSelenographicLocation(coords: EclipticSphericalCoordinates, T: number): SelenographicPoint {
     const F = moon.getArgumentOfLatitude(T);
     const {W, A} = getWA(coords, T);
 
@@ -44,13 +43,13 @@ export function getOpticalSelenographicLocation(
     );
     const lat = latRad * RAD;
 
-    return {lon, lat};
+    return {
+        lon: normalizeLongitude(lon),
+        lat: lat,
+    };
 }
 
-export function getPhysicalSelenographicLocation(
-    coords: EclipticSphericalCoordinates,
-    T: number,
-): SelenographicLocation {
+export function getPhysicalSelenographicLocation(coords: EclipticSphericalCoordinates, T: number): SelenographicPoint {
     const {lat: latOpt} = getOpticalSelenographicLocation(coords, T);
     const {A} = getWA(coords, T);
     const {rho, sigma, tau} = getQuantities(T);
@@ -62,7 +61,28 @@ export function getPhysicalSelenographicLocation(
     const lon = -1 * tau + (rho * Math.cos(ARad) + sigma * Math.sin(ARad)) * Math.tan(latOptRad);
     const lat = sigma * Math.cos(ARad) - rho * Math.sin(ARad);
 
-    return {lon, lat};
+    return {
+        lon: normalizeLongitude(lon),
+        lat: lat,
+    };
+}
+
+export function getTopocentricSelenographicLocation(
+    coords: EquatorialSphericalCoordinates,
+    T: number,
+): SelenographicPoint {
+    const eclipticCoords = equatorialSpherical2eclipticSpherical(coords, T);
+    const {lon: lonOpt, lat: latOpt} = getOpticalSelenographicLocation(eclipticCoords, T);
+    const {lon: lonPhy, lat: latPhy} = getPhysicalSelenographicLocation(eclipticCoords, T);
+
+    return {
+        lon: normalizeLongitude(lonOpt + lonPhy),
+        lat: latOpt + latPhy,
+    };
+}
+
+export function getSelenographicMagnitude(lon: number, lat: number): number {
+    return Math.hypot(lon, lat);
 }
 
 function getQuantities(T: number): Quantities {

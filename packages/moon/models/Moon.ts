@@ -9,7 +9,6 @@ import type {EclipticSphericalCoordinates, RectangularCoordinates} from '@app/ty
 import type {Location} from '@app/types/LocationTypes';
 import {correctEffectOfNutation} from '@app/utils/apparentPositionCorrections';
 import {
-    equatorialSpherical2eclipticSpherical,
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     spherical2rectangular,
@@ -25,8 +24,13 @@ import {
 } from '@app/utils/observation';
 import AstronomicalObject from '@package/core/models/models/AstronomicalObject';
 import Earth from '@package/earth/models/Earth';
-import type {SelenographicLocation} from '@package/moon/types/LibrationTypes';
-import {getOpticalSelenographicLocation, getSelenographicLocation} from '@package/moon/utils/libration';
+import type {SelenographicPoint} from '@package/moon/types/LibrationTypes';
+import {
+    getOpticalSelenographicLocation,
+    getSelenographicLocation,
+    getSelenographicMagnitude,
+    getTopocentricSelenographicLocation,
+} from '@package/moon/utils/libration';
 import {getApparentMagnitudeMoon} from '@package/moon/utils/magnitude';
 import {getTimeOfInterestOfUpcomingPhase} from '@package/moon/utils/phases';
 import Sun from '@package/sun/models/Sun';
@@ -214,30 +218,39 @@ export default class Moon extends AstronomicalObject {
         return getTimeOfInterestOfUpcomingPhase(decimalYear, MOON_PHASE_LAST_QUARTER);
     }
 
-    public getSubEarthPoint(): SelenographicLocation {
+    public getSubEarthPoint(): SelenographicPoint {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
         return getSelenographicLocation(coords, this.T);
     }
 
-    public getSubSolarPoint(): SelenographicLocation {
-        const coords = this.getHeliocentricEclipticSphericalDateCoordinates();
+    public getSubSolarPoint(): SelenographicPoint {
+        const coordsSun = this.getHeliocentricEclipticSphericalDateCoordinates();
 
-        return getSelenographicLocation(coords, this.T);
+        return getSelenographicLocation(coordsSun, this.T);
     }
 
-    public getOpticalLibration(): SelenographicLocation {
+    public getGeocentricLibration(): SelenographicPoint {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
         return getOpticalSelenographicLocation(coords, this.T);
     }
 
-    public getTopocentricLibration(location: Location): SelenographicLocation {
-        const coords = equatorialSpherical2eclipticSpherical(
-            this.getApparentTopocentricEquatorialSphericalCoordinates(location),
-            this.T,
-        );
+    public getGeocentricLibrationMagnitude(): number {
+        const {lon, lat} = this.getGeocentricLibration();
 
-        return getSelenographicLocation(coords, this.T);
+        return getSelenographicMagnitude(lon, lat);
+    }
+
+    public getTopocentricLibration(location: Location): SelenographicPoint {
+        const coords = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
+
+        return getTopocentricSelenographicLocation(coords, this.T);
+    }
+
+    public getTopocentricLibrationMagnitude(location: Location): number {
+        const {lon, lat} = this.getTopocentricLibration(location);
+
+        return getSelenographicMagnitude(lon, lat);
     }
 }

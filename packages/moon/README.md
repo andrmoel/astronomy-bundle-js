@@ -25,7 +25,7 @@ The `moon` package provides the `Moon` object for computing the Moon's position 
   - [Waxing / waning](#waxing--waning)
   - [Apparent magnitude](#apparent-magnitude)
   - [Upcoming lunar phases](#upcoming-lunar-phases)
-  - [Sub-Earth, optical libration, topocentric libration, and sub-Solar points](#sub-earth-optical-libration-topocentric-libration-and-sub-solar-points)
+  - [Sub-Earth, geocentric libration, topocentric libration, and sub-Solar points](#sub-earth-geocentric-libration-topocentric-libration-and-sub-solar-points)
 
 ## Install
 
@@ -432,14 +432,16 @@ Next last quarter: *1992-04-24 21:40:37 UTC*
 
 ---
 
-### Sub-Earth, optical libration, topocentric libration, and sub-Solar points
+### Sub-Earth, geocentric libration, topocentric libration, and sub-Solar points
 
 **Description:** These methods describe how the Moon is oriented toward the Earth and Sun at a given time.
 
-- `getSubEarthPoint()` returns the selenographic point on the Moon's surface that lies directly under the Earth's center. This is the combined Earth-facing point, including optical and physical libration.
-- `getSubSolarPoint()` returns the selenographic point on the Moon's surface that lies directly under the Sun. This is useful for identifying the lunar point receiving the Sun at zenith.
-- `getOpticalLibration()` returns the optical part of the Earth-facing offset only. It describes the apparent wobble caused by the Moon's varying orbital motion and viewing geometry.
-- `getTopocentricLibration(location)` returns the selenographic point on the Moon's surface that lies directly under the observer's line of sight at the given location. This is the Earth-facing point corrected for topocentric parallax.
+- `getSubEarthPoint()` represents the point on the Moon where Earth is at the zenith. It returns the selenographic coordinates of the point directly facing Earth.
+- `getSubSolarPoint()` represents the point on the Moon where the Sun is at the zenith. It returns the selenographic coordinates of the point directly under the Sun.
+- `getGeocentricLibration()` represents the optical libration of the Moon as seen from Earth's center. It returns the longitude and latitude offset of the apparent lunar disk center from the mean center.
+- `getGeocentricLibrationMagnitude()` represents the total geocentric libration amount. It returns a single angular distance in degrees from `(0°, 0°)`.
+- `getTopocentricLibration(location)` represents the optical libration as seen from a specific location on Earth. It returns the longitude and latitude offset of the apparent lunar disk center including parallax effects.
+- `getTopocentricLibrationMagnitude(location)` represents the total topocentric libration amount. It returns a single angular distance in degrees from `(0°, 0°)` including parallax.
 
 **Example**: Get the Moon's Earth-facing and Sun-facing reference points for 12 April 1992 at 00:00 UTC
 
@@ -453,12 +455,16 @@ const moon = Moon.create(toi);
 
 const subEarthPoint = moon.getSubEarthPoint();
 const subSolarPoint = moon.getSubSolarPoint();
-const opticalLibration = moon.getOpticalLibration();
+const geocentricLibration = moon.getGeocentricLibration();
+const geocentricLibrationMagnitude = moon.getGeocentricLibrationMagnitude();
 const topocentricLibration = moon.getTopocentricLibration(location);
+const topocentricLibrationMagnitude = moon.getTopocentricLibrationMagnitude(location);
 ```
 
 The result of the calculation should be:\
 Sub-Earth point: *lon -1.23121°, lat 4.1998°*\
-Sub-Solar point: *lon 67.89894°, lat 1.4615°*
-Optical libration: *lon -1.20579°, lat 4.19403°*\
+Sub-Solar point: *lon 67.89891°, lat 1.46152°*\
+Geocentric libration: *lon -1.20579°, lat 4.19403°*\
+Geocentric libration magnitude: *4.36392°*\
 Topocentric libration: *lon -0.55307°, lat 4.73118°*\
+Topocentric libration magnitude: *4.76340°*

@@ -1,4 +1,4 @@
-export type SelenographicLocation = {
+export type SelenographicPoint = {
     lat: number;
     lon: number;
 };

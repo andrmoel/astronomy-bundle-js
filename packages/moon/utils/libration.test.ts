@@ -1,4 +1,10 @@
-import {getOpticalSelenographicLocation, getPhysicalSelenographicLocation, getSelenographicLocation} from './libration';
+import {
+    getOpticalSelenographicLocation,
+    getPhysicalSelenographicLocation,
+    getSelenographicLocation,
+    getSelenographicMagnitude,
+    getTopocentricSelenographicLocation,
+} from './libration';
 
 const T = -0.07722108145106092;
 const coords = {
@@ -26,4 +32,22 @@ it('tests getPhysicalSelenographicLocation', () => {
 
     expect(lon).toBeCloseTo(-0.02542, 5);
     expect(lat).toBeCloseTo(0.00577, 5);
+});
+
+it('tests getTopocentricSelenographicLocation', () => {
+    const {lon, lat} = getTopocentricSelenographicLocation(
+        {
+            rightAscension: 135.211802,
+            declination: 13.079873,
+            radiusVector: 0.002441,
+        },
+        T,
+    );
+
+    expect(lon).toBeCloseTo(-0.55307, 5);
+    expect(lat).toBeCloseTo(4.73118, 5);
+});
+
+it('tests getSelenographicMagnitude', () => {
+    expect(getSelenographicMagnitude(-0.55307, 4.73118)).toBeCloseTo(4.76339696, 8);
 });
