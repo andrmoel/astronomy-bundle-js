@@ -307,7 +307,7 @@ it('tests getSubSolarPoint', () => {
     const {lon, lat} = moon.getSubSolarPoint();
 
     expect(lon).toBeCloseTo(67.89894, 5);
-    expect(lat).toBeCloseTo(1.46150, 5);
+    expect(lat).toBeCloseTo(1.4615, 5);
 });
 
 it('tests getGeocentricLibration', () => {
