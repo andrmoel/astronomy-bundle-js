@@ -177,6 +177,11 @@ interface PixelRange {
     pxRanges: Array<{pxMin: number; pxMax: number}>;
 }
 
+interface PixelInterval {
+    pxMin: number;
+    pxMax: number;
+}
+
 function coneBoundingBoxPixels(
     elements: BesselianElements,
     e: ReturnType<typeof evaluateElements>,
@@ -262,8 +267,14 @@ function coneBoundingBoxPixels(
     return {pyMin, pyMax, pxRanges};
 }
 
-function buildShadowMask(elements: BesselianElements, useUmbra: boolean, canvas: Canvas): Uint8Array {
-    const mask = new Uint8Array(canvas.width * canvas.height);
+// This is the same coarse over-approximation as the old pixel mask, stored as
+// merged row ranges so repeated eclipse-time boxes do not rewrite millions of pixels.
+function buildShadowMaskRows(
+    elements: BesselianElements,
+    useUmbra: boolean,
+    canvas: Canvas,
+): Array<Array<PixelInterval>> {
+    const rows: Array<Array<PixelInterval>> = Array.from({length: canvas.height}, () => []);
     const coarseTauStep = 30 / 3600;
     for (let tau = elements.tMin; tau <= elements.tMax; tau += coarseTauStep) {
         const e = evaluateElements(elements, tau);
@@ -272,15 +283,79 @@ function buildShadowMask(elements: BesselianElements, useUmbra: boolean, canvas:
             continue;
         }
         for (let py = bbox.pyMin; py <= bbox.pyMax; py++) {
+            const row = rows[py];
             for (const range of bbox.pxRanges) {
-                for (let px = range.pxMin; px <= range.pxMax; px++) {
-                    mask[py * canvas.width + px] = 1;
-                }
+                row.push({pxMin: range.pxMin, pxMax: range.pxMax});
             }
         }
     }
 
-    return mask;
+    for (const row of rows) {
+        if (row.length < 2) {
+            continue;
+        }
+
+        row.sort((a, b) => a.pxMin - b.pxMin || a.pxMax - b.pxMax);
+        let writeIndex = 0;
+        for (const range of row) {
+            const previous = row[writeIndex - 1];
+            if (writeIndex === 0 || range.pxMin > previous.pxMax + 1) {
+                row[writeIndex] = range;
+                writeIndex++;
+            } else if (range.pxMax > previous.pxMax) {
+                previous.pxMax = range.pxMax;
+            }
+        }
+        row.length = writeIndex;
+    }
+
+    return rows;
+}
+
+interface ShadowEvaluationCache {
+    length: number;
+    tanF: number;
+    x: Float64Array;
+    y: Float64Array;
+    l0: Float64Array;
+    sinD: Float64Array;
+    cosD: Float64Array;
+    sinAlpha: Float64Array;
+    cosAlpha: Float64Array;
+}
+
+function buildShadowEvaluationCache(
+    elements: BesselianElements,
+    useUmbra: boolean,
+    evaluations: Array<ReturnType<typeof evaluateElements>>,
+): ShadowEvaluationCache {
+    const deltaTRotationRad = ((EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600) * DEG;
+    const length = evaluations.length;
+    const cache: ShadowEvaluationCache = {
+        length,
+        tanF: useUmbra ? elements.tanF2 : elements.tanF1,
+        x: new Float64Array(length),
+        y: new Float64Array(length),
+        l0: new Float64Array(length),
+        sinD: new Float64Array(length),
+        cosD: new Float64Array(length),
+        sinAlpha: new Float64Array(length),
+        cosAlpha: new Float64Array(length),
+    };
+
+    for (let i = 0; i < length; i++) {
+        const evaluation = evaluations[i];
+        const alpha = evaluation.mu - deltaTRotationRad;
+        cache.x[i] = evaluation.x;
+        cache.y[i] = evaluation.y;
+        cache.l0[i] = useUmbra ? evaluation.l2 : evaluation.l1;
+        cache.sinD[i] = evaluation.sinD;
+        cache.cosD[i] = evaluation.cosD;
+        cache.sinAlpha[i] = Math.sin(alpha);
+        cache.cosAlpha[i] = Math.cos(alpha);
+    }
+
+    return cache;
 }
 
 // sinAlphas[i]/cosAlphas[i] = sin/cos(evaluations[i].mu - deltaTRotationRad).
@@ -288,30 +363,35 @@ function buildShadowMask(elements: BesselianElements, useUmbra: boolean, canvas:
 // H = alpha + lonRad is expanded with the angle-addition identity so the inner
 // evaluation loop contains no Math.sin/cos calls.
 function isInsideShadowAtPoint(
-    elements: BesselianElements,
-    useUmbra: boolean,
-    evaluations: Array<ReturnType<typeof evaluateElements>>,
+    cache: ShadowEvaluationCache,
     sinU: number,
     cosU: number,
     sinLon: number,
     cosLon: number,
-    sinAlphas: Float64Array,
-    cosAlphas: Float64Array,
 ): boolean {
-    const tanF = useUmbra ? elements.tanF2 : elements.tanF1;
-    for (const [i, e] of evaluations.entries()) {
+    const {
+        length,
+        tanF,
+        x: xs,
+        y: ys,
+        l0: l0s,
+        sinD: sinDs,
+        cosD: cosDs,
+        sinAlpha: sinAlphas,
+        cosAlpha: cosAlphas,
+    } = cache;
+    for (let i = 0; i < length; i++) {
         const sinH = sinAlphas[i] * cosLon + cosAlphas[i] * sinLon;
         const cosH = cosAlphas[i] * cosLon - sinAlphas[i] * sinLon;
         const xi = cosU * sinH;
-        const eta = ONE_MINUS_F * sinU * e.cosD - cosU * cosH * e.sinD;
-        const zeta = ONE_MINUS_F * sinU * e.sinD + cosU * cosH * e.cosD;
+        const eta = ONE_MINUS_F * sinU * cosDs[i] - cosU * cosH * sinDs[i];
+        const zeta = ONE_MINUS_F * sinU * sinDs[i] + cosU * cosH * cosDs[i];
         if (zeta < 0) {
             continue;
         }
-        const l0 = useUmbra ? e.l2 : e.l1;
-        const radius = Math.abs(l0 - zeta * tanF);
-        const dx = xi - e.x;
-        const dy = eta - e.y;
+        const radius = Math.abs(l0s[i] - zeta * tanF);
+        const dx = xi - xs[i];
+        const dy = eta - ys[i];
         if (dx * dx + dy * dy < radius * radius) {
             return true;
         }
@@ -344,21 +424,10 @@ function rasterizeShadowFill(
     for (let tau = elements.tMin; tau <= elements.tMax; tau += tauStep) {
         evaluations.push(evaluateElements(elements, tau));
     }
-    const deltaTRotationRad = ((EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600) * DEG;
-    const pixelMask = buildShadowMask(elements, useUmbra, canvas);
+    const evaluationCache = buildShadowEvaluationCache(elements, useUmbra, evaluations);
+    const maskRows = buildShadowMaskRows(elements, useUmbra, canvas);
     const w = canvas.width;
     const h = canvas.height;
-
-    // Precompute per-evaluation sin/cos so the hot inner loop uses multiply-add
-    // instead of Math.sin/cos. alpha = e.mu - deltaTRotationRad, and H = alpha + lonRad,
-    // so sin(H) = sinAlpha*cosLon + cosAlpha*sinLon (angle-addition identity).
-    const sinAlphas = new Float64Array(evaluations.length);
-    const cosAlphas = new Float64Array(evaluations.length);
-    for (const [i, evaluation] of evaluations.entries()) {
-        const alpha = evaluation.mu - deltaTRotationRad;
-        sinAlphas[i] = Math.sin(alpha);
-        cosAlphas[i] = Math.cos(alpha);
-    }
 
     // Precompute per-column longitude trig reused across every row.
     const sinLons = new Float64Array(w);
@@ -371,30 +440,22 @@ function rasterizeShadowFill(
 
     const binary = new Uint8Array(w * h);
     for (let py = 0; py < h; py++) {
+        const ranges = maskRows[py];
+        if (ranges.length === 0) {
+            continue;
+        }
+
         const lat = 90 - ((py + 0.5) / h) * 180;
         const u = Math.atan(ONE_MINUS_F * Math.tan(lat * DEG));
         const sinU = Math.sin(u);
         const cosU = Math.cos(u);
 
-        for (let px = 0; px < w; px++) {
-            const idx = py * w + px;
-            if (pixelMask[idx] === 0) {
-                continue;
-            }
-            if (
-                isInsideShadowAtPoint(
-                    elements,
-                    useUmbra,
-                    evaluations,
-                    sinU,
-                    cosU,
-                    sinLons[px],
-                    cosLons[px],
-                    sinAlphas,
-                    cosAlphas,
-                )
-            ) {
-                binary[idx] = 1;
+        for (const {pxMin, pxMax} of ranges) {
+            for (let px = pxMin; px <= pxMax; px++) {
+                const idx = py * w + px;
+                if (isInsideShadowAtPoint(evaluationCache, sinU, cosU, sinLons[px], cosLons[px])) {
+                    binary[idx] = 1;
+                }
             }
         }
     }
@@ -436,19 +497,7 @@ function rasterizeShadowFill(
                 const subLonRad = (((px + 0.5 + dxf) / w) * 360 - 180) * DEG;
                 const subSinLon = Math.sin(subLonRad);
                 const subCosLon = Math.cos(subLonRad);
-                if (
-                    isInsideShadowAtPoint(
-                        elements,
-                        useUmbra,
-                        evaluations,
-                        subSinU,
-                        subCosU,
-                        subSinLon,
-                        subCosLon,
-                        sinAlphas,
-                        cosAlphas,
-                    )
-                ) {
+                if (isInsideShadowAtPoint(evaluationCache, subSinU, subCosU, subSinLon, subCosLon)) {
                     count++;
                 }
             }
