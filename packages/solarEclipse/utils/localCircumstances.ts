@@ -3,10 +3,14 @@ import {DEG, RAD} from '@app/constants/math';
 import type {LocalHorizontalCoordinates} from '@app/types/CoordinateTypes';
 import type {Location} from '@app/types/LocationTypes';
 import {normalizeAngle} from '@app/utils/angle';
+import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
+import type {EclipseContacts} from '@package/solarEclipse/types/EclipseContactTypes';
+import Sun from '@package/sun/models/Sun';
+import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from './besselianElements';
+import {getBesselianElementsAtTime, tau2julianDay} from './besselianElements';
 
 export function getLocalEclipseCircumstances(
     elements: BesselianElements,
@@ -43,6 +47,26 @@ export function getLocalEclipseCircumstances(
         sinD: e.sinD,
         cosD: e.cosD,
     };
+}
+
+export function isEclipseVisible(
+    elements: BesselianElements,
+    location: Location,
+    contactTaus: EclipseContacts,
+): boolean {
+    const taus = [contactTaus.c1, contactTaus.max, contactTaus.c4];
+
+    return taus.some((tau) => {
+        if (tau === null) {
+            return false;
+        }
+
+        const circumstances = getLocalEclipseCircumstances(elements, location, tau);
+        const {altitude} = getLocalHorizontalCoordinates(circumstances, location);
+        const sunUpperLimbAltitude = getUpperSunLimbAltitude(elements, location, tau, altitude);
+
+        return sunUpperLimbAltitude > 0;
+    });
 }
 
 export function getLocalEclipseType(circumstances: LocalEclipseCircumstances): LocalSolarEclipseType {
@@ -132,4 +156,17 @@ export function getLocalHorizontalCoordinates(
         altitude,
         radiusVector: 0,
     };
+}
+
+function getUpperSunLimbAltitude(
+    elements: BesselianElements,
+    location: Location,
+    tau: number,
+    altitude: number,
+): number {
+    const toi = TimeOfInterest.fromJulianDay(tau2julianDay(elements, tau));
+    const sun = Sun.create(toi);
+    const solarDiameter = sun.getTopocentricAngularDiameter(location);
+
+    return correctEffectOfRefraction(altitude) + solarDiameter / 2;
 }

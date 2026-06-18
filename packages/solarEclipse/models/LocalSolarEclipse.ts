@@ -7,6 +7,7 @@ import {
     getMagnitude,
     getMoonSunRatio,
     getObscuration,
+    isEclipseVisible,
 } from '@package/solarEclipse/utils/localCircumstances';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
@@ -28,9 +29,11 @@ export default class LocalSolarEclipse {
 
     public static create(elements: BesselianElements, location: Location): LocalSolarEclipse {
         const contactTaus = getContactTaus(elements, location);
-        if (!contactTaus) {
+
+        if (!contactTaus || !isEclipseVisible(elements, location, contactTaus)) {
             throw new Error('No solar eclipse visible at this location');
         }
+
         return new LocalSolarEclipse(elements, location, contactTaus);
     }
 

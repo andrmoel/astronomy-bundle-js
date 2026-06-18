@@ -83,6 +83,10 @@ describe('getLocalEclipseCircumstances', () => {
     });
 });
 
+describe('isEclipseVisible', () => {
+    // TODO ...
+});
+
 describe('getEclipseType', () => {
     it('returns none if no eclipse is given', () => {
         const tau = -1.93492838; // no eclipse
