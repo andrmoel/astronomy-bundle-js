@@ -13,20 +13,43 @@ export const ONE_MINUS_F = 1 - FLATTENING;
 const E_SQ = 2 * FLATTENING - FLATTENING * FLATTENING;
 export const EARTH_ROTATION_DEG_PER_HOUR = 1.002738 * 15;
 
+// Standard sunrise/sunset: the Sun's upper limb sits on the horizon, raised by atmospheric
+// refraction. The Sun's centre is then 34' (horizon refraction) + 16' (semidiameter) below
+// the astronomical horizon, i.e. at altitude -50'. In Besselian coordinates sin(altitude) =
+// zeta / rho, so the terminator used for the rise/set curves lies at this slightly negative
+// zeta on the night side rather than at zeta = 0 (geometric horizon of the Sun's centre).
+const HORIZON_REFRACTION_DEG = 34 / 60;
+const SUN_SEMIDIAMETER_DEG = 16 / 60;
+const RISE_SET_SUN_ALTITUDE_DEG = -(HORIZON_REFRACTION_DEG + SUN_SEMIDIAMETER_DEG);
+const RISE_SET_SIN_ALTITUDE = Math.sin(RISE_SET_SUN_ALTITUDE_DEG * DEG);
+
 const CENTRAL_LINE_STEP_HOURS = 1 / (60 * 60);
 const _UMBRA_PATH_STEP_HOURS = 1 / (360 * 5);
 const _PENUMBRA_PATH_STEP_HOURS = 1 / (120 * 5);
 const RISE_SET_BOUNDARY_STEP_HOURS = 1 / 60;
 const RISE_SET_BOUNDARY_Q_SAMPLES = 180;
 
-export function fundamentalToLatLon(
+interface SurfaceSolution {
+    lat: number;
+    lon: number;
+    // Distance of the surface point from the fundamental plane along the shadow axis (Earth
+    // equatorial radii). zeta / rho = sin(Sun's geocentric altitude); zeta = 0 is the
+    // geometric terminator, zeta < 0 the night side.
+    zeta: number;
+    sinU: number;
+}
+
+// Projects a fundamental-plane point (xi, eta) onto the Earth ellipsoid. farSide selects the
+// night-side intersection (zeta < 0) instead of the sunlit one, needed for the rise/set curves
+// once the terminator is depressed below the geometric horizon.
+function solveSurfacePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     xi: number,
     eta: number,
-): LatLon | null {
-    const rho1Sq = 1 - E_SQ * e.cosD * e.cosD;
-    const rho1 = Math.sqrt(rho1Sq);
+    farSide: boolean,
+): SurfaceSolution | null {
+    const rho1 = Math.sqrt(1 - E_SQ * e.cosD * e.cosD);
     const sinD1 = e.sinD / rho1;
     const cosD1 = (ONE_MINUS_F * e.cosD) / rho1;
 
@@ -35,7 +58,8 @@ export function fundamentalToLatLon(
     if (bSq < 0) {
         return null;
     }
-    const B = Math.sqrt(bSq);
+    const sign = farSide ? -1 : 1;
+    const B = sign * Math.sqrt(bSq);
 
     const sinU = eta1 * cosD1 + B * sinD1;
     const cosU = Math.sqrt(Math.max(0, 1 - sinU * sinU));
@@ -44,32 +68,93 @@ export function fundamentalToLatLon(
     if (zetaSq < 0) {
         return null;
     }
-    const zeta = Math.sqrt(zetaSq);
+    const zeta = sign * Math.sqrt(zetaSq);
 
     const theta = Math.atan2(xi, (zeta - ONE_MINUS_F * sinU * e.sinD) / e.cosD);
     const lat = Math.atan2(sinU, ONE_MINUS_F * cosU) * RAD;
     let lon = (theta - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
     lon = normalizeLongitude(lon);
 
-    return {lat, lon};
+    return {lat, lon, zeta, sinU};
 }
 
-function calculateCentralLinePoint(elements: BesselianElements, tau: number): LatLon | null {
+export function fundamentalToLatLon(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    xi: number,
+    eta: number,
+): LatLon | null {
+    const solution = solveSurfacePoint(elements, e, xi, eta, false);
+
+    return solution !== null ? {lat: solution.lat, lon: solution.lon} : null;
+}
+
+// Projects the shadow axis (xi = x, eta = y) onto the surface and reports the depth zeta of
+// that surface point. farSide selects the night-side intersection (zeta < 0) used to extend
+// the line past the geometric horizon.
+function centralLineSurfacePoint(
+    elements: BesselianElements,
+    tau: number,
+    farSide: boolean,
+): {point: LatLon; zeta: number} | null {
     const e = getBesselianElementsAtTime(elements, tau);
+    const solution = solveSurfacePoint(elements, e, e.x, e.y, farSide);
 
-    return fundamentalToLatLon(elements, e, e.x, e.y);
+    return solution !== null ? {point: {lat: solution.lat, lon: solution.lon}, zeta: solution.zeta} : null;
 }
 
-function _calculateCentralLine(elements: BesselianElements): Array<LatLon> {
-    const points: Array<LatLon> = [];
-    for (let tau = elements.tMin; tau <= elements.tMax; tau += CENTRAL_LINE_STEP_HOURS) {
-        const point = calculateCentralLinePoint(elements, tau);
-        if (point !== null) {
-            points.push(point);
+// Refraction + Sun's upper limb: the central eclipse stays visible until the Sun's upper limb
+// sets at the refracted horizon (Sun's centre at -50'), slightly past the geometric tangent
+// where the sunlit axis solution ends at zeta = 0. From that tangent we step into the eclipse
+// (toward the interior) along the night-side axis solution, collecting points until zeta drops
+// below RISE_SET_SIN_ALTITUDE. Points are ordered tangent -> refracted tip.
+function calculateCentralLineHook(
+    elements: BesselianElements,
+    tangentTau: number,
+    stepTowardInterior: number,
+): Array<LatLon> {
+    const hook: Array<LatLon> = [];
+    let tau = tangentTau;
+    for (let i = 0; i < 1000; i++) {
+        tau += stepTowardInterior;
+        const sol = centralLineSurfacePoint(elements, tau, true);
+        if (sol === null) {
+            break;
+        }
+        hook.push(sol.point);
+        if (sol.zeta < RISE_SET_SIN_ALTITUDE) {
+            break;
         }
     }
 
-    return points;
+    return hook;
+}
+
+function _calculateCentralLine(elements: BesselianElements): Array<LatLon> {
+    const main: Array<LatLon> = [];
+    let firstTau: number | null = null;
+    let lastTau: number | null = null;
+
+    for (let tau = elements.tMin; tau <= elements.tMax; tau += CENTRAL_LINE_STEP_HOURS) {
+        const sol = centralLineSurfacePoint(elements, tau, false);
+        if (sol === null) {
+            continue;
+        }
+        main.push(sol.point);
+        if (firstTau === null) {
+            firstTau = tau;
+        }
+        lastTau = tau;
+    }
+
+    if (firstTau === null || lastTau === null) {
+        return main;
+    }
+
+    const startHook = calculateCentralLineHook(elements, firstTau, CENTRAL_LINE_STEP_HOURS);
+    const endHook = calculateCentralLineHook(elements, lastTau, -CENTRAL_LINE_STEP_HOURS);
+
+    return [...startHook.reverse(), ...main, ...endHook];
 }
 
 export function calculateShadowBoundaryPoint(
@@ -122,6 +207,99 @@ export function calculateShadowBoundaryPoint(
     }
 
     return result;
+}
+
+// Same fixed-point iteration as calculateShadowBoundaryPoint, but returns the converged
+// fundamental-plane coordinates so the crossing can be refined onto the depressed horizon.
+function penumbraBoundaryFundamental(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    q: number,
+): {xi: number; eta: number} | null {
+    const l0 = e.l1;
+    const tanF = elements.tanF1;
+    const sinQ = Math.sin(q);
+    const cosQ = Math.cos(q);
+
+    let radius = Math.abs(l0);
+    for (let iter = 0; iter < 6; iter++) {
+        const xi = e.x + radius * cosQ;
+        const eta = e.y + radius * sinQ;
+        const solution = solveSurfacePoint(elements, e, xi, eta, false);
+        if (solution === null) {
+            return null;
+        }
+        const newRadius = Math.abs(l0 - solution.zeta * tanF);
+        if (Math.abs(newRadius - radius) < 1e-8) {
+            return {xi, eta};
+        }
+        radius = newRadius;
+    }
+
+    return {xi: e.x + radius * cosQ, eta: e.y + radius * sinQ};
+}
+
+// Moves a geometric crossing (penumbra limit meeting the geometric terminator) onto the
+// rise/set horizon (Sun's upper limb with refraction, centre at -50'). The refined point lies
+// where the penumbra-limit circle of radius |l1 - zeta * tanF1| meets the terminator ring at
+// zeta = RISE_SET_SIN_ALTITUDE; both are circles about the shadow axis in the fundamental
+// plane, so the crossing is found by a two-circle intersection iterated for the ellipsoid.
+function refineCrossingToRiseSetHorizon(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    xiSeed: number,
+    etaSeed: number,
+): LatLon | null {
+    const z0 = RISE_SET_SIN_ALTITUDE;
+    const penumbraRadius = Math.abs(e.l1 - z0 * elements.tanF1);
+    const axisDistance = Math.hypot(e.x, e.y);
+    if (axisDistance === 0) {
+        return null;
+    }
+    const ux = e.x / axisDistance;
+    const uy = e.y / axisDistance;
+
+    let xi = xiSeed;
+    let eta = etaSeed;
+    let sinU = 0;
+    for (let iter = 0; iter < 40; iter++) {
+        const sample = solveSurfacePoint(elements, e, xi, eta, true) ?? solveSurfacePoint(elements, e, xi, eta, false);
+        if (sample !== null) {
+            sinU = sample.sinU;
+        }
+        // Radius (about the axis) of the terminator ring at zeta = z0 on the ellipsoid.
+        const ringRadiusSq = 1 - E_SQ * sinU * sinU - z0 * z0;
+        if (ringRadiusSq < 0) {
+            return null;
+        }
+        const ringRadius = Math.sqrt(ringRadiusSq);
+        const along = (ringRadius * ringRadius - penumbraRadius * penumbraRadius + axisDistance * axisDistance) / (2 * axisDistance);
+        const halfChordSq = ringRadius * ringRadius - along * along;
+        if (halfChordSq < 0) {
+            return null;
+        }
+        const halfChord = Math.sqrt(halfChordSq);
+        const baseXi = along * ux;
+        const baseEta = along * uy;
+        const candidate1Xi = baseXi - halfChord * uy;
+        const candidate1Eta = baseEta + halfChord * ux;
+        const candidate2Xi = baseXi + halfChord * uy;
+        const candidate2Eta = baseEta - halfChord * ux;
+        const dist1 = (candidate1Xi - xi) ** 2 + (candidate1Eta - eta) ** 2;
+        const dist2 = (candidate2Xi - xi) ** 2 + (candidate2Eta - eta) ** 2;
+        const nextXi = dist1 <= dist2 ? candidate1Xi : candidate2Xi;
+        const nextEta = dist1 <= dist2 ? candidate1Eta : candidate2Eta;
+        const moved = (nextXi - xi) ** 2 + (nextEta - eta) ** 2;
+        xi = nextXi;
+        eta = nextEta;
+        if (moved < 1e-18) {
+            break;
+        }
+    }
+
+    const solution = solveSurfacePoint(elements, e, xi, eta, true);
+
+    return solution !== null ? {lat: solution.lat, lon: solution.lon} : null;
 }
 
 function shortestAngularDelta(from: number, to: number): number {
@@ -230,7 +408,7 @@ function findNullBoundary(
     e: BesselianElementsAtTime,
     qNonNull: number,
     qNull: number,
-): LatLon | null {
+): {geometric: LatLon; xi: number; eta: number} | null {
     let nonNullSide = qNonNull;
     let nullSide = qNull;
 
@@ -247,7 +425,13 @@ function findNullBoundary(
         }
     }
 
-    return calculateShadowBoundaryPoint(elements, e, nonNullSide, false);
+    const geometric = calculateShadowBoundaryPoint(elements, e, nonNullSide, false);
+    const fundamental = penumbraBoundaryFundamental(elements, e, nonNullSide);
+    if (geometric === null || fundamental === null) {
+        return null;
+    }
+
+    return {geometric, xi: fundamental.xi, eta: fundamental.eta};
 }
 
 interface SunsetCrossing {
@@ -282,12 +466,16 @@ function collectSidedCrossings(
         if (crossing === null) {
             continue;
         }
-        if (isOnSunsetSide(crossing, e, elements.deltaT) !== isSunset) {
+        // Classify by the geometric crossing, which sits exactly on the night/day boundary; the
+        // refined point is nudged ~100 km onto the night side and could otherwise flip sides near
+        // the loop tips.
+        if (isOnSunsetSide(crossing.geometric, e, elements.deltaT) !== isSunset) {
             continue;
         }
 
+        const refined = refineCrossingToRiseSetHorizon(elements, e, crossing.xi, crossing.eta) ?? crossing.geometric;
         const qCrossing = (q1 + q2) / 2;
-        result.push({point: crossing, qCos: Math.cos(qCrossing - qVelocity)});
+        result.push({point: refined, qCos: Math.cos(qCrossing - qVelocity)});
     }
 
     return result;
