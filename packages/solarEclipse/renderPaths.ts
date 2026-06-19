@@ -1,7 +1,13 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
 
-import {calculateShadowBoundaryPoint, DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F} from './eclipsePaths';
+import {
+    calculateShadowBoundaryPoint,
+    DEG,
+    EARTH_ROTATION_DEG_PER_HOUR,
+    ONE_MINUS_F,
+    RISE_SET_SIN_ALTITUDE,
+} from './eclipsePaths';
 import type {BesselianElements} from './types/BesselianElementTypes';
 import type {EclipsePaths, EclipseStyle} from './types/SolarEclipsePathTypes';
 import {getBesselianElementsAtTime as evaluateElements} from './utils/besselianElements';
@@ -389,7 +395,10 @@ function isInsideShadowAtPoint(
         const xi = cosU * sinH;
         const eta = ONE_MINUS_F * sinU * cosDs[i] - cosU * cosH * sinDs[i];
         const zeta = ONE_MINUS_F * sinU * sinDs[i] + cosU * cosH * cosDs[i];
-        if (zeta < 0) {
+        // Sun's upper limb + refraction: a point still sees the (partial/total) eclipse until
+        // the Sun's centre drops to -50' (upper limb at the refracted horizon), so the shadow
+        // extends slightly onto the night side rather than ending at the geometric horizon.
+        if (zeta < RISE_SET_SIN_ALTITUDE) {
             continue;
         }
         const radius = Math.abs(l0s[i] - zeta * tanF);
