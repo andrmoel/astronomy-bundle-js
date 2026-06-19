@@ -190,7 +190,10 @@ function coneBoundingBoxPixels(
     bufferDeg: number,
 ): PixelRange | null {
     const samples: Array<LatLon> = [];
-    const sampleCount = 32;
+    // The boundary is sampled densely enough that the bounding box does not miss
+    // the southernmost on-Earth extent of the cone near the limb; too few samples
+    // leave a rectangular notch where inside-shadow pixels never get tested.
+    const sampleCount = 128;
     for (let i = 0; i < sampleCount; i++) {
         const q = (2 * Math.PI * i) / sampleCount;
         const p = calculateShadowBoundaryPoint(elements, e, q, useUmbra);
