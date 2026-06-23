@@ -1,9 +1,9 @@
-import {calculateCentralLine} from './geometry/centralLine';
-import {PENUMBRA_PATH_STEP_HOURS, UMBRA_PATH_STEP_HOURS} from './geometry/constants';
-import {calculateEdgePath} from './geometry/limitPaths';
-import {calculateSunriseBoundary, calculateSunsetBoundary} from './geometry/riseSetBoundary';
-import type {BesselianElements} from './types/BesselianElementTypes';
-import type {EclipsePaths} from './types/SolarEclipsePathTypes';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import type {EclipsePaths} from '../types/SolarEclipsePathTypes';
+import {calculateCentralLine} from './centralLine';
+import {PENUMBRA_PATH_STEP_HOURS, UMBRA_PATH_STEP_HOURS} from './constants';
+import {calculateEdgePath} from './limitPaths';
+import {calculateSunriseBoundary, calculateSunsetBoundary} from './riseSetBoundary';
 
 export default function calculateEclipsePaths(elements: BesselianElements): EclipsePaths {
     const centralLine = calculateCentralLine(elements);

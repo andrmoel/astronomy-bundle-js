@@ -1,6 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
-import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
+import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
 
 export interface SurfaceSolution {

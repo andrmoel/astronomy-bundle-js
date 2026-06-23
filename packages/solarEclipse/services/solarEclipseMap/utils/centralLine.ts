@@ -1,6 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
-import type {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '../utils/besselianElements';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {CENTRAL_LINE_STEP_HOURS, RISE_SET_SIN_ALTITUDE} from './constants';
 import {solveSurfacePoint} from './surface';
 

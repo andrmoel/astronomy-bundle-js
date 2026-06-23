@@ -1,8 +1,8 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
-import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
+import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import type {RiseSetBoundary} from '../types/SolarEclipsePathTypes';
-import {getBesselianElementsAtTime} from '../utils/besselianElements';
 import {
     DEG,
     E_SQ,

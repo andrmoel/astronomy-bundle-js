@@ -1,9 +1,23 @@
-import drawEclipseMap from '../getEclipseMap';
-import Catalogue from '../models/Catalogue';
+import BaseMap from '../services/solarEclipseMap/models/Map';
+import PenumbraPath from '../services/solarEclipseMap/models/PenumbraPath';
+import SolarEclipseMap from '../services/solarEclipseMap/models/SolarEclipseMap';
+import UmbraPath from '../services/solarEclipseMap/models/UmbraPath';
+import type {EclipseStyle} from '../services/solarEclipseMap/types/SolarEclipsePathTypes';
 
 const DEFAULT_DATE = '2026-08-12';
+const DEFAULT_DATE_2 = '2017-08-21';
 const DEFAULT_OUTPUT = 'packages/solarEclipse/eclipse-map.png';
-const DEFAULT_BASEMAP = 'packages/solarEclipse/resources/worldmap_topo.png';
+const DEFAULT_BASEMAP = 'packages/solarEclipse/services/solarEclipseMap/resources/worldmap_topo.png';
+const DEFAULT_WIDTH = 3600;
+const DEFAULT_HEIGHT = 1800;
+const PENUMBRA_STYLE: EclipseStyle = {
+    fillColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: 'rgba(0, 0, 0, 0.3)',
+};
+const UMBRA_STYLE: EclipseStyle = {
+    fillColor: 'rgba(0, 0, 0, 0.4)',
+    borderColor: 'rgba(0, 0, 0, 0.4)',
+};
 
 function printUsage(): void {
     console.log(
@@ -25,32 +39,12 @@ async function main(): Promise<void> {
         return;
     }
 
-    await drawEclipseMap({
-        basemap,
-        output,
-        overlays: [
-            {
-                elements: Catalogue.getBesselianElements(date),
-                // isCentralLineVisible: true,
-                isUmbraVisible: true,
-                isPenumbraVisible: true,
-                // isSunriseLineVisible: true,
-                // isSunsetLineVisible: true,
-                style: {
-                    centralLineColor: 'rgba(20, 20, 20, 1)',
-                    centralLineWidth: 3,
-                    umbralFillColor: 'rgba(0, 0, 0, 0.4)',
-                    umbralLimitColor: 'rgba(0, 0, 0, 0.4)',
-                    umbralLimitWidth: 2,
-                    penumbralFillColor: 'rgba(0, 0, 0, 0.3)',
-                    penumbralLimitColor: 'rgba(0, 0, 0, 0.3)',
-                    penumbralLimitWidth: 1.5,
-                    sunriseBoundaryColor: 'rgba(255, 132, 0, 0.95)',
-                    sunsetBoundaryColor: 'rgba(255, 205, 0, 0.95)',
-                },
-            },
-        ],
-    });
+    await SolarEclipseMap.create(DEFAULT_WIDTH, DEFAULT_HEIGHT)
+        .addLayer(BaseMap.create(basemap))
+        .addLayer(PenumbraPath.create(date).setStyle(PENUMBRA_STYLE))
+        .addLayer(UmbraPath.create(date).setStyle(UMBRA_STYLE))
+        .addLayer(UmbraPath.create(DEFAULT_DATE_2))
+        .print(output);
 
     console.log(`Generated solar eclipse map for ${date}: ${output}`);
 }

@@ -1,5 +1,5 @@
 import type {LatLon} from '@app/types/LocationTypes';
-import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
+import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {E_SQ, ONE_MINUS_F} from './constants';
 import {fundamentalToLatLon, solveSurfacePoint} from './surface';
 

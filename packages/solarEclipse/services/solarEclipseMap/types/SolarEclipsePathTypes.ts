@@ -1,5 +1,5 @@
 import type {LatLon} from '@app/types/LocationTypes';
-import type {BesselianElements} from './BesselianElementTypes';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 
 export type RiseSetBoundary = Array<LatLon>;
 
@@ -12,20 +12,8 @@ export interface EclipsePaths {
 }
 
 export interface EclipseStyle {
-    centralLineColor?: string;
-    umbralLimitColor?: string;
-    penumbralLimitColor?: string;
-    umbralFillColor?: string;
-    penumbralFillColor?: string;
-    centralLineWidth?: number;
-    umbralLimitWidth?: number;
-    penumbralLimitWidth?: number;
-    sunsetBoundaryColor?: string;
-    sunsetBoundaryFillColor?: string;
-    sunsetBoundaryWidth?: number;
-    sunriseBoundaryColor?: string;
-    sunriseBoundaryFillColor?: string;
-    sunriseBoundaryWidth?: number;
+    fillColor?: string;
+    borderColor?: string;
 }
 
 export interface EclipseMapOverlay {
@@ -41,5 +29,7 @@ export interface EclipseMapOverlay {
 export interface DrawEclipseMapOptions {
     basemap: string;
     output: string;
+    width?: number;
+    height?: number;
     overlays: Array<EclipseMapOverlay>;
 }

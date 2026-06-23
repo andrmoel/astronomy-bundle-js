@@ -1,11 +1,10 @@
 import {writeFile} from 'node:fs/promises';
 import {createCanvas, loadImage} from '@napi-rs/canvas';
-
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {parseBesselianElements} from '@package/solarEclipse/utils/besselianElements';
+import type {DrawEclipseMapOptions} from '../types/SolarEclipsePathTypes';
 import calculateEclipsePaths from './eclipsePaths';
 import renderPaths from './renderPaths';
-import type {BesselianElements} from './types/BesselianElementTypes';
-import type {DrawEclipseMapOptions} from './types/SolarEclipsePathTypes';
-import {parseBesselianElements} from './utils/besselianElements';
 
 function resolveBesselianElements(elements: Array<number> | BesselianElements): BesselianElements {
     return Array.isArray(elements) ? parseBesselianElements(elements) : elements;
@@ -13,9 +12,9 @@ function resolveBesselianElements(elements: Array<number> | BesselianElements): 
 
 export default async function drawEclipseMap(options: DrawEclipseMapOptions): Promise<void> {
     const basemap = await loadImage(options.basemap);
-    const canvas = createCanvas(basemap.width, basemap.height);
+    const canvas = createCanvas(options.width ?? basemap.width, options.height ?? basemap.height);
     const context = canvas.getContext('2d');
-    context.drawImage(basemap, 0, 0);
+    context.drawImage(basemap, 0, 0, canvas.width, canvas.height);
 
     for (const overlay of options.overlays) {
         const elements = resolveBesselianElements(overlay.elements);

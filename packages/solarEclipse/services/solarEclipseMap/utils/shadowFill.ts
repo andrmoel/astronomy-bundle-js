@@ -1,11 +1,11 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
-import {DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RISE_SET_SIN_ALTITUDE} from '../geometry/constants';
-import {calculateShadowBoundaryPoint} from '../geometry/shadowBoundary';
-import type {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime as evaluateElements} from '../utils/besselianElements';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getBesselianElementsAtTime as evaluateElements} from '@package/solarEclipse/utils/besselianElements';
 import {parseRgba} from './color';
+import {DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RISE_SET_SIN_ALTITUDE} from './constants';
+import {calculateShadowBoundaryPoint} from './shadowBoundary';
 
 interface PixelRange {
     pyMin: number;
