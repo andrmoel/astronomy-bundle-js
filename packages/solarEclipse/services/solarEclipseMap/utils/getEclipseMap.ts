@@ -1,13 +1,14 @@
 import {writeFile} from 'node:fs/promises';
 import {createCanvas, loadImage} from '@napi-rs/canvas';
-import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {parseBesselianElements} from '@package/solarEclipse/utils/besselianElements';
-import type {DrawEclipseMapOptions} from '../types/SolarEclipsePathTypes';
+import type SolarEclipseMapLayer from '../models/SolarEclipseMapLayer';
 import calculateEclipsePaths from './eclipsePaths';
-import renderPaths from './renderPaths';
 
-function resolveBesselianElements(elements: Array<number> | BesselianElements): BesselianElements {
-    return Array.isArray(elements) ? parseBesselianElements(elements) : elements;
+interface DrawEclipseMapOptions {
+    basemap: string;
+    output: string;
+    width?: number;
+    height?: number;
+    layers: Array<SolarEclipseMapLayer>;
 }
 
 export default async function drawEclipseMap(options: DrawEclipseMapOptions): Promise<void> {
@@ -16,16 +17,10 @@ export default async function drawEclipseMap(options: DrawEclipseMapOptions): Pr
     const context = canvas.getContext('2d');
     context.drawImage(basemap, 0, 0, canvas.width, canvas.height);
 
-    for (const overlay of options.overlays) {
-        const elements = resolveBesselianElements(overlay.elements);
+    for (const layer of options.layers) {
+        const elements = layer.getElements();
         const paths = calculateEclipsePaths(elements);
-        renderPaths(context, canvas, elements, paths, overlay.style, {
-            isCentralLineVisible: overlay.isCentralLineVisible,
-            isUmbraVisible: overlay.isUmbraVisible,
-            isPenumbraVisible: overlay.isPenumbraVisible,
-            isSunriseLineVisible: overlay.isSunriseLineVisible,
-            isSunsetLineVisible: overlay.isSunsetLineVisible,
-        });
+        layer.render(context, canvas, elements, paths);
     }
 
     const buffer = await canvas.encode('png');

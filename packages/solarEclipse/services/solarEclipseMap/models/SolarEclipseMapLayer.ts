@@ -1,15 +1,11 @@
+import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
 import Catalogue from '@package/solarEclipse/models/Catalogue';
-import type {EclipseMapOverlay, EclipseStyle} from '../types/SolarEclipsePathTypes';
-
-type LayerVisibility = Pick<
-    EclipseMapOverlay,
-    'isCentralLineVisible' | 'isUmbraVisible' | 'isPenumbraVisible' | 'isSunriseLineVisible' | 'isSunsetLineVisible'
->;
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import type {EclipsePaths, EclipseStyle} from '../types/SolarEclipsePathTypes';
 
 export default abstract class SolarEclipseMapLayer {
     protected constructor(
         private readonly date: string,
-        private readonly visibility: LayerVisibility,
         private style?: EclipseStyle,
     ) {}
 
@@ -19,11 +15,19 @@ export default abstract class SolarEclipseMapLayer {
         return this;
     }
 
-    public toOverlay(): EclipseMapOverlay {
-        return {
-            elements: Catalogue.getBesselianElements(this.date),
-            style: this.style,
-            ...this.visibility,
-        };
+    public getElements(): BesselianElements {
+        return Catalogue.getBesselianElements(this.date);
     }
+
+    public render(context: SKRSContext2D, canvas: Canvas, elements: BesselianElements, paths: EclipsePaths): void {
+        this.renderLayer(context, canvas, elements, paths, this.style);
+    }
+
+    protected abstract renderLayer(
+        context: SKRSContext2D,
+        canvas: Canvas,
+        elements: BesselianElements,
+        paths: EclipsePaths,
+        style?: EclipseStyle,
+    ): void;
 }

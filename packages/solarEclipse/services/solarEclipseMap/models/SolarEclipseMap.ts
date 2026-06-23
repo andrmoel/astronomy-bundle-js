@@ -35,7 +35,7 @@ export default class SolarEclipseMap {
             output,
             width: this.width,
             height: this.height,
-            overlays: this.layers.map((layer) => layer.toOverlay()),
+            layers: this.layers,
         });
     }
 }
