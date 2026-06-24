@@ -1,4 +1,4 @@
-import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'node:fs';
+import {copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import type {OnResolveArgs, PluginBuild} from 'esbuild';
 import {defineConfig, type Options} from 'tsup';
@@ -28,19 +28,11 @@ const shared: Partial<Options> = {
     esbuildPlugins: [aliasPlugin],
 };
 
-const EXTRA_ENTRIES = ['high-precision', 'catalogue', 'catalogue-full'];
-
 export default defineConfig(
     packages.map((pkg) => {
-        const entry: Record<string, string> = {index: `${pkg}/index.ts`};
-        for (const extra of EXTRA_ENTRIES) {
-            if (existsSync(path.join(root, `${pkg}/index.${extra}.ts`))) {
-                entry[extra] = `${pkg}/index.${extra}.ts`;
-            }
-        }
         return {
             ...shared,
-            entry,
+            entry: getPackageEntries(pkg),
             outDir: `${pkg}/dist`,
             async onSuccess() {
                 writeDistPackageJson(pkg);
@@ -49,6 +41,28 @@ export default defineConfig(
         };
     }),
 );
+
+function getPackageEntries(packageDir: string): Record<string, string> {
+    const entries: Record<string, string> = {index: `${packageDir}/index.ts`};
+    const files = readdirSync(path.join(root, packageDir));
+
+    for (const file of files) {
+        if (file.endsWith('.test.ts')) {
+            continue;
+        }
+
+        const match = /^index\.(.+)\.ts$/.exec(file);
+
+        if (match === null) {
+            continue;
+        }
+
+        const subpath = match[1].split('.').join('/');
+        entries[subpath] = `${packageDir}/${file}`;
+    }
+
+    return entries;
+}
 
 function copyReadme(packageDir: string): void {
     const pkgReadme = path.join(root, packageDir, 'README.md');
@@ -71,14 +85,16 @@ function writeDistPackageJson(packageDir: string): void {
             require: './index.js',
         },
     };
-    for (const extra of EXTRA_ENTRIES) {
-        if (existsSync(path.join(root, packageDir, `index.${extra}.ts`))) {
-            exports[`./${extra}`] = {
-                types: `./${extra}.d.ts`,
-                import: `./${extra}.mjs`,
-                require: `./${extra}.js`,
-            };
+    for (const entry of Object.keys(getPackageEntries(packageDir))) {
+        if (entry === 'index') {
+            continue;
         }
+
+        exports[`./${entry}`] = {
+            types: `./${entry}.d.ts`,
+            import: `./${entry}.mjs`,
+            require: `./${entry}.js`,
+        };
     }
     Object.assign(distPkg, {
         main: './index.js',

@@ -22,4 +22,5 @@ A TypeScript library for astronomical calculations including the position of the
 | **Earth** | The `Earth` object — heliocentric VSOP87 coordinates, nutation, and obliquity of the ecliptic. | [README](packages/earth/README.md) |
 | **Moon** | The `Moon` object — geocentric coordinates, apparent and observed topocentric coordinates, phase angle, illuminated fraction, upcoming lunar phases, and apparent magnitude. | [README](packages/moon/README.md) |
 | **Sun** | The `Sun` object — geocentric coordinates, apparent and observed topocentric coordinates, angular diameter, light time, and apparent magnitude. | [README](packages/sun/README.md) |
+| **Planets** | The `Mercury`, `Venus`, `Mars`, `Jupiter`, `Saturn`, `Uranus`, and `Neptune` objects — heliocentric, geocentric, apparent, and topocentric planetary coordinates, plus distance, light time, phase, elongation, and magnitude. | [README](packages/planets/README.md) |
 | **Solar Eclipse** | Solar eclipse calculations using Besselian elements. Provides global and local eclipse circumstances for any observer position. | [README](packages/solarEclipse/README.md) |
