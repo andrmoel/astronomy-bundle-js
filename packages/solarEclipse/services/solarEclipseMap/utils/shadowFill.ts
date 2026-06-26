@@ -250,7 +250,7 @@ export function rasterizeShadowFill(
     useUmbra: boolean,
     tauStep: number,
     color: string,
-): void {
+): Uint8Array {
     const evaluations = [];
     for (let tau = elements.tMin; tau <= elements.tMax; tau += tauStep) {
         evaluations.push(evaluateElements(elements, tau));
@@ -350,4 +350,100 @@ export function rasterizeShadowFill(
         }
     }
     context.putImageData(imageData, 0, 0);
+
+    return binary;
+}
+
+// Marching squares: per cell, look up the segments to emit between the four corner
+// values. Coordinates are in cell-local space (0..1); the caller offsets them by (px, py).
+const CELL_SEGMENTS: ReadonlyArray<ReadonlyArray<readonly [number, number, number, number]>> = (() => {
+    const L: [number, number] = [0, 0.5];
+    const R: [number, number] = [1, 0.5];
+    const T: [number, number] = [0.5, 0];
+    const B: [number, number] = [0.5, 1];
+    const seg = (a: [number, number], b: [number, number]): [number, number, number, number] =>
+        [a[0], a[1], b[0], b[1]];
+    const cases: Array<Array<[number, number, number, number]>> = [
+        [],
+        [seg(L, T)],
+        [seg(T, R)],
+        [seg(L, R)],
+        [seg(R, B)],
+        [seg(L, T), seg(R, B)],
+        [seg(T, B)],
+        [seg(L, B)],
+        [seg(L, B)],
+        [seg(T, B)],
+        [seg(T, R), seg(L, B)],
+        [seg(R, B)],
+        [seg(L, R)],
+        [seg(T, R)],
+        [seg(L, T)],
+        [],
+    ];
+    return cases;
+})();
+
+export function rasterizeShadowBorder(
+    context: SKRSContext2D,
+    canvas: Canvas,
+    binary: Uint8Array,
+    color: string,
+    lineWidth: number,
+): void {
+    const w = canvas.width;
+    const h = canvas.height;
+    const segments: Array<number> = [];
+
+    for (let py = 0; py < h - 1; py++) {
+        const rowOff = py * w;
+        const nextOff = rowOff + w;
+        for (let px = 0; px < w; px++) {
+            const px1 = px + 1 === w ? 0 : px + 1;
+            const c00 = binary[rowOff + px];
+            const c01 = binary[rowOff + px1];
+            const c11 = binary[nextOff + px1];
+            const c10 = binary[nextOff + px];
+            const code = c00 | (c01 << 1) | (c11 << 2) | (c10 << 3);
+            if (code === 0 || code === 15) {
+                continue;
+            }
+            for (const seg of CELL_SEGMENTS[code]) {
+                segments.push(px + seg[0], py + seg[1], px + seg[2], py + seg[3]);
+            }
+        }
+    }
+
+    context.save();
+    context.strokeStyle = color;
+    context.lineWidth = lineWidth;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+
+    context.beginPath();
+    for (let i = 0; i < segments.length; i += 4) {
+        context.moveTo(segments[i], segments[i + 1]);
+        context.lineTo(segments[i + 2], segments[i + 3]);
+    }
+    context.stroke();
+
+    // Seam cells at px = w - 1 emit segments with x in [w-1, w]. Draw a second copy
+    // shifted by -w so the wrap is also visible at the left edge of the canvas.
+    context.beginPath();
+    let wrapEmitted = false;
+    for (let i = 0; i < segments.length; i += 4) {
+        const x1 = segments[i];
+        const x2 = segments[i + 2];
+        if (x1 < w - 0.5 && x2 < w - 0.5) {
+            continue;
+        }
+        context.moveTo(x1 - w, segments[i + 1]);
+        context.lineTo(x2 - w, segments[i + 3]);
+        wrapEmitted = true;
+    }
+    if (wrapEmitted) {
+        context.stroke();
+    }
+
+    context.restore();
 }

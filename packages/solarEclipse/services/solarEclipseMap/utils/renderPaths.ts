@@ -2,7 +2,7 @@ import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import type {EclipsePaths, EclipseStyle} from '../types/SolarEclipsePathTypes';
 import {fillPolygons, strokePolyline} from './polyline';
-import {rasterizeShadowFill} from './shadowFill';
+import {rasterizeShadowBorder, rasterizeShadowFill} from './shadowFill';
 import {DEFAULT_STYLE} from './style';
 
 const CENTRAL_LINE_WIDTH = 1.5;
@@ -17,28 +17,24 @@ export function renderPenumbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
     elements: BesselianElements,
-    paths: EclipsePaths,
+    _paths: EclipsePaths,
     style?: EclipseStyle,
 ): void {
     const resolved = resolveStyle(style);
-    rasterizeShadowFill(context, canvas, elements, false, 30 / 3600, resolved.fillColor);
-    for (const path of paths.penumbralRegion) {
-        strokePolyline(context, canvas, path, resolved.borderColor, SHADOW_BORDER_WIDTH, true);
-    }
+    const binary = rasterizeShadowFill(context, canvas, elements, false, 30 / 3600, resolved.fillColor);
+    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, SHADOW_BORDER_WIDTH);
 }
 
 export function renderUmbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
     elements: BesselianElements,
-    paths: EclipsePaths,
+    _paths: EclipsePaths,
     style?: EclipseStyle,
 ): void {
     const resolved = resolveStyle(style);
-    rasterizeShadowFill(context, canvas, elements, true, 5 / 3600, resolved.fillColor);
-    for (const path of paths.umbralRegion) {
-        strokePolyline(context, canvas, path, resolved.borderColor, SHADOW_BORDER_WIDTH, true);
-    }
+    const binary = rasterizeShadowFill(context, canvas, elements, true, 5 / 3600, resolved.fillColor);
+    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, SHADOW_BORDER_WIDTH);
 }
 
 export function renderCentralLine(
