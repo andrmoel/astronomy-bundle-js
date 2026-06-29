@@ -354,35 +354,108 @@ export function rasterizeShadowFill(
     return binary;
 }
 
-// Marching squares: per cell, look up the segments to emit between the four corner
-// values. Coordinates are in cell-local space (0..1); the caller offsets them by (px, py).
-const CELL_SEGMENTS: ReadonlyArray<ReadonlyArray<readonly [number, number, number, number]>> = (() => {
-    const L: [number, number] = [0, 0.5];
-    const R: [number, number] = [1, 0.5];
-    const T: [number, number] = [0.5, 0];
-    const B: [number, number] = [0.5, 1];
-    const seg = (a: [number, number], b: [number, number]): [number, number, number, number] =>
-        [a[0], a[1], b[0], b[1]];
-    const cases: Array<Array<[number, number, number, number]>> = [
-        [],
-        [seg(L, T)],
-        [seg(T, R)],
-        [seg(L, R)],
-        [seg(R, B)],
-        [seg(L, T), seg(R, B)],
-        [seg(T, B)],
-        [seg(L, B)],
-        [seg(L, B)],
-        [seg(T, B)],
-        [seg(T, R), seg(L, B)],
-        [seg(R, B)],
-        [seg(L, R)],
-        [seg(T, R)],
-        [seg(L, T)],
-        [],
-    ];
-    return cases;
-})();
+// Marching squares with edge interpolation: per cell the corner code selects which
+// pairs of cell edges the contour crosses. Each edge id (L/R/T/B) is later resolved to
+// a sub-pixel crossing position by linearly interpolating the smoothed field at the
+// 0.5 iso-level, so the contour is not pinned to pixel-edge midpoints (which staircases).
+const Edge = {
+    Left: 0,
+    Right: 1,
+    Top: 2,
+    Bottom: 3,
+} as const;
+type EdgeValue = (typeof Edge)[keyof typeof Edge];
+const CELL_EDGE_SEGMENTS: ReadonlyArray<ReadonlyArray<readonly [EdgeValue, EdgeValue]>> = [
+    [],
+    [[Edge.Left, Edge.Top]],
+    [[Edge.Top, Edge.Right]],
+    [[Edge.Left, Edge.Right]],
+    [[Edge.Right, Edge.Bottom]],
+    [
+        [Edge.Left, Edge.Top],
+        [Edge.Right, Edge.Bottom],
+    ],
+    [[Edge.Top, Edge.Bottom]],
+    [[Edge.Left, Edge.Bottom]],
+    [[Edge.Left, Edge.Bottom]],
+    [[Edge.Top, Edge.Bottom]],
+    [
+        [Edge.Top, Edge.Right],
+        [Edge.Left, Edge.Bottom],
+    ],
+    [[Edge.Right, Edge.Bottom]],
+    [[Edge.Left, Edge.Right]],
+    [[Edge.Top, Edge.Right]],
+    [[Edge.Left, Edge.Top]],
+    [],
+];
+
+const BORDER_FIELD_BLUR_RADIUS = 2;
+const BORDER_FIELD_BLUR_PASSES = 2;
+const BORDER_ISO_LEVEL = 0.5;
+
+// Separable box blur (repeated passes approximate a Gaussian). Longitude wraps in x so
+// the contour stays continuous across the date line; latitude is clamped at the poles.
+function boxBlurField(src: Float32Array, w: number, h: number, radius: number, passes: number): Float32Array {
+    const norm = 1 / (2 * radius + 1);
+    let buffer = src;
+    for (let pass = 0; pass < passes; pass++) {
+        const horizontal = new Float32Array(w * h);
+        for (let y = 0; y < h; y++) {
+            const off = y * w;
+            for (let x = 0; x < w; x++) {
+                let sum = 0;
+                for (let k = -radius; k <= radius; k++) {
+                    let xx = x + k;
+                    if (xx < 0) {
+                        xx += w;
+                    } else if (xx >= w) {
+                        xx -= w;
+                    }
+                    sum += buffer[off + xx];
+                }
+                horizontal[off + x] = sum * norm;
+            }
+        }
+
+        const vertical = new Float32Array(w * h);
+        for (let x = 0; x < w; x++) {
+            for (let y = 0; y < h; y++) {
+                let sum = 0;
+                for (let k = -radius; k <= radius; k++) {
+                    let yy = y + k;
+                    if (yy < 0) {
+                        yy = 0;
+                    } else if (yy >= h) {
+                        yy = h - 1;
+                    }
+                    sum += horizontal[yy * w + x];
+                }
+                vertical[y * w + x] = sum * norm;
+            }
+        }
+        buffer = vertical;
+    }
+
+    return buffer;
+}
+
+// Fraction along the edge (a -> b) where the field equals the iso-level, clamped to the cell.
+function interpEdge(a: number, b: number): number {
+    const delta = b - a;
+    if (delta === 0) {
+        return 0.5;
+    }
+    const t = (BORDER_ISO_LEVEL - a) / delta;
+    if (t < 0) {
+        return 0;
+    }
+    if (t > 1) {
+        return 1;
+    }
+
+    return t;
+}
 
 export function rasterizeShadowBorder(
     context: SKRSContext2D,
@@ -393,23 +466,45 @@ export function rasterizeShadowBorder(
 ): void {
     const w = canvas.width;
     const h = canvas.height;
-    const segments: Array<number> = [];
 
+    const field = boxBlurField(Float32Array.from(binary), w, h, BORDER_FIELD_BLUR_RADIUS, BORDER_FIELD_BLUR_PASSES);
+
+    const segments: Array<number> = [];
     for (let py = 0; py < h - 1; py++) {
         const rowOff = py * w;
         const nextOff = rowOff + w;
         for (let px = 0; px < w; px++) {
             const px1 = px + 1 === w ? 0 : px + 1;
-            const c00 = binary[rowOff + px];
-            const c01 = binary[rowOff + px1];
-            const c11 = binary[nextOff + px1];
-            const c10 = binary[nextOff + px];
-            const code = c00 | (c01 << 1) | (c11 << 2) | (c10 << 3);
+            // Field corner values, matching the binary corner code bit order below.
+            const f00 = field[rowOff + px];
+            const f01 = field[rowOff + px1];
+            const f11 = field[nextOff + px1];
+            const f10 = field[nextOff + px];
+            const code =
+                (f00 >= BORDER_ISO_LEVEL ? 1 : 0)
+                | (f01 >= BORDER_ISO_LEVEL ? 2 : 0)
+                | (f11 >= BORDER_ISO_LEVEL ? 4 : 0)
+                | (f10 >= BORDER_ISO_LEVEL ? 8 : 0);
             if (code === 0 || code === 15) {
                 continue;
             }
-            for (const seg of CELL_SEGMENTS[code]) {
-                segments.push(px + seg[0], py + seg[1], px + seg[2], py + seg[3]);
+            for (const [edgeA, edgeB] of CELL_EDGE_SEGMENTS[code]) {
+                for (const edge of [edgeA, edgeB]) {
+                    switch (edge) {
+                        case Edge.Top:
+                            segments.push(px + interpEdge(f00, f01), py);
+                            break;
+                        case Edge.Bottom:
+                            segments.push(px + interpEdge(f10, f11), py + 1);
+                            break;
+                        case Edge.Left:
+                            segments.push(px, py + interpEdge(f00, f10));
+                            break;
+                        case Edge.Right:
+                            segments.push(px + 1, py + interpEdge(f01, f11));
+                            break;
+                    }
+                }
             }
         }
     }

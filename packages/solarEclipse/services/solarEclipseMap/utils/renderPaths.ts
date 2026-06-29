@@ -5,10 +5,6 @@ import {fillPolygons, strokePolyline} from './polyline';
 import {rasterizeShadowBorder, rasterizeShadowFill} from './shadowFill';
 import {DEFAULT_STYLE} from './style';
 
-const CENTRAL_LINE_WIDTH = 1.5;
-const SHADOW_BORDER_WIDTH = 1.5;
-const RISE_SET_BORDER_WIDTH = 1.5;
-
 function resolveStyle(style?: EclipseStyle): Required<EclipseStyle> {
     return {...DEFAULT_STYLE, ...(style ?? {})};
 }
@@ -22,7 +18,7 @@ export function renderPenumbraPath(
 ): void {
     const resolved = resolveStyle(style);
     const binary = rasterizeShadowFill(context, canvas, elements, false, 30 / 3600, resolved.fillColor);
-    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, SHADOW_BORDER_WIDTH);
+    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, resolved.borderWeight);
 }
 
 export function renderUmbraPath(
@@ -34,7 +30,7 @@ export function renderUmbraPath(
 ): void {
     const resolved = resolveStyle(style);
     const binary = rasterizeShadowFill(context, canvas, elements, true, 5 / 3600, resolved.fillColor);
-    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, SHADOW_BORDER_WIDTH);
+    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, resolved.borderWeight);
 }
 
 export function renderCentralLine(
@@ -44,7 +40,7 @@ export function renderCentralLine(
     style?: EclipseStyle,
 ): void {
     const resolved = resolveStyle(style);
-    strokePolyline(context, canvas, paths.centralLine, resolved.borderColor, CENTRAL_LINE_WIDTH, false);
+    strokePolyline(context, canvas, paths.centralLine, resolved.borderColor, resolved.borderWeight, false);
 }
 
 export function renderSunriseBoundary(
@@ -55,7 +51,7 @@ export function renderSunriseBoundary(
 ): void {
     const resolved = resolveStyle(style);
     fillPolygons(context, canvas, [paths.sunriseBoundary], resolved.fillColor);
-    strokePolyline(context, canvas, paths.sunriseBoundary, resolved.borderColor, RISE_SET_BORDER_WIDTH, true);
+    strokePolyline(context, canvas, paths.sunriseBoundary, resolved.borderColor, resolved.borderWeight, true);
 }
 
 export function renderSunsetBoundary(
@@ -66,5 +62,5 @@ export function renderSunsetBoundary(
 ): void {
     const resolved = resolveStyle(style);
     fillPolygons(context, canvas, [paths.sunsetBoundary], resolved.fillColor);
-    strokePolyline(context, canvas, paths.sunsetBoundary, resolved.borderColor, RISE_SET_BORDER_WIDTH, true);
+    strokePolyline(context, canvas, paths.sunsetBoundary, resolved.borderColor, resolved.borderWeight, true);
 }

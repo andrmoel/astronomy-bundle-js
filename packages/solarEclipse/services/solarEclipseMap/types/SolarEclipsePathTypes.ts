@@ -13,4 +13,5 @@ export interface EclipsePaths {
 export interface EclipseStyle {
     fillColor?: string;
     borderColor?: string;
+    borderWeight?: number;
 }
