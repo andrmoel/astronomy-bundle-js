@@ -1,7 +1,8 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
-import {DEG, E_SQ, ONE_MINUS_F, RISE_SET_SIN_ALTITUDE} from './constants';
+import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD, RISE_SET_SIN_ALTITUDE} from './constants';
 import {closeContourAroundPole, lonWinding, shortestLonDelta, signedUnwrappedArea} from './contourGeometry';
 import {solveSurfacePoint} from './surface';
 
@@ -32,13 +33,14 @@ interface EdgeSample {
 // One point of the shadow edge at position angle q, projected onto the requested sheet of
 // the ellipsoid. The shadow radius depends on zeta, which depends on the surface point, so
 // both are converged by fixed-point iteration. Returns null when the edge misses the
-// ellipsoid or the surface point lies below the rise/set horizon.
+// ellipsoid or the surface point lies below the visibility horizon at zeta = z0.
 function shadowEdgePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     q: number,
     useUmbra: boolean,
     farSide: boolean,
+    z0: number,
 ): EdgeSample | null {
     const l0 = useUmbra ? e.l2 : e.l1;
     const tanF = useUmbra ? elements.tanF2 : elements.tanF1;
@@ -65,7 +67,7 @@ function shadowEdgePoint(
         }
         radius = newRadius;
     }
-    if (point === null || zeta < RISE_SET_SIN_ALTITUDE) {
+    if (point === null || zeta < z0) {
         return null;
     }
 
@@ -81,12 +83,13 @@ function bisectEdgeBoundary(
     qBad: number,
     useUmbra: boolean,
     farSide: boolean,
+    z0: number,
 ): {sample: EdgeSample; q: number} | null {
     let good = qGood;
     let bad = qBad;
     for (let iter = 0; iter < 40; iter++) {
         const qMid = (good + bad) / 2;
-        if (shadowEdgePoint(elements, e, qMid, useUmbra, farSide) !== null) {
+        if (shadowEdgePoint(elements, e, qMid, useUmbra, farSide, z0) !== null) {
             good = qMid;
         } else {
             bad = qMid;
@@ -95,7 +98,7 @@ function bisectEdgeBoundary(
             break;
         }
     }
-    const sample = shadowEdgePoint(elements, e, good, useUmbra, farSide);
+    const sample = shadowEdgePoint(elements, e, good, useUmbra, farSide, z0);
 
     return sample !== null ? {sample, q: good} : null;
 }
@@ -110,6 +113,7 @@ function nightSheetRun(
     direction: number,
     useUmbra: boolean,
     qStep: number,
+    z0: number,
 ): Array<EdgeSample> {
     const run: Array<EdgeSample> = [];
     // The sliver covers only a small q range, so it is walked at a finer step than the
@@ -122,9 +126,9 @@ function nightSheetRun(
     let qGood = qFold;
     for (let step = 1; step <= maxSteps; step++) {
         const q = qFold + direction * step * nightStep;
-        const sample = shadowEdgePoint(elements, e, q, useUmbra, true);
+        const sample = shadowEdgePoint(elements, e, q, useUmbra, true, z0);
         if (sample === null) {
-            const crossing = bisectEdgeBoundary(elements, e, qGood, q, useUmbra, true);
+            const crossing = bisectEdgeBoundary(elements, e, qGood, q, useUmbra, true, z0);
             if (crossing !== null) {
                 run.push(crossing.sample);
             }
@@ -137,41 +141,44 @@ function nightSheetRun(
     return run;
 }
 
-interface RingPoint {
+export interface RingPoint {
     point: LatLon;
     xi: number;
     eta: number;
     sinU: number;
 }
 
-// Surface point of the rise/set horizon ring (zeta = sin(-50')) at position angle theta.
-// The ring radius depends weakly on sinU through the ellipsoid flattening, so it is
-// converged by fixed-point iteration.
-function terminatorRingPoint(
+// Surface point of the horizon ring at Sun altitude asin(z0) (default: the rise/set horizon
+// at -50') and position angle theta. On the ring sinU follows linearly from the coordinates
+// via (1 - f) sinU = eta cos d + zeta sin d, so only the ellipsoid radius needs a short
+// fixed-point iteration and every theta yields a point — the general surface solver would
+// sit exactly on its zetaSq >= 0 float boundary at z0 = 0 and fail intermittently.
+export function terminatorRingPoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     theta: number,
     sinUSeed: number,
-): RingPoint | null {
-    const z0 = RISE_SET_SIN_ALTITUDE;
+    z0: number = RISE_SET_SIN_ALTITUDE,
+): RingPoint {
     const cosTheta = Math.cos(theta);
     const sinTheta = Math.sin(theta);
 
     let sinU = sinUSeed;
-    let result: RingPoint | null = null;
-    for (let iter = 0; iter < 3; iter++) {
+    let xi = 0;
+    let eta = 0;
+    for (let iter = 0; iter < 4; iter++) {
         const rho = Math.sqrt(Math.max(0, 1 - E_SQ * sinU * sinU - z0 * z0));
-        const xi = rho * cosTheta;
-        const eta = rho * sinTheta;
-        const solution = solveSurfacePoint(elements, e, xi, eta, true);
-        if (solution === null) {
-            break;
-        }
-        sinU = solution.sinU;
-        result = {point: {lat: solution.lat, lon: solution.lon}, xi, eta, sinU};
+        xi = rho * cosTheta;
+        eta = rho * sinTheta;
+        sinU = (eta * e.cosD + z0 * e.sinD) / ONE_MINUS_F;
     }
 
-    return result;
+    const cosU = Math.sqrt(Math.max(0, 1 - sinU * sinU));
+    const lat = Math.atan2(sinU, ONE_MINUS_F * cosU) * RAD;
+    const thetaG = Math.atan2(xi, (z0 - ONE_MINUS_F * sinU * e.sinD) / e.cosD);
+    const lon = normalizeLongitude((thetaG - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600);
+
+    return {point: {lat, lon}, xi, eta, sinU};
 }
 
 // Arc of the rise/set horizon ring between two fundamental-plane points, taking the side
@@ -184,15 +191,16 @@ function terminatorRingArc(
     e: BesselianElementsAtTime,
     from: EdgeSample,
     to: EdgeSample,
+    z0: number,
 ): Array<LatLon> {
     const thetaFrom = Math.atan2(from.eta, from.xi);
     const thetaTo = Math.atan2(to.eta, to.xi);
     let sinU = solveSurfacePoint(elements, e, from.xi, from.eta, true)?.sinU ?? 0;
 
     const distanceToShadowCentre = (theta: number): number => {
-        const ringPoint = terminatorRingPoint(elements, e, theta, sinU);
+        const ringPoint = terminatorRingPoint(elements, e, theta, sinU, z0);
 
-        return ringPoint === null ? Infinity : Math.hypot(ringPoint.xi - e.x, ringPoint.eta - e.y);
+        return Math.hypot(ringPoint.xi - e.x, ringPoint.eta - e.y);
     };
 
     let delta = thetaTo - thetaFrom;
@@ -213,10 +221,7 @@ function terminatorRingArc(
     const steps = Math.max(1, Math.ceil(Math.abs(delta) / RING_ARC_STEP));
     for (let k = 1; k < steps; k++) {
         const theta = thetaFrom + (delta * k) / steps;
-        const ringPoint = terminatorRingPoint(elements, e, theta, sinU);
-        if (ringPoint === null) {
-            continue;
-        }
+        const ringPoint = terminatorRingPoint(elements, e, theta, sinU, z0);
         sinU = ringPoint.sinU;
         anchors.push({theta, ring: ringPoint});
     }
@@ -235,10 +240,7 @@ function terminatorRingArc(
             return;
         }
         const thetaMid = (thetaA + thetaB) / 2;
-        const mid = terminatorRingPoint(elements, e, thetaMid, a.sinU);
-        if (mid === null) {
-            return;
-        }
+        const mid = terminatorRingPoint(elements, e, thetaMid, a.sinU, z0);
         emitBetween(thetaA, a, thetaMid, mid, depth + 1);
         arc.push(mid.point);
         emitBetween(thetaMid, mid, thetaB, b, depth + 1);
@@ -259,12 +261,13 @@ function instantaneousShadowOutline(
     e: BesselianElementsAtTime,
     useUmbra: boolean,
     qSamples: number,
+    z0: number,
 ): Array<LatLon> | null {
     const qStep = (2 * Math.PI) / qSamples;
     const samples: Array<EdgeSample | null> = [];
     let firstAccepted = -1;
     for (let i = 0; i < qSamples; i++) {
-        const sample = shadowEdgePoint(elements, e, i * qStep, useUmbra, false);
+        const sample = shadowEdgePoint(elements, e, i * qStep, useUmbra, false, z0);
         samples.push(sample);
         if (sample !== null && firstAccepted < 0) {
             firstAccepted = i;
@@ -282,7 +285,7 @@ function instantaneousShadowOutline(
         const sample = offset === qSamples ? samples[firstAccepted] : samples[i];
         if (sample === null) {
             if (gapStart === null && outline.length > 0) {
-                gapStart = bisectEdgeBoundary(elements, e, q - qStep, q, useUmbra, false);
+                gapStart = bisectEdgeBoundary(elements, e, q - qStep, q, useUmbra, false, z0);
                 if (gapStart !== null) {
                     outline.push(gapStart.sample.point);
                 }
@@ -290,13 +293,13 @@ function instantaneousShadowOutline(
             continue;
         }
         if (gapStart !== null) {
-            const gapEnd = bisectEdgeBoundary(elements, e, q, q - qStep, useUmbra, false);
-            const nightIn = nightSheetRun(elements, e, gapStart.q, -1, useUmbra, qStep);
-            const nightOut = gapEnd !== null ? nightSheetRun(elements, e, gapEnd.q, 1, useUmbra, qStep) : [];
+            const gapEnd = bisectEdgeBoundary(elements, e, q, q - qStep, useUmbra, false, z0);
+            const nightIn = nightSheetRun(elements, e, gapStart.q, -1, useUmbra, qStep, z0);
+            const nightOut = gapEnd !== null ? nightSheetRun(elements, e, gapEnd.q, 1, useUmbra, qStep, z0) : [];
             const arcFrom = nightIn.length > 0 ? nightIn[nightIn.length - 1] : gapStart.sample;
             const arcTo = nightOut.length > 0 ? nightOut[nightOut.length - 1] : (gapEnd?.sample ?? sample);
             outline.push(...nightIn.map(({point}) => point));
-            outline.push(...terminatorRingArc(elements, e, arcFrom, arcTo));
+            outline.push(...terminatorRingArc(elements, e, arcFrom, arcTo, z0));
             for (let k = nightOut.length - 1; k >= 0; k--) {
                 outline.push(nightOut[k].point);
             }
@@ -318,11 +321,12 @@ function isPoleInsideInstantShadow(
     e: BesselianElementsAtTime,
     useUmbra: boolean,
     poleLat: number,
+    z0: number,
 ): boolean {
     const sinU = poleLat > 0 ? 1 : -1;
     const eta = sinU * ONE_MINUS_F * e.cosD;
     const zeta = sinU * ONE_MINUS_F * e.sinD;
-    if (zeta < RISE_SET_SIN_ALTITUDE) {
+    if (zeta < z0) {
         return false;
     }
     const l0 = useUmbra ? e.l2 : e.l1;
@@ -340,16 +344,16 @@ export function calculateShadowRegionContours(
     const contours: Array<Array<LatLon>> = [];
     for (let tau = elements.tMin; tau <= elements.tMax; tau += stepHours) {
         const e = getBesselianElementsAtTime(elements, tau);
-        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples);
+        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples, RISE_SET_SIN_ALTITUDE);
         if (outline === null) {
             continue;
         }
 
         const winding = lonWinding(outline);
         if (Math.abs(winding) >= 180) {
-            const poleLat = isPoleInsideInstantShadow(elements, e, useUmbra, 90)
+            const poleLat = isPoleInsideInstantShadow(elements, e, useUmbra, 90, RISE_SET_SIN_ALTITUDE)
                 ? 90
-                : isPoleInsideInstantShadow(elements, e, useUmbra, -90)
+                : isPoleInsideInstantShadow(elements, e, useUmbra, -90, RISE_SET_SIN_ALTITUDE)
                   ? -90
                   : null;
             // A contour that winds around the globe without containing a pole is a numerical

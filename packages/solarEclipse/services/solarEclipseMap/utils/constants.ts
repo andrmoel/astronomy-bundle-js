@@ -17,12 +17,18 @@ const SUN_SEMIDIAMETER_DEG = 16 / 60;
 const RISE_SET_SUN_ALTITUDE_DEG = -(HORIZON_REFRACTION_DEG + SUN_SEMIDIAMETER_DEG);
 export const RISE_SET_SIN_ALTITUDE = Math.sin(RISE_SET_SUN_ALTITUDE_DEG * DEG);
 
+// Espenak and Jubier compute the maximum-eclipse-at-sunrise/sunset curve with the Sun's
+// CENTRE on the geometric horizon (no refraction, no semidiameter): zeta = 0. The curve is
+// verified against Jubier's reference maps, so it keeps that convention.
+export const MAX_ECLIPSE_SIN_ALTITUDE = 0;
+
 export const CENTRAL_LINE_STEP_HOURS = 1 / (60 * 60);
 // Region fills are unions of instantaneous outlines. Along the rise/set edges the union
 // boundary is traced by the corner where an outline switches from shadow edge to terminator
 // arc; that corner advances with the shadow (~0.5°/min), so the step must keep the resulting
 // stair teeth below a map pixel.
-export const PENUMBRA_REGION_STEP_HOURS = 1 / 360;
 export const UMBRA_REGION_STEP_HOURS = 1 / 720;
 export const RISE_SET_BOUNDARY_STEP_HOURS = 1 / 60;
 export const RISE_SET_BOUNDARY_Q_SAMPLES = 180;
+// Ring positions sampled per instant when locating the maximum-eclipse-at-horizon root.
+export const MAX_ECLIPSE_RING_SAMPLES = 240;

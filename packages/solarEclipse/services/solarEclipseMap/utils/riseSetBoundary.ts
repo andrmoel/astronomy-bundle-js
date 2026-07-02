@@ -7,25 +7,30 @@ import {
     DEG,
     E_SQ,
     EARTH_ROTATION_DEG_PER_HOUR,
+    MAX_ECLIPSE_RING_SAMPLES,
+    MAX_ECLIPSE_SIN_ALTITUDE,
+    ONE_MINUS_F,
     RISE_SET_BOUNDARY_Q_SAMPLES,
     RISE_SET_BOUNDARY_STEP_HOURS,
     RISE_SET_SIN_ALTITUDE,
 } from './constants';
 import {calculateShadowBoundaryPoint, penumbraBoundaryFundamental} from './shadowBoundary';
-import {solveSurfacePoint} from './surface';
+import {type RingPoint, terminatorRingPoint} from './shadowOutline';
 
-// Moves a geometric crossing (penumbra limit meeting the geometric terminator) onto the
-// rise/set horizon (Sun's upper limb with refraction, centre at -50'). The refined point lies
-// where the penumbra-limit circle of radius |l1 - zeta * tanF1| meets the terminator ring at
-// zeta = RISE_SET_SIN_ALTITUDE; both are circles about the shadow axis in the fundamental
-// plane, so the crossing is found by a two-circle intersection iterated for the ellipsoid.
-function refineCrossingToRiseSetHorizon(
+// Moves a crossing (penumbra limit meeting the terminator) onto the horizon ring at
+// zeta = z0. The refined point lies where the penumbra-limit circle of radius
+// |l1 - zeta * tanF1| meets the terminator ring at that zeta; both are circles about the
+// shadow axis in the fundamental plane, so the crossing is found by a two-circle
+// intersection iterated for the ellipsoid. This is needed even for the geometric horizon
+// (z0 = 0): the shadow-boundary solver's day sheet ends at the ellipsoid fold, which sits
+// O(e^2) short of zeta = 0 — amplified by the grazing geometry to a visible offset.
+function refineCrossingToHorizon(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     xiSeed: number,
     etaSeed: number,
+    z0: number,
 ): LatLon | null {
-    const z0 = RISE_SET_SIN_ALTITUDE;
     const penumbraRadius = Math.abs(e.l1 - z0 * elements.tanF1);
     const axisDistance = Math.hypot(e.x, e.y);
     if (axisDistance === 0) {
@@ -36,12 +41,9 @@ function refineCrossingToRiseSetHorizon(
 
     let xi = xiSeed;
     let eta = etaSeed;
-    let sinU = 0;
+    // On the ring sinU follows linearly from eta: (1 - f) sinU = eta cos d + zeta sin d.
+    let sinU = (etaSeed * e.cosD + z0 * e.sinD) / ONE_MINUS_F;
     for (let iter = 0; iter < 40; iter++) {
-        const sample = solveSurfacePoint(elements, e, xi, eta, true) ?? solveSurfacePoint(elements, e, xi, eta, false);
-        if (sample !== null) {
-            sinU = sample.sinU;
-        }
         // Radius (about the axis) of the terminator ring at zeta = z0 on the ellipsoid.
         const ringRadiusSq = 1 - E_SQ * sinU * sinU - z0 * z0;
         if (ringRadiusSq < 0) {
@@ -69,14 +71,13 @@ function refineCrossingToRiseSetHorizon(
         const moved = (nextXi - xi) ** 2 + (nextEta - eta) ** 2;
         xi = nextXi;
         eta = nextEta;
+        sinU = (eta * e.cosD + z0 * e.sinD) / ONE_MINUS_F;
         if (moved < 1e-18) {
             break;
         }
     }
 
-    const solution = solveSurfacePoint(elements, e, xi, eta, true);
-
-    return solution !== null ? {lat: solution.lat, lon: solution.lon} : null;
+    return terminatorRingPoint(elements, e, Math.atan2(eta, xi), sinU, z0).point;
 }
 
 function isOnSunsetSide(point: LatLon, e: BesselianElementsAtTime, deltaT: number): boolean {
@@ -132,6 +133,7 @@ function collectSidedCrossings(
     e: BesselianElementsAtTime,
     qVelocity: number,
     isSunset: boolean,
+    onRefractedHorizon: boolean,
 ): Array<SunsetCrossing> {
     const N = RISE_SET_BOUNDARY_Q_SAMPLES;
     const pts: Array<LatLon | null> = new Array(N);
@@ -161,21 +163,29 @@ function collectSidedCrossings(
             continue;
         }
 
-        const refined = refineCrossingToRiseSetHorizon(elements, e, crossing.xi, crossing.eta) ?? crossing.geometric;
+        // The loops live on the refracted upper-limb horizon; the maximum-eclipse lens edges
+        // on the geometric one, matching the geometric-horizon region clip.
+        const z0 = onRefractedHorizon ? RISE_SET_SIN_ALTITUDE : MAX_ECLIPSE_SIN_ALTITUDE;
+        const point = refineCrossingToHorizon(elements, e, crossing.xi, crossing.eta, z0) ?? crossing.geometric;
         const qCrossing = (q1 + q2) / 2;
-        result.push({point: refined, qCos: Math.cos(qCrossing - qVelocity)});
+        result.push({point, qCos: Math.cos(qCrossing - qVelocity)});
     }
 
     return result;
 }
 
-function crossingsAtTau(elements: BesselianElements, tau: number, isSunset: boolean): Array<SunsetCrossing> {
+function crossingsAtTau(
+    elements: BesselianElements,
+    tau: number,
+    isSunset: boolean,
+    onRefractedHorizon: boolean,
+): Array<SunsetCrossing> {
     const e = getBesselianElementsAtTime(elements, tau);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
     const qVelocity = Math.atan2(dy, dx);
 
-    return collectSidedCrossings(elements, e, qVelocity, isSunset);
+    return collectSidedCrossings(elements, e, qVelocity, isSunset, onRefractedHorizon);
 }
 
 function bisectEndTangent(
@@ -183,12 +193,13 @@ function bisectEndTangent(
     isSunset: boolean,
     tauWithTwo: number,
     tauWithLess: number,
+    onRefractedHorizon: boolean,
 ): LatLon | null {
     let twoSide = tauWithTwo;
     let lessSide = tauWithLess;
     for (let iter = 0; iter < 40; iter++) {
         const mid = (twoSide + lessSide) / 2;
-        const c = crossingsAtTau(elements, mid, isSunset);
+        const c = crossingsAtTau(elements, mid, isSunset, onRefractedHorizon);
         if (c.length >= 2) {
             twoSide = mid;
         } else {
@@ -198,7 +209,7 @@ function bisectEndTangent(
             break;
         }
     }
-    const c = crossingsAtTau(elements, twoSide, isSunset);
+    const c = crossingsAtTau(elements, twoSide, isSunset, onRefractedHorizon);
     if (c.length === 0) {
         return null;
     }
@@ -233,7 +244,18 @@ function latLonDistSq(a: LatLon, b: LatLon): number {
     return dLat * dLat + dLon * dLon;
 }
 
-export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean): RiseSetBoundary {
+interface RiseSetEdges {
+    leadingEdge: Array<LatLon>;
+    trailingEdge: Array<LatLon>;
+    startTip: LatLon | null;
+    endTip: LatLon | null;
+}
+
+function calculateRiseSetEdges(
+    elements: BesselianElements,
+    isSunset: boolean,
+    onRefractedHorizon: boolean,
+): RiseSetEdges {
     // Two curves form the loop:
     //   leadingEdge  = where eclipse BEGINS (C1) at rise/set  (forward of shadow velocity)
     //   trailingEdge = where eclipse ENDS (C4) at rise/set    (rearward of shadow velocity)
@@ -267,7 +289,7 @@ export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: 
     let lastSingleBranch: 'leading' | 'trailing' | null = null;
 
     for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
-        const crossings = crossingsAtTau(elements, tau, isSunset);
+        const crossings = crossingsAtTau(elements, tau, isSunset, onRefractedHorizon);
         const leadingLast = leadingEdge.length > 0 ? leadingEdge[leadingEdge.length - 1] : null;
         const trailingLast = trailingEdge.length > 0 ? trailingEdge[trailingEdge.length - 1] : null;
 
@@ -360,15 +382,31 @@ export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: 
     // A 2 → 1 transition is a meridian crossing of one intersection, not a tangent.
     let endTip: LatLon | null = null;
     if (lastTwoTau !== null && countAfterLastTwo === 0) {
-        endTip = bisectEndTangent(elements, isSunset, lastTwoTau, lastTwoTau + RISE_SET_BOUNDARY_STEP_HOURS);
+        endTip = bisectEndTangent(
+            elements,
+            isSunset,
+            lastTwoTau,
+            lastTwoTau + RISE_SET_BOUNDARY_STEP_HOURS,
+            onRefractedHorizon,
+        );
     }
 
     // Include startTip only when the pre-firstTwoTau transition is 0 → 2 (true tangent).
     let startTip: LatLon | null = null;
     if (firstTwoTau !== null && countBeforeFirstTwo === 0) {
-        startTip = bisectEndTangent(elements, isSunset, firstTwoTau, firstTwoTau - RISE_SET_BOUNDARY_STEP_HOURS);
+        startTip = bisectEndTangent(
+            elements,
+            isSunset,
+            firstTwoTau,
+            firstTwoTau - RISE_SET_BOUNDARY_STEP_HOURS,
+            onRefractedHorizon,
+        );
     }
 
+    return {leadingEdge, trailingEdge, startTip, endTip};
+}
+
+function assembleLoop({leadingEdge, trailingEdge, startTip, endTip}: RiseSetEdges): RiseSetBoundary {
     if (leadingEdge.length === 0 && trailingEdge.length === 0) {
         return [];
     }
@@ -388,10 +426,142 @@ export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: 
     return loop;
 }
 
+export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean): RiseSetBoundary {
+    return assembleLoop(calculateRiseSetEdges(elements, isSunset, true));
+}
+
 export function calculateSunsetBoundary(elements: BesselianElements): RiseSetBoundary {
     return calculateRiseSetBoundary(elements, true);
 }
 
 export function calculateSunriseBoundary(elements: BesselianElements): RiseSetBoundary {
     return calculateRiseSetBoundary(elements, false);
+}
+
+// The maximum-eclipse point on the horizon at one instant: the root of the separation-rate
+// condition (P - S) . (P' - S') = 0 on the horizon ring, inside the penumbra and on the
+// requested terminator side. A fixed location reaches maximum eclipse when its
+// fundamental-plane separation from the shadow axis stops shrinking, i.e. when the separation
+// vector is perpendicular to the relative velocity of location and shadow. The location
+// itself moves with Earth's rotation; for a surface point on the horizon ring at zeta = z0,
+//   xi'  = mu' (z0 cos d - eta sin d)
+//   eta' = mu' xi sin d - z0 d'
+// Only the near-side root can pass the penumbra test, so each tau yields at most one point.
+function maxEclipseRootAtTau(elements: BesselianElements, tau: number, isSunset: boolean): LatLon | null {
+    const z0 = MAX_ECLIPSE_SIN_ALTITUDE;
+    const e = getBesselianElementsAtTime(elements, tau);
+    const dx = polynomialDerivative(elements.x, tau);
+    const dy = polynomialDerivative(elements.y, tau);
+    const muDot = polynomialDerivative(elements.mu, tau) * DEG;
+    const dDot = polynomialDerivative(elements.d, tau) * DEG;
+    const penumbraRadius = Math.abs(e.l1 - z0 * elements.tanF1);
+
+    const separationRate = (ring: RingPoint): number => {
+        const xiDot = muDot * (z0 * e.cosD - ring.eta * e.sinD);
+        const etaDot = muDot * ring.xi * e.sinD - z0 * dDot;
+
+        return (ring.xi - e.x) * (xiDot - dx) + (ring.eta - e.y) * (etaDot - dy);
+    };
+
+    const N = MAX_ECLIPSE_RING_SAMPLES;
+    const rings: Array<RingPoint> = new Array(N);
+    const rates: Array<number> = new Array(N);
+    let sinUSeed = e.sinD;
+    for (let i = 0; i < N; i++) {
+        const ring = terminatorRingPoint(elements, e, (i / N) * 2 * Math.PI, sinUSeed, z0);
+        rings[i] = ring;
+        rates[i] = separationRate(ring);
+        sinUSeed = ring.sinU;
+    }
+
+    let best: {point: LatLon; separation: number} | null = null;
+    for (let i = 0; i < N; i++) {
+        const j = (i + 1) % N;
+        if (rates[i] * rates[j] > 0) {
+            continue;
+        }
+
+        // Bisect theta to the root of the separation rate.
+        let thetaA = (i / N) * 2 * Math.PI;
+        let thetaB = ((i + 1) / N) * 2 * Math.PI;
+        let rateA = rates[i];
+        let root = rings[i];
+        for (let iter = 0; iter < 40; iter++) {
+            const thetaMid = (thetaA + thetaB) / 2;
+            root = terminatorRingPoint(elements, e, thetaMid, root.sinU, z0);
+            const rate = separationRate(root);
+            if (rateA * rate <= 0) {
+                thetaB = thetaMid;
+            } else {
+                thetaA = thetaMid;
+                rateA = rate;
+            }
+            if (thetaB - thetaA < 1e-10) {
+                break;
+            }
+        }
+
+        const separation = Math.hypot(root.xi - e.x, root.eta - e.y);
+        if (separation > penumbraRadius) {
+            continue;
+        }
+        if (isOnSunsetSide(root.point, e, elements.deltaT) !== isSunset) {
+            continue;
+        }
+        if (best === null || separation < best.separation) {
+            best = {point: root.point, separation};
+        }
+    }
+
+    return best?.point ?? null;
+}
+
+// Curve of maximum (greatest) eclipse at sunrise/sunset — the green line inside the rise/set
+// loops on Jubier/Espenak maps: the locus of points whose deepest eclipse phase occurs exactly
+// while the Sun sits on the horizon. Sweeping tau traces one tau-ordered polyline per
+// terminator side.
+export function calculateMaxEclipseAtHorizon(elements: BesselianElements, isSunset: boolean): Array<LatLon> {
+    const curve: Array<LatLon> = [];
+    for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
+        const root = maxEclipseRootAtTau(elements, tau, isSunset);
+        if (root !== null) {
+            curve.push(root);
+        }
+    }
+
+    return longestContinuousRun(curve);
+}
+
+// Legit consecutive points stay within ~6 degrees even at the accelerating loop tips; a
+// larger gap means the sweep switched branches.
+const MAX_ECLIPSE_GAP_DEG_SQ = 100;
+
+// In polar summer the horizon graze can also happen around local midnight, where the
+// sunrise/sunset classification (sin H) flips mid-branch: the tau-ordered sweep then contains
+// a short stray arc from the polar zone next to the main branch, separated by a large jump
+// (observed for 2017-08-21: seven Arctic points, then a 60-degree jump to the true sunset
+// branch). Only the main branch bisecting the rise/set loop is wanted — keep the longest
+// gap-free run.
+function longestContinuousRun(points: Array<LatLon>): Array<LatLon> {
+    let best: Array<LatLon> = [];
+    let run: Array<LatLon> = [];
+    for (const point of points) {
+        if (run.length > 0 && latLonDistSq(run[run.length - 1], point) > MAX_ECLIPSE_GAP_DEG_SQ) {
+            if (run.length > best.length) {
+                best = run;
+            }
+            run = [];
+        }
+        run.push(point);
+    }
+
+    return run.length > best.length ? run : best;
+}
+
+export function calculateMaxEclipseAtSunrise(elements: BesselianElements): Array<LatLon> {
+    return calculateMaxEclipseAtHorizon(elements, false);
+}
+
+export function calculateMaxEclipseAtSunset(elements: BesselianElements): Array<LatLon> {
+    return calculateMaxEclipseAtHorizon(elements, true);
 }
