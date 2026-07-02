@@ -18,7 +18,11 @@ const RISE_SET_SUN_ALTITUDE_DEG = -(HORIZON_REFRACTION_DEG + SUN_SEMIDIAMETER_DE
 export const RISE_SET_SIN_ALTITUDE = Math.sin(RISE_SET_SUN_ALTITUDE_DEG * DEG);
 
 export const CENTRAL_LINE_STEP_HOURS = 1 / (60 * 60);
-export const UMBRA_PATH_STEP_HOURS = 1 / (360 * 5);
-export const PENUMBRA_PATH_STEP_HOURS = 1 / (120 * 5);
+// Region fills are unions of instantaneous outlines. Along the rise/set edges the union
+// boundary is traced by the corner where an outline switches from shadow edge to terminator
+// arc; that corner advances with the shadow (~0.5°/min), so the step must keep the resulting
+// stair teeth below a map pixel.
+export const PENUMBRA_REGION_STEP_HOURS = 1 / 360;
+export const UMBRA_REGION_STEP_HOURS = 1 / 720;
 export const RISE_SET_BOUNDARY_STEP_HOURS = 1 / 60;
 export const RISE_SET_BOUNDARY_Q_SAMPLES = 180;

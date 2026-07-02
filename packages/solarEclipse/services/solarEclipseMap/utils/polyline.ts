@@ -1,5 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
+import {unwrapPoints} from './contourGeometry';
 
 export function projectLonLatToPixel(point: LatLon, canvas: Canvas): {x: number; y: number} {
     return {
@@ -50,26 +51,6 @@ export function strokePolyline(
     context.beginPath();
     traceSubpath(context, canvas, points, closed);
     context.stroke();
-}
-
-function unwrapPoints(points: Array<LatLon>): Array<LatLon> {
-    if (points.length === 0) {
-        return points;
-    }
-    const result: Array<LatLon> = [points[0]];
-    for (let i = 1; i < points.length; i++) {
-        let lon = points[i].lon;
-        const prevLon = result[i - 1].lon;
-        while (lon - prevLon > 180) {
-            lon -= 360;
-        }
-        while (lon - prevLon < -180) {
-            lon += 360;
-        }
-        result.push({lat: points[i].lat, lon});
-    }
-
-    return result;
 }
 
 function traceFillSubpath(context: SKRSContext2D, canvas: Canvas, points: Array<LatLon>): void {

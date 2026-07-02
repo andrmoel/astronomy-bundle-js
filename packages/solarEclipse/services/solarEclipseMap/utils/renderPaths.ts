@@ -2,35 +2,32 @@ import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import type {EclipsePaths, EclipseStyle} from '../types/SolarEclipsePathTypes';
 import {fillPolygons, strokePolyline} from './polyline';
-import {rasterizeShadowBorder, rasterizeShadowFill} from './shadowFill';
 import {DEFAULT_STYLE} from './style';
 
 function resolveStyle(style?: EclipseStyle): Required<EclipseStyle> {
     return {...DEFAULT_STYLE, ...(style ?? {})};
 }
 
+// The umbral and penumbral regions are unions of many overlapping instantaneous outlines,
+// so they have no strokeable boundary — the layers are fill-only.
 export function renderPenumbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
-    elements: BesselianElements,
-    _paths: EclipsePaths,
+    _elements: BesselianElements,
+    paths: EclipsePaths,
     style?: EclipseStyle,
 ): void {
-    const resolved = resolveStyle(style);
-    const binary = rasterizeShadowFill(context, canvas, elements, false, 30 / 3600, resolved.fillColor);
-    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, resolved.borderWeight);
+    fillPolygons(context, canvas, paths.penumbralRegion, resolveStyle(style).fillColor);
 }
 
 export function renderUmbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
-    elements: BesselianElements,
-    _paths: EclipsePaths,
+    _elements: BesselianElements,
+    paths: EclipsePaths,
     style?: EclipseStyle,
 ): void {
-    const resolved = resolveStyle(style);
-    const binary = rasterizeShadowFill(context, canvas, elements, true, 5 / 3600, resolved.fillColor);
-    rasterizeShadowBorder(context, canvas, binary, resolved.borderColor, resolved.borderWeight);
+    fillPolygons(context, canvas, paths.umbralRegion, resolveStyle(style).fillColor);
 }
 
 export function renderCentralLine(
