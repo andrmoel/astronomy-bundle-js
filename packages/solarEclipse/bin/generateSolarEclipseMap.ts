@@ -9,8 +9,10 @@ import SunriseBoundary from '@package/solarEclipse/services/solarEclipseMap/mode
 import SunsetBoundary from '@package/solarEclipse/services/solarEclipseMap/models/SunsetBoundary';
 
 const DEFAULT_DATE_1 = '2026-08-12';
-const DEFAULT_DATE_2 = '2017-08-21';
+const DEFAULT_DATE_2 = '1988-03-18';
 const DEFAULT_DATE_3 = '2021-12-04';
+const DEFAULT_DATE_4 = '2018-08-11';
+
 const DEFAULT_OUTPUT = 'packages/solarEclipse/eclipse-map.png';
 const DEFAULT_BASEMAP = 'packages/solarEclipse/services/solarEclipseMap/resources/worldmap_topo.png';
 const DEFAULT_WIDTH = 3600;
@@ -50,7 +52,7 @@ async function main(): Promise<void> {
 
     const start = Date.now();
 
-    await SolarEclipseMap.create(DEFAULT_WIDTH, DEFAULT_HEIGHT)
+    await SolarEclipseMap.create(DEFAULT_WIDTH, DEFAULT_HEIGHT, {refraction: true})
         .addLayer(BaseMap.create(basemap))
 
         .addLayer(PenumbraPath.create(date).setStyle(PENUMBRA_STYLE))
@@ -67,6 +69,11 @@ async function main(): Promise<void> {
         .addLayer(UmbraPath.create(DEFAULT_DATE_3).setStyle(UMBRA_STYLE))
         .addLayer(SunriseBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
         .addLayer(SunsetBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
+
+        .addLayer(PenumbraPath.create(DEFAULT_DATE_4).setStyle(PENUMBRA_STYLE))
+        .addLayer(UmbraPath.create(DEFAULT_DATE_4).setStyle(UMBRA_STYLE))
+        .addLayer(SunriseBoundary.create(DEFAULT_DATE_4).setStyle(MAX_ECLIPSE_STYLE))
+        .addLayer(SunsetBoundary.create(DEFAULT_DATE_4).setStyle(MAX_ECLIPSE_STYLE))
 
         .print(output);
 

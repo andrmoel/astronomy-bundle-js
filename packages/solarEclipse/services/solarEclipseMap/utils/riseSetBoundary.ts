@@ -11,6 +11,9 @@ import {
     ONE_MINUS_F,
     RISE_SET_BOUNDARY_Q_SAMPLES,
     RISE_SET_BOUNDARY_STEP_HOURS,
+    RISE_SET_GAP_SUBDIVISION_DEPTH,
+    RISE_SET_MAX_CHORD_DEG,
+    RISE_SET_TIP_REFINEMENT_SAMPLES,
 } from './constants';
 import {calculateShadowBoundaryPoint, penumbraBoundaryFundamental} from './shadowBoundary';
 import {type RingPoint, terminatorRingPoint} from './shadowOutline';
@@ -78,6 +81,44 @@ function refineCrossingToHorizon(
     return terminatorRingPoint(elements, e, Math.atan2(eta, xi), sinU, z0).point;
 }
 
+// The point where the penumbra-limit circle is TANGENT to the horizon ring (the halfChord
+// = 0 case of refineCrossingToHorizon's two-circle intersection): it lies on the ring along
+// the axis direction, iterated for the ellipsoid. Used for the rise/set loop tips, where
+// the intersection construction is marginal — right at tangency one crossing's halfChordSq
+// can dip below zero numerically and fall back to the geometric point ~0.6 degrees off the
+// ring (observed for 1988-03-18 as a kink at the sunrise loop's P2 tip).
+function refineTangentToHorizon(elements: BesselianElements, e: BesselianElementsAtTime, z0: number): LatLon | null {
+    const penumbraRadius = Math.abs(e.l1 - z0 * elements.tanF1);
+    const axisDistance = Math.hypot(e.x, e.y);
+    if (axisDistance === 0) {
+        return null;
+    }
+    const ux = e.x / axisDistance;
+    const uy = e.y / axisDistance;
+
+    let xi = ux;
+    let eta = uy;
+    let sinU = (uy * e.cosD + z0 * e.sinD) / ONE_MINUS_F;
+    for (let iter = 0; iter < 40; iter++) {
+        const ringRadiusSq = 1 - E_SQ * sinU * sinU - z0 * z0;
+        if (ringRadiusSq < 0) {
+            return null;
+        }
+        const along =
+            (ringRadiusSq - penumbraRadius * penumbraRadius + axisDistance * axisDistance) / (2 * axisDistance);
+        xi = along * ux;
+        eta = along * uy;
+        const next = (eta * e.cosD + z0 * e.sinD) / ONE_MINUS_F;
+        const moved = (next - sinU) ** 2;
+        sinU = next;
+        if (moved < 1e-18) {
+            break;
+        }
+    }
+
+    return terminatorRingPoint(elements, e, Math.atan2(eta, xi), sinU, z0).point;
+}
+
 function isOnSunsetSide(point: LatLon, e: BesselianElementsAtTime, deltaT: number): boolean {
     const lonRad = point.lon * DEG;
     const gha = e.mu - ((EARTH_ROTATION_DEG_PER_HOUR * deltaT) / 3600) * DEG;
@@ -131,9 +172,10 @@ interface TerminatorCrossing {
 // rise/set side. The tag is NOT used to filter here: near the terminator's polar fold
 // (local midnight in polar summer) sin H hovers around zero and the tag jitters between
 // rise and set from one tau to the next. Filtering by side during the sweep therefore
-// tears both loops apart — the sweep must stay side-agnostic and split only at assembly
-// (observed for 2017-08-21: ~26 fold crossings at 77°N tagged "sunset" chorded the
-// European sunset loop to the Kara Sea while the sunrise loop lost its western tip).
+// tears both loops apart — the sweep must stay side-agnostic; the tags only vote on each
+// run's majority side at assembly (observed for 2017-08-21: ~26 fold crossings at 77°N
+// tagged "sunset" chorded the European sunset loop to the Kara Sea while the sunrise loop
+// lost its western tip).
 function collectCrossings(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
@@ -191,7 +233,7 @@ function bisectEndTangent(
     tauWithTwo: number,
     tauWithLess: number,
     z0: number,
-): SidedPoint | null {
+): {tip: SidedPoint; tau: number} | null {
     let twoSide = tauWithTwo;
     let lessSide = tauWithLess;
     for (let iter = 0; iter < 40; iter++) {
@@ -211,7 +253,17 @@ function bisectEndTangent(
         return null;
     }
     if (c.length === 1) {
-        return {point: c[0].point, isSunset: c[0].isSunset};
+        return {tip: {point: c[0].point, isSunset: c[0].isSunset}, tau: twoSide};
+    }
+
+    // The two crossings at the bisected tau sit a fraction of a degree apart around the
+    // tangency point, so place the tip at the tangency itself. A tip straddling the
+    // midnight fold has an ambiguous side; either choice places it within a pixel of both
+    // loops, so the first crossing's tag is fine.
+    const e = getBesselianElementsAtTime(elements, twoSide);
+    const tangencyPoint = refineTangentToHorizon(elements, e, z0);
+    if (tangencyPoint !== null) {
+        return {tip: {point: tangencyPoint, isSunset: c[0].isSunset}, tau: twoSide};
     }
 
     const dlon = ((c[1].point.lon - c[0].point.lon + 540) % 360) - 180;
@@ -223,9 +275,10 @@ function bisectEndTangent(
         avgLon += 360;
     }
 
-    // A tip straddling the midnight fold has an ambiguous side; either choice places it
-    // within a pixel of both filtered loops, so the first crossing's tag is fine.
-    return {point: {lat: (c[0].point.lat + c[1].point.lat) / 2, lon: avgLon}, isSunset: c[0].isSunset};
+    return {
+        tip: {point: {lat: (c[0].point.lat + c[1].point.lat) / 2, lon: avgLon}, isSunset: c[0].isSunset},
+        tau: twoSide,
+    };
 }
 
 // Squared lat/lon distance, antimeridian-aware. Used to decide which existing branch
@@ -287,32 +340,10 @@ function calculateRiseSetRuns(elements: BesselianElements, z0: number): Array<Ri
     // splitting one continuous trajectory across both branches.
     let lastSingleBranch: 'leading' | 'trailing' | null = null;
 
-    for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
-        const crossings = crossingsAtTau(elements, tau, z0);
-
-        if (crossings.length === 0) {
-            if (current !== null) {
-                // Close the run; a 2 → 0 transition is a true tangent, 1 → 0 is not.
-                if (prevCount >= 2) {
-                    current.endTip = bisectEndTangent(elements, tau - RISE_SET_BOUNDARY_STEP_HOURS, tau, z0);
-                }
-                runs.push(current);
-                current = null;
-            }
-            lastSingleBranch = null;
-            prevCount = 0;
-            continue;
+    const feed = (crossings: Array<TerminatorCrossing>): void => {
+        if (current === null || crossings.length === 0) {
+            return;
         }
-
-        if (current === null) {
-            current = {leadingEdge: [], trailingEdge: [], startTip: null, endTip: null};
-            lastSingleBranch = null;
-            // A 0 → 2 transition is a true tangent; skip when the sweep starts mid-run at tMin.
-            if (crossings.length >= 2 && tau > elements.tMin) {
-                current.startTip = bisectEndTangent(elements, tau, tau - RISE_SET_BOUNDARY_STEP_HOURS, z0);
-            }
-        }
-
         const {leadingEdge, trailingEdge} = current;
         const leadingLast = leadingEdge.length > 0 ? leadingEdge[leadingEdge.length - 1].point : null;
         const trailingLast = trailingEdge.length > 0 ? trailingEdge[trailingEdge.length - 1].point : null;
@@ -383,7 +414,107 @@ function calculateRiseSetRuns(elements: BesselianElements, z0: number): Array<Ri
             }
             lastSingleBranch = target;
         }
+    };
 
+    // Fills the sqrt-speed hole next to a tangency: the two crossings separate from (or
+    // merge into) the tip at a rate ~ sqrt(|tau - tangent|), so the first uniform step
+    // after the tangent already sits several degrees away from the tip. Sampling at
+    // tangent + span * (k/N)^2 spaces the extra points roughly evenly along the curve
+    // (observed for 1988-03-18: without this, the sunset loop chorded from the P3 tip at
+    // 85°N straight to 89°N/157°E, cutting the polar hook's ascending edge).
+    const feedTipNeighborhood = (tangentTau: number, gridTau: number): void => {
+        const span = gridTau - tangentTau;
+        const N = RISE_SET_TIP_REFINEMENT_SAMPLES;
+        for (let i = 1; i < N; i++) {
+            // Ascending tau order either way: k counts up after a start tip (span > 0,
+            // sweeping away from the tangent) and down before an end tip (span < 0).
+            const k = span > 0 ? i : N - i;
+            feed(crossingsAtTau(elements, tangentTau + span * (k / N) ** 2, z0));
+        }
+    };
+
+    // True when a crossing is further than the chord tolerance from both branch ends,
+    // measured with the longitude scaled to real angular size (latLonDistSq's raw lon
+    // difference would demand needless subdivision near the poles).
+    const needsSubdivision = (crossings: Array<TerminatorCrossing>): boolean => {
+        if (current === null) {
+            return false;
+        }
+        const ends: Array<LatLon> = [];
+        if (current.leadingEdge.length > 0) {
+            ends.push(current.leadingEdge[current.leadingEdge.length - 1].point);
+        }
+        if (current.trailingEdge.length > 0) {
+            ends.push(current.trailingEdge[current.trailingEdge.length - 1].point);
+        }
+        if (ends.length === 0) {
+            return false;
+        }
+
+        return crossings.some((c) =>
+            ends.every((end) => {
+                let dLon = Math.abs(c.point.lon - end.lon);
+                if (dLon > 180) {
+                    dLon = 360 - dLon;
+                }
+                dLon *= Math.cos(((c.point.lat + end.lat) / 2) * DEG);
+                const dLat = c.point.lat - end.lat;
+
+                return dLat * dLat + dLon * dLon > RISE_SET_MAX_CHORD_DEG ** 2;
+            }),
+        );
+    };
+
+    // Feeds the crossings at tauB, first bisecting tau wherever the curve outruns the
+    // uniform step (the crossings race around the terminator's polar fold at several
+    // degrees per step; fixed sampling chords across the curve there — observed for
+    // 1988-03-18 as a 0.7 degree bite out of the sunset loop near 87°N, 143°W).
+    const feedRefined = (tauA: number, tauB: number, crossingsB: Array<TerminatorCrossing>, depth: number): void => {
+        if (depth > 0 && needsSubdivision(crossingsB)) {
+            const mid = (tauA + tauB) / 2;
+            feedRefined(tauA, mid, crossingsAtTau(elements, mid, z0), depth - 1);
+            feedRefined(mid, tauB, crossingsB, depth - 1);
+
+            return;
+        }
+        feed(crossingsB);
+    };
+
+    for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
+        const crossings = crossingsAtTau(elements, tau, z0);
+
+        if (crossings.length === 0) {
+            if (current !== null) {
+                // Close the run; a 2 → 0 transition is a true tangent, 1 → 0 is not.
+                if (prevCount >= 2) {
+                    const tangent = bisectEndTangent(elements, tau - RISE_SET_BOUNDARY_STEP_HOURS, tau, z0);
+                    if (tangent !== null) {
+                        feedTipNeighborhood(tangent.tau, tau - RISE_SET_BOUNDARY_STEP_HOURS);
+                        current.endTip = tangent.tip;
+                    }
+                }
+                runs.push(current);
+                current = null;
+            }
+            lastSingleBranch = null;
+            prevCount = 0;
+            continue;
+        }
+
+        if (current === null) {
+            current = {leadingEdge: [], trailingEdge: [], startTip: null, endTip: null};
+            lastSingleBranch = null;
+            // A 0 → 2 transition is a true tangent; skip when the sweep starts mid-run at tMin.
+            if (crossings.length >= 2 && tau > elements.tMin) {
+                const tangent = bisectEndTangent(elements, tau, tau - RISE_SET_BOUNDARY_STEP_HOURS, z0);
+                if (tangent !== null) {
+                    current.startTip = tangent.tip;
+                    feedTipNeighborhood(tangent.tau, tau);
+                }
+            }
+        }
+
+        feedRefined(tau - RISE_SET_BOUNDARY_STEP_HOURS, tau, crossings, RISE_SET_GAP_SUBDIVISION_DEPTH);
         prevCount = crossings.length;
     }
     if (current !== null) {
@@ -393,11 +524,9 @@ function calculateRiseSetRuns(elements: BesselianElements, z0: number): Array<Ri
     return runs;
 }
 
-// Assembles the run's closed cycle (leading edge, end tip, trailing edge reversed, start
-// tip) and keeps only the requested side's points, preserving cyclic order. Side flips
-// happen where an edge crosses the midnight fold, so the polygon segments bridging the
-// dropped points run along the fold — exactly where the true region boundary lies.
-function assembleSideLoop(run: RiseSetRun, isSunset: boolean): Array<LatLon> {
+// Assembles the run's closed cycle: leading edge, end tip, trailing edge reversed, start
+// tip.
+function assembleRunCycle(run: RiseSetRun): Array<SidedPoint> {
     const cycle: Array<SidedPoint> = [];
     if (run.startTip !== null) {
         cycle.push(run.startTip);
@@ -410,17 +539,29 @@ function assembleSideLoop(run: RiseSetRun, isSunset: boolean): Array<LatLon> {
         cycle.push(run.trailingEdge[i]);
     }
 
-    return cycle.filter((p) => p.isSunset === isSunset).map((p) => p.point);
+    return cycle;
 }
 
 export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean, z0: number): RiseSetBoundary {
-    // RiseSetBoundary holds a single polygon, so if several runs contribute to the same
-    // side (not observed for any catalogued eclipse) keep the largest.
+    // A run's cycle is drawn whole, as on the Jubier/Espenak maps, and assigned to the
+    // sunrise or sunset side by majority vote of its points. Near the terminator's polar
+    // fold a run carries a short arc tagged with the other side (the sun grazes the horizon
+    // around local midnight there), but that arc still belongs to the run's loop — filtering
+    // it out chops the loop's polar hook (observed for 1988-03-18: the sunset loop's descent
+    // to the P3 region at 77°N, 59°E, rise-tagged, went missing). For eclipses whose penumbra
+    // never fully leaves the terminator (e.g. 2021-12-04, 2026-08-12) there is a single run:
+    // one closed curve holding both halves, which Jubier likewise draws as one loop — it goes
+    // to the majority side and the minority side stays empty.
+    //
+    // RiseSetBoundary holds a single polygon, so if several runs land on the same side
+    // (not observed for any catalogued eclipse) keep the largest.
     let best: RiseSetBoundary = [];
     for (const run of calculateRiseSetRuns(elements, z0)) {
-        const loop = assembleSideLoop(run, isSunset);
-        if (loop.length > best.length) {
-            best = loop;
+        const cycle = assembleRunCycle(run);
+        const sunsetCount = cycle.filter((p) => p.isSunset).length;
+        const runIsSunset = sunsetCount * 2 > cycle.length;
+        if (runIsSunset === isSunset && cycle.length > best.length) {
+            best = cycle.map((p) => p.point);
         }
     }
 
