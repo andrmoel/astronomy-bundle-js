@@ -123,25 +123,32 @@ function findNullBoundary(
     return {geometric, xi: fundamental.xi, eta: fundamental.eta};
 }
 
-interface SunsetCrossing {
+interface TerminatorCrossing {
     point: LatLon;
     qCos: number;
+    isSunset: boolean;
 }
 
-function collectSidedCrossings(
+// Collects ALL penumbra-limit/terminator crossings at one instant, each tagged with its
+// rise/set side. The tag is NOT used to filter here: near the terminator's polar fold
+// (local midnight in polar summer) sin H hovers around zero and the tag jitters between
+// rise and set from one tau to the next. Filtering by side during the sweep therefore
+// tears both loops apart — the sweep must stay side-agnostic and split only at assembly
+// (observed for 2017-08-21: ~26 fold crossings at 77°N tagged "sunset" chorded the
+// European sunset loop to the Kara Sea while the sunrise loop lost its western tip).
+function collectCrossings(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     qVelocity: number,
-    isSunset: boolean,
     onRefractedHorizon: boolean,
-): Array<SunsetCrossing> {
+): Array<TerminatorCrossing> {
     const N = RISE_SET_BOUNDARY_Q_SAMPLES;
     const pts: Array<LatLon | null> = new Array(N);
     for (let i = 0; i < N; i++) {
         pts[i] = calculateShadowBoundaryPoint(elements, e, (i / N) * 2 * Math.PI, false);
     }
 
-    const result: Array<SunsetCrossing> = [];
+    const result: Array<TerminatorCrossing> = [];
     for (let i = 0; i < N; i++) {
         const j = (i + 1) % N;
         const p1 = pts[i];
@@ -156,19 +163,20 @@ function collectSidedCrossings(
         if (crossing === null) {
             continue;
         }
-        // Classify by the geometric crossing, which sits exactly on the night/day boundary; the
-        // refined point is nudged ~100 km onto the night side and could otherwise flip sides near
-        // the loop tips.
-        if (isOnSunsetSide(crossing.geometric, e, elements.deltaT) !== isSunset) {
-            continue;
-        }
 
         // The loops live on the refracted upper-limb horizon; the maximum-eclipse lens edges
         // on the geometric one, matching the geometric-horizon region clip.
         const z0 = onRefractedHorizon ? RISE_SET_SIN_ALTITUDE : MAX_ECLIPSE_SIN_ALTITUDE;
         const point = refineCrossingToHorizon(elements, e, crossing.xi, crossing.eta, z0) ?? crossing.geometric;
         const qCrossing = (q1 + q2) / 2;
-        result.push({point, qCos: Math.cos(qCrossing - qVelocity)});
+        result.push({
+            point,
+            qCos: Math.cos(qCrossing - qVelocity),
+            // Classify by the geometric crossing, which sits exactly on the night/day boundary;
+            // the refined point is nudged ~100 km onto the night side and could otherwise flip
+            // sides near the loop tips.
+            isSunset: isOnSunsetSide(crossing.geometric, e, elements.deltaT),
+        });
     }
 
     return result;
@@ -177,29 +185,27 @@ function collectSidedCrossings(
 function crossingsAtTau(
     elements: BesselianElements,
     tau: number,
-    isSunset: boolean,
     onRefractedHorizon: boolean,
-): Array<SunsetCrossing> {
+): Array<TerminatorCrossing> {
     const e = getBesselianElementsAtTime(elements, tau);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
     const qVelocity = Math.atan2(dy, dx);
 
-    return collectSidedCrossings(elements, e, qVelocity, isSunset, onRefractedHorizon);
+    return collectCrossings(elements, e, qVelocity, onRefractedHorizon);
 }
 
 function bisectEndTangent(
     elements: BesselianElements,
-    isSunset: boolean,
     tauWithTwo: number,
     tauWithLess: number,
     onRefractedHorizon: boolean,
-): LatLon | null {
+): SidedPoint | null {
     let twoSide = tauWithTwo;
     let lessSide = tauWithLess;
     for (let iter = 0; iter < 40; iter++) {
         const mid = (twoSide + lessSide) / 2;
-        const c = crossingsAtTau(elements, mid, isSunset, onRefractedHorizon);
+        const c = crossingsAtTau(elements, mid, onRefractedHorizon);
         if (c.length >= 2) {
             twoSide = mid;
         } else {
@@ -209,12 +215,12 @@ function bisectEndTangent(
             break;
         }
     }
-    const c = crossingsAtTau(elements, twoSide, isSunset, onRefractedHorizon);
+    const c = crossingsAtTau(elements, twoSide, onRefractedHorizon);
     if (c.length === 0) {
         return null;
     }
     if (c.length === 1) {
-        return c[0].point;
+        return {point: c[0].point, isSunset: c[0].isSunset};
     }
 
     const dlon = ((c[1].point.lon - c[0].point.lon + 540) % 360) - 180;
@@ -226,7 +232,9 @@ function bisectEndTangent(
         avgLon += 360;
     }
 
-    return {lat: (c[0].point.lat + c[1].point.lat) / 2, lon: avgLon};
+    // A tip straddling the midnight fold has an ambiguous side; either choice places it
+    // within a pixel of both filtered loops, so the first crossing's tag is fine.
+    return {point: {lat: (c[0].point.lat + c[1].point.lat) / 2, lon: avgLon}, isSunset: c[0].isSunset};
 }
 
 // Squared lat/lon distance, antimeridian-aware. Used to decide which existing branch
@@ -244,44 +252,44 @@ function latLonDistSq(a: LatLon, b: LatLon): number {
     return dLat * dLat + dLon * dLon;
 }
 
-interface RiseSetEdges {
-    leadingEdge: Array<LatLon>;
-    trailingEdge: Array<LatLon>;
-    startTip: LatLon | null;
-    endTip: LatLon | null;
+interface SidedPoint {
+    point: LatLon;
+    isSunset: boolean;
 }
 
-function calculateRiseSetEdges(
-    elements: BesselianElements,
-    isSunset: boolean,
-    onRefractedHorizon: boolean,
-): RiseSetEdges {
-    // Two curves form the loop:
+// One maximal tau interval during which the penumbra limit crosses the terminator. Each
+// run traces one closed band on the terminator; for polar eclipses a single run can hold
+// both the sunrise and the sunset half, joined across the midnight fold.
+interface RiseSetRun {
+    leadingEdge: Array<SidedPoint>;
+    trailingEdge: Array<SidedPoint>;
+    startTip: SidedPoint | null;
+    endTip: SidedPoint | null;
+}
+
+function calculateRiseSetRuns(elements: BesselianElements, onRefractedHorizon: boolean): Array<RiseSetRun> {
+    // Two curves form each run's band:
     //   leadingEdge  = where eclipse BEGINS (C1) at rise/set  (forward of shadow velocity)
     //   trailingEdge = where eclipse ENDS (C4) at rise/set    (rearward of shadow velocity)
     //
-    // For each tau, the penumbra circle intersects the chosen terminator side at 0, 1, or 2
-    // points. We assign crossings to the leading/trailing branch by proximity to each
-    // branch's most-recent point — qCos (bearing relative to shadow velocity) is only used
-    // for the initial classification before either branch exists. Proximity is required
-    // because near a pole or meridian transition, one crossing can vanish from the
-    // sunrise/sunset side while the other continues with a qCos that flips sign — using
-    // qCos at that moment would misassign the survivor to the wrong branch and break the
-    // loop closure (observed over east Russia for the 2026-08-12 sunrise polygon).
+    // For each tau, the penumbra circle intersects the terminator at 0, 1, or 2 points.
+    // The sweep is side-agnostic — see collectCrossings for why filtering by rise/set here
+    // would tear the loops at the midnight fold. We assign crossings to the leading/trailing
+    // branch by proximity to each branch's most-recent point — qCos (bearing relative to
+    // shadow velocity) is only used for the initial classification before either branch
+    // exists. Proximity is required because near a pole or meridian transition, one crossing
+    // can vanish while the other continues with a qCos that flips sign — using qCos at that
+    // moment would misassign the survivor to the wrong branch and break the loop closure
+    // (observed over east Russia for the 2026-08-12 sunrise polygon).
     //
     // Tangent tips: at a true tangent moment (e.g., penumbra first/last touches Earth on
-    // the chosen terminator side), the crossing count jumps 0 ↔ 2 between adjacent taus.
-    // We bisect tau to find the tangent point and insert it for clean tip closure.
-    // Meridian transitions (1 ↔ 2) are not tangents — we don't insert tips there.
-    const leadingEdge: Array<LatLon> = [];
-    const trailingEdge: Array<LatLon> = [];
+    // the terminator), the crossing count jumps 0 ↔ 2 between adjacent taus. We bisect tau
+    // to find the tangent point and insert it for clean tip closure. Meridian transitions
+    // (1 ↔ 2) are not tangents — we don't insert tips there.
+    const runs: Array<RiseSetRun> = [];
+    let current: RiseSetRun | null = null;
 
-    let firstTwoTau: number | null = null;
-    let countBeforeFirstTwo = -1;
-    let lastTwoTau: number | null = null;
-    let countAfterLastTwo = -1;
-
-    let prevCount = -1;
+    let prevCount = 0;
     // Branch the previous tau's single crossing went to. Sticky across a 1-crossing
     // run so the surviving branch keeps growing once chosen — otherwise the migrating
     // single crossing can wander close to the other branch's stale endpoint and flip,
@@ -289,13 +297,48 @@ function calculateRiseSetEdges(
     let lastSingleBranch: 'leading' | 'trailing' | null = null;
 
     for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
-        const crossings = crossingsAtTau(elements, tau, isSunset, onRefractedHorizon);
-        const leadingLast = leadingEdge.length > 0 ? leadingEdge[leadingEdge.length - 1] : null;
-        const trailingLast = trailingEdge.length > 0 ? trailingEdge[trailingEdge.length - 1] : null;
+        const crossings = crossingsAtTau(elements, tau, onRefractedHorizon);
+
+        if (crossings.length === 0) {
+            if (current !== null) {
+                // Close the run; a 2 → 0 transition is a true tangent, 1 → 0 is not.
+                if (prevCount >= 2) {
+                    current.endTip = bisectEndTangent(
+                        elements,
+                        tau - RISE_SET_BOUNDARY_STEP_HOURS,
+                        tau,
+                        onRefractedHorizon,
+                    );
+                }
+                runs.push(current);
+                current = null;
+            }
+            lastSingleBranch = null;
+            prevCount = 0;
+            continue;
+        }
+
+        if (current === null) {
+            current = {leadingEdge: [], trailingEdge: [], startTip: null, endTip: null};
+            lastSingleBranch = null;
+            // A 0 → 2 transition is a true tangent; skip when the sweep starts mid-run at tMin.
+            if (crossings.length >= 2 && tau > elements.tMin) {
+                current.startTip = bisectEndTangent(
+                    elements,
+                    tau,
+                    tau - RISE_SET_BOUNDARY_STEP_HOURS,
+                    onRefractedHorizon,
+                );
+            }
+        }
+
+        const {leadingEdge, trailingEdge} = current;
+        const leadingLast = leadingEdge.length > 0 ? leadingEdge[leadingEdge.length - 1].point : null;
+        const trailingLast = trailingEdge.length > 0 ? trailingEdge[trailingEdge.length - 1].point : null;
 
         if (crossings.length >= 2) {
-            const c0 = crossings[0].point;
-            const c1 = crossings[1].point;
+            const c0 = {point: crossings[0].point, isSunset: crossings[0].isSunset};
+            const c1 = {point: crossings[1].point, isSunset: crossings[1].isSunset};
             if (leadingLast === null && trailingLast === null) {
                 if (crossings[0].qCos >= crossings[1].qCos) {
                     leadingEdge.push(c0);
@@ -305,10 +348,10 @@ function calculateRiseSetEdges(
                     trailingEdge.push(c0);
                 }
             } else if (leadingLast !== null && trailingLast !== null) {
-                const dLL0 = latLonDistSq(c0, leadingLast);
-                const dLL1 = latLonDistSq(c1, leadingLast);
-                const dTL0 = latLonDistSq(c0, trailingLast);
-                const dTL1 = latLonDistSq(c1, trailingLast);
+                const dLL0 = latLonDistSq(c0.point, leadingLast);
+                const dLL1 = latLonDistSq(c1.point, leadingLast);
+                const dTL0 = latLonDistSq(c0.point, trailingLast);
+                const dTL1 = latLonDistSq(c1.point, trailingLast);
                 if (dLL0 + dTL1 <= dLL1 + dTL0) {
                     leadingEdge.push(c0);
                     trailingEdge.push(c1);
@@ -319,7 +362,7 @@ function calculateRiseSetEdges(
             } else if (leadingLast !== null) {
                 // Trailing branch hasn't started yet — continue leading with the closer
                 // crossing, fork the other into a fresh trailing branch.
-                if (latLonDistSq(c0, leadingLast) <= latLonDistSq(c1, leadingLast)) {
+                if (latLonDistSq(c0.point, leadingLast) <= latLonDistSq(c1.point, leadingLast)) {
                     leadingEdge.push(c0);
                     trailingEdge.push(c1);
                 } else {
@@ -328,7 +371,7 @@ function calculateRiseSetEdges(
                 }
             } else {
                 // Mirror of the previous case.
-                if (latLonDistSq(c0, trailingLast as LatLon) <= latLonDistSq(c1, trailingLast as LatLon)) {
+                if (latLonDistSq(c0.point, trailingLast as LatLon) <= latLonDistSq(c1.point, trailingLast as LatLon)) {
                     trailingEdge.push(c0);
                     leadingEdge.push(c1);
                 } else {
@@ -336,13 +379,8 @@ function calculateRiseSetEdges(
                     leadingEdge.push(c0);
                 }
             }
-            if (firstTwoTau === null) {
-                firstTwoTau = tau;
-                countBeforeFirstTwo = prevCount;
-            }
-            lastTwoTau = tau;
             lastSingleBranch = null;
-        } else if (crossings.length === 1) {
+        } else {
             const c = crossings[0];
             let target: 'leading' | 'trailing';
             if (lastSingleBranch !== null) {
@@ -358,76 +396,54 @@ function calculateRiseSetEdges(
                 target = c.qCos >= 0 ? 'leading' : 'trailing';
             }
             if (target === 'leading') {
-                leadingEdge.push(c.point);
+                leadingEdge.push({point: c.point, isSunset: c.isSunset});
             } else {
-                trailingEdge.push(c.point);
+                trailingEdge.push({point: c.point, isSunset: c.isSunset});
             }
             lastSingleBranch = target;
-        } else {
-            lastSingleBranch = null;
         }
 
-        if (lastTwoTau === tau - RISE_SET_BOUNDARY_STEP_HOURS && prevCount >= 2 && crossings.length < 2) {
-            countAfterLastTwo = crossings.length;
-        } else if (lastTwoTau !== null && lastTwoTau !== tau && countAfterLastTwo === -1) {
-            countAfterLastTwo = crossings.length;
-        }
         prevCount = crossings.length;
     }
-    if (lastTwoTau !== null && countAfterLastTwo === -1) {
-        countAfterLastTwo = 0;
+    if (current !== null) {
+        runs.push(current);
     }
 
-    // Include endTip only when the post-lastTwoTau transition is 2 → 0 (true tangent).
-    // A 2 → 1 transition is a meridian crossing of one intersection, not a tangent.
-    let endTip: LatLon | null = null;
-    if (lastTwoTau !== null && countAfterLastTwo === 0) {
-        endTip = bisectEndTangent(
-            elements,
-            isSunset,
-            lastTwoTau,
-            lastTwoTau + RISE_SET_BOUNDARY_STEP_HOURS,
-            onRefractedHorizon,
-        );
-    }
-
-    // Include startTip only when the pre-firstTwoTau transition is 0 → 2 (true tangent).
-    let startTip: LatLon | null = null;
-    if (firstTwoTau !== null && countBeforeFirstTwo === 0) {
-        startTip = bisectEndTangent(
-            elements,
-            isSunset,
-            firstTwoTau,
-            firstTwoTau - RISE_SET_BOUNDARY_STEP_HOURS,
-            onRefractedHorizon,
-        );
-    }
-
-    return {leadingEdge, trailingEdge, startTip, endTip};
+    return runs;
 }
 
-function assembleLoop({leadingEdge, trailingEdge, startTip, endTip}: RiseSetEdges): RiseSetBoundary {
-    if (leadingEdge.length === 0 && trailingEdge.length === 0) {
-        return [];
+// Assembles the run's closed cycle (leading edge, end tip, trailing edge reversed, start
+// tip) and keeps only the requested side's points, preserving cyclic order. Side flips
+// happen where an edge crosses the midnight fold, so the polygon segments bridging the
+// dropped points run along the fold — exactly where the true region boundary lies.
+function assembleSideLoop(run: RiseSetRun, isSunset: boolean): Array<LatLon> {
+    const cycle: Array<SidedPoint> = [];
+    if (run.startTip !== null) {
+        cycle.push(run.startTip);
+    }
+    cycle.push(...run.leadingEdge);
+    if (run.endTip !== null) {
+        cycle.push(run.endTip);
+    }
+    for (let i = run.trailingEdge.length - 1; i >= 0; i--) {
+        cycle.push(run.trailingEdge[i]);
     }
 
-    const loop: Array<LatLon> = [];
-    if (startTip !== null) {
-        loop.push(startTip);
-    }
-    loop.push(...leadingEdge);
-    if (endTip !== null) {
-        loop.push(endTip);
-    }
-    for (let i = trailingEdge.length - 1; i >= 0; i--) {
-        loop.push(trailingEdge[i]);
-    }
-
-    return loop;
+    return cycle.filter((p) => p.isSunset === isSunset).map((p) => p.point);
 }
 
 export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean): RiseSetBoundary {
-    return assembleLoop(calculateRiseSetEdges(elements, isSunset, true));
+    // RiseSetBoundary holds a single polygon, so if several runs contribute to the same
+    // side (not observed for any catalogued eclipse) keep the largest.
+    let best: RiseSetBoundary = [];
+    for (const run of calculateRiseSetRuns(elements, true)) {
+        const loop = assembleSideLoop(run, isSunset);
+        if (loop.length > best.length) {
+            best = loop;
+        }
+    }
+
+    return best;
 }
 
 export function calculateSunsetBoundary(elements: BesselianElements): RiseSetBoundary {

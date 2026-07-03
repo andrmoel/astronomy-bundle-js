@@ -53,20 +53,20 @@ async function main(): Promise<void> {
     await SolarEclipseMap.create(DEFAULT_WIDTH, DEFAULT_HEIGHT)
         .addLayer(BaseMap.create(basemap))
 
-        // .addLayer(PenumbraPath.create(date).setStyle(PENUMBRA_STYLE))
-        // .addLayer(UmbraPath.create(date).setStyle(UMBRA_STYLE))
-        // .addLayer(SunriseBoundary.create(date).setStyle(MAX_ECLIPSE_STYLE))
-        // .addLayer(SunsetBoundary.create(date).setStyle(MAX_ECLIPSE_STYLE))
+        .addLayer(PenumbraPath.create(date).setStyle(PENUMBRA_STYLE))
+        .addLayer(UmbraPath.create(date).setStyle(UMBRA_STYLE))
+        .addLayer(SunriseBoundary.create(date).setStyle(MAX_ECLIPSE_STYLE))
+        .addLayer(SunsetBoundary.create(date).setStyle(MAX_ECLIPSE_STYLE))
 
         .addLayer(PenumbraPath.create(DEFAULT_DATE_2).setStyle(PENUMBRA_STYLE))
         .addLayer(UmbraPath.create(DEFAULT_DATE_2).setStyle(UMBRA_STYLE))
         .addLayer(SunriseBoundary.create(DEFAULT_DATE_2).setStyle(MAX_ECLIPSE_STYLE))
         .addLayer(SunsetBoundary.create(DEFAULT_DATE_2).setStyle(MAX_ECLIPSE_STYLE))
 
-        // .addLayer(PenumbraPath.create(DEFAULT_DATE_3).setStyle(PENUMBRA_STYLE))
-        // .addLayer(UmbraPath.create(DEFAULT_DATE_3).setStyle(UMBRA_STYLE))
-        // .addLayer(SunriseBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
-        // .addLayer(SunsetBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
+        .addLayer(PenumbraPath.create(DEFAULT_DATE_3).setStyle(PENUMBRA_STYLE))
+        .addLayer(UmbraPath.create(DEFAULT_DATE_3).setStyle(UMBRA_STYLE))
+        .addLayer(SunriseBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
+        .addLayer(SunsetBoundary.create(DEFAULT_DATE_3).setStyle(MAX_ECLIPSE_STYLE))
 
         .print(output);
 
