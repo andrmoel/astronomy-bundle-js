@@ -1,7 +1,6 @@
 import {type Canvas, createCanvas, type SKRSContext2D} from '@napi-rs/canvas';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import type {EclipsePaths, EclipseStyle} from '../types/SolarEclipsePathTypes';
-import calculatePenumbraVisibilityAlpha from './penumbraVisibility';
 import {fillPolygons, strokePolyline} from './polyline';
 import {DEFAULT_STYLE} from './style';
 
@@ -9,20 +8,20 @@ function resolveStyle(style?: EclipseStyle): Required<EclipseStyle> {
     return {...DEFAULT_STYLE, ...(style ?? {})};
 }
 
-// The penumbral shading follows Jubier's maps: a location is shaded iff its own maximum
-// eclipse happens with the Sun above the geometric horizon (see penumbraVisibility). The
+// The penumbral shading: a location is shaded iff its own maximum eclipse happens with the
+// Sun above the horizon of the map's settings (see penumbraVisibility). The
 // per-pixel mask is drawn through offscreen canvases: a uniform fill in the style's colour
 // is clipped to the mask's alpha with destination-in. (source-in would be the direct route,
 // but @napi-rs/canvas applies the fill style's alpha twice under it.)
 export function renderPenumbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
-    elements: BesselianElements,
-    _paths: EclipsePaths,
+    _elements: BesselianElements,
+    paths: EclipsePaths,
     style?: EclipseStyle,
 ): void {
     const fillColor = resolveStyle(style).fillColor;
-    const alpha = calculatePenumbraVisibilityAlpha(elements, canvas.width, canvas.height);
+    const alpha = paths.penumbraVisibilityAlpha(canvas.width, canvas.height);
     const mask = createCanvas(canvas.width, canvas.height);
     const maskContext = mask.getContext('2d');
     const image = maskContext.createImageData(canvas.width, canvas.height);

@@ -1,3 +1,4 @@
+import type {SolarEclipseMapSettings} from '../types/SolarEclipsePathTypes';
 import drawEclipseMap from '../utils/getEclipseMap';
 import BaseMap from './Map';
 import type SolarEclipseMapLayer from './SolarEclipseMapLayer';
@@ -9,10 +10,11 @@ export default class SolarEclipseMap {
     private constructor(
         private readonly width: number,
         private readonly height: number,
+        private readonly settings?: SolarEclipseMapSettings,
     ) {}
 
-    public static create(width: number, height: number): SolarEclipseMap {
-        return new SolarEclipseMap(width, height);
+    public static create(width: number, height: number, settings?: SolarEclipseMapSettings): SolarEclipseMap {
+        return new SolarEclipseMap(width, height, settings);
     }
 
     public addLayer(layer: BaseMap | SolarEclipseMapLayer): this {
@@ -36,6 +38,7 @@ export default class SolarEclipseMap {
             width: this.width,
             height: this.height,
             layers: this.layers,
+            settings: this.settings,
         });
     }
 }

@@ -2,6 +2,15 @@ import type {LatLon} from '@app/types/LocationTypes';
 
 export type RiseSetBoundary = Array<LatLon>;
 
+export interface SolarEclipseMapSettings {
+    // With refraction on, the Sun counts as risen while its refracted upper limb is on or
+    // above the horizon (centre altitude >= -50'); off, while its centre is on or above the
+    // geometric horizon (zeta >= 0, the Espenak/Jubier convention). The switch moves every
+    // horizon-dependent curve: rise/set loops, max-eclipse-at-rise/set curves, the penumbral
+    // shading border, the umbra region clip and the central-line hooks.
+    refraction?: boolean;
+}
+
 export interface EclipsePaths {
     centralLine: Array<LatLon>;
     umbralRegion: Array<Array<LatLon>>;
@@ -9,6 +18,7 @@ export interface EclipsePaths {
     sunriseBoundary: RiseSetBoundary;
     maxEclipseSunset: Array<LatLon>;
     maxEclipseSunrise: Array<LatLon>;
+    penumbraVisibilityAlpha(width: number, height: number): Uint8ClampedArray;
 }
 
 export interface EclipseStyle {

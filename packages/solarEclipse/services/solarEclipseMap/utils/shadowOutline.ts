@@ -2,13 +2,13 @@ import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
-import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD, RISE_SET_SIN_ALTITUDE} from './constants';
+import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
 import {closeContourAroundPole, lonWinding, shortestLonDelta, signedUnwrappedArea} from './contourGeometry';
 import {solveSurfacePoint} from './surface';
 
 // The region where an eclipse is visible is the union over time of the instantaneous shadow
-// outline: the shadow circle clipped to where the Sun is still up (zeta >= sin(-50'), the
-// rise/set horizon). Rendering every outline into one nonzero-winding fill makes the canvas
+// outline: the shadow circle clipped to where the Sun is still up (zeta >= z0, the rise/set
+// horizon of the map's settings). Rendering every outline into one nonzero-winding fill makes the canvas
 // compute that union, so sunrise/sunset crescents, interior holes and polar caps all come out
 // of the same construction instead of needing to be stitched from separate boundary curves.
 
@@ -148,8 +148,8 @@ export interface RingPoint {
     sinU: number;
 }
 
-// Surface point of the horizon ring at Sun altitude asin(z0) (default: the rise/set horizon
-// at -50') and position angle theta. On the ring sinU follows linearly from the coordinates
+// Surface point of the horizon ring at Sun altitude asin(z0) and position angle theta.
+// On the ring sinU follows linearly from the coordinates
 // via (1 - f) sinU = eta cos d + zeta sin d, so only the ellipsoid radius needs a short
 // fixed-point iteration and every theta yields a point — the general surface solver would
 // sit exactly on its zetaSq >= 0 float boundary at z0 = 0 and fail intermittently.
@@ -158,7 +158,7 @@ export function terminatorRingPoint(
     e: BesselianElementsAtTime,
     theta: number,
     sinUSeed: number,
-    z0: number = RISE_SET_SIN_ALTITUDE,
+    z0: number,
 ): RingPoint {
     const cosTheta = Math.cos(theta);
     const sinTheta = Math.sin(theta);
@@ -339,21 +339,22 @@ export function calculateShadowRegionContours(
     elements: BesselianElements,
     useUmbra: boolean,
     stepHours: number,
+    z0: number,
 ): Array<Array<LatLon>> {
     const qSamples = useUmbra ? UMBRA_Q_SAMPLES : PENUMBRA_Q_SAMPLES;
     const contours: Array<Array<LatLon>> = [];
     for (let tau = elements.tMin; tau <= elements.tMax; tau += stepHours) {
         const e = getBesselianElementsAtTime(elements, tau);
-        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples, RISE_SET_SIN_ALTITUDE);
+        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples, z0);
         if (outline === null) {
             continue;
         }
 
         const winding = lonWinding(outline);
         if (Math.abs(winding) >= 180) {
-            const poleLat = isPoleInsideInstantShadow(elements, e, useUmbra, 90, RISE_SET_SIN_ALTITUDE)
+            const poleLat = isPoleInsideInstantShadow(elements, e, useUmbra, 90, z0)
                 ? 90
-                : isPoleInsideInstantShadow(elements, e, useUmbra, -90, RISE_SET_SIN_ALTITUDE)
+                : isPoleInsideInstantShadow(elements, e, useUmbra, -90, z0)
                   ? -90
                   : null;
             // A contour that winds around the globe without containing a pole is a numerical

@@ -8,11 +8,9 @@ import {
     E_SQ,
     EARTH_ROTATION_DEG_PER_HOUR,
     MAX_ECLIPSE_RING_SAMPLES,
-    MAX_ECLIPSE_SIN_ALTITUDE,
     ONE_MINUS_F,
     RISE_SET_BOUNDARY_Q_SAMPLES,
     RISE_SET_BOUNDARY_STEP_HOURS,
-    RISE_SET_SIN_ALTITUDE,
 } from './constants';
 import {calculateShadowBoundaryPoint, penumbraBoundaryFundamental} from './shadowBoundary';
 import {type RingPoint, terminatorRingPoint} from './shadowOutline';
@@ -140,7 +138,7 @@ function collectCrossings(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     qVelocity: number,
-    onRefractedHorizon: boolean,
+    z0: number,
 ): Array<TerminatorCrossing> {
     const N = RISE_SET_BOUNDARY_Q_SAMPLES;
     const pts: Array<LatLon | null> = new Array(N);
@@ -164,9 +162,6 @@ function collectCrossings(
             continue;
         }
 
-        // The loops live on the refracted upper-limb horizon; the maximum-eclipse lens edges
-        // on the geometric one, matching the geometric-horizon region clip.
-        const z0 = onRefractedHorizon ? RISE_SET_SIN_ALTITUDE : MAX_ECLIPSE_SIN_ALTITUDE;
         const point = refineCrossingToHorizon(elements, e, crossing.xi, crossing.eta, z0) ?? crossing.geometric;
         const qCrossing = (q1 + q2) / 2;
         result.push({
@@ -182,30 +177,26 @@ function collectCrossings(
     return result;
 }
 
-function crossingsAtTau(
-    elements: BesselianElements,
-    tau: number,
-    onRefractedHorizon: boolean,
-): Array<TerminatorCrossing> {
+function crossingsAtTau(elements: BesselianElements, tau: number, z0: number): Array<TerminatorCrossing> {
     const e = getBesselianElementsAtTime(elements, tau);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
     const qVelocity = Math.atan2(dy, dx);
 
-    return collectCrossings(elements, e, qVelocity, onRefractedHorizon);
+    return collectCrossings(elements, e, qVelocity, z0);
 }
 
 function bisectEndTangent(
     elements: BesselianElements,
     tauWithTwo: number,
     tauWithLess: number,
-    onRefractedHorizon: boolean,
+    z0: number,
 ): SidedPoint | null {
     let twoSide = tauWithTwo;
     let lessSide = tauWithLess;
     for (let iter = 0; iter < 40; iter++) {
         const mid = (twoSide + lessSide) / 2;
-        const c = crossingsAtTau(elements, mid, onRefractedHorizon);
+        const c = crossingsAtTau(elements, mid, z0);
         if (c.length >= 2) {
             twoSide = mid;
         } else {
@@ -215,7 +206,7 @@ function bisectEndTangent(
             break;
         }
     }
-    const c = crossingsAtTau(elements, twoSide, onRefractedHorizon);
+    const c = crossingsAtTau(elements, twoSide, z0);
     if (c.length === 0) {
         return null;
     }
@@ -267,7 +258,7 @@ interface RiseSetRun {
     endTip: SidedPoint | null;
 }
 
-function calculateRiseSetRuns(elements: BesselianElements, onRefractedHorizon: boolean): Array<RiseSetRun> {
+function calculateRiseSetRuns(elements: BesselianElements, z0: number): Array<RiseSetRun> {
     // Two curves form each run's band:
     //   leadingEdge  = where eclipse BEGINS (C1) at rise/set  (forward of shadow velocity)
     //   trailingEdge = where eclipse ENDS (C4) at rise/set    (rearward of shadow velocity)
@@ -297,18 +288,13 @@ function calculateRiseSetRuns(elements: BesselianElements, onRefractedHorizon: b
     let lastSingleBranch: 'leading' | 'trailing' | null = null;
 
     for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
-        const crossings = crossingsAtTau(elements, tau, onRefractedHorizon);
+        const crossings = crossingsAtTau(elements, tau, z0);
 
         if (crossings.length === 0) {
             if (current !== null) {
                 // Close the run; a 2 → 0 transition is a true tangent, 1 → 0 is not.
                 if (prevCount >= 2) {
-                    current.endTip = bisectEndTangent(
-                        elements,
-                        tau - RISE_SET_BOUNDARY_STEP_HOURS,
-                        tau,
-                        onRefractedHorizon,
-                    );
+                    current.endTip = bisectEndTangent(elements, tau - RISE_SET_BOUNDARY_STEP_HOURS, tau, z0);
                 }
                 runs.push(current);
                 current = null;
@@ -323,12 +309,7 @@ function calculateRiseSetRuns(elements: BesselianElements, onRefractedHorizon: b
             lastSingleBranch = null;
             // A 0 → 2 transition is a true tangent; skip when the sweep starts mid-run at tMin.
             if (crossings.length >= 2 && tau > elements.tMin) {
-                current.startTip = bisectEndTangent(
-                    elements,
-                    tau,
-                    tau - RISE_SET_BOUNDARY_STEP_HOURS,
-                    onRefractedHorizon,
-                );
+                current.startTip = bisectEndTangent(elements, tau, tau - RISE_SET_BOUNDARY_STEP_HOURS, z0);
             }
         }
 
@@ -432,11 +413,11 @@ function assembleSideLoop(run: RiseSetRun, isSunset: boolean): Array<LatLon> {
     return cycle.filter((p) => p.isSunset === isSunset).map((p) => p.point);
 }
 
-export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean): RiseSetBoundary {
+export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: boolean, z0: number): RiseSetBoundary {
     // RiseSetBoundary holds a single polygon, so if several runs contribute to the same
     // side (not observed for any catalogued eclipse) keep the largest.
     let best: RiseSetBoundary = [];
-    for (const run of calculateRiseSetRuns(elements, true)) {
+    for (const run of calculateRiseSetRuns(elements, z0)) {
         const loop = assembleSideLoop(run, isSunset);
         if (loop.length > best.length) {
             best = loop;
@@ -446,12 +427,12 @@ export function calculateRiseSetBoundary(elements: BesselianElements, isSunset: 
     return best;
 }
 
-export function calculateSunsetBoundary(elements: BesselianElements): RiseSetBoundary {
-    return calculateRiseSetBoundary(elements, true);
+export function calculateSunsetBoundary(elements: BesselianElements, z0: number): RiseSetBoundary {
+    return calculateRiseSetBoundary(elements, true, z0);
 }
 
-export function calculateSunriseBoundary(elements: BesselianElements): RiseSetBoundary {
-    return calculateRiseSetBoundary(elements, false);
+export function calculateSunriseBoundary(elements: BesselianElements, z0: number): RiseSetBoundary {
+    return calculateRiseSetBoundary(elements, false, z0);
 }
 
 // The maximum-eclipse point on the horizon at one instant: the root of the separation-rate
@@ -463,8 +444,7 @@ export function calculateSunriseBoundary(elements: BesselianElements): RiseSetBo
 //   xi'  = mu' (z0 cos d - eta sin d)
 //   eta' = mu' xi sin d - z0 d'
 // Only the near-side root can pass the penumbra test, so each tau yields at most one point.
-function maxEclipseRootAtTau(elements: BesselianElements, tau: number, isSunset: boolean): LatLon | null {
-    const z0 = MAX_ECLIPSE_SIN_ALTITUDE;
+function maxEclipseRootAtTau(elements: BesselianElements, tau: number, isSunset: boolean, z0: number): LatLon | null {
     const e = getBesselianElementsAtTime(elements, tau);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
@@ -536,10 +516,14 @@ function maxEclipseRootAtTau(elements: BesselianElements, tau: number, isSunset:
 // loops on Jubier/Espenak maps: the locus of points whose deepest eclipse phase occurs exactly
 // while the Sun sits on the horizon. Sweeping tau traces one tau-ordered polyline per
 // terminator side.
-export function calculateMaxEclipseAtHorizon(elements: BesselianElements, isSunset: boolean): Array<LatLon> {
+export function calculateMaxEclipseAtHorizon(
+    elements: BesselianElements,
+    isSunset: boolean,
+    z0: number,
+): Array<LatLon> {
     const curve: Array<LatLon> = [];
     for (let tau = elements.tMin; tau <= elements.tMax; tau += RISE_SET_BOUNDARY_STEP_HOURS) {
-        const root = maxEclipseRootAtTau(elements, tau, isSunset);
+        const root = maxEclipseRootAtTau(elements, tau, isSunset, z0);
         if (root !== null) {
             curve.push(root);
         }
@@ -574,10 +558,10 @@ function longestContinuousRun(points: Array<LatLon>): Array<LatLon> {
     return run.length > best.length ? run : best;
 }
 
-export function calculateMaxEclipseAtSunrise(elements: BesselianElements): Array<LatLon> {
-    return calculateMaxEclipseAtHorizon(elements, false);
+export function calculateMaxEclipseAtSunrise(elements: BesselianElements, z0: number): Array<LatLon> {
+    return calculateMaxEclipseAtHorizon(elements, false, z0);
 }
 
-export function calculateMaxEclipseAtSunset(elements: BesselianElements): Array<LatLon> {
-    return calculateMaxEclipseAtHorizon(elements, true);
+export function calculateMaxEclipseAtSunset(elements: BesselianElements, z0: number): Array<LatLon> {
+    return calculateMaxEclipseAtHorizon(elements, true, z0);
 }

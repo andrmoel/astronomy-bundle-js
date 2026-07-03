@@ -2,11 +2,12 @@ import type {BesselianElements} from '@package/solarEclipse/types/BesselianEleme
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F} from './constants';
 
-// The penumbral region is shaded per pixel, following Jubier's convention: a location is
-// shaded iff at the moment of ITS OWN maximum eclipse the Sun's centre is on or above the
-// geometric horizon (zeta >= 0) and the eclipse magnitude is positive (m <= L1). This
+// The penumbral region is shaded per pixel: a location is shaded iff at the moment of ITS
+// OWN maximum eclipse the Sun is up per the map's horizon convention (zeta >= z0: the
+// geometric horizon at z0 = 0, or the refracted upper-limb horizon at z0 = sin(-50'))
+// and the eclipse magnitude is positive (m <= L1). This
 // pointwise definition produces every boundary in one stroke — the penumbral limit
-// (m = L1 envelope), the maximum-eclipse-at-sunrise/sunset curves (zeta = 0, the green
+// (m = L1 envelope), the maximum-eclipse-at-sunrise/sunset curves (the green
 // lines), their polar-midnight cusps, and the midnight-sun arcs joining them — where a
 // polygon assembly needs a fragile per-curve case analysis that breaks with the eclipse
 // geometry (compare the 2017-08-21 Arctic, where the rise/set curves swap sides at the
@@ -23,7 +24,7 @@ const COARSE_STEP_HOURS = 0.25;
 const DEPTH_OUT_SLACK = 0.03;
 const DEPTH_IN_SLACK = 0.01;
 // Zeta moves by at most ~0.26/h (Earth rotation), i.e. ~0.033 per half step; a coarse zeta
-// beyond this slack keeps its sign at the true minimum.
+// farther than this slack from the horizon threshold stays on its side at the true minimum.
 const ZETA_SLACK = 0.05;
 // Square tiles whose corners stay this far outside the penumbra at every sample are skipped
 // wholesale; the slack covers the tile diagonal (~0.02 at 8 map pixels) plus the coarse
@@ -37,6 +38,7 @@ interface ScanContext {
     elements: BesselianElements;
     ghaOffset: number;
     tanF1: number;
+    z0: number;
     taus: Float64Array;
     xs: Float64Array;
     ys: Float64Array;
@@ -47,7 +49,7 @@ interface ScanContext {
     cosGs: Float64Array;
 }
 
-function buildScanContext(elements: BesselianElements): ScanContext {
+function buildScanContext(elements: BesselianElements, z0: number): ScanContext {
     const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600) * DEG;
     const count = Math.max(2, Math.ceil((elements.tMax - elements.tMin) / COARSE_STEP_HOURS) + 1);
     const taus = new Float64Array(count);
@@ -72,7 +74,7 @@ function buildScanContext(elements: BesselianElements): ScanContext {
         cosGs[i] = Math.cos(gha);
     }
 
-    return {elements, ghaOffset, tanF1: elements.tanF1, taus, xs, ys, l1s, sinDs, cosDs, sinGs, cosGs};
+    return {elements, ghaOffset, tanF1: elements.tanF1, z0, taus, xs, ys, l1s, sinDs, cosDs, sinGs, cosGs};
 }
 
 // Geocentric direction of a sea-level point at geodetic latitude: tan U = (1 - f) tan(lat).
@@ -174,13 +176,13 @@ function isMaxEclipseVisible(
     if (depth < -DEPTH_OUT_SLACK) {
         return false;
     }
-    if (depth > DEPTH_IN_SLACK && Math.abs(bestZeta) > ZETA_SLACK) {
-        return bestZeta > 0;
+    if (depth > DEPTH_IN_SLACK && Math.abs(bestZeta - ctx.z0) > ZETA_SLACK) {
+        return bestZeta > ctx.z0;
     }
 
     const state = refineMaxEclipse(ctx, bestIndex, lonRad, sinU, cosU);
 
-    return state.zeta >= 0 && state.m <= state.l1Effective;
+    return state.zeta >= ctx.z0 && state.m <= state.l1Effective;
 }
 
 function isMaxEclipseVisibleAt(ctx: ScanContext, latDeg: number, lonDeg: number): boolean {
@@ -196,8 +198,9 @@ export default function calculatePenumbraVisibilityAlpha(
     elements: BesselianElements,
     width: number,
     height: number,
+    z0: number,
 ): Uint8ClampedArray {
-    const ctx = buildScanContext(elements);
+    const ctx = buildScanContext(elements, z0);
     const count = ctx.taus.length;
 
     const lonRads = new Float64Array(width);
