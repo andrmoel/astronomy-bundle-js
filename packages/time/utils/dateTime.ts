@@ -7,7 +7,7 @@ export function sec2string(sec: number, short = false): string {
     const sign = sec < 0 ? '-' : '';
     sec = Math.abs(sec);
 
-    const hour = Math.floor(sec / 3660);
+    const hour = Math.floor(sec / 3600);
     const min = Math.floor((sec - hour * 3600) / 60);
     const secPart = round(sec - hour * 3600 - min * 60, 2);
 
