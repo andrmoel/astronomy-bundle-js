@@ -1,5 +1,6 @@
 import {EARTH_POLAR_RADIUS_RATIO, EARTH_ROTATION_DEG_PER_HOUR, ECCENTRICITY_SQUARED} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
+import {SECONDS_PER_DAY} from '@app/constants/time';
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import {polynomialDerivative} from '@app/utils/polynoms';
@@ -42,7 +43,7 @@ export function getLocationOfGreatestEclipse(elements: BesselianElements): LatLo
 }
 
 export function getJulianDayOfGreatestEclipse(elements: BesselianElements): number {
-    return elements.t0Jde - elements.deltaT / 86400;
+    return elements.t0Jde - elements.deltaT / SECONDS_PER_DAY;
 }
 
 export function getTauOfGreatestEclipse(elements: BesselianElements): number {

@@ -1,3 +1,5 @@
+import {DEG} from '@app/constants/math';
+
 export function getApparentMagnitudeMercury(distanceSun: number, distanceEarth: number, phaseAngle: number): number {
     let V = 5 * Math.log10(distanceSun * distanceEarth);
 
@@ -53,7 +55,7 @@ export function getApparentMagnitudeSaturn(
     ringInclination: number,
 ): number {
     const V = 5 * Math.log10(distanceSun * distanceEarth);
-    const B = (Math.abs(ringInclination) * Math.PI) / 180;
+    const B = Math.abs(ringInclination) * DEG;
 
     return V - 8.88 + 0.044 * phaseAngle - 2.6 * Math.sin(B) + 1.25 * Math.sin(B) ** 2;
 }

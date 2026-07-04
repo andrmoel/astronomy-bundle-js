@@ -1,4 +1,9 @@
-import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
+import {
+    EARTH_AXIS_RATIO,
+    EARTH_EQUATORIAL_RADIUS_METERS,
+    EARTH_ROTATION_DEG_PER_HOUR,
+    SUNRISE_SUNSET_ALTITUDE_DEG,
+} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
 import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
@@ -10,9 +15,6 @@ const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
 const TIME_MARGIN_HOURS = 0.5;
 const SEARCH_RANGE_HOURS = 4;
-
-// Sun's centre altitude at sunrise/sunset: -(34' refraction + 16' semi-diameter). Meeus, chapter 15.
-const SUNRISE_SUNSET_ALTITUDE_DEG = -0.8333;
 
 const HORIZON_SCAN_SAMPLES = 64;
 const HORIZON_BISECTION_ITERATIONS = 60;

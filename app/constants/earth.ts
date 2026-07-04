@@ -9,6 +9,9 @@ export const ECCENTRICITY_SQUARED = 2 * EARTH_FLATTENING - EARTH_FLATTENING * EA
 export const EARTH_ROTATION_DEG_PER_HOUR = 1.002738 * 15;
 export const EARTH_SIDEREAL_ROTATION_PER_DAY = 360.985647;
 
+// Sun's centre altitude at sunrise/sunset: -(34' refraction + 16' semi-diameter). Meeus, chapter 15.
+export const SUNRISE_SUNSET_ALTITUDE_DEG = -0.8333;
+
 export const EARTH_ARGUMENTS_OF_NUTATION = [
     [0, 0, 0, 0, 1, -171996, -174.2, 92025, 8.9],
     [0, 0, 2, -2, 2, -13187, -1.6, 5736, -3.1],
