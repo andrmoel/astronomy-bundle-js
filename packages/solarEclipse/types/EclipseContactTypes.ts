@@ -6,6 +6,8 @@ export interface EclipseContacts {
     max: number;
     c3: number | null;
     c4: number;
+    sunrise: number | null;
+    sunset: number | null;
 }
 
 export interface EclipseContactsToi {
@@ -14,4 +16,6 @@ export interface EclipseContactsToi {
     max: TimeOfInterest;
     c3: TimeOfInterest | null;
     c4: TimeOfInterest;
+    sunrise: TimeOfInterest | null;
+    sunset: TimeOfInterest | null;
 }
