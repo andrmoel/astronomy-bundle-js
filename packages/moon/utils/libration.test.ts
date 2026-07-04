@@ -1,4 +1,5 @@
 import {
+    getAxisPositionAngle,
     getOpticalSelenographicLocation,
     getPhysicalSelenographicLocation,
     getSelenographicLocation,
@@ -50,4 +51,17 @@ it('tests getTopocentricSelenographicLocation', () => {
 
 it('tests getSelenographicMagnitude', () => {
     expect(getSelenographicMagnitude(-0.55307, 4.73118)).toBeCloseTo(4.76339696, 8);
+});
+
+it('tests getAxisPositionAngle', () => {
+    const P = getAxisPositionAngle(
+        {
+            rightAscension: 134.68847,
+            declination: 13.768368,
+            radiusVector: 0.002443,
+        },
+        T,
+    );
+
+    expect(P).toBeCloseTo(15.08413, 5);
 });

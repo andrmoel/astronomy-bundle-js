@@ -26,6 +26,7 @@ import AstronomicalObject from '@package/core/models/models/AstronomicalObject';
 import Earth from '@package/earth/models/Earth';
 import type {SelenographicPoint} from '@package/moon/types/LibrationTypes';
 import {
+    getAxisPositionAngle,
     getOpticalSelenographicLocation,
     getSelenographicLocation,
     getSelenographicMagnitude,
@@ -252,5 +253,11 @@ export default class Moon extends AstronomicalObject {
         const {lon, lat} = this.getTopocentricLibration(location);
 
         return getSelenographicMagnitude(lon, lat);
+    }
+
+    public getPositionAngleOfAxis(): number {
+        const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getAxisPositionAngle(coords, this.T);
     }
 }

@@ -27,6 +27,7 @@ The `moon` package provides the `Moon` object for computing the Moon's position 
   - [Apparent magnitude](#apparent-magnitude)
   - [Upcoming lunar phases](#upcoming-lunar-phases)
   - [Sub-Earth, geocentric libration, topocentric libration, and sub-Solar points](#sub-earth-geocentric-libration-topocentric-libration-and-sub-solar-points)
+  - [Position angle of the axis](#position-angle-of-the-axis)
 
 ## Install
 
@@ -516,3 +517,24 @@ Geocentric libration: *lon -1.20579°, lat 4.19403°*\
 Geocentric libration magnitude: *4.36392°*\
 Topocentric libration: *lon -0.55307°, lat 4.73118°*\
 Topocentric libration magnitude: *4.76340°*
+
+---
+
+### Position angle of the axis
+
+**Description:** `getPositionAngleOfAxis()` returns the position angle of the Moon's axis of rotation in degrees, measured eastward from the north point of the disk. It indicates the direction of the Moon's north pole as projected onto the sky.
+
+**Example**: Get the position angle of the axis for 12 April 1992 at 00:00 UTC
+
+```javascript
+import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Moon} from '@astronomy-bundle/moon';
+
+const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const moon = Moon.create(toi);
+
+const positionAngleOfAxis = moon.getPositionAngleOfAxis();
+```
+
+The result of the calculation should be:\
+Position angle of the axis: *15.08413°*
