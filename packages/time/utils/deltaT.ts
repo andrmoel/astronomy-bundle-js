@@ -1,6 +1,40 @@
+// https://maia.usno.navy.mil/ser7/deltat.data
+const OBSERVED_DELTA_T: Record<number, number> = {
+    2005: 64.6876,
+    2006: 64.8452,
+    2007: 65.1464,
+    2008: 65.4573,
+    2009: 65.7768,
+    2010: 66.0699,
+    2011: 66.3246,
+    2012: 66.603,
+    2013: 66.9069,
+    2014: 67.281,
+    2015: 67.6439,
+    2016: 68.1024,
+    2017: 68.5927,
+    2018: 68.9676,
+    2019: 69.2202,
+    2020: 69.3612,
+    2021: 69.3594,
+    2022: 69.2945,
+    2023: 69.2039,
+    2024: 69.1752,
+    2025: 69.1377,
+    2026: 69.1099,
+};
+
+const OBSERVED_YEARS = Object.keys(OBSERVED_DELTA_T).map(Number);
+const OBSERVED_MIN_YEAR = Math.min(...OBSERVED_YEARS);
+const OBSERVED_MAX_YEAR = Math.max(...OBSERVED_YEARS);
+
 export function getDeltaT(year: number, month = 0): number {
     // https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html
     const y = year + (month - 0.5) / 12;
+
+    if (year >= OBSERVED_MIN_YEAR && year <= OBSERVED_MAX_YEAR) {
+        return getObservedDeltaT(y);
+    }
 
     let t: number;
     let deltaT = 0;
@@ -94,10 +128,24 @@ export function getDeltaT(year: number, month = 0): number {
         deltaT = 62.92 + 0.32217 * t + 0.005589 * t ** 2;
     }
 
-    if (year >= 2050) {
+    if (year >= 2050 && year < 2150) {
+        t = (y - 1820) / 100;
+        deltaT = -20 + 32 * t ** 2 - 0.5628 * (2150 - y);
+    }
+
+    if (year >= 2150) {
         t = (y - 1820) / 100;
         deltaT = -20 + 32 * t ** 2;
     }
 
     return deltaT;
 }
+
+function getObservedDeltaT(y: number): number {
+    const clamped = Math.max(OBSERVED_MIN_YEAR, Math.min(OBSERVED_MAX_YEAR, y));
+    const y0 = Math.min(Math.floor(clamped), OBSERVED_MAX_YEAR - 1);
+    const fraction = clamped - y0;
+
+    return OBSERVED_DELTA_T[y0] + fraction * (OBSERVED_DELTA_T[y0 + 1] - OBSERVED_DELTA_T[y0]);
+}
+
