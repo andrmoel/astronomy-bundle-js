@@ -180,7 +180,8 @@ export function dayOfYear2time(year: number, dayOfYear: number): Time {
 
 export function getDecimalYear(time: Time): number {
     const daysInYear = isLeapYear(time.year) ? 366 : 365;
-    const dayOfYear = getDayOfYear(time) - 1 + time.hour / HOURS_PER_DAY + time.min / MINUTES_PER_DAY + time.sec / SECONDS_PER_DAY;
+    const dayOfYear =
+        getDayOfYear(time) - 1 + time.hour / HOURS_PER_DAY + time.min / MINUTES_PER_DAY + time.sec / SECONDS_PER_DAY;
 
     return time.year + dayOfYear / daysInYear;
 }
