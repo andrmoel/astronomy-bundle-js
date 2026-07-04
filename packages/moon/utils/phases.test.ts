@@ -1,4 +1,4 @@
-import {MOON_PHASE_LAST_QUARTER, MOON_PHASE_NEW_MOON} from '../constants/phases';
+import {MOON_PHASE_LAST_QUARTER, MOON_PHASE_NEW_MOON} from '@app/constants/moon';
 import {getTimeOfInterestOfUpcomingPhase} from './phases';
 
 it('tests getTimeOfInterestOfUpcomingPhase with new moon', () => {

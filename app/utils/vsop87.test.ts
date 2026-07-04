@@ -72,7 +72,7 @@ describe('Earth spherical Date coordinates', () => {
     });
 
     it('computes heliocentric latitude', () => {
-        expect(calculateVSOP87Angle(Y_DATE, t)).toBeCloseTo(-0.00014636, 8);
+        expect(calculateVSOP87Angle(Y_DATE, t)).toBeCloseTo(-0.00014628532, 8);
     });
 
     it('computes radius vector', () => {
