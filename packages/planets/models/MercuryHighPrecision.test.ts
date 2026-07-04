@@ -248,3 +248,33 @@ it('tests getTopocentricApparentMagnitude', () => {
 
     expect(V).toBeCloseTo(-0.721576138493624, 6);
 });
+
+it('tests getTransit', () => {
+    const toi = mercury.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 10, min: 32, sec: 39});
+});
+
+it('tests getGeometricRise', () => {
+    const toi = mercury.getGeometricRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 6, min: 57, sec: 20});
+});
+
+it('tests getApparentRise', () => {
+    const toi = mercury.getApparentRise(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 6, min: 52, sec: 17});
+});
+
+it('tests getGeometricSet', () => {
+    const toi = mercury.getGeometricSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 14, min: 7, sec: 48});
+});
+
+it('tests getApparentSet', () => {
+    const toi = mercury.getApparentSet(location);
+
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 14, min: 12, sec: 51});
+});

@@ -19,6 +19,7 @@ The examples below intentionally rotate between planets. The same methods are av
   - [Geocentric equatorial spherical coordinates](#geocentric-equatorial-spherical-coordinates)
   - [Apparent geocentric coordinates](#apparent-geocentric-coordinates)
   - [Topocentric coordinates](#topocentric-coordinates)
+  - [Rise, transit and set](#rise-transit-and-set)
   - [Distance to Earth](#distance-to-earth)
   - [Light time](#light-time)
   - [Angular diameter](#angular-diameter)
@@ -279,6 +280,46 @@ Apparent topocentric radius vector: *31.021081 AU*
 Apparent topocentric azimuth: *339.698701°*\
 Geometric altitude: *-55.400937°*\
 Observed altitude (with refraction): *-55.400937°*
+
+---
+
+### Rise, transit and set
+
+**Description:** These methods return the times of the planet's rise, upper transit (culmination) and set for an observer at a given `Location`, each as a `TimeOfInterest`.
+
+`getTransit` takes only the location. The rise and set methods come in two variants and additionally accept an optional `LimbAlignment`:
+
+- **Geometric** (`getGeometricRise`, `getGeometricSet`) — the event is defined by the true geometric altitude, without atmospheric refraction.
+- **Apparent** (`getApparentRise`, `getApparentSet`) — atmospheric refraction is taken into account, matching the times an observer actually sees.
+
+The `LimbAlignment` argument selects which part of the disk crosses the horizon: `LimbAlignment.Center` (default), `LimbAlignment.UpperLimb` or `LimbAlignment.LowerLimb`. For planets the disk is tiny, so the choice changes the result by only a fraction of a second and `Center` is normally sufficient.
+
+**Example**: Get Mars's rise, transit and set for 1 January 2000 at 00:00 UTC, observer in Berlin (52.519°N, 13.408°E)
+
+```javascript
+import {TimeOfInterest, Location} from '@astronomy-bundle/core';
+import {Mars} from '@astronomy-bundle/planets/mars';
+
+const toi = TimeOfInterest.fromTime(2000, 1, 1, 0, 0, 0);
+const location = Location.create(52.519, 13.408);
+const mars = Mars.create(toi);
+
+const transit = mars.getTransit(location);
+
+// Rise/set with and without refraction
+const apparentRise  = mars.getApparentRise(location);
+const geometricRise = mars.getGeometricRise(location);
+const apparentSet   = mars.getApparentSet(location);
+const geometricSet  = mars.getGeometricSet(location);
+```
+
+The result of the calculation should be (UTC):\
+Transit: *14:26:30*
+
+Apparent rise: *09:34:00*\
+Geometric rise: *09:38:00*\
+Apparent set: *19:19:39*\
+Geometric set: *19:15:39*
 
 ---
 

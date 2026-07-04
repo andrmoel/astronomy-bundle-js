@@ -1,3 +1,4 @@
+import {LimbAlignment} from '@app/enums/limb';
 import type {Location} from '@app/types/LocationTypes';
 import {decimal2degreeMinutesSeconds} from '@app/utils/angle';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
@@ -158,24 +159,91 @@ it('tests getTopocentricDistanceToEarth', () => {
 
     expect(d).toBeCloseTo(365174.89477, 6);
 });
-//
-// it('tests getTransit',  () => {
-//     const toi =  moon.getTransit(location);
-//
-//     expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 55, sec: 0});
-// });
-//
-// it('tests getRise',  () => {
-//     const toi =  moon.getRise(location);
-//
-//     expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 45, sec: 30});
-// });
-//
-// it('tests getSet',  () => {
-//     const toi =  moon.getSet(location);
-//
-//     expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 10, sec: 31});
-// });
+it('tests getTransit', () => {
+    const toi = moon.getTransit(location);
+
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 54, sec: 59});
+});
+
+describe('getGeometricRise', () => {
+    it('tests the upper limb', () => {
+        const toi = moon.getGeometricRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 49, sec: 49});
+    });
+
+    it('tests the center', () => {
+        const toi = moon.getGeometricRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 51, sec: 45});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = moon.getGeometricRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 53, sec: 41});
+    });
+});
+
+describe('getApparentRise', () => {
+    it('tests the upper limb', () => {
+        const toi = moon.getApparentRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 45, sec: 45});
+    });
+
+    it('tests the center', () => {
+        const toi = moon.getApparentRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 47, sec: 41});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = moon.getApparentRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 49, sec: 38});
+    });
+});
+
+describe('getGeometricSet', () => {
+    it('tests the upper limb', () => {
+        const toi = moon.getGeometricSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 6, sec: 12});
+    });
+
+    it('tests the center', () => {
+        const toi = moon.getGeometricSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 4, sec: 18});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = moon.getGeometricSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 2, sec: 25});
+    });
+});
+
+describe('getApparentSet', () => {
+    it('tests the upper limb', () => {
+        const toi = moon.getApparentSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 10, sec: 11});
+    });
+
+    it('tests the center', () => {
+        const toi = moon.getApparentSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 8, sec: 16});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = moon.getApparentSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 6, sec: 23});
+    });
+});
 
 it('tests getLightTime', () => {
     const lt = moon.getLightTime();

@@ -1,3 +1,4 @@
+import {LimbAlignment} from '@app/enums/limb';
 import * as vsop87Date from '@app/resources/vsop87/vsop87EarthSphericalDate';
 import * as vsop87J2000 from '@app/resources/vsop87/vsop87EarthSphericalJ2000';
 import {decimal2degreeMinutesSeconds} from '@app/utils/angle';
@@ -191,4 +192,90 @@ it('tests getTopocentricApparentMagnitude', () => {
     const V = sun.getTopocentricApparentMagnitude();
 
     expect(V).toBe(-26.74);
+});
+
+it('tests getTransit', () => {
+    const toi = sun.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
+});
+
+describe('getGeometricRise', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 55});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 47});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 52, sec: 39});
+    });
+});
+
+describe('getApparentRise', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 51});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 43});
+    });
+});
+
+describe('getGeometricSet', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 51, sec: 47});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 55});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 48, sec: 4});
+    });
+});
+
+describe('getApparentSet', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 51});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 52, sec: 0});
+    });
 });
