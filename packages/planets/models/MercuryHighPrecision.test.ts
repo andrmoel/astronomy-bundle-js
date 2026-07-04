@@ -128,16 +128,16 @@ it('tests getApparentTopocentricEquatorialSphericalCoordinates', () => {
 it('tests getApparentTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = mercury.getApparentTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(39.39045296958801, 6);
-    expect(altitude).toBeCloseTo(-57.233213404310874, 6);
+    expect(azimuth).toBeCloseTo(39.39044640351946, 6);
+    expect(altitude).toBeCloseTo(-57.23414336489054, 6);
     expect(radiusVector).toBeCloseTo(1.4131245774268764, 6);
 });
 
 it('tests getRefractionCorrectedTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = mercury.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(39.39045296958801, 6);
-    expect(altitude).toBeCloseTo(-57.233213404310874, 6);
+    expect(azimuth).toBeCloseTo(39.39044640351946, 6);
+    expect(altitude).toBeCloseTo(-57.23414336489054, 6);
     expect(radiusVector).toBeCloseTo(1.4131245774268764, 6);
 });
 

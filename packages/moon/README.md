@@ -186,9 +186,9 @@ The result of the calculation should be:\
 Apparent topocentric right ascension: *135.211802°*\
 Apparent topocentric declination: *13.079873°*
 
-Apparent topocentric azimuth: *108.968405°*\
-Geometric altitude: *30.91398°*\
-Observed altitude (with refraction): *30.94205°*
+Apparent topocentric azimuth: *108.964863°*\
+Geometric altitude: *30.057752°*\
+Observed altitude (with refraction): *30.086785°*
 
 ---
 

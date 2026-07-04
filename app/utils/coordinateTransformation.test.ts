@@ -75,8 +75,8 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
 
     const {azimuth, altitude, radiusVector} = equatorialSpherical2topocentricHorizontal(coords, location, T);
 
-    expect(azimuth).toBeCloseTo(248.033688, 6);
-    expect(altitude).toBeCloseTo(15.124862, 6);
+    expect(azimuth).toBeCloseTo(248.033709, 6);
+    expect(altitude).toBeCloseTo(15.118546, 6);
     expect(radiusVector).toBeCloseTo(0.372749, 6);
 });
 

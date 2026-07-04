@@ -85,13 +85,17 @@ export function equatorialSpherical2topocentricHorizontal(
     location: Location,
     T: number,
 ): LocalHorizontalCoordinates {
-    const {rightAscension, declination} = coords;
     const {lat, lon} = location;
 
     const topoCoords = equatorialSpherical2topocentricSpherical(coords, location, T);
-    const H = getLocalHourAngle(T, lon, rightAscension);
+    const H = getLocalHourAngle(T, lon, topoCoords.rightAscension);
 
-    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, topoCoords.radiusVector);
+    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(
+        H,
+        topoCoords.declination,
+        lat,
+        topoCoords.radiusVector,
+    );
 }
 
 export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(

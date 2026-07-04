@@ -277,8 +277,8 @@ Apparent topocentric declination: *-19.217270°*\
 Apparent topocentric radius vector: *31.021081 AU*
 
 Apparent topocentric azimuth: *339.698701°*\
-Geometric altitude: *-55.400892°*\
-Observed altitude (with refraction): *-55.400892°*
+Geometric altitude: *-55.400937°*\
+Observed altitude (with refraction): *-55.400937°*
 
 ---
 
