@@ -235,13 +235,13 @@ const upperLimbSet  = sun.getApparentSet(location, LimbAlignment.UpperLimb);
 The result of the calculation should be (UTC):\
 Transit: *10:50:46*
 
-Apparent rise (center): *05:46:50*\
-Geometric rise (center): *05:50:46*\
-Apparent set (center): *15:53:52*\
-Geometric set (center): *15:49:56*
+Apparent rise (center): *05:46:51*\
+Geometric rise (center): *05:50:47*\
+Apparent set (center): *15:53:51*\
+Geometric set (center): *15:49:55*
 
-Apparent rise (upper limb): *05:44:59*\
-Apparent set (upper limb): *15:55:43*
+Apparent rise (upper limb): *05:45:00*\
+Apparent set (upper limb): *15:55:42*
 
 ---
 

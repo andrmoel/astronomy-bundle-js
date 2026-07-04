@@ -5,12 +5,14 @@ import {
     equatorialSpherical2eclipticSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
+    equatorialSpherical2topocentricSphericalByLocalHourAngle,
     getEquatorialParallax,
     rectangular2spherical,
     rectangularGeocentric2rectangularHeliocentric,
     rectangularHeliocentric2rectangularGeocentric,
     spherical2rectangular,
 } from './coordinateTransformation';
+import {getLocalHourAngle} from './siderealTime';
 
 it('tests rectangular2spherical', () => {
     const coords = {
@@ -78,6 +80,28 @@ it('tests equatorialSpherical2topocentricHorizontal', () => {
     expect(azimuth).toBeCloseTo(248.033709, 6);
     expect(altitude).toBeCloseTo(15.118546, 6);
     expect(radiusVector).toBeCloseTo(0.372749, 6);
+});
+
+it('tests equatorialSpherical2topocentricSphericalByLocalHourAngle', () => {
+    // Meeus, example 40.a (Mars from Palomar)
+    const T = 0.03654036428626374;
+    const location = {
+        lat: 33.356111,
+        lon: -116.8625,
+        elevation: 1705,
+    };
+    const localHourAngle = getLocalHourAngle(T, location.lon, 339.530208);
+
+    const topocentric = equatorialSpherical2topocentricSphericalByLocalHourAngle(
+        localHourAngle,
+        -15.771083,
+        0.37276,
+        location,
+    );
+
+    expect(topocentric.localHourAngle).toBeCloseTo(-71.209482, 6);
+    expect(topocentric.declination).toBeCloseTo(-15.775012, 6);
+    expect(topocentric.radiusVector).toBeCloseTo(0.372755, 6);
 });
 
 it('tests eclipticSpherical2equatorialSpherical', () => {

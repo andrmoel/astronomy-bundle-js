@@ -121,6 +121,32 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
     };
 }
 
+export function equatorialSpherical2topocentricSphericalByLocalHourAngle(
+    localHourAngle: number,
+    declination: number,
+    radiusVector: number,
+    location: Location,
+): {localHourAngle: number; declination: number; radiusVector: number} {
+    const rhoSinLat = getRhoSinLat(location.lat, location.elevation);
+    const rhoCosLat = getRhoCosLat(location.lat, location.elevation);
+    const piRad = getEquatorialParallax(radiusVector) * DEG;
+
+    const HRad = localHourAngle * DEG;
+    const dRad = declination * DEG;
+
+    const A = Math.cos(dRad) * Math.sin(HRad);
+    const B = Math.cos(dRad) * Math.cos(HRad) - rhoCosLat * Math.sin(piRad);
+    const C = Math.sin(dRad) - rhoSinLat * Math.sin(piRad);
+
+    const q = Math.sqrt(A * A + B * B + C * C);
+
+    return {
+        localHourAngle: normalizeAngle(Math.atan2(A, B) * RAD + 180) - 180,
+        declination: Math.asin(C / q) * RAD,
+        radiusVector: q * radiusVector,
+    };
+}
+
 export function eclipticSpherical2equatorialSpherical(
     coords: EclipticSphericalCoordinates,
     T: number,

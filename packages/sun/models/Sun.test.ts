@@ -169,19 +169,19 @@ describe('getGeometricRise', () => {
     it('tests the upper limb', () => {
         const toi = sun.getGeometricRise(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 54});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 55});
     });
 
     it('tests the center', () => {
         const toi = sun.getGeometricRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 46});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 47});
     });
 
     it('tests the lower limb', () => {
         const toi = sun.getGeometricRise(location, LimbAlignment.LowerLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 52, sec: 38});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 52, sec: 39});
     });
 });
 
@@ -189,19 +189,19 @@ describe('getApparentRise', () => {
     it('tests the upper limb', () => {
         const toi = sun.getApparentRise(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 44, sec: 59});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
     });
 
     it('tests the center', () => {
         const toi = sun.getApparentRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 50});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 51});
     });
 
     it('tests the lower limb', () => {
         const toi = sun.getApparentRise(location, LimbAlignment.LowerLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 42});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 43});
     });
 });
 
@@ -209,19 +209,19 @@ describe('getGeometricSet', () => {
     it('tests the upper limb', () => {
         const toi = sun.getGeometricSet(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 51, sec: 48});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 51, sec: 47});
     });
 
     it('tests the center', () => {
         const toi = sun.getGeometricSet(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 56});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 55});
     });
 
     it('tests the lower limb', () => {
         const toi = sun.getGeometricSet(location, LimbAlignment.LowerLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 48, sec: 5});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 48, sec: 4});
     });
 });
 
@@ -229,19 +229,19 @@ describe('getApparentSet', () => {
     it('tests the upper limb', () => {
         const toi = sun.getApparentSet(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 43});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
     });
 
     it('tests the center', () => {
         const toi = sun.getApparentSet(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 52});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 51});
     });
 
     it('tests the lower limb', () => {
         const toi = sun.getApparentSet(location, LimbAlignment.LowerLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 52, sec: 1});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 52, sec: 0});
     });
 });
 

@@ -5,7 +5,10 @@ import type {EquatorialSphericalCoordinates} from '@app/types/CoordinateTypes';
 import type {EventOptions} from '@app/types/EventTypes';
 import type {Location} from '@app/types/LocationTypes';
 import {normalizeAngle} from '@app/utils/angle';
-import {equatorialSpherical2topocentricHorizontalByLocalHourAngle} from '@app/utils/coordinateTransformation';
+import {
+    equatorialSpherical2topocentricHorizontalByLocalHourAngle,
+    equatorialSpherical2topocentricSphericalByLocalHourAngle,
+} from '@app/utils/coordinateTransformation';
 import {getGreenwichApparentSiderealTime} from '@app/utils/siderealTime';
 import {julianDay2julianCenturiesJ2000, julianDay2time} from '@package/time/utils/dateTime';
 import {getDeltaT} from '@package/time/utils/deltaT';
@@ -100,18 +103,21 @@ function getRiseSet(
     let cnt = 0;
     do {
         const coords = getCoords(jd0 + m + dynamicalTimeOffset);
-        const H = getLocalHourAngle(coords.rightAscension, location.lon, GAST, m);
+        const geocentricH = getLocalHourAngle(coords.rightAscension, location.lon, GAST, m);
 
-        const {altitude} = equatorialSpherical2topocentricHorizontalByLocalHourAngle(
-            H,
+        // Reduce the geocentric position to the observer's location. This matters for the
+        // Moon, whose horizontal parallax (~1°) shifts rise and set by several minutes.
+        const {localHourAngle: H, declination} = equatorialSpherical2topocentricSphericalByLocalHourAngle(
+            geocentricH,
             coords.declination,
-            location.lat,
+            coords.radiusVector,
+            location,
         );
 
+        const {altitude} = equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, location.lat);
+
         // Meeus 15, correction to m
-        dm =
-            (altitude - h0)
-            / (360 * Math.cos(coords.declination * DEG) * Math.cos(location.lat * DEG) * Math.sin(H * DEG));
+        dm = (altitude - h0) / (360 * Math.cos(declination * DEG) * Math.cos(location.lat * DEG) * Math.sin(H * DEG));
         m += dm;
 
         if (cnt++ > MAX_ITERATIONS) {
