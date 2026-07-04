@@ -1,4 +1,5 @@
 import {LIGHT_SPEED_KM_PER_SEC} from '@app/constants/units';
+import {LimbAlignment} from '@app/enums/limb';
 import type {
     EclipticSphericalCoordinates,
     EquatorialSphericalCoordinates,
@@ -14,6 +15,7 @@ import {
     spherical2rectangular,
 } from '@app/utils/coordinateTransformation';
 import {au2km} from '@app/utils/distance';
+import {getRise, getSet, getStandardAltitude, getTransit} from '@app/utils/riseSetTransit';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {AstronomicalObjectInterface} from './AstronomicalObjectInterface';
 
@@ -126,6 +128,54 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
         const {radiusVector} = this.getGeocentricEclipticSphericalDateCoordinates();
 
         return au2km(radiusVector) / LIGHT_SPEED_KM_PER_SEC;
+    }
+
+    public getAngularDiameter(): number {
+        return 0;
+    }
+
+    public getTransit(location: Location): TimeOfInterest {
+        const jd = getTransit(location, this.jd0, (jd: number) => this.getApparentEquatorialCoordinatesAtJulianDay(jd));
+
+        return TimeOfInterest.fromJulianDay(jd);
+    }
+
+    public getGeometricRise(location: Location, limbAlignment: LimbAlignment = LimbAlignment.Center): TimeOfInterest {
+        return this.getRiseSet(getRise, location, limbAlignment, false);
+    }
+
+    public getApparentRise(location: Location, limbAlignment: LimbAlignment = LimbAlignment.Center): TimeOfInterest {
+        return this.getRiseSet(getRise, location, limbAlignment, true);
+    }
+
+    public getGeometricSet(location: Location, limbAlignment: LimbAlignment = LimbAlignment.Center): TimeOfInterest {
+        return this.getRiseSet(getSet, location, limbAlignment, false);
+    }
+
+    public getApparentSet(location: Location, limbAlignment: LimbAlignment = LimbAlignment.Center): TimeOfInterest {
+        return this.getRiseSet(getSet, location, limbAlignment, true);
+    }
+
+    private getRiseSet(
+        riseSet: typeof getRise,
+        location: Location,
+        limbAlignment: LimbAlignment,
+        isRefractionConsidered: boolean,
+    ): TimeOfInterest {
+        const h0 = getStandardAltitude({isRefractionConsidered, alignment: limbAlignment}, this.getAngularDiameter());
+        const jd = riseSet(location, this.jd0, h0, (jd: number) =>
+            this.getApparentEquatorialCoordinatesAtJulianDay(jd),
+        );
+
+        return TimeOfInterest.fromJulianDay(jd);
+    }
+
+    private getApparentEquatorialCoordinatesAtJulianDay(jd: number): EquatorialSphericalCoordinates {
+        const toi = TimeOfInterest.fromJulianDay(jd);
+        const AstronomicalObjectClass = this.constructor as new (toi: TimeOfInterest) => AstronomicalObject;
+        const object = new AstronomicalObjectClass(toi);
+
+        return object.getApparentGeocentricEquatorialSphericalCoordinates();
     }
 
     // public getConjunctionInRightAscensionTo(

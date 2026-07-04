@@ -1,3 +1,4 @@
+import {LimbAlignment} from '@app/enums/limb';
 import {decimal2degreeMinutesSeconds} from '@app/utils/angle';
 import Location from '@package/location/models/Location';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
@@ -158,36 +159,91 @@ it('tests getTopocentricDistanceToEarth', () => {
 
     expect(d).toBeCloseTo(148871283.28993, 6);
 });
-//
-// it('tests getTransit',  () => {
-//     const toi =  sun.getTransit(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
-// });
-//
-// it('tests getRise',  () => {
-//     const toi =  sun.getRise(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 44});
-// });
-//
-// it('tests getRiseUpperLimb',  () => {
-//     const toi =  sun.getRiseUpperLimb(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
-// });
-//
-// it('tests getSet',  () => {
-//     const toi =  sun.getSet(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 59});
-// });
-//
-// it('tests getSetUpperLimb',  () => {
-//     const toi =  sun.getSetUpperLimb(location);
-//
-//     expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 42});
-// });
+it('tests getTransit', () => {
+    const toi = sun.getTransit(location);
+
+    expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 10, min: 50, sec: 46});
+});
+
+describe('getGeometricRise', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 54});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 46});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getGeometricRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 52, sec: 38});
+    });
+});
+
+describe('getApparentRise', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 44, sec: 59});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 50});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getApparentRise(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 42});
+    });
+});
+
+describe('getGeometricSet', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 51, sec: 48});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 56});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getGeometricSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 48, sec: 5});
+    });
+});
+
+describe('getApparentSet', () => {
+    it('tests the upper limb', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.UpperLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 55, sec: 43});
+    });
+
+    it('tests the center', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.Center);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 53, sec: 52});
+    });
+
+    it('tests the lower limb', () => {
+        const toi = sun.getApparentSet(location, LimbAlignment.LowerLimb);
+
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 52, sec: 1});
+    });
+});
 
 it('tests getLightTime', () => {
     const lt = sun.getLightTime();

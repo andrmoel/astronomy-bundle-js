@@ -5,6 +5,7 @@ export * from '@app/constants/moon';
 export * from '@app/constants/units';
 // Enums
 export * from '@app/enums/direction';
+export * from '@app/enums/limb';
 // Types
 export * from '@app/types/CoordinateTypes';
 export * from '@app/types/LocationTypes';
