@@ -1,9 +1,12 @@
 import {getDeltaT} from './deltaT';
 
 it('tests getDeltaT', () => {
-    expect(getDeltaT(2200)).toBeCloseTo(442, 1);
-    expect(getDeltaT(2100)).toBeCloseTo(202.6, 1);
-    expect(getDeltaT(2050)).toBeCloseTo(92.9, 1);
+    expect(getDeltaT(2200)).toBeCloseTo(1627.3, 1);
+    expect(getDeltaT(2100)).toBeCloseTo(196.5, 1);
+    expect(getDeltaT(2050)).toBeCloseTo(76.5, 1);
+    expect(getDeltaT(2034)).toBeCloseTo(70.7, 1);
+    expect(getDeltaT(2033)).toBeCloseTo(71, 1);
+    expect(getDeltaT(2027)).toBeCloseTo(69.1, 1);
     expect(getDeltaT(2026)).toBeCloseTo(69.1, 1);
     expect(getDeltaT(2020)).toBeCloseTo(69.4, 1);
     expect(getDeltaT(2018)).toBeCloseTo(69, 1);

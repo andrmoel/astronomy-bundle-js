@@ -170,4 +170,4 @@ const deltaT = toi.getDeltaT();
 The result of the calculation should be:\
 Delta T: *64*
 
-Values for 2005–2026 come from observed IERS measurements ([deltat.data](https://maia.usno.navy.mil/ser7/deltat.data)); all other years use the NASA polynomial expressions. Since the polynomials are extrapolations, ΔT for years beyond the observed range is approximate.
+Values for 2005–2026 come from observed IERS measurements ([deltat.data](https://maia.usno.navy.mil/ser7/deltat.data)) and 2027–2033 from IERS predictions ([deltat.preds](https://maia.usno.navy.mil/ser7/deltat.preds)). Years before 2005 use the NASA polynomial expressions, and years after 2033 are extrapolated with a cubic fit to the tabulated values. Both extrapolations are only approximate, and the cubic diverges increasingly far into the future.

@@ -1,5 +1,6 @@
-// https://maia.usno.navy.mil/ser7/deltat.data
-const OBSERVED_DELTA_T: Record<number, number> = {
+// 2005-2026 observed: https://maia.usno.navy.mil/ser7/deltat.data
+// 2027-2033 predicted: https://maia.usno.navy.mil/ser7/deltat.preds
+const REFERENCE_DELTA_T: Record<number, number> = {
     2005: 64.6876,
     2006: 64.8452,
     2007: 65.1464,
@@ -22,18 +23,35 @@ const OBSERVED_DELTA_T: Record<number, number> = {
     2024: 69.1752,
     2025: 69.1377,
     2026: 69.1099,
+    2027: 69.14,
+    2028: 69.34,
+    2029: 69.63,
+    2030: 69.97,
+    2031: 70.32,
+    2032: 70.62,
+    2033: 70.98,
 };
 
-const OBSERVED_YEARS = Object.keys(OBSERVED_DELTA_T).map(Number);
-const OBSERVED_MIN_YEAR = Math.min(...OBSERVED_YEARS);
-const OBSERVED_MAX_YEAR = Math.max(...OBSERVED_YEARS);
+const REFERENCE_YEARS = Object.keys(REFERENCE_DELTA_T).map(Number);
+const REFERENCE_MIN_YEAR = Math.min(...REFERENCE_YEARS);
+const REFERENCE_MAX_YEAR = Math.max(...REFERENCE_YEARS);
+
+// Cubic least-squares fit to the reference values, used to extrapolate ΔT beyond the tabulated years.
+const FUTURE_DELTA_T_COEFFICIENTS = fitPolynomial(
+    REFERENCE_YEARS.map((year) => [year - 2000, REFERENCE_DELTA_T[year]]),
+    3,
+);
 
 export function getDeltaT(year: number, month = 0): number {
     // https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html
     const y = year + (month - 0.5) / 12;
 
-    if (year >= OBSERVED_MIN_YEAR && year <= OBSERVED_MAX_YEAR) {
-        return getObservedDeltaT(y);
+    if (year >= REFERENCE_MIN_YEAR && year <= REFERENCE_MAX_YEAR) {
+        return getReferenceDeltaT(y);
+    }
+
+    if (year > REFERENCE_MAX_YEAR) {
+        return evaluatePolynomial(FUTURE_DELTA_T_COEFFICIENTS, y - 2000);
     }
 
     let t: number;
@@ -123,29 +141,55 @@ export function getDeltaT(year: number, month = 0): number {
             63.86 + 0.3345 * t - 0.060374 * t ** 2 + 0.0017275 * t ** 3 + 0.000651814 * t ** 4 + 0.00002373599 * t ** 5;
     }
 
-    if (year >= 2005 && year < 2050) {
-        t = y - 2000;
-        deltaT = 62.92 + 0.32217 * t + 0.005589 * t ** 2;
-    }
-
-    if (year >= 2050 && year < 2150) {
-        t = (y - 1820) / 100;
-        deltaT = -20 + 32 * t ** 2 - 0.5628 * (2150 - y);
-    }
-
-    if (year >= 2150) {
-        t = (y - 1820) / 100;
-        deltaT = -20 + 32 * t ** 2;
-    }
-
     return deltaT;
 }
 
-function getObservedDeltaT(y: number): number {
-    const clamped = Math.max(OBSERVED_MIN_YEAR, Math.min(OBSERVED_MAX_YEAR, y));
-    const y0 = Math.min(Math.floor(clamped), OBSERVED_MAX_YEAR - 1);
+function getReferenceDeltaT(y: number): number {
+    const clamped = Math.max(REFERENCE_MIN_YEAR, Math.min(REFERENCE_MAX_YEAR, y));
+    const y0 = Math.min(Math.floor(clamped), REFERENCE_MAX_YEAR - 1);
     const fraction = clamped - y0;
 
-    return OBSERVED_DELTA_T[y0] + fraction * (OBSERVED_DELTA_T[y0 + 1] - OBSERVED_DELTA_T[y0]);
+    return REFERENCE_DELTA_T[y0] + fraction * (REFERENCE_DELTA_T[y0 + 1] - REFERENCE_DELTA_T[y0]);
 }
 
+function evaluatePolynomial(coefficients: number[], x: number): number {
+    return coefficients.reduce((sum, coefficient, power) => sum + coefficient * x ** power, 0);
+}
+
+function fitPolynomial(points: Array<[number, number]>, degree: number): number[] {
+    const size = degree + 1;
+    const matrix: number[][] = [];
+    const vector: number[] = [];
+
+    for (let i = 0; i < size; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < size; j++) {
+            matrix[i][j] = points.reduce((sum, [x]) => sum + x ** (i + j), 0);
+        }
+        vector[i] = points.reduce((sum, [x, value]) => sum + value * x ** i, 0);
+    }
+
+    for (let i = 0; i < size; i++) {
+        let pivot = i;
+        for (let row = i + 1; row < size; row++) {
+            if (Math.abs(matrix[row][i]) > Math.abs(matrix[pivot][i])) {
+                pivot = row;
+            }
+        }
+        [matrix[i], matrix[pivot]] = [matrix[pivot], matrix[i]];
+        [vector[i], vector[pivot]] = [vector[pivot], vector[i]];
+
+        for (let row = 0; row < size; row++) {
+            if (row === i) {
+                continue;
+            }
+            const factor = matrix[row][i] / matrix[i][i];
+            for (let col = i; col < size; col++) {
+                matrix[row][col] -= factor * matrix[i][col];
+            }
+            vector[row] -= factor * vector[i];
+        }
+    }
+
+    return matrix.map((_, i) => vector[i] / matrix[i][i]);
+}
