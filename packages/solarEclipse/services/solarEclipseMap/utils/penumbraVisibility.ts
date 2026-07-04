@@ -29,7 +29,8 @@ const ZETA_SLACK = 0.05;
 // Square tiles whose corners stay this far outside the penumbra at every sample are skipped
 // wholesale; the slack covers the tile diagonal (~0.02 at 8 map pixels) plus the coarse
 // sampling dip.
-const TILE_SIZE = 8;
+export const PENUMBRA_TILE_SIZE = 8;
+const TILE_SIZE = PENUMBRA_TILE_SIZE;
 const TILE_SLACK = 0.05;
 // Border pixels are supersampled on an n x n subgrid for antialiasing.
 const SUBSAMPLES = 3;
@@ -108,6 +109,33 @@ function stateAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: number,
     return {m, zeta, l1Effective: e.l1 - zeta * ctx.tanF1};
 }
 
+// Separation only, at one exact instant: the m of stateAtTau computed by the identical
+// operations on the identical inputs, skipping the l1/zeta terms (and the intermediate
+// objects) that the golden-section comparisons below never look at, and with the
+// polynomial() accumulation loops unrolled operation for operation. Keeping the refinement
+// this lean matters — it runs for every pixel near the mask's borders.
+function separationAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: number, cosU: number): number {
+    const elements = ctx.elements;
+    const tau2 = tau * tau;
+    const tau3 = tau2 * tau;
+    const cd = elements.d;
+    const d = (0 + cd[0] * 1 + cd[1] * tau + cd[2] * tau2) * DEG;
+    const cMu = elements.mu;
+    const mu = (0 + cMu[0] * 1 + cMu[1] * tau + cMu[2] * tau2) * DEG;
+    const H = mu - ctx.ghaOffset + lonRad;
+    const sinH = Math.sin(H);
+    const cosH = Math.cos(H);
+    const pSinU = ONE_MINUS_F * sinU;
+    const xi = cosU * sinH;
+    const eta = pSinU * Math.cos(d) - cosU * cosH * Math.sin(d);
+    const cx = elements.x;
+    const x = 0 + cx[0] * 1 + cx[1] * tau + cx[2] * tau2 + cx[3] * tau3;
+    const cy = elements.y;
+    const y = 0 + cy[0] * 1 + cy[1] * tau + cy[2] * tau2 + cy[3] * tau3;
+
+    return Math.hypot(xi - x, eta - y);
+}
+
 // Golden-section refinement of the separation minimum inside the coarse bracket.
 const GOLDEN = (Math.sqrt(5) - 1) / 2;
 
@@ -122,21 +150,21 @@ function refineMaxEclipse(
     let b = ctx.taus[Math.min(ctx.taus.length - 1, bestIndex + 1)];
     let t1 = b - GOLDEN * (b - a);
     let t2 = a + GOLDEN * (b - a);
-    let m1 = stateAtTau(ctx, t1, lonRad, sinU, cosU).m;
-    let m2 = stateAtTau(ctx, t2, lonRad, sinU, cosU).m;
+    let m1 = separationAtTau(ctx, t1, lonRad, sinU, cosU);
+    let m2 = separationAtTau(ctx, t2, lonRad, sinU, cosU);
     for (let iter = 0; iter < 20; iter++) {
         if (m1 <= m2) {
             b = t2;
             t2 = t1;
             m2 = m1;
             t1 = b - GOLDEN * (b - a);
-            m1 = stateAtTau(ctx, t1, lonRad, sinU, cosU).m;
+            m1 = separationAtTau(ctx, t1, lonRad, sinU, cosU);
         } else {
             a = t1;
             t1 = t2;
             m1 = m2;
             t2 = a + GOLDEN * (b - a);
-            m2 = stateAtTau(ctx, t2, lonRad, sinU, cosU).m;
+            m2 = separationAtTau(ctx, t2, lonRad, sinU, cosU);
         }
     }
 
@@ -153,21 +181,22 @@ function isMaxEclipseVisible(
     cosU: number,
 ): boolean {
     const count = ctx.taus.length;
+    const {sinGs, cosGs, xs, ys, sinDs, cosDs} = ctx;
     const pSinU = ONE_MINUS_F * sinU;
     let bestIndex = 0;
     let bestMSq = Infinity;
     let bestZeta = 0;
     for (let i = 0; i < count; i++) {
-        const sinH = ctx.sinGs[i] * cosLon + ctx.cosGs[i] * sinLon;
-        const cosH = ctx.cosGs[i] * cosLon - ctx.sinGs[i] * sinLon;
+        const sinH = sinGs[i] * cosLon + cosGs[i] * sinLon;
+        const cosH = cosGs[i] * cosLon - sinGs[i] * sinLon;
         const cosUcosH = cosU * cosH;
-        const xi = cosU * sinH - ctx.xs[i];
-        const eta = pSinU * ctx.cosDs[i] - cosUcosH * ctx.sinDs[i] - ctx.ys[i];
+        const xi = cosU * sinH - xs[i];
+        const eta = pSinU * cosDs[i] - cosUcosH * sinDs[i] - ys[i];
         const mSq = xi * xi + eta * eta;
         if (mSq < bestMSq) {
             bestMSq = mSq;
             bestIndex = i;
-            bestZeta = pSinU * ctx.sinDs[i] + cosUcosH * ctx.cosDs[i];
+            bestZeta = pSinU * sinDs[i] + cosUcosH * cosDs[i];
         }
     }
 
@@ -193,13 +222,37 @@ function isMaxEclipseVisibleAt(ctx: ScanContext, latDeg: number, lonDeg: number)
 }
 
 // Alpha mask (0..255 per pixel, row-major) of the visible penumbral eclipse on the
-// equirectangular map, antialiased along its boundary by subpixel supersampling.
+// equirectangular map, antialiased along its boundary by subpixel supersampling. The two
+// passes below are split into row-band functions so that a worker pool can share the work
+// (see penumbraAlphaPool); each pass runs the exact per-pixel arithmetic of a single
+// full-image sweep, so banded evaluation is bit-identical to this single-threaded one.
 export default function calculatePenumbraVisibilityAlpha(
     elements: BesselianElements,
     width: number,
     height: number,
     z0: number,
 ): Uint8ClampedArray {
+    const inside = new Uint8Array(width * height);
+    computePenumbraInsideBand(elements, width, height, z0, 0, height, inside);
+    const alpha = new Uint8ClampedArray(width * height);
+    computePenumbraAlphaBand(elements, width, height, z0, 0, height, inside, alpha);
+
+    return alpha;
+}
+
+// First pass, rows [yStart, yEnd) (multiples of the tile size, or the map edges, so the
+// tile-skip decisions match the full-image pass tile for tile): mark the pixels whose
+// maximum eclipse is visible in the full-size `inside` mask. Tiles are decided
+// independently of each other, so any tile-aligned banding writes identical values.
+export function computePenumbraInsideBand(
+    elements: BesselianElements,
+    width: number,
+    height: number,
+    z0: number,
+    yStart: number,
+    yEnd: number,
+    inside: Uint8Array,
+): void {
     const ctx = buildScanContext(elements, z0);
     const count = ctx.taus.length;
 
@@ -214,7 +267,7 @@ export default function calculatePenumbraVisibilityAlpha(
     }
     const sinUs = new Float64Array(height);
     const cosUs = new Float64Array(height);
-    for (let py = 0; py < height; py++) {
+    for (let py = yStart; py < yEnd; py++) {
         const {sinU, cosU} = parametricLatitude((90 - ((py + 0.5) / height) * 180) * DEG);
         sinUs[py] = sinU;
         cosUs[py] = cosU;
@@ -223,17 +276,19 @@ export default function calculatePenumbraVisibilityAlpha(
     // Distance of a pixel outside the penumbra, minimized over the coarse instants; used to
     // discard whole tiles that stay clear of the shadow throughout the eclipse.
     const clearance = (px: number, py: number): number => {
+        const {sinGs, cosGs, xs, ys, sinDs, cosDs, l1s} = ctx;
+        const absTanF1 = Math.abs(ctx.tanF1);
         const sinLon = sinLons[px];
         const cosLon = cosLons[px];
         const pSinU = ONE_MINUS_F * sinUs[py];
         const cosU = cosUs[py];
         let best = Infinity;
         for (let i = 0; i < count; i++) {
-            const sinH = ctx.sinGs[i] * cosLon + ctx.cosGs[i] * sinLon;
-            const cosH = ctx.cosGs[i] * cosLon - ctx.sinGs[i] * sinLon;
-            const xi = cosU * sinH - ctx.xs[i];
-            const eta = pSinU * ctx.cosDs[i] - cosU * cosH * ctx.sinDs[i] - ctx.ys[i];
-            const gap = Math.sqrt(xi * xi + eta * eta) - ctx.l1s[i] - Math.abs(ctx.tanF1);
+            const sinH = sinGs[i] * cosLon + cosGs[i] * sinLon;
+            const cosH = cosGs[i] * cosLon - sinGs[i] * sinLon;
+            const xi = cosU * sinH - xs[i];
+            const eta = pSinU * cosDs[i] - cosU * cosH * sinDs[i] - ys[i];
+            const gap = Math.sqrt(xi * xi + eta * eta) - l1s[i] - absTanF1;
             if (gap < best) {
                 best = gap;
             }
@@ -242,20 +297,19 @@ export default function calculatePenumbraVisibilityAlpha(
         return best;
     };
 
-    const inside = new Uint8Array(width * height);
-    for (let tileY = 0; tileY < height; tileY += TILE_SIZE) {
-        const yEnd = Math.min(height - 1, tileY + TILE_SIZE - 1);
+    for (let tileY = yStart; tileY < yEnd; tileY += TILE_SIZE) {
+        const tileYEnd = Math.min(height - 1, tileY + TILE_SIZE - 1);
         for (let tileX = 0; tileX < width; tileX += TILE_SIZE) {
             const xEnd = Math.min(width - 1, tileX + TILE_SIZE - 1);
             if (
                 clearance(tileX, tileY) > TILE_SLACK
                 && clearance(xEnd, tileY) > TILE_SLACK
-                && clearance(tileX, yEnd) > TILE_SLACK
-                && clearance(xEnd, yEnd) > TILE_SLACK
+                && clearance(tileX, tileYEnd) > TILE_SLACK
+                && clearance(xEnd, tileYEnd) > TILE_SLACK
             ) {
                 continue;
             }
-            for (let py = tileY; py <= yEnd; py++) {
+            for (let py = tileY; py <= tileYEnd; py++) {
                 const rowOffset = py * width;
                 for (let px = tileX; px <= xEnd; px++) {
                     if (isMaxEclipseVisible(ctx, lonRads[px], sinLons[px], cosLons[px], sinUs[py], cosUs[py])) {
@@ -265,11 +319,26 @@ export default function calculatePenumbraVisibilityAlpha(
             }
         }
     }
+}
 
-    const alpha = new Uint8ClampedArray(width * height);
+// Second pass, rows [yStart, yEnd): resolve the completed full-size `inside` mask into the
+// full-size `alpha` mask, supersampling the border pixels. Each pixel reads only its own
+// and its direct neighbours' `inside` values, so any row banding whose neighbouring rows
+// are complete writes identical values.
+export function computePenumbraAlphaBand(
+    elements: BesselianElements,
+    width: number,
+    height: number,
+    z0: number,
+    yStart: number,
+    yEnd: number,
+    inside: Uint8Array,
+    alpha: Uint8ClampedArray,
+): void {
+    const ctx = buildScanContext(elements, z0);
     const lonStep = 360 / width;
     const latStep = 180 / height;
-    for (let py = 0; py < height; py++) {
+    for (let py = yStart; py < yEnd; py++) {
         const rowOffset = py * width;
         for (let px = 0; px < width; px++) {
             const value = inside[rowOffset + px];
@@ -295,6 +364,4 @@ export default function calculatePenumbraVisibilityAlpha(
             alpha[rowOffset + px] = Math.round((covered / (SUBSAMPLES * SUBSAMPLES)) * 255);
         }
     }
-
-    return alpha;
 }

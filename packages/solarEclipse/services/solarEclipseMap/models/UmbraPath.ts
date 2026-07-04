@@ -13,6 +13,10 @@ export default class UmbraPath extends SolarEclipseMapLayer {
         return new UmbraPath(date);
     }
 
+    public prepare(paths: EclipsePaths): Promise<void> {
+        return paths.prefetchGeometry('umbralRegion');
+    }
+
     protected renderLayer(
         context: SKRSContext2D,
         canvas: Canvas,

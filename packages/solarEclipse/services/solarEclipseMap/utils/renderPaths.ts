@@ -12,31 +12,39 @@ function resolveStyle(style?: EclipseStyle): Required<EclipseStyle> {
 // Sun above the horizon of the map's settings (see penumbraVisibility). The
 // per-pixel mask is drawn through offscreen canvases: a uniform fill in the style's colour
 // is clipped to the mask's alpha with destination-in. (source-in would be the direct route,
-// but @napi-rs/canvas applies the fill style's alpha twice under it.)
+// but @napi-rs/canvas applies the fill style's alpha twice under it.) The offscreen canvas
+// is built separately from the final blit so a prepared layer can composite it while other
+// masks are still being computed (see PenumbraPath).
+export function buildPenumbraFill(width: number, height: number, paths: EclipsePaths, style?: EclipseStyle): Canvas {
+    const fillColor = resolveStyle(style).fillColor;
+    const alpha = paths.penumbraVisibilityAlpha(width, height);
+    const mask = createCanvas(width, height);
+    const maskContext = mask.getContext('2d');
+    const image = maskContext.createImageData(width, height);
+    for (let i = 0; i < alpha.length; i++) {
+        image.data[i * 4 + 3] = alpha[i];
+    }
+    maskContext.putImageData(image, 0, 0);
+
+    const fill = createCanvas(width, height);
+    const fillContext = fill.getContext('2d');
+    fillContext.fillStyle = fillColor;
+    fillContext.fillRect(0, 0, width, height);
+    fillContext.globalCompositeOperation = 'destination-in';
+    fillContext.drawImage(mask, 0, 0);
+
+    return fill;
+}
+
 export function renderPenumbraPath(
     context: SKRSContext2D,
     canvas: Canvas,
     _elements: BesselianElements,
     paths: EclipsePaths,
     style?: EclipseStyle,
+    preparedFill?: Canvas,
 ): void {
-    const fillColor = resolveStyle(style).fillColor;
-    const alpha = paths.penumbraVisibilityAlpha(canvas.width, canvas.height);
-    const mask = createCanvas(canvas.width, canvas.height);
-    const maskContext = mask.getContext('2d');
-    const image = maskContext.createImageData(canvas.width, canvas.height);
-    for (let i = 0; i < alpha.length; i++) {
-        image.data[i * 4 + 3] = alpha[i];
-    }
-    maskContext.putImageData(image, 0, 0);
-
-    const fill = createCanvas(canvas.width, canvas.height);
-    const fillContext = fill.getContext('2d');
-    fillContext.fillStyle = fillColor;
-    fillContext.fillRect(0, 0, canvas.width, canvas.height);
-    fillContext.globalCompositeOperation = 'destination-in';
-    fillContext.drawImage(mask, 0, 0);
-    context.drawImage(fill, 0, 0);
+    context.drawImage(preparedFill ?? buildPenumbraFill(canvas.width, canvas.height, paths, style), 0, 0);
 }
 
 export function renderUmbraPath(

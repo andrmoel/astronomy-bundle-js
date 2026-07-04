@@ -13,6 +13,10 @@ export default class SunriseBoundary extends SolarEclipseMapLayer {
         return new SunriseBoundary(date);
     }
 
+    public prepare(paths: EclipsePaths): Promise<void> {
+        return paths.prefetchGeometry('sunriseBoundary');
+    }
+
     protected renderLayer(
         context: SKRSContext2D,
         canvas: Canvas,

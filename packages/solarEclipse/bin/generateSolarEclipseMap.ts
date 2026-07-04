@@ -1,16 +1,14 @@
-import MaxEclipseSunrise from '@package/solarEclipse/services/solarEclipseMap/models/MaxEclipseSunrise';
-import MaxEclipseSunset from '@package/solarEclipse/services/solarEclipseMap/models/MaxEclipseSunset';
+import SunriseBoundary from '@package/solarEclipse/services/solarEclipseMap/models/SunriseBoundary';
+import SunsetBoundary from '@package/solarEclipse/services/solarEclipseMap/models/SunsetBoundary';
 import BaseMap from '../services/solarEclipseMap/models/Map';
 import PenumbraPath from '../services/solarEclipseMap/models/PenumbraPath';
 import SolarEclipseMap from '../services/solarEclipseMap/models/SolarEclipseMap';
 import UmbraPath from '../services/solarEclipseMap/models/UmbraPath';
 import type {EclipseStyle} from '../services/solarEclipseMap/types/SolarEclipsePathTypes';
-import SunriseBoundary from '@package/solarEclipse/services/solarEclipseMap/models/SunriseBoundary';
-import SunsetBoundary from '@package/solarEclipse/services/solarEclipseMap/models/SunsetBoundary';
 
 const DEFAULT_DATE_1 = '2026-08-12';
 const DEFAULT_DATE_2 = '1988-03-18';
-const DEFAULT_DATE_3 = '2021-12-04';
+const DEFAULT_DATE_3 = '2019-07-02';
 const DEFAULT_DATE_4 = '2018-08-11';
 
 const DEFAULT_OUTPUT = 'packages/solarEclipse/eclipse-map.png';
@@ -27,7 +25,7 @@ const UMBRA_STYLE: EclipseStyle = {
 // rise/set loop.
 const MAX_ECLIPSE_STYLE: EclipseStyle = {
     borderColor: 'rgba(0, 176, 0, 0.9)',
-    borderWeight: 3,
+    borderWeight: 0,
 };
 
 function printUsage(): void {

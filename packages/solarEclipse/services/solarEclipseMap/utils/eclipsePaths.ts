@@ -11,6 +11,7 @@ import {
     calculateSunsetBoundary,
 } from './riseSetBoundary';
 import {calculateShadowRegionContours} from './shadowOutline';
+import {calculateGeometryParallel, calculatePenumbraVisibilityAlphaParallel, type EclipseGeometry} from './workerPool';
 
 // Each path is computed lazily on first access and memoized. A layer therefore never
 // triggers the umbra / central-line / rise-set math it does not draw, so rendering a map
@@ -67,6 +68,43 @@ export default function calculateEclipsePaths(
             }
 
             return penumbraAlpha.alpha;
+        },
+        // Same mask, but computed on the worker pool; the memoized result is then served
+        // synchronously by penumbraVisibilityAlpha above.
+        async prefetchPenumbraVisibilityAlpha(width: number, height: number): Promise<void> {
+            if (penumbraAlpha === undefined || penumbraAlpha.width !== width || penumbraAlpha.height !== height) {
+                const alpha = await calculatePenumbraVisibilityAlphaParallel(elements, width, height, z0);
+                penumbraAlpha = {width, height, alpha};
+            }
+        },
+        // Same vector path as the getter of the same name, but computed on the worker pool
+        // (or, without one, on the main thread) and stored in the same memo.
+        async prefetchGeometry(geometry: EclipseGeometry): Promise<void> {
+            const computed = await calculateGeometryParallel(geometry, elements, z0);
+            switch (geometry) {
+                case 'centralLine':
+                    centralLine ??= (computed as Array<LatLon> | null) ?? calculateCentralLine(elements, z0);
+                    break;
+                case 'umbralRegion':
+                    umbralRegion ??=
+                        (computed as Array<Array<LatLon>> | null)
+                        ?? calculateShadowRegionContours(elements, true, UMBRA_REGION_STEP_HOURS, z0);
+                    break;
+                case 'sunriseBoundary':
+                    sunriseBoundary ??= (computed as RiseSetBoundary | null) ?? calculateSunriseBoundary(elements, z0);
+                    break;
+                case 'sunsetBoundary':
+                    sunsetBoundary ??= (computed as RiseSetBoundary | null) ?? calculateSunsetBoundary(elements, z0);
+                    break;
+                case 'maxEclipseSunrise':
+                    maxEclipseSunrise ??=
+                        (computed as Array<LatLon> | null) ?? calculateMaxEclipseAtSunrise(elements, z0);
+                    break;
+                case 'maxEclipseSunset':
+                    maxEclipseSunset ??=
+                        (computed as Array<LatLon> | null) ?? calculateMaxEclipseAtSunset(elements, z0);
+                    break;
+            }
         },
     };
 }

@@ -15,9 +15,18 @@ export default abstract class SolarEclipseMapLayer {
         return this;
     }
 
+    protected getStyle(): EclipseStyle | undefined {
+        return this.style;
+    }
+
     public getElements(): BesselianElements {
         return Catalogue.getBesselianElements(this.date);
     }
+
+    // Computes the paths this layer will draw, ahead of the synchronous render pass.
+    // Layers whose paths are worker-pool-backed return a promise; the others warm their
+    // memos on the main thread while the pool works (see drawEclipseMap).
+    public abstract prepare(paths: EclipsePaths, width: number, height: number): Promise<void> | void;
 
     public render(context: SKRSContext2D, canvas: Canvas, elements: BesselianElements, paths: EclipsePaths): void {
         this.renderLayer(context, canvas, elements, paths, this.style);

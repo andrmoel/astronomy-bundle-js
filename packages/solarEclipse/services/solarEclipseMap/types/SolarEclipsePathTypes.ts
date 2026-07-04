@@ -1,4 +1,5 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import type {EclipseGeometry} from '../utils/workerPool';
 
 export type RiseSetBoundary = Array<LatLon>;
 
@@ -19,6 +20,8 @@ export interface EclipsePaths {
     maxEclipseSunset: Array<LatLon>;
     maxEclipseSunrise: Array<LatLon>;
     penumbraVisibilityAlpha(width: number, height: number): Uint8ClampedArray;
+    prefetchPenumbraVisibilityAlpha(width: number, height: number): Promise<void>;
+    prefetchGeometry(geometry: EclipseGeometry): Promise<void>;
 }
 
 export interface EclipseStyle {

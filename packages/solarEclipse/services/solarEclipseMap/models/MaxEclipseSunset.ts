@@ -13,6 +13,10 @@ export default class MaxEclipseSunset extends SolarEclipseMapLayer {
         return new MaxEclipseSunset(date);
     }
 
+    public prepare(paths: EclipsePaths): Promise<void> {
+        return paths.prefetchGeometry('maxEclipseSunset');
+    }
+
     protected renderLayer(
         context: SKRSContext2D,
         canvas: Canvas,

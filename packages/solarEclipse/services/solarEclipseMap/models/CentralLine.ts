@@ -13,6 +13,10 @@ export default class CentralLine extends SolarEclipseMapLayer {
         return new CentralLine(date);
     }
 
+    public prepare(paths: EclipsePaths): Promise<void> {
+        return paths.prefetchGeometry('centralLine');
+    }
+
     protected renderLayer(
         context: SKRSContext2D,
         canvas: Canvas,
