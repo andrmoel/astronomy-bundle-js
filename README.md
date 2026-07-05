@@ -12,6 +12,7 @@ A TypeScript library for astronomical calculations including the position of the
 - [`@astronomy-bundle/sun`](https://www.npmjs.com/package/@astronomy-bundle/sun)
 - [`@astronomy-bundle/planets`](https://www.npmjs.com/package/@astronomy-bundle/planets)
 - [`@astronomy-bundle/solar-eclipse`](https://www.npmjs.com/package/@astronomy-bundle/solar-eclipse)
+- [`@astronomy-bundle/lunar-limb-profile`](https://www.npmjs.com/package/@astronomy-bundle/lunar-limb-profile)
 
 ## API Reference
 
@@ -24,3 +25,4 @@ A TypeScript library for astronomical calculations including the position of the
 | **Sun** | The `Sun` object — geocentric coordinates, apparent and observed topocentric coordinates, rise, transit and set times, angular diameter, light time, and apparent magnitude. | [README](packages/sun/README.md) |
 | **Planets** | The `Mercury`, `Venus`, `Mars`, `Jupiter`, `Saturn`, `Uranus`, and `Neptune` objects — heliocentric, geocentric, apparent, and topocentric planetary coordinates, rise, transit and set times, plus distance, light time, phase, elongation, and magnitude. | [README](packages/planets/README.md) |
 | **Solar Eclipse** | Solar eclipse calculations from Besselian elements — global circumstances (eclipse type, time and location of greatest eclipse, magnitude, obscuration, Moon/Sun ratio, and the central line path) and local circumstances for any observer (local type, contact times, magnitude, obscuration, duration, and the Sun's position at a given moment). Ships with built-in catalogues covering 1900–2100 and −1999–3000. | [README](packages/solarEclipse/README.md) |
+| **Lunar Limb Profile** | The `LunarLimbProfile` object — height of the Moon's visible limb silhouette from LOLA/LDEM terrain data, evaluated in perspective from the observer's distance at a celestial position angle. Useful for occultations, grazing occultations, and Baily's beads. | [README](packages/lunarLimbProfile/README.md) |

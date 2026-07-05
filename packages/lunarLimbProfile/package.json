@@ -1,0 +1,5 @@
+{
+    "name": "@astronomy-bundle/lunar-limb-profile",
+    "description": "Lunar limb profile from LOLA/LDEM terrain for the astronomy bundle",
+    "private": true
+}
