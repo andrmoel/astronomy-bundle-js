@@ -2,6 +2,7 @@
 export * from '@app/constants/earth';
 export * from '@app/constants/epoch';
 export * from '@app/constants/moon';
+export * from '@app/constants/sun';
 export * from '@app/constants/units';
 // Enums
 export * from '@app/enums/direction';
