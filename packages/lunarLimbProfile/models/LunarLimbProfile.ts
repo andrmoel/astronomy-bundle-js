@@ -19,7 +19,7 @@ export default class LunarLimbProfile implements LunarLimbProfile {
         return this.geometry.referenceRadiusM / 1000;
     }
 
-    public heightKm(
+    public getLimbHeightKm(
         positionAngleDeg: number,
         libration: LunarLibration,
         axisPositionAngleDeg: number,

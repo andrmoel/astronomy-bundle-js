@@ -17,7 +17,7 @@ it('returns finite limb heights of lunar-relief magnitude across position angles
     const libration = {longitude: 2.0, latitude: -0.1};
 
     for (let positionAngleDeg = 0; positionAngleDeg < 360; positionAngleDeg += 5) {
-        const height = profile.heightKm(positionAngleDeg, libration, 340, 380000);
+        const height = profile.getLimbHeightKm(positionAngleDeg, libration, 340, 380000);
         expect(Number.isFinite(height)).toBe(true);
         expect(Math.abs(height)).toBeLessThan(10);
     }
@@ -27,5 +27,5 @@ it('throws when the image does not match the label geometry', () => {
     // Feed the (much smaller) label bytes as the raster so it fails the size check.
     const profile = LunarLimbProfile.create(readFileSync(join(__dirname, '../resources/ldem_16.lbl')), label);
 
-    expect(() => profile.heightKm(0, {longitude: 0, latitude: 0}, 0, 380000)).toThrow(/size mismatch/);
+    expect(() => profile.getLimbHeightKm(0, {longitude: 0, latitude: 0}, 0, 380000)).toThrow(/size mismatch/);
 });

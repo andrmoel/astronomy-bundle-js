@@ -55,7 +55,10 @@ const profile = LunarLimbProfile.create(imgData, label);
 import {readFileSync} from 'node:fs';
 import {LunarLimbProfile} from '@astronomy-bundle/lunar-limb-profile';
 
-const profile = LunarLimbProfile.create(readFileSync('ldem_16.img'), readFileSync('ldem_16.lbl', 'utf8'));
+const imgData = readFileSync('ldem_16.img');
+const label = readFileSync('ldem_16.lbl', 'utf8');
+
+const profile = LunarLimbProfile.create(imgData, label);
 
 const referenceRadiusKm = profile.getReferenceRadiusKm();
 ```
@@ -67,7 +70,7 @@ Reference radius: *1737.4 km*
 
 ### Limb height at a position angle
 
-**Description:** `heightKm(positionAngleDeg, libration, axisPositionAngleDeg, observerDistanceKm)` returns the height of the visible limb silhouette in kilometres — the maximum apparent terrain radius along the line of sight, in perspective from the given observer distance — above the apparent radius of the LDEM reference sphere, at the given celestial position angle.
+**Description:** `getLimbHeightKm(positionAngleDeg, libration, axisPositionAngleDeg, observerDistanceKm)` returns the height of the visible limb silhouette in kilometres — the maximum apparent terrain radius along the line of sight, in perspective from the given observer distance — above the apparent radius of the LDEM reference sphere, at the given celestial position angle.
 
 - `positionAngleDeg` — celestial position angle of the limb point, measured eastward from the north point of the disk.
 - `libration` — the Moon's optical libration as `{longitude, latitude}` in degrees.
@@ -80,16 +83,19 @@ Reference radius: *1737.4 km*
 import {readFileSync} from 'node:fs';
 import {LunarLimbProfile} from '@astronomy-bundle/lunar-limb-profile';
 
-const profile = LunarLimbProfile.create(readFileSync('ldem_16.img'), readFileSync('ldem_16.lbl', 'utf8'));
+const imgData = readFileSync('ldem_16.img');
+const label = readFileSync('ldem_16.lbl', 'utf8');
+
+const profile = LunarLimbProfile.create(imgData, label);
 
 const libration = {longitude: 2.0, latitude: -0.1};
 const axisPositionAngleDeg = 340;
 const observerDistanceKm = 380000;
 
-const north = profile.heightKm(0, libration, axisPositionAngleDeg, observerDistanceKm);
-const east  = profile.heightKm(90, libration, axisPositionAngleDeg, observerDistanceKm);
-const south = profile.heightKm(180, libration, axisPositionAngleDeg, observerDistanceKm);
-const west  = profile.heightKm(270, libration, axisPositionAngleDeg, observerDistanceKm);
+const north = profile.getLimbHeightKm(0, libration, axisPositionAngleDeg, observerDistanceKm);
+const east  = profile.getLimbHeightKm(90, libration, axisPositionAngleDeg, observerDistanceKm);
+const south = profile.getLimbHeightKm(180, libration, axisPositionAngleDeg, observerDistanceKm);
+const west  = profile.getLimbHeightKm(270, libration, axisPositionAngleDeg, observerDistanceKm);
 ```
 
 The result of the calculation should be:\
