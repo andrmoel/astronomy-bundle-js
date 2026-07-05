@@ -399,8 +399,12 @@ it('tests getTopocentricLibrationMagnitude', () => {
     expect(liberation).toBeCloseTo(4.7634, 5);
 });
 
-it('tests getPositionAngleOfAxis', () => {
-    expect(moon.getPositionAngleOfAxis()).toBeCloseTo(15.08413, 5);
+it('tests getGeocentricPositionAngleOfAxis', () => {
+    expect(moon.getGeocentricPositionAngleOfAxis()).toBeCloseTo(15.08413, 5);
+});
+
+it('tests getTopocentricPositionAngleOfAxis', () => {
+    expect(moon.getTopocentricPositionAngleOfAxis(location)).toBeCloseTo(15.25807, 5);
 });
 
 // it('tests GoldenHandle', () => {

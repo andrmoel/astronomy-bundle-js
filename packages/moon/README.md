@@ -522,19 +522,25 @@ Topocentric libration magnitude: *4.76340°*
 
 ### Position angle of the axis
 
-**Description:** `getPositionAngleOfAxis()` returns the position angle of the Moon's axis of rotation in degrees, measured eastward from the north point of the disk. It indicates the direction of the Moon's north pole as projected onto the sky.
+**Description:** These methods return the position angle of the Moon's axis of rotation in degrees, measured eastward from the north point of the disk. It indicates the direction of the Moon's north pole as projected onto the sky.
+
+- `getPositionAngleOfAxis()` returns the position angle as seen from Earth's center.
+- `getTopocentricPositionAngleOfAxis(location)` returns the position angle as seen from a specific location on Earth, including parallax effects.
 
 **Example**: Get the position angle of the axis for 12 April 1992 at 00:00 UTC
 
 ```javascript
-import {TimeOfInterest} from '@astronomy-bundle/core';
+import {Location, TimeOfInterest} from '@astronomy-bundle/core';
 import {Moon} from '@astronomy-bundle/moon';
 
 const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const location = Location.create(52.519, -122.4108);
 const moon = Moon.create(toi);
 
 const positionAngleOfAxis = moon.getPositionAngleOfAxis();
+const topocentricPositionAngleOfAxis = moon.getTopocentricPositionAngleOfAxis(location);
 ```
 
 The result of the calculation should be:\
-Position angle of the axis: *15.08413°*
+Position angle of the axis: *15.08413°*\
+Topocentric position angle of the axis: *15.25807°*

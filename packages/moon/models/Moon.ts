@@ -255,8 +255,14 @@ export default class Moon extends AstronomicalObject {
         return getSelenographicMagnitude(lon, lat);
     }
 
-    public getPositionAngleOfAxis(): number {
+    public getGeocentricPositionAngleOfAxis(): number {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
+
+        return getAxisPositionAngle(coords, this.T);
+    }
+
+    public getTopocentricPositionAngleOfAxis(location: Location): number {
+        const coords = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
         return getAxisPositionAngle(coords, this.T);
     }
