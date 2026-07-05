@@ -1,3 +1,4 @@
+import {SUN_DIAMETER_KM} from '@app/constants/sun';
 import type {EclipticSphericalCoordinates, RectangularCoordinates} from '@app/types/CoordinateTypes';
 import type {Location} from '@app/types/LocationTypes';
 import {correctEffectOfAberration, correctEffectOfNutation} from '@app/utils/apparentPositionCorrections';
@@ -5,7 +6,6 @@ import {earthEclipticSpherical2sunEclipticSpherical, spherical2rectangular} from
 import {getAngularDiameter} from '@app/utils/observation';
 import AstronomicalObject from '@package/core/models/models/AstronomicalObject';
 import Earth from '@package/earth/models/Earth';
-import {SUN_DIAMETER_KM} from '@package/sun/constants/diameters';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 
 export default class Sun extends AstronomicalObject {
