@@ -6,7 +6,7 @@ import {normalizeAngle} from '@app/utils/angle';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import type {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from './besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from './besselianElements';
 
 export function getLocalEclipseCircumstances(
     elements: BesselianElements,
@@ -14,7 +14,7 @@ export function getLocalEclipseCircumstances(
     tau: number,
 ): LocalEclipseCircumstances {
     const e = getBesselianElementsAtTime(elements, tau);
-    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
     const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
 
     const latRad = location.lat * DEG;

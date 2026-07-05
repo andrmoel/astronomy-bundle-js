@@ -121,19 +121,19 @@ describe('getMagnitude', () => {
     it('returns magnitude if eclipse has not started', () => {
         const result = circumstancesNoEclipse.getMagnitude();
 
-        expect(result).toBeCloseTo(-0.053991, 6);
+        expect(result).toBeCloseTo(-0.054002, 6);
     });
 
     it('returns magnitude if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getMagnitude();
 
-        expect(result).toBeCloseTo(0.737326, 6);
+        expect(result).toBeCloseTo(0.737315, 6);
     });
 
     it('returns magnitude if eclipse is in total phase', () => {
         const result = circumstancesTotal.getMagnitude();
 
-        expect(result).toBeCloseTo(1.011528, 6);
+        expect(result).toBeCloseTo(1.011517, 6);
     });
 });
 
@@ -147,7 +147,7 @@ describe('getObscuration', () => {
     it('returns obscuration if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getObscuration();
 
-        expect(result).toBeCloseTo(0.684328, 6);
+        expect(result).toBeCloseTo(0.684315, 6);
     });
 
     it('returns obscuration if eclipse is in total phase', () => {
@@ -161,7 +161,7 @@ describe('getTopocentricHorizontalCoordinates', () => {
     it('returns the geometric Sun horizontal coordinates in degrees at maximum eclipse', () => {
         const result = circumstancesTotal.getTopocentricHorizontalCoordinates();
 
-        expect(result.azimuth).toBeCloseTo(255.664318, 6);
+        expect(result.azimuth).toBeCloseTo(255.664319, 6);
         expect(result.altitude).toBeCloseTo(76.861319, 6);
         expect(result.radiusVector).toBe(0);
     });
@@ -171,7 +171,7 @@ describe('getApparentTopocentricHorizontalCoordinates', () => {
     it('returns the refraction-corrected Sun horizontal coordinates in degrees at maximum eclipse', () => {
         const result = circumstancesTotal.getApparentTopocentricHorizontalCoordinates();
 
-        expect(result.azimuth).toBeCloseTo(255.664318, 6);
+        expect(result.azimuth).toBeCloseTo(255.664319, 6);
         expect(result.altitude).toBeCloseTo(76.865248, 6);
         expect(result.radiusVector).toBe(0);
     });

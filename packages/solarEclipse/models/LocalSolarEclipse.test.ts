@@ -67,11 +67,11 @@ it('tests getType', () => {
 it('tests getContactTaus', () => {
     const result = localSolarEclipse.getContactTaus();
 
-    expect(result?.c1).toBeCloseTo(-0.587733, 6);
-    expect(result?.c2).toBeCloseTo(1.161358, 6);
-    expect(result?.max).toBeCloseTo(1.185232, 6);
-    expect(result?.c3).toBeCloseTo(1.209146, 6);
-    expect(result?.c4).toBeCloseTo(2.730092, 6);
+    expect(result?.c1).toBeCloseTo(-0.587742, 6);
+    expect(result?.c2).toBeCloseTo(1.161349, 6);
+    expect(result?.max).toBeCloseTo(1.185224, 6);
+    expect(result?.c3).toBeCloseTo(1.20914, 6);
+    expect(result?.c4).toBeCloseTo(2.730088, 6);
 });
 
 it('tests getContactTimes', () => {
@@ -87,7 +87,7 @@ it('tests getContactTimes', () => {
 it('tests getMaxMagnitude', () => {
     const result = localSolarEclipse.getMaxMagnitude();
 
-    expect(result).toBeCloseTo(0.980731, 6);
+    expect(result).toBeCloseTo(0.980734, 6);
 });
 
 it('tests getMaxMoonSunRatio', () => {
@@ -122,7 +122,7 @@ describe('visibility above the horizon', () => {
         const contactTimes = localEclipse.getContactTimes();
 
         expect(localEclipse.getType()).toBe(LocalSolarEclipseType.Partial);
-        expect(localEclipse.getDuration()).toBeCloseTo(3057.94, 2);
+        expect(localEclipse.getDuration()).toBeCloseTo(3058.0, 2);
         expect(contactTimes?.c1.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 21, min: 33, sec: 38});
         expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 4});
         expect(contactTimes?.sunset).toBeNull();

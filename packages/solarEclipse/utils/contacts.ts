@@ -9,7 +9,7 @@ import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {EclipseContacts} from '../types/EclipseContactTypes';
-import {getBesselianElementsAtTime, tau2julianDay} from './besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT, tau2julianDay} from './besselianElements';
 
 const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
@@ -245,7 +245,7 @@ function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocent
     const dMuDt = polynomialDerivative(elements.mu, tau) * DEG;
     const dDDt = polynomialDerivative(elements.d, tau) * DEG;
 
-    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
     const hourAngle = e.mu + (obs.lon - deltaTCorrection) * DEG;
     const sinH = Math.sin(hourAngle);
     const cosH = Math.cos(hourAngle);

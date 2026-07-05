@@ -151,7 +151,7 @@ const {lat, lon} = eclipse.getLocationOfGreatestEclipse();
 
 The result of the calculation should be:\
 lat: *-17.388965*\
-lon: *-108.998649*
+lon: *-108.999081*
 
 ---
 
@@ -299,11 +299,11 @@ const {c1, c2, max, c3, c4} = contacts;
 ```
 
 The result of the calculation should be:\
-c1: *-0.587733*\
-c2: *1.161358*\
-max: *1.185232*\
-c3: *1.209146*\
-c4: *2.730092*
+c1: *-0.587742*\
+c2: *1.161349*\
+max: *1.185224*\
+c3: *1.20914*\
+c4: *2.730088*
 
 ---
 
@@ -338,7 +338,7 @@ c4: *2016-09-01 11:42:39*
 const magnitude = localEclipse.getMaxMagnitude();
 ```
 
-The result of the calculation should be: *0.980731*
+The result of the calculation should be: *0.980734*
 
 ---
 
@@ -495,8 +495,8 @@ const magnitudeTotal   = circumstancesTotal.getMagnitude();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.737326*\
-During total phase: *1.011528*
+During partial phase: *0.737315*\
+During total phase: *1.011517*
 
 ---
 
@@ -512,7 +512,7 @@ const obscurationTotal   = circumstancesTotal.getObscuration();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.684328*\
+During partial phase: *0.684315*\
 During total phase: *1*
 
 ---
@@ -528,7 +528,7 @@ const horizontal = circumstancesTotal.getTopocentricHorizontalCoordinates();
 ```
 
 The result of the calculation should be:\
-Azimuth: *255.664318°*\
+Azimuth: *255.664319°*\
 Geometric altitude: *76.861319°*
 
 ---
@@ -544,5 +544,5 @@ const apparentHorizontal = circumstancesTotal.getApparentTopocentricHorizontalCo
 ```
 
 The result of the calculation should be:\
-Azimuth: *255.664318°*\
+Azimuth: *255.664319°*\
 Apparent altitude (with refraction): *76.865248°*

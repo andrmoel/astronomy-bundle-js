@@ -41,7 +41,7 @@ describe('getDuration', () => {
     it('returns the partial-phase duration in seconds for a central-line observer', () => {
         const result = getDuration(elements, centralLineLocation);
 
-        expect(result).toBeCloseTo(10564.88, 2);
+        expect(result).toBeCloseTo(10564.91, 2);
     });
 
     it('returns the partial-phase duration in seconds for a partial-only observer', () => {
@@ -53,13 +53,13 @@ describe('getDuration', () => {
     it('counts only the time after sunrise for an observer whose eclipse begins at sunrise', () => {
         const result = getDuration(elements, partialSunriseLocation);
 
-        expect(result).toBeCloseTo(3057.94, 2);
+        expect(result).toBeCloseTo(3058.0, 2);
     });
 
     it('counts only the time before sunset for an observer whose eclipse ends at sunset', () => {
         const result = getDuration(elements, partialSunsetLocation);
 
-        expect(result).toBeCloseTo(2545.01, 2);
+        expect(result).toBeCloseTo(2544.96, 2);
     });
 
     it('returns 0 when the eclipse stays below the horizon at the observer location', () => {
@@ -79,7 +79,7 @@ describe('getCentralDuration', () => {
     it('returns the annularity duration in seconds for a central-line observer', () => {
         const result = getCentralDuration(elements, centralLineLocation);
 
-        expect(result).toBeCloseTo(160.77, 2);
+        expect(result).toBeCloseTo(160.81, 2);
     });
 
     it('returns 0 for a partial-only observer (no c2/c3)', () => {
