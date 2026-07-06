@@ -2,7 +2,7 @@ import type {Location} from '@app/types/LocationTypes';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getCentralDuration, getDuration} from './duration';
 
-// 2021-12-04 total solar eclipse
+// ASE 2013-05-10
 const elements: BesselianElements = {
     t0Jde: 2456422.51829,
     t0Hours: 0,
@@ -19,41 +19,56 @@ const elements: BesselianElements = {
     tanF2: 0.0046082,
 };
 
-// Coen, Australia
+// Coen, Australia - central line, full annular eclipse with the Sun well up.
 const centralLineLocation: Location = {lat: -13.94528, lon: 143.19881, elevation: 219};
 
-// Kapstadt, South Africa
-const partialObserverLocation: Location = {lat: -33.9177, lon: 18.40277, elevation: 113};
+// Sydney, Australia - partial eclipse, Sun above the horizon throughout.
+const partialObserverLocation: Location = {lat: -33.8688, lon: 151.2093, elevation: 58};
 
-// Ushuaia, Argentina
-const partialSunriseLocation: Location = {lat: -54.83955, lon: -68.31199, elevation: 20};
+// Perth, Australia - eclipse in progress at sunrise, only the phase after sunrise is observable.
+const partialSunriseLocation: Location = {lat: -31.9523, lon: 115.8613, elevation: 15};
 
-// London
+// South Pacific Ocean - Sun sets mid-eclipse, only the phase before sunset is observable.
+const partialSunsetLocation: Location = {lat: -35, lon: -130, elevation: 0};
+
+// Cape Town, South Africa - inside the penumbra, but the Sun stays below the horizon throughout.
+const belowHorizonLocation: Location = {lat: -33.9249, lon: 18.4241, elevation: 25};
+
+// London - well outside the eclipse entirely.
 const outsideEclipseLocation: Location = {lat: 51.5, lon: -0.12, elevation: 0};
 
 describe('getDuration', () => {
-    it('returns the annular partial-phase duration in seconds for a central-line observer', () => {
+    it('returns the partial-phase duration in seconds for a central-line observer', () => {
         const result = getDuration(elements, centralLineLocation);
 
-        expect(result).toBeCloseTo(6209.7, 2);
+        expect(result).toBeCloseTo(10564.91, 2);
     });
 
-    it('returns the total partial-phase duration in seconds for a partial-only observer', () => {
-        // Kapstadt, South Africa
+    it('returns the partial-phase duration in seconds for a partial-only observer', () => {
         const result = getDuration(elements, partialObserverLocation);
 
-        expect(result).toBeCloseTo(4534.47, 2);
+        expect(result).toBeCloseTo(8685.76, 2);
     });
 
-    it('returns the total partial-phase duration for an observer seeing only the end at sunrise', () => {
-        // Ushuaia, Argentina
+    it('counts only the time after sunrise for an observer whose eclipse begins at sunrise', () => {
         const result = getDuration(elements, partialSunriseLocation);
 
-        expect(result).toBeCloseTo(5539.38, 2);
+        expect(result).toBeCloseTo(3058.0, 2);
+    });
+
+    it('counts only the time before sunset for an observer whose eclipse ends at sunset', () => {
+        const result = getDuration(elements, partialSunsetLocation);
+
+        expect(result).toBeCloseTo(2544.96, 2);
+    });
+
+    it('returns 0 when the eclipse stays below the horizon at the observer location', () => {
+        const result = getDuration(elements, belowHorizonLocation);
+
+        expect(result).toBe(0);
     });
 
     it('returns 0 when the eclipse is not visible from the observer location', () => {
-        // London
         const result = getDuration(elements, outsideEclipseLocation);
 
         expect(result).toBe(0);
@@ -62,28 +77,30 @@ describe('getDuration', () => {
 
 describe('getCentralDuration', () => {
     it('returns the annularity duration in seconds for a central-line observer', () => {
-        // Coen Australia
         const result = getCentralDuration(elements, centralLineLocation);
 
-        expect(result).toBeCloseTo(160.77, 2);
+        expect(result).toBeCloseTo(160.81, 2);
     });
 
     it('returns 0 for a partial-only observer (no c2/c3)', () => {
-        // Kapstadt, South Africa
         const result = getCentralDuration(elements, partialObserverLocation);
 
         expect(result).toBe(0);
     });
 
-    it('returns 0 for an observer whose eclipse ends at sunrise (no c2/c3)', () => {
-        // Ushuaia, Argentina
+    it('returns 0 for an observer whose eclipse begins at sunrise (no c2/c3)', () => {
         const result = getCentralDuration(elements, partialSunriseLocation);
 
         expect(result).toBe(0);
     });
 
+    it('returns 0 when the eclipse stays below the horizon at the observer location', () => {
+        const result = getCentralDuration(elements, belowHorizonLocation);
+
+        expect(result).toBe(0);
+    });
+
     it('returns 0 when the eclipse is not visible from the observer location', () => {
-        // London
         const result = getCentralDuration(elements, outsideEclipseLocation);
 
         expect(result).toBe(0);

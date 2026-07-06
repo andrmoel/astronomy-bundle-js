@@ -45,14 +45,14 @@ describe('getLocationOfGreatestEclipse', () => {
         const {lat, lon} = getLocationOfGreatestEclipse(elementsPartial);
 
         expect(lat).toBeCloseTo(-62.51235, 5);
-        expect(lon).toBeCloseTo(-71.40541, 5);
+        expect(lon).toBeCloseTo(-71.40555, 5);
     });
 
     it('returns the point of greatest eclipse for a total eclipse', () => {
         const {lat, lon} = getLocationOfGreatestEclipse(elementsTotal);
 
         expect(lat).toBeCloseTo(65.22344, 5);
-        expect(lon).toBeCloseTo(-25.24243, 5);
+        expect(lon).toBeCloseTo(-25.24231, 5);
     });
 });
 
@@ -68,7 +68,7 @@ describe('getJulianDayOfGreatestEclipse', () => {
             day: 30,
             hour: 20,
             min: 41,
-            sec: 26,
+            sec: 27,
         });
     });
 

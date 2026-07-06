@@ -18,7 +18,7 @@ export function getLocalEclipseCircumstances(
     tau: number,
 ): LocalEclipseCircumstances {
     const e = getBesselianElementsAtTime(elements, tau);
-    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
     const hourAngle = e.mu + (location.lon - deltaTCorrection) * DEG;
 
     const latRad = location.lat * DEG;

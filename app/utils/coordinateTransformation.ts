@@ -85,13 +85,17 @@ export function equatorialSpherical2topocentricHorizontal(
     location: Location,
     T: number,
 ): LocalHorizontalCoordinates {
-    const {rightAscension, declination} = coords;
     const {lat, lon} = location;
 
     const topoCoords = equatorialSpherical2topocentricSpherical(coords, location, T);
-    const H = getLocalHourAngle(T, lon, rightAscension);
+    const H = getLocalHourAngle(T, lon, topoCoords.rightAscension);
 
-    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(H, declination, lat, topoCoords.radiusVector);
+    return equatorialSpherical2topocentricHorizontalByLocalHourAngle(
+        H,
+        topoCoords.declination,
+        lat,
+        topoCoords.radiusVector,
+    );
 }
 
 export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
@@ -114,6 +118,32 @@ export function equatorialSpherical2topocentricHorizontalByLocalHourAngle(
         azimuth: normalizeAngle(ARad * RAD + 180),
         altitude: hRad * RAD,
         radiusVector: radiusVector,
+    };
+}
+
+export function equatorialSpherical2topocentricSphericalByLocalHourAngle(
+    localHourAngle: number,
+    declination: number,
+    radiusVector: number,
+    location: Location,
+): {localHourAngle: number; declination: number; radiusVector: number} {
+    const rhoSinLat = getRhoSinLat(location.lat, location.elevation);
+    const rhoCosLat = getRhoCosLat(location.lat, location.elevation);
+    const piRad = getEquatorialParallax(radiusVector) * DEG;
+
+    const HRad = localHourAngle * DEG;
+    const dRad = declination * DEG;
+
+    const A = Math.cos(dRad) * Math.sin(HRad);
+    const B = Math.cos(dRad) * Math.cos(HRad) - rhoCosLat * Math.sin(piRad);
+    const C = Math.sin(dRad) - rhoSinLat * Math.sin(piRad);
+
+    const q = Math.sqrt(A * A + B * B + C * C);
+
+    return {
+        localHourAngle: normalizeAngle(Math.atan2(A, B) * RAD + 180) - 180,
+        declination: Math.asin(C / q) * RAD,
+        radiusVector: q * radiusVector,
     };
 }
 

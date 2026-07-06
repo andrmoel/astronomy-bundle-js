@@ -1,11 +1,14 @@
+import {EPOCH_J2000} from '@app/constants/epoch';
+import {DAYS_PER_JULIAN_CENTURY, HOURS_PER_DAY, MINUTES_PER_DAY, SECONDS_PER_DAY} from '@app/constants/time';
 import {round} from '@app/utils/math';
 import type {Time} from '../types/TimeTypes';
+import {getDeltaT} from './deltaT';
 
 export function sec2string(sec: number, short = false): string {
     const sign = sec < 0 ? '-' : '';
     sec = Math.abs(sec);
 
-    const hour = Math.floor(sec / 3660);
+    const hour = Math.floor(sec / 3600);
     const min = Math.floor((sec - hour * 3600) / 60);
     const secPart = round(sec - hour * 3600 - min * 60, 2);
 
@@ -35,7 +38,7 @@ export function time2julianDay(time: Time): number {
     }
 
     const D = time.day;
-    const H = time.hour / 24 + time.min / 1440 + time.sec / 86400;
+    const H = time.hour / HOURS_PER_DAY + time.min / MINUTES_PER_DAY + time.sec / SECONDS_PER_DAY;
 
     let A: number;
     let B: number;
@@ -60,7 +63,7 @@ export function dateStringToJulianDay(dateStr: string): number {
 
     if (isoDate !== null) {
         const {offsetMinutes, ...time} = isoDate;
-        return time2julianDay(time) - offsetMinutes / 1440;
+        return time2julianDay(time) - offsetMinutes / MINUTES_PER_DAY;
     }
 
     const date = new Date(dateStr);
@@ -142,11 +145,11 @@ export function julianDay2ModifiedJulianDay(jd: number): number {
 }
 
 export function julianDay2julianCenturiesJ2000(jd: number): number {
-    return (jd - 2451545.0) / 36525.0;
+    return (jd - EPOCH_J2000) / DAYS_PER_JULIAN_CENTURY;
 }
 
 export function julianCenturiesJ20002julianDay(T: number): number {
-    return T * 36525.0 + 2451545.0;
+    return T * DAYS_PER_JULIAN_CENTURY + EPOCH_J2000;
 }
 
 export function julianDay2julianMillenniaJ2000(jd: number): number {
@@ -159,6 +162,18 @@ export function julianMillenniaJ20002julianDay(t: number): number {
     const T = t * 10;
 
     return julianCenturiesJ20002julianDay(T);
+}
+
+export function julianDay2julianDayEphemeris(jd: number): number {
+    const {year, month} = julianDay2time(jd);
+
+    return jd + getDeltaT(year, month) / SECONDS_PER_DAY;
+}
+
+export function julianDayEphemeris2julianDay(jde: number): number {
+    const {year, month} = julianDay2time(jde);
+
+    return jde - getDeltaT(year, month) / SECONDS_PER_DAY;
 }
 
 export function dayOfYear2time(year: number, dayOfYear: number): Time {
@@ -178,7 +193,8 @@ export function dayOfYear2time(year: number, dayOfYear: number): Time {
 
 export function getDecimalYear(time: Time): number {
     const daysInYear = isLeapYear(time.year) ? 366 : 365;
-    const dayOfYear = getDayOfYear(time) - 1 + time.hour / 24 + time.min / 1440 + time.sec / 86400;
+    const dayOfYear =
+        getDayOfYear(time) - 1 + time.hour / HOURS_PER_DAY + time.min / MINUTES_PER_DAY + time.sec / SECONDS_PER_DAY;
 
     return time.year + dayOfYear / daysInYear;
 }

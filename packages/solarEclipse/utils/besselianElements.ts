@@ -1,5 +1,7 @@
 import {DEG} from '@app/constants/math';
 import {polynomial} from '@app/utils/polynoms';
+import {julianDay2time} from '@package/time/utils/dateTime';
+import {getDeltaT} from '@package/time/utils/deltaT';
 import type {BesselianElements, BesselianElementsAtTime, Catalogue} from '../types/BesselianElementTypes';
 
 export function getBesselianElementsFromCatalogue(catalogue: Catalogue, julianDay: number): BesselianElements {
@@ -53,10 +55,16 @@ export function getBesselianElementsAtTime(elements: BesselianElements, tau: num
 export function tau2julianDay(elements: BesselianElements, tau: number): number {
     const polyRefJd = Math.floor(elements.t0Jde - elements.t0Hours / 24) + 0.5 + elements.t0Hours / 24;
 
-    return polyRefJd + (tau - elements.deltaT / 3600) / 24;
+    return polyRefJd + (tau - getEclipseDeltaT(elements) / 3600) / 24;
 }
 
 export function julianDay2tau(elements: BesselianElements, jd: number): number {
     const polyRefJd = Math.floor(elements.t0Jde - elements.t0Hours / 24) + 0.5 + elements.t0Hours / 24;
-    return (jd - polyRefJd) * 24 + elements.deltaT / 3600;
+    return (jd - polyRefJd) * 24 + getEclipseDeltaT(elements) / 3600;
+}
+
+export function getEclipseDeltaT(elements: BesselianElements): number {
+    const {year, month} = julianDay2time(elements.t0Jde);
+
+    return getDeltaT(year, month);
 }

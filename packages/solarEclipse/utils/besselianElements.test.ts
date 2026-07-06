@@ -136,7 +136,7 @@ describe('tau2julianDay', () => {
 
         const result = tau2julianDay(besselianElements, tau);
 
-        expect(result).toBeCloseTo(2459552.832493, 6);
+        expect(result).toBeCloseTo(2459552.832531, 6);
     });
 
     it('returns the correct julian day for tau=-0.232001', () => {
@@ -144,24 +144,24 @@ describe('tau2julianDay', () => {
 
         const result = tau2julianDay(besselianElements, tau);
 
-        expect(result).toBeCloseTo(2459552.822826, 6);
+        expect(result).toBeCloseTo(2459552.822865, 6);
     });
 });
 
 describe('tau2julianDay', () => {
-    it('returns the correct tau for jd 2459552.832493', () => {
-        const jd = 2459552.832493;
+    it('returns the correct tau for jd 2459552.8325312827', () => {
+        const jd = 2459552.8325312827;
 
         const result = julianDay2tau(besselianElements, jd);
 
         expect(result).toBeCloseTo(0, 5);
     });
 
-    it('returns the correct tau for jd 2459552.822826', () => {
-        const jd = 2459552.822826;
+    it('returns the correct tau for jd 2459552.8228645744', () => {
+        const jd = 2459552.8228645744;
 
         const result = julianDay2tau(besselianElements, jd);
 
-        expect(result).toBeCloseTo(-0.232009, 5);
+        expect(result).toBeCloseTo(-0.232001, 5);
     });
 });

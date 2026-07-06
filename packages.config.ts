@@ -1,1 +1,9 @@
-export default ['packages/core', 'packages/earth', 'packages/moon', 'packages/sun', 'packages/solarEclipse'];
+export default [
+    'packages/core',
+    'packages/earth',
+    'packages/moon',
+    'packages/planets',
+    'packages/sun',
+    'packages/solarEclipse',
+    'packages/lunarLimbProfile',
+];

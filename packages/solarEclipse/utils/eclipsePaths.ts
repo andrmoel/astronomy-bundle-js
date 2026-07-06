@@ -3,7 +3,7 @@ import {RAD} from '@app/constants/math';
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '../utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '../utils/besselianElements';
 
 export function getCentralLine(elements: BesselianElements, stepsInSeconds = 10): Array<LatLon> {
     const points: Array<LatLon> = [];
@@ -58,7 +58,7 @@ export function fundamentalToLatLon(
 
     const theta = Math.atan2(xi, (zeta - EARTH_POLAR_RADIUS_RATIO * sinU * e.sinD) / e.cosD);
     const lat = Math.atan2(sinU, EARTH_POLAR_RADIUS_RATIO * cosU) * RAD;
-    let lon = (theta - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
+    let lon = (theta - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
     lon = normalizeLongitude(lon);
 
     return {lat, lon};

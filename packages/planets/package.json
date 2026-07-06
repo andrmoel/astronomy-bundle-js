@@ -1,0 +1,5 @@
+{
+    "name": "@astronomy-bundle/planets",
+    "description": "Planet calculations for the astronomy bundle",
+    "private": true
+}

@@ -61,6 +61,15 @@ describe('constructors', () => {
         });
     });
 
+    describe('fromJulianDayEphemeris', () => {
+        it('creates from an ephemeris (TD) julian day, converting back to UT', () => {
+            const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+            const fromJde = TimeOfInterest.fromJulianDayEphemeris(toi.getJulianDayEphemeris());
+
+            expect(fromJde.getJulianDay()).toBeCloseTo(toi.getJulianDay(), 4);
+        });
+    });
+
     describe('fromJulianCenturiesJ2000', () => {
         it('creates from julian centuries J2000 (T=0 is J2000.0 epoch)', () => {
             const toi = TimeOfInterest.fromJulianCenturiesJ2000(0);
@@ -144,16 +153,34 @@ it('tests getJulianDay0', () => {
     expect(toi.getJulianDay0()).toBe(2451684.5);
 });
 
+it('tests getJulianDayEphemeris', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(toi.getJulianDayEphemeris()).toBeCloseTo(2451685.077592, 6);
+});
+
 it('tests getJulianCenturiesJ2000', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
     expect(toi.getJulianCenturiesJ2000()).toBeCloseTo(0.003835);
 });
 
+it('tests getJulianCenturiesJ2000Ephemeris', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(toi.getJulianCenturiesJ2000Ephemeris()).toBeCloseTo(0.0038351155);
+});
+
 it('tests getJulianMillenniaJ2000', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
     expect(toi.getJulianMillenniaJ2000()).toBeCloseTo(0.000384);
+});
+
+it('tests getJulianMillenniaJ2000Ephemeris', () => {
+    const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
+
+    expect(toi.getJulianMillenniaJ2000Ephemeris()).toBeCloseTo(0.00038351155);
 });
 
 it('tests getGreenwichMeanSiderealTime', () => {

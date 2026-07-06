@@ -15,6 +15,7 @@ The `moon` package provides the `Moon` object for computing the Moon's position 
   - [Geocentric equatorial spherical coordinates](#geocentric-equatorial-spherical-coordinates)
   - [Apparent geocentric coordinates](#apparent-geocentric-coordinates)
   - [Topocentric coordinates](#topocentric-coordinates)
+  - [Rise, transit and set](#rise-transit-and-set)
   - [Distance to Earth](#distance-to-earth)
   - [Light time](#light-time)
   - [Angular diameter](#angular-diameter)
@@ -26,6 +27,7 @@ The `moon` package provides the `Moon` object for computing the Moon's position 
   - [Apparent magnitude](#apparent-magnitude)
   - [Upcoming lunar phases](#upcoming-lunar-phases)
   - [Sub-Earth, geocentric libration, topocentric libration, and sub-Solar points](#sub-earth-geocentric-libration-topocentric-libration-and-sub-solar-points)
+  - [Position angle of the axis](#position-angle-of-the-axis)
 
 ## Install
 
@@ -186,9 +188,56 @@ The result of the calculation should be:\
 Apparent topocentric right ascension: *135.211802°*\
 Apparent topocentric declination: *13.079873°*
 
-Apparent topocentric azimuth: *108.968405°*\
-Geometric altitude: *30.91398°*\
-Observed altitude (with refraction): *30.94205°*
+Apparent topocentric azimuth: *108.964863°*\
+Geometric altitude: *30.057752°*\
+Observed altitude (with refraction): *30.086785°*
+
+---
+
+### Rise, transit and set
+
+**Description:** These methods return the times of the Moon's rise, upper transit (culmination) and set for an observer at a given `Location`, each as a `TimeOfInterest`.
+
+`getTransit` takes only the location. The rise and set methods come in two variants and additionally accept an optional `LimbAlignment`:
+
+- **Geometric** (`getGeometricRise`, `getGeometricSet`) — the event is defined by the true geometric altitude, without atmospheric refraction.
+- **Apparent** (`getApparentRise`, `getApparentSet`) — atmospheric refraction is taken into account, matching the times an observer actually sees.
+
+The `LimbAlignment` argument selects which part of the lunar disk crosses the horizon: `LimbAlignment.Center` (default), `LimbAlignment.UpperLimb` or `LimbAlignment.LowerLimb`.
+
+**Example**: Get rise, transit and set for 12 April 1992, observer at 52.519°N, 122.4108°W
+
+```javascript
+import {TimeOfInterest, Location, LimbAlignment} from '@astronomy-bundle/core';
+import {Moon} from '@astronomy-bundle/moon';
+
+const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const location = Location.create(52.519, -122.4108);
+const moon = Moon.create(toi);
+
+const transit = moon.getTransit(location);
+
+// Rise/set of the disk's center, with and without refraction
+const apparentRise  = moon.getApparentRise(location);
+const geometricRise = moon.getGeometricRise(location);
+const apparentSet   = moon.getApparentSet(location);
+const geometricSet  = moon.getGeometricSet(location);
+
+// Rise/set of the upper limb (e.g. the moment the disk first appears)
+const upperLimbRise = moon.getApparentRise(location, LimbAlignment.UpperLimb);
+const upperLimbSet  = moon.getApparentSet(location, LimbAlignment.UpperLimb);
+```
+
+The result of the calculation should be (UTC):\
+Transit: *03:54:59*
+
+Apparent rise (center): *21:47:41*\
+Geometric rise (center): *21:51:45*\
+Apparent set (center): *11:08:16*\
+Geometric set (center): *11:04:18*
+
+Apparent rise (upper limb): *21:45:45*\
+Apparent set (upper limb): *11:10:11*
 
 ---
 
@@ -468,3 +517,30 @@ Geocentric libration: *lon -1.20579°, lat 4.19403°*\
 Geocentric libration magnitude: *4.36392°*\
 Topocentric libration: *lon -0.55307°, lat 4.73118°*\
 Topocentric libration magnitude: *4.76340°*
+
+---
+
+### Position angle of the axis
+
+**Description:** These methods return the position angle of the Moon's axis of rotation in degrees, measured eastward from the north point of the disk. It indicates the direction of the Moon's north pole as projected onto the sky.
+
+- `getPositionAngleOfAxis()` returns the position angle as seen from Earth's center.
+- `getTopocentricPositionAngleOfAxis(location)` returns the position angle as seen from a specific location on Earth, including parallax effects.
+
+**Example**: Get the position angle of the axis for 12 April 1992 at 00:00 UTC
+
+```javascript
+import {Location, TimeOfInterest} from '@astronomy-bundle/core';
+import {Moon} from '@astronomy-bundle/moon';
+
+const toi = TimeOfInterest.fromTime(1992, 4, 12, 0, 0, 0);
+const location = Location.create(52.519, -122.4108);
+const moon = Moon.create(toi);
+
+const positionAngleOfAxis = moon.getPositionAngleOfAxis();
+const topocentricPositionAngleOfAxis = moon.getTopocentricPositionAngleOfAxis(location);
+```
+
+The result of the calculation should be:\
+Position angle of the axis: *15.08413°*\
+Topocentric position angle of the axis: *15.25807°*

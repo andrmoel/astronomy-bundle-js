@@ -24,13 +24,13 @@ describe('getCenterLine', () => {
         const result = getCentralLine(elements);
 
         expect(result).toHaveLength(365);
-        expect(result[0]).toEqual({lat: -54.04560676491059, lon: -49.35712967288015});
+        expect(result[0]).toEqual({lat: -54.04560676491059, lon: -49.35755916158149});
     });
 
     it('returns the central line with custom 1 sec steps', () => {
         const result = getCentralLine(elements, 1);
 
         expect(result).toHaveLength(3654);
-        expect(result[0]).toEqual({lat: -53.42722771691792, lon: -50.51744486801903});
+        expect(result[0]).toEqual({lat: -53.42722771691792, lon: -50.51787435672037});
     });
 });

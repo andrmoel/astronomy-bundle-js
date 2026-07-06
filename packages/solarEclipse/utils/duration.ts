@@ -1,8 +1,6 @@
 import type {Location} from '@app/types/LocationTypes';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getContactTaus} from './contacts';
-
-// TODO consider sunrise and sunset + atmospheric refraction
+import {clampToVisibleWindow, getContactTaus} from './contacts';
 
 export function getDuration(elements: BesselianElements, location: Location): number {
     const contacts = getContactTaus(elements, location);
@@ -10,7 +8,12 @@ export function getDuration(elements: BesselianElements, location: Location): nu
         return 0;
     }
 
-    return (contacts.c4 - contacts.c1) * 3600;
+    const visible = clampToVisibleWindow(contacts, contacts.c1, contacts.c4);
+    if (visible === null) {
+        return 0;
+    }
+
+    return (visible.end - visible.start) * 3600;
 }
 
 export function getCentralDuration(elements: BesselianElements, location: Location): number {
@@ -19,5 +22,10 @@ export function getCentralDuration(elements: BesselianElements, location: Locati
         return 0;
     }
 
-    return (contacts.c3 - contacts.c2) * 3600;
+    const visible = clampToVisibleWindow(contacts, contacts.c2, contacts.c3);
+    if (visible === null) {
+        return 0;
+    }
+
+    return (visible.end - visible.start) * 3600;
 }

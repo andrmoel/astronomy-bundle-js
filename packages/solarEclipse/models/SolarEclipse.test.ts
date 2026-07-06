@@ -31,7 +31,7 @@ it('tests getLocationOfGreatestEclipse', () => {
     const {lat, lon} = eclipse.getLocationOfGreatestEclipse();
 
     expect(lat).toBeCloseTo(-17.388965, 6);
-    expect(lon).toBeCloseTo(-108.998649, 6);
+    expect(lon).toBeCloseTo(-108.999081, 6);
 });
 
 it('tests getTimeOfGreatestEclipse', () => {

@@ -4,6 +4,23 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `sun` package provides the `Sun` object for computing the Sun's position as seen from Earth. Geocentric and topocentric coordinates are derived from Earth's heliocentric VSOP87 position, with corrections for aberration and nutation applied to the apparent coordinates. Topocentric results are exposed as apparent coordinates and, for horizontal altitude, as observed coordinates with atmospheric refraction applied.
 
+## Contents
+
+- [Install](#install)
+- [High precision](#high-precision)
+- [API Reference](#api-reference)
+  - [Create the Sun object](#create-the-sun-object)
+  - [Geocentric ecliptic spherical coordinates](#geocentric-ecliptic-spherical-coordinates)
+  - [Geocentric ecliptic rectangular coordinates](#geocentric-ecliptic-rectangular-coordinates)
+  - [Geocentric equatorial spherical coordinates](#geocentric-equatorial-spherical-coordinates)
+  - [Apparent geocentric coordinates](#apparent-geocentric-coordinates)
+  - [Topocentric coordinates](#topocentric-coordinates)
+  - [Rise, transit and set](#rise-transit-and-set)
+  - [Distance to Earth](#distance-to-earth)
+  - [Light time](#light-time)
+  - [Angular diameter](#angular-diameter)
+  - [Apparent magnitude](#apparent-magnitude)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/sun @astronomy-bundle/core`\
@@ -175,9 +192,56 @@ The result of the calculation should be:\
 Apparent topocentric right ascension: *207.248790°*\
 Apparent topocentric declination: *-11.227918°*
 
-Apparent topocentric azimuth: *113.500747°*\
-Geometric altitude: *3.433916°*\
-Observed altitude (with refraction): *3.643402°*
+Apparent topocentric azimuth: *113.500740°*\
+Geometric altitude: *3.431471°*\
+Observed altitude (with refraction): *3.641052°*
+
+---
+
+### Rise, transit and set
+
+**Description:** These methods return the times of the Sun's rise, upper transit (culmination) and set for an observer at a given `Location`, each as a `TimeOfInterest`.
+
+`getTransit` takes only the location. The rise and set methods come in two variants and additionally accept an optional `LimbAlignment`:
+
+- **Geometric** (`getGeometricRise`, `getGeometricSet`) — the event is defined by the true geometric altitude, without atmospheric refraction.
+- **Apparent** (`getApparentRise`, `getApparentSet`) — atmospheric refraction is taken into account, matching the times an observer actually sees.
+
+The `LimbAlignment` argument selects which part of the solar disk crosses the horizon: `LimbAlignment.Center` (default), `LimbAlignment.UpperLimb` or `LimbAlignment.LowerLimb`.
+
+**Example**: Get rise, transit and set for 22 October 2020, observer in Berlin (52.519°N, 13.408°E)
+
+```javascript
+import {TimeOfInterest, Location, LimbAlignment} from '@astronomy-bundle/core';
+import {Sun} from '@astronomy-bundle/sun';
+
+const toi = TimeOfInterest.fromTime(2020, 10, 22, 6, 15, 0);
+const location = Location.create(52.519, 13.408);
+const sun = Sun.create(toi);
+
+const transit = sun.getTransit(location);
+
+// Rise/set of the disk's center, with and without refraction
+const apparentRise  = sun.getApparentRise(location);
+const geometricRise = sun.getGeometricRise(location);
+const apparentSet   = sun.getApparentSet(location);
+const geometricSet  = sun.getGeometricSet(location);
+
+// Rise/set of the upper limb (e.g. the moment the disk first appears)
+const upperLimbRise = sun.getApparentRise(location, LimbAlignment.UpperLimb);
+const upperLimbSet  = sun.getApparentSet(location, LimbAlignment.UpperLimb);
+```
+
+The result of the calculation should be (UTC):\
+Transit: *10:50:46*
+
+Apparent rise (center): *05:46:51*\
+Geometric rise (center): *05:50:47*\
+Apparent set (center): *15:53:51*\
+Geometric set (center): *15:49:55*
+
+Apparent rise (upper limb): *05:45:00*\
+Apparent set (upper limb): *15:55:42*
 
 ---
 

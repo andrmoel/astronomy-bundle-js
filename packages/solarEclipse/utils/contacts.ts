@@ -1,19 +1,28 @@
-import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
+import {
+    EARTH_AXIS_RATIO,
+    EARTH_EQUATORIAL_RADIUS_METERS,
+    EARTH_ROTATION_DEG_PER_HOUR,
+    SUNRISE_SUNSET_ALTITUDE_DEG,
+} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
 import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {EclipseContacts} from '../types/EclipseContactTypes';
-import {getBesselianElementsAtTime, tau2julianDay} from './besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT, tau2julianDay} from './besselianElements';
 
 const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
 const TIME_MARGIN_HOURS = 0.5;
 const SEARCH_RANGE_HOURS = 4;
 
+const HORIZON_SCAN_SAMPLES = 64;
+const HORIZON_BISECTION_ITERATIONS = 60;
+
 interface ObserverGeocentric {
     rhoSinPhi: number;
     rhoCosPhi: number;
+    rho: number;
     lon: number;
 }
 
@@ -25,6 +34,12 @@ interface FundamentalSnapshot {
     nSq: number;
     l1: number;
     l2: number;
+    zeta: number;
+}
+
+interface VisibleWindow {
+    sunrise: number | null;
+    sunset: number | null;
 }
 
 export function getContactTaus(elements: BesselianElements, location: Location): EclipseContacts | null {
@@ -58,7 +73,14 @@ export function getContactTaus(elements: BesselianElements, location: Location):
         }
     }
 
-    return {c1, c2, max, c3, c4};
+    // The solver also has a solution for night-side observers: keep the geometric contacts, report
+    // the horizon crossings, and reject an eclipse that never rises above the horizon.
+    const window = findVisibleWindow(elements, obs, c1, c4);
+    if (window === null) {
+        return null;
+    }
+
+    return {c1, c2, max, c3, c4, sunrise: window.sunrise, sunset: window.sunset};
 }
 
 export function contactTausToContactJulianDays(
@@ -75,7 +97,20 @@ export function contactTausToContactJulianDays(
         max: tau2julianDay(elements, contactTaus.max),
         c3: contactTaus.c3 ? tau2julianDay(elements, contactTaus.c3) : null,
         c4: tau2julianDay(elements, contactTaus.c4),
+        sunrise: contactTaus.sunrise !== null ? tau2julianDay(elements, contactTaus.sunrise) : null,
+        sunset: contactTaus.sunset !== null ? tau2julianDay(elements, contactTaus.sunset) : null,
     };
+}
+
+export function clampToVisibleWindow(
+    contacts: EclipseContacts,
+    start: number,
+    end: number,
+): {start: number; end: number} | null {
+    const visibleStart = Math.max(start, contacts.sunrise ?? start);
+    const visibleEnd = Math.min(end, contacts.sunset ?? end);
+
+    return visibleEnd > visibleStart ? {start: visibleStart, end: visibleEnd} : null;
 }
 
 function computeObserverGeocentric(location: Location): ObserverGeocentric {
@@ -83,9 +118,13 @@ function computeObserverGeocentric(location: Location): ObserverGeocentric {
     const h = location.elevation / EARTH_EQUATORIAL_RADIUS_METERS;
     const u = Math.atan(EARTH_AXIS_RATIO * Math.tan(latRad));
 
+    const rhoSinPhi = EARTH_AXIS_RATIO * Math.sin(u) + h * Math.sin(latRad);
+    const rhoCosPhi = Math.cos(u) + h * Math.cos(latRad);
+
     return {
-        rhoSinPhi: EARTH_AXIS_RATIO * Math.sin(u) + h * Math.sin(latRad),
-        rhoCosPhi: Math.cos(u) + h * Math.cos(latRad),
+        rhoSinPhi,
+        rhoCosPhi,
+        rho: Math.hypot(rhoSinPhi, rhoCosPhi),
         lon: location.lon,
     };
 }
@@ -108,42 +147,6 @@ function findMaximum(elements: BesselianElements, obs: ObserverGeocentric, start
     }
 
     return inBounds(tau) ? tau : null;
-}
-
-function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocentric): FundamentalSnapshot {
-    const e = getBesselianElementsAtTime(elements, tau);
-    const dMuDt = polynomialDerivative(elements.mu, tau) * DEG;
-    const dDDt = polynomialDerivative(elements.d, tau) * DEG;
-
-    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600;
-    const hourAngle = e.mu + (obs.lon - deltaTCorrection) * DEG;
-    const sinH = Math.sin(hourAngle);
-    const cosH = Math.cos(hourAngle);
-
-    const xi = obs.rhoCosPhi * sinH;
-    const eta = obs.rhoSinPhi * e.cosD - obs.rhoCosPhi * cosH * e.sinD;
-    const zeta = obs.rhoSinPhi * e.sinD + obs.rhoCosPhi * cosH * e.cosD;
-
-    const xiDot = dMuDt * obs.rhoCosPhi * cosH;
-    const etaDot = dMuDt * xi * e.sinD - zeta * dDDt;
-
-    const dx = polynomialDerivative(elements.x, tau);
-    const dy = polynomialDerivative(elements.y, tau);
-
-    const u = e.x - xi;
-    const v = e.y - eta;
-    const uDot = dx - xiDot;
-    const vDot = dy - etaDot;
-
-    return {
-        u,
-        v,
-        uDot,
-        vDot,
-        nSq: uDot * uDot + vDot * vDot,
-        l1: e.l1 - zeta * elements.tanF1,
-        l2: e.l2 - zeta * elements.tanF2,
-    };
 }
 
 function findContact(
@@ -178,6 +181,100 @@ function findContact(
     }
 
     return inBounds(tau) ? tau : null;
+}
+
+function findVisibleWindow(
+    elements: BesselianElements,
+    obs: ObserverGeocentric,
+    tauStart: number,
+    tauEnd: number,
+): VisibleWindow | null {
+    const tauAt = (i: number): number =>
+        i === HORIZON_SCAN_SAMPLES ? tauEnd : tauStart + ((tauEnd - tauStart) * i) / HORIZON_SCAN_SAMPLES;
+
+    let firstAbove: number | null = null;
+    let lastAbove: number | null = null;
+    for (let i = 0; i <= HORIZON_SCAN_SAMPLES; i++) {
+        if (horizonMargin(elements, obs, tauAt(i)) >= 0) {
+            if (firstAbove === null) {
+                firstAbove = i;
+            }
+            lastAbove = i;
+        }
+    }
+
+    if (firstAbove === null || lastAbove === null) {
+        return null;
+    }
+
+    const sunrise = firstAbove > 0 ? bisectHorizon(elements, obs, tauAt(firstAbove - 1), tauAt(firstAbove)) : null;
+    const sunset =
+        lastAbove < HORIZON_SCAN_SAMPLES ? bisectHorizon(elements, obs, tauAt(lastAbove), tauAt(lastAbove + 1)) : null;
+
+    return {sunrise, sunset};
+}
+
+function bisectHorizon(elements: BesselianElements, obs: ObserverGeocentric, lo: number, hi: number): number {
+    let low = lo;
+    let high = hi;
+    let lowBelow = horizonMargin(elements, obs, low) < 0;
+
+    for (let i = 0; i < HORIZON_BISECTION_ITERATIONS; i++) {
+        const mid = (low + high) / 2;
+        const midBelow = horizonMargin(elements, obs, mid) < 0;
+        if (midBelow === lowBelow) {
+            low = mid;
+            lowBelow = midBelow;
+        } else {
+            high = mid;
+        }
+    }
+
+    return (low + high) / 2;
+}
+
+// Positive while the Sun is above the horizon; zeta equals rho * sin(Sun altitude).
+function horizonMargin(elements: BesselianElements, obs: ObserverGeocentric, tau: number): number {
+    const {zeta} = snapshot(elements, tau, obs);
+
+    return zeta / obs.rho - Math.sin(SUNRISE_SUNSET_ALTITUDE_DEG * DEG);
+}
+
+function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocentric): FundamentalSnapshot {
+    const e = getBesselianElementsAtTime(elements, tau);
+    const dMuDt = polynomialDerivative(elements.mu, tau) * DEG;
+    const dDDt = polynomialDerivative(elements.d, tau) * DEG;
+
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
+    const hourAngle = e.mu + (obs.lon - deltaTCorrection) * DEG;
+    const sinH = Math.sin(hourAngle);
+    const cosH = Math.cos(hourAngle);
+
+    const xi = obs.rhoCosPhi * sinH;
+    const eta = obs.rhoSinPhi * e.cosD - obs.rhoCosPhi * cosH * e.sinD;
+    const zeta = obs.rhoSinPhi * e.sinD + obs.rhoCosPhi * cosH * e.cosD;
+
+    const xiDot = dMuDt * obs.rhoCosPhi * cosH;
+    const etaDot = dMuDt * xi * e.sinD - zeta * dDDt;
+
+    const dx = polynomialDerivative(elements.x, tau);
+    const dy = polynomialDerivative(elements.y, tau);
+
+    const u = e.x - xi;
+    const v = e.y - eta;
+    const uDot = dx - xiDot;
+    const vDot = dy - etaDot;
+
+    return {
+        u,
+        v,
+        uDot,
+        vDot,
+        nSq: uDot * uDot + vDot * vDot,
+        l1: e.l1 - zeta * elements.tanF1,
+        l2: e.l2 - zeta * elements.tanF2,
+        zeta,
+    };
 }
 
 function inBounds(tau: number): boolean {

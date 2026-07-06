@@ -3,6 +3,7 @@ import {INCLINATION_OF_MEAN_LUNAR_EQUATOR} from '@app/constants/moon';
 import type {EclipticSphericalCoordinates, EquatorialSphericalCoordinates} from '@app/types/CoordinateTypes';
 import {normalizeAngle} from '@app/utils/angle';
 import {equatorialSpherical2eclipticSpherical} from '@app/utils/coordinateTransformation';
+import * as earth from '@app/utils/earth';
 import {normalizeLongitude} from '@app/utils/location';
 import * as moon from '@app/utils/moon';
 import * as sun from '@app/utils/sun';
@@ -83,6 +84,28 @@ export function getTopocentricSelenographicLocation(
 
 export function getSelenographicMagnitude(lon: number, lat: number): number {
     return Math.hypot(lon, lat);
+}
+
+export function getAxisPositionAngle(coords: EquatorialSphericalCoordinates, T: number): number {
+    const eclipticCoords = equatorialSpherical2eclipticSpherical(coords, T);
+    const {lat} = getSelenographicLocation(eclipticCoords, T);
+    const {rho, sigma} = getQuantities(T);
+
+    const omega = moon.getMeanLongitudeOfAscendingNode(T);
+    const deltaPsi = earth.getNutationInLongitude(T);
+    const epsRad = earth.getTrueObliquityOfEcliptic(T) * DEG;
+    const IRad = INCLINATION_OF_MEAN_LUNAR_EQUATOR * DEG;
+
+    const VRad = (omega + deltaPsi) * DEG + (sigma * DEG) / Math.sin(IRad);
+    const inclinationRad = IRad + rho * DEG;
+    const x = Math.sin(inclinationRad) * Math.sin(VRad);
+    const y =
+        Math.sin(inclinationRad) * Math.cos(VRad) * Math.cos(epsRad) - Math.cos(inclinationRad) * Math.sin(epsRad);
+    const omegaRad = Math.atan2(x, y);
+
+    const sinP = (Math.hypot(x, y) * Math.cos(coords.rightAscension * DEG - omegaRad)) / Math.cos(lat * DEG);
+
+    return Math.asin(Math.max(-1, Math.min(1, sinP))) * RAD;
 }
 
 function getQuantities(T: number): Quantities {

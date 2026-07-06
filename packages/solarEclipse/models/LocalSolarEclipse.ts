@@ -24,7 +24,10 @@ export default class LocalSolarEclipse {
         private readonly location: Location,
         private readonly contactTaus: EclipseContacts,
     ) {
-        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(elements, location, contactTaus.max);
+        // Greatest eclipse restricted to the above-horizon part, since max may be below the horizon.
+        const {c1, c4, max, sunrise, sunset} = contactTaus;
+        const visibleMax = Math.min(Math.max(max, sunrise ?? c1), sunset ?? c4);
+        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(elements, location, visibleMax);
     }
 
     public static create(elements: BesselianElements, location: Location): LocalSolarEclipse {
@@ -62,6 +65,8 @@ export default class LocalSolarEclipse {
             max: TimeOfInterest.fromJulianDay(contactsJd.max),
             c3: contactsJd.c3 ? TimeOfInterest.fromJulianDay(contactsJd.c3) : null,
             c4: TimeOfInterest.fromJulianDay(contactsJd.c4),
+            sunrise: contactsJd.sunrise !== null ? TimeOfInterest.fromJulianDay(contactsJd.sunrise) : null,
+            sunset: contactsJd.sunset !== null ? TimeOfInterest.fromJulianDay(contactsJd.sunset) : null,
         };
     }
 

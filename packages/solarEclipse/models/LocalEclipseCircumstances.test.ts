@@ -50,6 +50,31 @@ describe('getType', () => {
 
         expect(result).toBe(LocalSolarEclipseType.Total);
     });
+
+    it('returns the geometric eclipse type even when the Sun is below the horizon', () => {
+        // ASE 2013-05-10
+        const elements: BesselianElements = {
+            t0Jde: 2456422.51829,
+            t0Hours: 0,
+            tMin: -3,
+            tMax: 3,
+            deltaT: 67.1,
+            x: [-0.17518, 0.50528872, 0.0000144, -0.00000591],
+            y: [-0.30430099, 0.0888899, -0.0000959, -9.7e-7],
+            d: [17.60548019, 0.010701, -0.000004],
+            mu: [180.9034729, 15.00166035, 0],
+            l1: [0.56367201, 0.0000788, -0.00001],
+            l2: [0.017447, 0.0000784, -0.00001],
+            tanF1: 0.0046313,
+            tanF2: 0.0046082,
+        };
+        const capeTown = Location.create(-33.9249, 18.4241, 25);
+        const toi = TimeOfInterest.fromTime(2013, 5, 9, 23, 51, 8);
+        const circumstances = LocalEclipseCircumstances.create(elements, capeTown, toi);
+
+        expect(circumstances.getTopocentricHorizontalCoordinates().altitude).toBeLessThan(0);
+        expect(circumstances.getEclipseType()).toBe(LocalSolarEclipseType.Partial);
+    });
 });
 
 describe('isInEclipse', () => {
@@ -96,19 +121,19 @@ describe('getMagnitude', () => {
     it('returns magnitude if eclipse has not started', () => {
         const result = circumstancesNoEclipse.getMagnitude();
 
-        expect(result).toBeCloseTo(-0.053991, 6);
+        expect(result).toBeCloseTo(-0.054002, 6);
     });
 
     it('returns magnitude if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getMagnitude();
 
-        expect(result).toBeCloseTo(0.737326, 6);
+        expect(result).toBeCloseTo(0.737315, 6);
     });
 
     it('returns magnitude if eclipse is in total phase', () => {
         const result = circumstancesTotal.getMagnitude();
 
-        expect(result).toBeCloseTo(1.011528, 6);
+        expect(result).toBeCloseTo(1.011517, 6);
     });
 });
 
@@ -122,7 +147,7 @@ describe('getObscuration', () => {
     it('returns obscuration if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getObscuration();
 
-        expect(result).toBeCloseTo(0.684328, 6);
+        expect(result).toBeCloseTo(0.684315, 6);
     });
 
     it('returns obscuration if eclipse is in total phase', () => {
@@ -136,7 +161,7 @@ describe('getTopocentricHorizontalCoordinates', () => {
     it('returns the geometric Sun horizontal coordinates in degrees at maximum eclipse', () => {
         const result = circumstancesTotal.getTopocentricHorizontalCoordinates();
 
-        expect(result.azimuth).toBeCloseTo(255.664318, 6);
+        expect(result.azimuth).toBeCloseTo(255.664319, 6);
         expect(result.altitude).toBeCloseTo(76.861319, 6);
         expect(result.radiusVector).toBe(0);
     });
@@ -146,7 +171,7 @@ describe('getApparentTopocentricHorizontalCoordinates', () => {
     it('returns the refraction-corrected Sun horizontal coordinates in degrees at maximum eclipse', () => {
         const result = circumstancesTotal.getApparentTopocentricHorizontalCoordinates();
 
-        expect(result.azimuth).toBeCloseTo(255.664318, 6);
+        expect(result.azimuth).toBeCloseTo(255.664319, 6);
         expect(result.altitude).toBeCloseTo(76.865248, 6);
         expect(result.radiusVector).toBe(0);
     });

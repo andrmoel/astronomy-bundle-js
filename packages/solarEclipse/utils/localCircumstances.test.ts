@@ -63,12 +63,12 @@ const circumstancesPartialEclipseExmouth = {
 };
 
 const circumstancesMaximumEclipseExmouth = {
-    u: 0.0006822685435502185,
-    v: -0.0006902970430300304,
-    l1: 0.542960673183228,
-    l2: -0.003161175368268852,
-    distance: 0.0009705670369089092,
-    hourAngle: 6.05543018850995,
+    u: 0.0006819738377337736,
+    v: -0.0006902835357406323,
+    l1: 0.542960672871543,
+    l2: -0.003161175678400492,
+    distance: 0.0009703502847260468,
+    hourAngle: 6.055430514528325,
     sinD: 0.19774710806100118,
     cosD: 0.9802530700046345,
 };
@@ -169,8 +169,8 @@ describe('getLocalHorizontalCoordinates', () => {
     it('returns the geometric Sun horizontal coordinates in degrees for maximum eclipse in Exmouth', () => {
         const result = getLocalHorizontalCoordinates(circumstancesMaximumEclipseExmouth, locationTotal);
 
-        expect(result.azimuth).toBeCloseTo(22.271663, 6);
-        expect(result.altitude).toBeCloseTo(54.268116, 6);
+        expect(result.azimuth).toBeCloseTo(22.271634, 6);
+        expect(result.altitude).toBeCloseTo(54.268122, 6);
         expect(result.radiusVector).toBe(0);
     });
 });

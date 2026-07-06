@@ -4,6 +4,44 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `solarEclipse` package provides solar eclipse calculations for any location on Earth. It uses Besselian Elements — pre-computed polynomial coefficients describing the Moon's shadow geometry — to determine eclipse type, contact times, magnitude, and obscuration at a specific geographic location and point in time.
 
+## Contents
+
+- [Install](#install)
+- [API Reference](#api-reference)
+  - [Eclipse Catalogue](#eclipse-catalogue)
+    - [Standard catalogue (1900–2100)](#standard-catalogue-19002100)
+    - [Full catalogue (−1999–3000)](#full-catalogue-19993000)
+  - [SolarEclipse](#solareclipse)
+    - [Create a SolarEclipse object](#create-a-solareclipse-object)
+    - [Eclipse type](#eclipse-type)
+    - [Location of greatest eclipse](#location-of-greatest-eclipse)
+    - [Time of greatest eclipse](#time-of-greatest-eclipse)
+    - [Maximum magnitude](#maximum-magnitude)
+    - [Maximum Moon/Sun ratio](#maximum-moonsun-ratio)
+    - [Maximum obscuration](#maximum-obscuration)
+    - [Maximum duration](#maximum-duration)
+    - [Maximum central duration](#maximum-central-duration)
+    - [Central line](#central-line)
+    - [Local eclipse for an observer](#local-eclipse-for-an-observer)
+  - [LocalSolarEclipse (Eclipse + Location)](#localsolareclipse-eclipse--location)
+    - [Local eclipse type](#local-eclipse-type)
+    - [Contact times as τ offsets](#contact-times-as-τ-offsets)
+    - [Contact times](#contact-times)
+    - [Maximum magnitude](#maximum-magnitude-1)
+    - [Maximum Moon/Sun ratio](#maximum-moonsun-ratio-1)
+    - [Maximum obscuration](#maximum-obscuration-1)
+    - [Duration](#duration)
+    - [Central duration](#central-duration)
+    - [Circumstances at a given time](#circumstances-at-a-given-time)
+  - [LocalEclipseCircumstances (Eclipse + Location + Time)](#localeclipsecircumstances-eclipse--location--time)
+    - [Eclipse type at a given moment](#eclipse-type-at-a-given-moment)
+    - [Eclipse in progress](#eclipse-in-progress)
+    - [Central eclipse in progress](#central-eclipse-in-progress)
+    - [Magnitude](#magnitude)
+    - [Obscuration](#obscuration)
+    - [Geometric topocentric horizontal coordinates](#geometric-topocentric-horizontal-coordinates)
+    - [Apparent topocentric horizontal coordinates](#apparent-topocentric-horizontal-coordinates)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/solar-eclipse @astronomy-bundle/core`\
@@ -12,14 +50,9 @@ With pnpm: `pnpm add @astronomy-bundle/solar-eclipse @astronomy-bundle/core`
 
 ## API Reference
 
-- [Eclipse Catalogue](#eclipse-catalogue)
-- [SolarEclipse](#solareclipse)
-- [LocalSolarEclipse](#localsolareclipse-eclipse--location)
-- [LocalEclipseCircumstances](#localeclipsecircumstances-eclipse--location--time)
-
 ### Eclipse Catalogue
 
-Two pre-computed eclipse catalogues are provided as separate subpath exports. Use them to list available eclipse dates, look up Besselian elements by date, and pass the result to [`SolarEclipse.createFromBesselianElements`](#createfrombesselianelements-static).
+Two pre-computed eclipse catalogues are provided as separate subpath exports. Use them to list available eclipse dates, look up Besselian elements by date, and pass the result to [`SolarEclipse.createFromBesselianElements`](#create-a-solareclipse-object).
 
 Both catalogue entrypoints export a `Catalogue` class with the same methods:
 
@@ -72,9 +105,9 @@ const eclipse = SolarEclipse.createFromBesselianElements(elements);
 
 ---
 
-#### createFromBesselianElements *(static)*
+#### Create a SolarEclipse object
 
-**Description:** Creates a `SolarEclipse` instance from a `BesselianElements` object. This is the only static constructor on `SolarEclipse`. Use the built-in [`Catalogue`](#eclipse-catalogue) entrypoints for date-based lookup, or pass custom pre-computed Besselian elements.
+**Description:** The `createFromBesselianElements` static method creates a `SolarEclipse` instance from a `BesselianElements` object. This is the only static constructor on `SolarEclipse`. Use the built-in [`Catalogue`](#eclipse-catalogue) entrypoints for date-based lookup, or pass custom pre-computed Besselian elements.
 
 ```javascript
 import {SolarEclipse, parseBesselianElements} from '@astronomy-bundle/solar-eclipse';
@@ -96,7 +129,7 @@ const eclipse = SolarEclipse.createFromBesselianElements(elements);
 
 ---
 
-#### getType
+#### Eclipse type
 
 **Description:** Returns the global eclipse type as a `SolarEclipseType` value. Possible values are `'partial'`, `'total'`, `'annular'`, and `'hybrid'`.
 
@@ -108,7 +141,7 @@ The result of the calculation should be: *total*
 
 ---
 
-#### getLocationOfGreatestEclipse
+#### Location of greatest eclipse
 
 **Description:** Returns the geographic coordinates `{lat, lon}` (in decimal degrees) of the point on Earth's surface where the eclipse is greatest — i.e., where the Moon's shadow axis passes closest to the centre of the Earth.
 
@@ -118,11 +151,11 @@ const {lat, lon} = eclipse.getLocationOfGreatestEclipse();
 
 The result of the calculation should be:\
 lat: *-17.388965*\
-lon: *-108.998649*
+lon: *-108.999081*
 
 ---
 
-#### getTimeOfGreatestEclipse
+#### Time of greatest eclipse
 
 **Description:** Returns a `TimeOfInterest` representing the moment of greatest eclipse in Terrestrial Time (TT).
 
@@ -135,7 +168,7 @@ The result of the calculation should be: *2019-07-02 19:22:58*
 
 ---
 
-#### getMaxMagnitude
+#### Maximum magnitude
 
 **Description:** Returns the eclipse magnitude at greatest eclipse — the fraction of the Sun's diameter covered by the Moon at the point and moment of greatest eclipse. Values above 1 indicate a total eclipse.
 
@@ -147,7 +180,7 @@ The result of the calculation should be: *1.022966*
 
 ---
 
-#### getMaxMoonSunRatio
+#### Maximum Moon/Sun ratio
 
 **Description:** Returns the ratio of the apparent angular diameter of the Moon to that of the Sun at the moment of greatest eclipse. A ratio greater than 1 means totality is possible; less than 1 means an annular eclipse is possible.
 
@@ -159,7 +192,7 @@ The result of the calculation should be: *1.045932*
 
 ---
 
-#### getMaxObscuration
+#### Maximum obscuration
 
 **Description:** Returns the fraction of the Sun's area obscured by the Moon at greatest eclipse, as a value between 0 and 1. Returns 1 for total eclipses.
 
@@ -171,7 +204,7 @@ The result of the calculation should be: *1*
 
 ---
 
-#### getMaxDuration
+#### Maximum duration
 
 **Description:** Returns the total duration of the eclipse in seconds at the point of greatest eclipse, measured from first contact (C1) to last contact (C4).
 
@@ -183,7 +216,7 @@ The result of the calculation should be: *11847.3*
 
 ---
 
-#### getMaxCentralDuration
+#### Maximum central duration
 
 **Description:** Returns the duration of the central phase (totality or annularity) in seconds at the point of greatest eclipse, measured from second contact (C2) to third contact (C3).
 
@@ -195,7 +228,7 @@ The result of the calculation should be: *272.8*
 
 ---
 
-#### getCentralLine
+#### Central line
 
 **Description:** Returns the path of the central eclipse (totality or annularity) as an array of `{lat, lon}` coordinate objects in decimal degrees. Points are computed by stepping through the eclipse duration and projecting the Moon's shadow axis onto Earth's surface. Points where the shadow axis misses Earth are omitted. The optional `stepsInSeconds` parameter (default: `10`) controls the time resolution between points — smaller values produce a denser path.
 
@@ -209,7 +242,7 @@ const densePath = eclipse.getCentralLine(1);
 
 ---
 
-#### getLocalEclipse
+#### Local eclipse for an observer
 
 **Description:** Returns a [`LocalSolarEclipse`](#localsolareclipse-eclipse--location) instance for a specific observer location. Use this to calculate contact times, local eclipse type, magnitude, and obscuration as seen from that location.
 
@@ -243,7 +276,7 @@ const localEclipse = SolarEclipse
 
 ---
 
-#### getType
+#### Local eclipse type
 
 **Description:** Returns the local eclipse type as a `LocalSolarEclipseType` value. Possible values are `'partial'`, `'total'`, and `'annular'`.
 
@@ -255,7 +288,7 @@ The result of the calculation should be: *annular*
 
 ---
 
-#### getContactTaus
+#### Contact times as τ offsets
 
 **Description:** Returns the contact times as dimensionless time offsets (τ) relative to `t0` in the Besselian elements. `c1` and `c4` are always present; `c2` and `c3` are only set for central (total or annular) eclipses and are `null` for partial eclipses. `max` is the moment of greatest eclipse at this location.
 
@@ -266,15 +299,15 @@ const {c1, c2, max, c3, c4} = contacts;
 ```
 
 The result of the calculation should be:\
-c1: *-0.587733*\
-c2: *1.161358*\
-max: *1.185232*\
-c3: *1.209146*\
-c4: *2.730092*
+c1: *-0.587742*\
+c2: *1.161349*\
+max: *1.185224*\
+c3: *1.20914*\
+c4: *2.730088*
 
 ---
 
-#### getContactTimes
+#### Contact times
 
 **Description:** Returns the contact times as `TimeOfInterest` objects in Terrestrial Time (TT). `c1` is first external contact, `c2` second contact (start of central phase), `max` is greatest eclipse, `c3` third contact (end of central phase), and `c4` last external contact. `c2` and `c3` are `null` for partial eclipses.
 
@@ -297,7 +330,7 @@ c4: *2016-09-01 11:42:39*
 
 ---
 
-#### getMaxMagnitude
+#### Maximum magnitude
 
 **Description:** Returns the eclipse magnitude at greatest local eclipse — the fraction of the Sun's diameter covered by the Moon at the observer's location. Values below 1 indicate a partial or annular eclipse; values above 1 indicate totality.
 
@@ -305,11 +338,11 @@ c4: *2016-09-01 11:42:39*
 const magnitude = localEclipse.getMaxMagnitude();
 ```
 
-The result of the calculation should be: *0.980731*
+The result of the calculation should be: *0.980734*
 
 ---
 
-#### getMaxMoonSunRatio
+#### Maximum Moon/Sun ratio
 
 **Description:** Returns the ratio of the apparent angular diameter of the Moon to that of the Sun at the moment of greatest local eclipse. A ratio below 1 means an annular eclipse is possible; above 1 means totality is possible.
 
@@ -321,7 +354,7 @@ The result of the calculation should be: *0.970421*
 
 ---
 
-#### getMaxObscuration
+#### Maximum obscuration
 
 **Description:** Returns the fraction of the Sun's area obscured by the Moon at greatest local eclipse, as a value between 0 and 1. Returns 1 for total eclipses; less than 1 for annular and partial eclipses.
 
@@ -333,7 +366,7 @@ The result of the calculation should be: *0.941717*
 
 ---
 
-#### getDuration
+#### Duration
 
 **Description:** Returns the total duration of the eclipse in seconds at the observer's location, measured from first contact (C1) to last contact (C4).
 
@@ -345,7 +378,7 @@ The result of the calculation should be: *11944.2*
 
 ---
 
-#### getCentralDuration
+#### Central duration
 
 **Description:** Returns the duration of the central phase (totality or annularity) in seconds at the observer's location, measured from second contact (C2) to third contact (C3). Returns 0 for partial eclipses.
 
@@ -357,7 +390,7 @@ The result of the calculation should be: *172.0*
 
 ---
 
-#### getCircumstances
+#### Circumstances at a given time
 
 **Description:** Returns a [`LocalEclipseCircumstances`](#localeclipsecircumstances-eclipse--location--time) instance for a specific moment in time at the observer's location. Use this to query eclipse state (type, magnitude, obscuration) at any point during the eclipse.
 
@@ -399,7 +432,7 @@ const circumstancesTotal = localEclipse.getCircumstances(toiTotal);
 
 ---
 
-#### getEclipseType
+#### Eclipse type at a given moment
 
 **Description:** Returns the eclipse type at the observer's location for the given moment. Possible values are `'none'`, `'partial'`, `'total'`, and `'annular'`. Returns `'none'` before the eclipse has started or after it has ended.
 
@@ -416,7 +449,7 @@ During total phase: *total*
 
 ---
 
-#### isInEclipse
+#### Eclipse in progress
 
 **Description:** Returns `true` if any eclipse is in progress at the given moment (partial, total, or annular phase). Returns `false` before first contact and after last contact.
 
@@ -433,7 +466,7 @@ During total phase: *true*
 
 ---
 
-#### isInCentralEclipse
+#### Central eclipse in progress
 
 **Description:** Returns `true` only during the central phase — totality or annularity. Returns `false` during the partial phase, before first contact, and after last contact.
 
@@ -450,7 +483,7 @@ During total phase: *true*
 
 ---
 
-#### getMagnitude
+#### Magnitude
 
 **Description:** Returns the eclipse magnitude — the fraction of the Sun's diameter covered by the Moon. During the partial phase the value is between 0 and 1; it exceeds 1 during totality and is negative before the eclipse begins.
 
@@ -462,12 +495,12 @@ const magnitudeTotal   = circumstancesTotal.getMagnitude();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.737326*\
-During total phase: *1.011528*
+During partial phase: *0.737315*\
+During total phase: *1.011517*
 
 ---
 
-#### getObscuration
+#### Obscuration
 
 **Description:** Returns the fraction of the Sun's area obscured by the Moon, as a value between 0 and 1. Unlike magnitude, this is an area-based measure and never exceeds 1. Returns 0 when no eclipse is in progress and 1 during totality.
 
@@ -479,12 +512,12 @@ const obscurationTotal   = circumstancesTotal.getObscuration();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.684328*\
+During partial phase: *0.684315*\
 During total phase: *1*
 
 ---
 
-#### getTopocentricHorizontalCoordinates
+#### Geometric topocentric horizontal coordinates
 
 **Description:** Returns the geometric topocentric horizontal coordinates of the Sun for the observer's location and given moment. The result contains azimuth and altitude in degrees, plus `radiusVector` set to `0`.
 
@@ -495,12 +528,12 @@ const horizontal = circumstancesTotal.getTopocentricHorizontalCoordinates();
 ```
 
 The result of the calculation should be:\
-Azimuth: *255.664318°*\
+Azimuth: *255.664319°*\
 Geometric altitude: *76.861319°*
 
 ---
 
-#### getApparentTopocentricHorizontalCoordinates
+#### Apparent topocentric horizontal coordinates
 
 **Description:** Returns the apparent topocentric horizontal coordinates of the Sun for the observer's location and given moment. The altitude includes atmospheric refraction correction; azimuth and `radiusVector` are unchanged from the geometric coordinates.
 
@@ -511,5 +544,5 @@ const apparentHorizontal = circumstancesTotal.getApparentTopocentricHorizontalCo
 ```
 
 The result of the calculation should be:\
-Azimuth: *255.664318°*\
+Azimuth: *255.664319°*\
 Apparent altitude (with refraction): *76.865248°*
