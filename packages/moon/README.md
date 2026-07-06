@@ -474,10 +474,10 @@ const lastQuarter  = moon.getUpcomingLastQuarter();
 ```
 
 The result of the calculation should be:\
-Next new moon: *1992-04-03 05:02:03 UTC*\
-Next first quarter: *1992-04-10 10:06:42 UTC*\
-Next full moon: *1992-04-17 04:43:22 UTC*\
-Next last quarter: *1992-04-24 21:40:37 UTC*
+Next new moon: *1992-04-03 05:01:04 UTC*\
+Next first quarter: *1992-04-10 10:05:44 UTC*\
+Next full moon: *1992-04-17 04:42:23 UTC*\
+Next last quarter: *1992-04-24 21:39:38 UTC*
 
 ---
 

@@ -17,9 +17,9 @@ export function getTimeOfInterestOfUpcomingPhase(decimalYear: number, moonPhase:
     const wCorrections = getQuarterPhaseCorrections(k, T, moonPhase);
     const pCorrections = getPlanetaryCorrections(k, T);
 
-    const jd = JDE + corrections + wCorrections + pCorrections;
+    const jde = JDE + corrections + wCorrections + pCorrections;
 
-    return TimeOfInterest.fromJulianDay(jd);
+    return TimeOfInterest.fromJulianDayEphemeris(jde);
 }
 
 function getPeriodicTermCorrections(k: number, T: number, moonPhase: number): number {

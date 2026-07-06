@@ -338,25 +338,25 @@ it('tests getTopocentricApparentMagnitude', () => {
 it('tests getUpcomingNewMoon', () => {
     const toiNewMoon = moon.getUpcomingNewMoon();
 
-    expect(toiNewMoon.time).toEqual({year: 1992, month: 4, day: 3, hour: 5, min: 2, sec: 3});
+    expect(toiNewMoon.time).toEqual({year: 1992, month: 4, day: 3, hour: 5, min: 1, sec: 4});
 });
 
 it('tests getUpcomingFirstQuarter', () => {
     const toiFirstQuarter = moon.getUpcomingFirstQuarter();
 
-    expect(toiFirstQuarter.time).toEqual({year: 1992, month: 4, day: 10, hour: 10, min: 6, sec: 42});
+    expect(toiFirstQuarter.time).toEqual({year: 1992, month: 4, day: 10, hour: 10, min: 5, sec: 44});
 });
 
 it('tests getUpcomingFullMoon', () => {
     const toiFullMoon = moon.getUpcomingFullMoon();
 
-    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 43, sec: 22});
+    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 42, sec: 23});
 });
 
 it('tests getUpcomingLastQuarter', () => {
     const toiLastQuarter = moon.getUpcomingLastQuarter();
 
-    expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 40, sec: 37});
+    expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 39, sec: 38});
 });
 
 it('tests getSubEarthPoint', () => {
