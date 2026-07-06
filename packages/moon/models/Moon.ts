@@ -86,9 +86,9 @@ export default class Moon extends AstronomicalObject {
     }
 
     public getGeocentricEclipticSphericalDateCoordinates(): EclipticSphericalCoordinates {
-        const lon = moon.getLongitude(this.T);
-        const lat = moon.getLatitude(this.T);
-        const radiusVector = moon.getRadiusVector(this.T);
+        const lon = moon.getLongitude(this.Te);
+        const lat = moon.getLatitude(this.Te);
+        const radiusVector = moon.getRadiusVector(this.Te);
 
         return {lon, lat, radiusVector};
     }
@@ -96,7 +96,7 @@ export default class Moon extends AstronomicalObject {
     public getApparentGeocentricEclipticSphericalCoordinates(): EclipticSphericalCoordinates {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return correctEffectOfNutation(coords, this.T);
+        return correctEffectOfNutation(coords, this.Te);
     }
 
     public getAngularDiameter(): number {
@@ -222,19 +222,19 @@ export default class Moon extends AstronomicalObject {
     public getSubEarthPoint(): SelenographicPoint {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return getSelenographicLocation(coords, this.T);
+        return getSelenographicLocation(coords, this.Te);
     }
 
     public getSubSolarPoint(): SelenographicPoint {
         const coordsSun = this.getHeliocentricEclipticSphericalDateCoordinates();
 
-        return getSelenographicLocation(coordsSun, this.T);
+        return getSelenographicLocation(coordsSun, this.Te);
     }
 
     public getGeocentricLibration(): SelenographicPoint {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return getOpticalSelenographicLocation(coords, this.T);
+        return getOpticalSelenographicLocation(coords, this.Te);
     }
 
     public getGeocentricLibrationMagnitude(): number {
@@ -246,7 +246,7 @@ export default class Moon extends AstronomicalObject {
     public getTopocentricLibration(location: Location): SelenographicPoint {
         const coords = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
-        return getTopocentricSelenographicLocation(coords, this.T);
+        return getTopocentricSelenographicLocation(coords, this.Te);
     }
 
     public getTopocentricLibrationMagnitude(location: Location): number {
@@ -258,12 +258,12 @@ export default class Moon extends AstronomicalObject {
     public getGeocentricPositionAngleOfAxis(): number {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return getAxisPositionAngle(coords, this.T);
+        return getAxisPositionAngle(coords, this.Te);
     }
 
     public getTopocentricPositionAngleOfAxis(location: Location): number {
         const coords = this.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
-        return getAxisPositionAngle(coords, this.T);
+        return getAxisPositionAngle(coords, this.Te);
     }
 }

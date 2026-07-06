@@ -93,8 +93,8 @@ export default abstract class Planet extends AstronomicalObject {
     public getApparentGeocentricEclipticSphericalCoordinates(): EclipticSphericalCoordinates {
         let coords = this.getLightTimeCorrectedEclipticSphericalCoordinates();
 
-        coords = correctEffectOfAberration(coords, this.T);
-        coords = correctEffectOfNutation(coords, this.T);
+        coords = correctEffectOfAberration(coords, this.Te);
+        coords = correctEffectOfNutation(coords, this.Te);
 
         return coords;
     }
@@ -189,8 +189,8 @@ export default abstract class Planet extends AstronomicalObject {
 
     protected getSaturnRingInclination(): number {
         const {lon, lat} = this.getApparentGeocentricEclipticSphericalCoordinates();
-        const iRad = (28.075216 - 0.012998 * this.T + 0.000004 * this.T ** 2) * DEG;
-        const omegaRad = normalizeAngle(169.50847 + 1.394681 * this.T + 0.000412 * this.T ** 2) * DEG;
+        const iRad = (28.075216 - 0.012998 * this.Te + 0.000004 * this.Te ** 2) * DEG;
+        const omegaRad = normalizeAngle(169.50847 + 1.394681 * this.Te + 0.000412 * this.Te ** 2) * DEG;
         const lonRad = lon * DEG;
         const latRad = lat * DEG;
 
@@ -203,9 +203,9 @@ export default abstract class Planet extends AstronomicalObject {
 
     private getHeliocentricEclipticSphericalCoordinates(vsop87: Vsop87): EclipticSphericalCoordinates {
         return {
-            lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.t)),
-            lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.t),
-            radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.t),
+            lon: normalizeAngle(calculateVSOP87Angle(vsop87.VSOP87_X, this.te)),
+            lat: calculateVSOP87Angle(vsop87.VSOP87_Y, this.te),
+            radiusVector: calculateVSOP87(vsop87.VSOP87_Z, this.te),
         };
     }
 

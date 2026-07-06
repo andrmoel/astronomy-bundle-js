@@ -75,13 +75,13 @@ const coordsDate  = sun.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *209.02485979°*\
+J2000 longitude: *209.02565877°*\
 J2000 latitude: *0.00145256°*\
-J2000 radius vector: *0.99514567 AU*
+J2000 radius vector: *0.99514544 AU*
 
-Date longitude: *209.31554093°*\
-Date latitude: *-0.00011635°*\
-Date radius vector: *0.99514567 AU*
+Date longitude: *209.31633994°*\
+Date latitude: *-0.00011638°*\
+Date radius vector: *0.99514544 AU*
 
 ---
 
@@ -103,12 +103,12 @@ const coordsDate  = sun.getGeocentricEclipticRectangularDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 x: *-0.87016460 AU*\
-J2000 y: *-0.48283379 AU*\
+J2000 x: *-0.87015767 AU*\
+J2000 y: *-0.48284581 AU*\
 J2000 z: *0.00002523 AU*
 
-Date x: *-0.86770383 AU*\
-Date y: *-0.48724220 AU*\
+Date x: *-0.86769684 AU*\
+Date y: *-0.48725419 AU*\
 Date z: *-0.00000202 AU*
 
 ---
@@ -131,13 +131,13 @@ const coordsDate  = sun.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 right ascension: *206.98107755°*\
-J2000 declination: *-11.12534365°*\
-J2000 radius vector: *0.99514567 AU*
+J2000 right ascension: *206.98183896°*\
+J2000 declination: *-11.12562684°*\
+J2000 radius vector: *0.99514544 AU*
 
-Date right ascension: *207.25762482°*\
-Date declination: *-11.22971558°*\
-Date radius vector: *0.99514567 AU*
+Date right ascension: *207.25838680°*\
+Date declination: *-11.22999811°*\
+Date radius vector: *0.99514544 AU*
 
 ---
 
@@ -159,13 +159,13 @@ const equatorialSpherical = sun.getApparentGeocentricEquatorialSphericalCoordina
 ```
 
 The result of the calculation should be:\
-Apparent ecliptic longitude: *209.30478357°*\
-Apparent ecliptic latitude: *-0.00011635°*\
-Apparent ecliptic radius vector: *0.99514567 AU*
+Apparent ecliptic longitude: *209.30558260°*\
+Apparent ecliptic latitude: *-0.00011638°*\
+Apparent ecliptic radius vector: *0.99514544 AU*
 
-Apparent right ascension: *207.24736604°*\
-Apparent declination: *-11.22591188°*\
-Apparent radius vector: *0.99514567 AU*
+Apparent right ascension: *207.24812801°*\
+Apparent declination: *-11.22619445°*\
+Apparent radius vector: *0.99514544 AU*
 
 ---
 
@@ -189,12 +189,12 @@ const observedHorizontal = sun.getRefractionCorrectedTopocentricHorizontalCoordi
 ```
 
 The result of the calculation should be:\
-Apparent topocentric right ascension: *207.248790°*\
-Apparent topocentric declination: *-11.227918°*
+Apparent topocentric right ascension: *207.249552°*\
+Apparent topocentric declination: *-11.228201°*
 
-Apparent topocentric azimuth: *113.500740°*\
-Geometric altitude: *3.431471°*\
-Observed altitude (with refraction): *3.641052°*
+Apparent topocentric azimuth: *113.500285°*\
+Geometric altitude: *3.430814°*\
+Observed altitude (with refraction): *3.640420°*
 
 ---
 
@@ -264,8 +264,8 @@ const topocentricDistance = sun.getTopocentricDistanceToEarth(location);
 ```
 
 The result of the calculation should be:\
-Geocentric distance: *148,871,672.60 km*\
-Topocentric distance: *148,871,283.29 km*
+Geocentric distance: *148,871,638.64 km*\
+Topocentric distance: *148,871,249.40 km*
 
 ---
 
@@ -309,8 +309,8 @@ const topocentricDiameter = sun.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 32' 09.579"*\
-Topocentric angular diameter: *0° 32' 09.584"*
+Geocentric angular diameter: *0° 32' 07.8"*\
+Topocentric angular diameter: *0° 32' 07.805"*
 
 ---
 

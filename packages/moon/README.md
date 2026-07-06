@@ -83,8 +83,8 @@ const coordsDate  = moon.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-Longitude: *133.162655°*\
-Latitude: *-3.229126°*\
+Longitude: *133.172335°*\
+Latitude: *-3.229784°*\
 Radius vector: *0.002463 AU*
 
 ---
@@ -131,8 +131,8 @@ const coordsDate  = moon.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-Right ascension: *134.68392°*\
-Declination: *13.769656°*\
+Right ascension: *134.69328°*\
+Declination: *13.766317°*\
 Radius vector: *0.002463 AU*
 
 ---
@@ -155,12 +155,12 @@ const equatorialSpherical = moon.getApparentGeocentricEquatorialSphericalCoordin
 ```
 
 The result of the calculation should be:\
-Apparent ecliptic longitude: *133.167265°*\
-Apparent ecliptic latitude: *-3.229126°*\
+Apparent ecliptic longitude: *133.176945°*\
+Apparent ecliptic latitude: *-3.229784°*\
 Apparent ecliptic radius vector: *0.002463 AU*
 
-Apparent right ascension: *134.688469°*\
-Apparent declination: *13.768367°*\
+Apparent right ascension: *134.697831°*\
+Apparent declination: *13.765027°*\
 Apparent radius vector: *0.002463 AU*
 
 ---
@@ -185,12 +185,12 @@ const observedHorizontal = moon.getRefractionCorrectedTopocentricHorizontalCoord
 ```
 
 The result of the calculation should be:\
-Apparent topocentric right ascension: *135.211802°*\
-Apparent topocentric declination: *13.079873°*
+Apparent topocentric right ascension: *135.221214°*\
+Apparent topocentric declination: *13.076484°*
 
-Apparent topocentric azimuth: *108.964863°*\
-Geometric altitude: *30.057752°*\
-Observed altitude (with refraction): *30.086785°*
+Apparent topocentric azimuth: *108.958631°*\
+Geometric altitude: *30.049601°*\
+Observed altitude (with refraction): *30.078644°*
 
 ---
 
@@ -260,8 +260,8 @@ const topocentricDistance = moon.getTopocentricDistanceToEarth(location);
 ```
 
 The result of the calculation should be:\
-Geocentric distance: *368,409.684816 km*\
-Topocentric distance: *365,174.894770 km*
+Geocentric distance: *368,409.007082 km*\
+Topocentric distance: *365,174.995170 km*
 
 ---
 
@@ -305,8 +305,8 @@ const topocentricDiameter = moon.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 32' 25.453"*\
-Topocentric angular diameter: *0° 32' 42.686"*
+Geocentric angular diameter: *0° 32' 25.456"*\
+Topocentric angular diameter: *0° 32' 42.685"*
 
 ---
 
@@ -329,8 +329,8 @@ const topocentricElongation = moon.getTopocentricElongation(location);
 ```
 
 The result of the calculation should be:\
-Elongation: *110.792854°*\
-Topocentric elongation: *111.462765°*
+Elongation: *110.801867°*\
+Topocentric elongation: *111.471862°*
 
 ---
 
@@ -353,8 +353,8 @@ const topocentricPhaseAngle = moon.getTopocentricPhaseAngle(location);
 ```
 
 The result of the calculation should be:\
-Phase angle: *69.075679°*\
-Topocentric phase angle: *68.407512°*
+Phase angle: *69.066674°*\
+Topocentric phase angle: *68.398424°*
 
 ---
 
@@ -401,8 +401,8 @@ const topocentricChi = moon.getTopocentricPositionAngleOfBrightLimb(location);
 ```
 
 The result of the calculation should be:\
-Position angle: *285.044°*\
-Topocentric position angle: *284.960°*
+Position angle: *285.046°*\
+Topocentric position angle: *284.962°*
 
 ---
 
@@ -511,12 +511,12 @@ const topocentricLibrationMagnitude = moon.getTopocentricLibrationMagnitude(loca
 ```
 
 The result of the calculation should be:\
-Sub-Earth point: *lon -1.23121°, lat 4.1998°*\
-Sub-Solar point: *lon 67.89891°, lat 1.46152°*\
-Geocentric libration: *lon -1.20579°, lat 4.19403°*\
-Geocentric libration magnitude: *4.36392°*\
-Topocentric libration: *lon -0.55307°, lat 4.73118°*\
-Topocentric libration magnitude: *4.76340°*
+Sub-Earth point: *lon -1.23046°, lat 4.2007°*\
+Sub-Solar point: *lon 67.89065°, lat 1.46152°*\
+Geocentric libration: *lon -1.20504°, lat 4.19489°*\
+Geocentric libration magnitude: *4.36455°*\
+Topocentric libration: *lon -0.55223°, lat 4.73204°*\
+Topocentric libration magnitude: *4.76416°*
 
 ---
 
@@ -542,5 +542,5 @@ const topocentricPositionAngleOfAxis = moon.getTopocentricPositionAngleOfAxis(lo
 ```
 
 The result of the calculation should be:\
-Position angle of the axis: *15.08413°*\
-Topocentric position angle of the axis: *15.25807°*
+Position angle of the axis: *15.08707°*\
+Topocentric position angle of the axis: *15.26101°*

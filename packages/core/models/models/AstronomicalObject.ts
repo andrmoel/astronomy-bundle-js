@@ -24,18 +24,24 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
 
     protected readonly jd0: number = 0.0;
 
-    protected readonly T: number = 0.0;
+    // Julian Centuries J2000 in Dynamical Time (TT), for ephemeris series
+    protected readonly Te: number = 0.0;
 
-    protected readonly t: number = 0.0;
+    // Julian Millennia J2000 in Dynamical Time (TT), for ephemeris series
+    protected readonly te: number = 0.0;
+
+    // Julian Centuries J2000 in Universal Time (UT), for sidereal time
+    protected readonly Tut: number = 0.0;
 
     protected constructor(
         protected readonly toi: TimeOfInterest = TimeOfInterest.fromCurrentTime(),
         public readonly name = 'astronomical object',
     ) {
-        this.jd = toi.getJulianDay();
         this.jd0 = toi.getJulianDay0();
-        this.T = toi.getJulianCenturiesJ2000();
-        this.t = toi.getJulianMillenniaJ2000();
+        this.jd = toi.getJulianDay();
+        this.Tut = toi.getJulianCenturiesJ2000();
+        this.Te = toi.getJulianCenturiesJ2000Ephemeris();
+        this.te = toi.getJulianMillenniaJ2000Ephemeris();
     }
 
     public getTimeOfInterest(): TimeOfInterest {
@@ -61,13 +67,13 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     public getGeocentricEquatorialSphericalJ2000Coordinates(): EquatorialSphericalCoordinates {
         const coords = this.getGeocentricEclipticSphericalJ2000Coordinates();
 
-        return eclipticSpherical2equatorialSpherical(coords, this.T);
+        return eclipticSpherical2equatorialSpherical(coords, this.Te);
     }
 
     public getGeocentricEquatorialSphericalDateCoordinates(): EquatorialSphericalCoordinates {
         const coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
-        return eclipticSpherical2equatorialSpherical(coords, this.T);
+        return eclipticSpherical2equatorialSpherical(coords, this.Te);
     }
 
     public getApparentGeocentricEclipticRectangularCoordinates(): RectangularCoordinates {
@@ -81,19 +87,19 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     public getApparentGeocentricEquatorialSphericalCoordinates(): EquatorialSphericalCoordinates {
         const coords = this.getApparentGeocentricEclipticSphericalCoordinates();
 
-        return eclipticSpherical2equatorialSpherical(coords, this.T);
+        return eclipticSpherical2equatorialSpherical(coords, this.Te);
     }
 
     public getApparentTopocentricEquatorialSphericalCoordinates(location: Location): EquatorialSphericalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return equatorialSpherical2topocentricSpherical(coords, location, this.T);
+        return equatorialSpherical2topocentricSpherical(coords, location, this.Tut);
     }
 
     public getApparentTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return equatorialSpherical2topocentricHorizontal(coords, location, this.T);
+        return equatorialSpherical2topocentricHorizontal(coords, location, this.Tut);
     }
 
     public getRefractionCorrectedTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {

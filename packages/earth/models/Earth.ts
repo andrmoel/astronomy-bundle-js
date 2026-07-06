@@ -32,17 +32,17 @@ export default class Earth extends AstronomicalObject {
 
     public getHeliocentricEclipticSphericalJ2000Coordinates(): EclipticSphericalCoordinates {
         return {
-            lon: normalizeAngle(calculateVSOP87Angle(this.vsop87J2000.VSOP87_X, this.t)),
-            lat: calculateVSOP87Angle(this.vsop87J2000.VSOP87_Y, this.t),
-            radiusVector: calculateVSOP87(this.vsop87J2000.VSOP87_Z, this.t),
+            lon: normalizeAngle(calculateVSOP87Angle(this.vsop87J2000.VSOP87_X, this.te)),
+            lat: calculateVSOP87Angle(this.vsop87J2000.VSOP87_Y, this.te),
+            radiusVector: calculateVSOP87(this.vsop87J2000.VSOP87_Z, this.te),
         };
     }
 
     public getHeliocentricEclipticSphericalDateCoordinates(): EclipticSphericalCoordinates {
         return {
-            lon: normalizeAngle(calculateVSOP87Angle(this.vsop87Date.VSOP87_X, this.t)),
-            lat: calculateVSOP87Angle(this.vsop87Date.VSOP87_Y, this.t),
-            radiusVector: calculateVSOP87(this.vsop87Date.VSOP87_Z, this.t),
+            lon: normalizeAngle(calculateVSOP87Angle(this.vsop87Date.VSOP87_X, this.te)),
+            lat: calculateVSOP87Angle(this.vsop87Date.VSOP87_Y, this.te),
+            radiusVector: calculateVSOP87(this.vsop87Date.VSOP87_Z, this.te),
         };
     }
 
@@ -67,18 +67,18 @@ export default class Earth extends AstronomicalObject {
     }
 
     public getNutationInLongitude(): number {
-        return earth.getNutationInLongitude(this.T);
+        return earth.getNutationInLongitude(this.Te);
     }
 
     public getNutationInObliquity(): number {
-        return earth.getNutationInObliquity(this.T);
+        return earth.getNutationInObliquity(this.Te);
     }
 
     public getMeanObliquityOfEcliptic(): number {
-        return earth.getMeanObliquityOfEcliptic(this.T);
+        return earth.getMeanObliquityOfEcliptic(this.Te);
     }
 
     public getTrueObliquityOfEcliptic(): number {
-        return earth.getTrueObliquityOfEcliptic(this.T);
+        return earth.getTrueObliquityOfEcliptic(this.Te);
     }
 }

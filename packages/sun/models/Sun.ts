@@ -59,8 +59,8 @@ export default class Sun extends AstronomicalObject {
     public getApparentGeocentricEclipticSphericalCoordinates(): EclipticSphericalCoordinates {
         let coords = this.getGeocentricEclipticSphericalDateCoordinates();
 
-        coords = correctEffectOfAberration(coords, this.T);
-        coords = correctEffectOfNutation(coords, this.T);
+        coords = correctEffectOfAberration(coords, this.Te);
+        coords = correctEffectOfNutation(coords, this.Te);
 
         return coords;
     }

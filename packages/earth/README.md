@@ -58,13 +58,13 @@ const coordsDate  = earth.getHeliocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *77.86590139°*\
-J2000 latitude: *-0.00250426°*\
-J2000 radius vector: *0.98482663 AU*
+J2000 longitude: *77.86671222°*\
+J2000 latitude: *-0.00250429°*\
+J2000 radius vector: *0.98482654 AU*
 
-Date longitude: *78.11652455°*\
-Date latitude: *-0.00014301°*\
-Date radius vector: *0.98482663 AU*
+Date longitude: *78.11733541°*\
+Date latitude: *-0.00014303°*\
+Date radius vector: *0.98482654 AU*
 
 ---
 
@@ -86,12 +86,12 @@ const coordsDate  = earth.getHeliocentricEclipticRectangularDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 x: *0.20701099 AU*\
-J2000 y: *0.96282394 AU*\
+J2000 x: *0.20699734 AU*\
+J2000 y: *0.96282678 AU*\
 J2000 z: *-0.00004304 AU*
 
-Date x: *0.20279744 AU*\
-Date y: *0.96372024 AU*\
+Date x: *0.20278378 AU*\
+Date y: *0.96372302 AU*\
 Date z: *-0.00000246 AU*
 
 ---

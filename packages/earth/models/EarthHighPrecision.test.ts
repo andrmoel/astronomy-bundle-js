@@ -13,33 +13,33 @@ it('tests if name is correct', () => {
 it('test getHeliocentricEclipticRectangularJ2000Coordinates', () => {
     const coords = earth.getHeliocentricEclipticRectangularJ2000Coordinates();
 
-    expect(coords.x).toBeCloseTo(0.20701041, 8);
-    expect(coords.y).toBeCloseTo(0.96282379, 8);
-    expect(coords.z).toBeCloseTo(-0.00004247, 8);
+    expect(coords.x).toBeCloseTo(0.2069967634, 8);
+    expect(coords.y).toBeCloseTo(0.9628266287, 8);
+    expect(coords.z).toBeCloseTo(-0.0000424696, 8);
 });
 
 it('test getHeliocentricEclipticRectangularDateCoordinates', () => {
     const coords = earth.getHeliocentricEclipticRectangularDateCoordinates();
 
-    expect(coords.x).toBeCloseTo(0.20279686, 8);
-    expect(coords.y).toBeCloseTo(0.96372008, 8);
-    expect(coords.z).toBeCloseTo(-0.00000251, 8);
+    expect(coords.x).toBeCloseTo(0.2027831988, 8);
+    expect(coords.y).toBeCloseTo(0.9637228613, 8);
+    expect(coords.z).toBeCloseTo(-0.0000025149, 8);
 });
 
 it('test getHeliocentricEclipticSphericalJ2000Coordinates', () => {
     const coords = earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(coords.lon).toBeCloseTo(77.86593249, 8);
-    expect(coords.lat).toBeCloseTo(-0.00247079, 8);
-    expect(coords.radiusVector).toBeCloseTo(0.98482636, 8);
+    expect(coords.lon).toBeCloseTo(77.8667433212, 8);
+    expect(coords.lat).toBeCloseTo(-0.0024708192, 8);
+    expect(coords.radiusVector).toBeCloseTo(0.9848262683, 8);
 });
 
 it('test getHeliocentricEclipticSphericalDateCoordinates', () => {
     const coords = earth.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(coords.lon).toBeCloseTo(78.11655576, 8);
-    expect(coords.lat).toBeCloseTo(-0.00014629, 8);
-    expect(coords.radiusVector).toBeCloseTo(0.98482636, 8);
+    expect(coords.lon).toBeCloseTo(78.1173666238, 8);
+    expect(coords.lat).toBeCloseTo(-0.0001463123, 8);
+    expect(coords.radiusVector).toBeCloseTo(0.9848262685, 8);
 });
 
 it('test getGeocentricEclipticRectangularJ2000Coordinates', () => {
