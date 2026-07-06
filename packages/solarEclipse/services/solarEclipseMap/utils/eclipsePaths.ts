@@ -1,16 +1,19 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import {calculateCentralLine} from '@package/solarEclipse/services/shadowGeometry/utils/centralLine';
+import {
+    horizonSinAltitude,
+    UMBRA_REGION_STEP_HOURS,
+} from '@package/solarEclipse/services/shadowGeometry/utils/constants';
+import calculatePenumbraVisibilityAlpha from '@package/solarEclipse/services/shadowGeometry/utils/penumbraVisibility';
+import {calculateShadowRegionContours} from '@package/solarEclipse/services/shadowGeometry/utils/shadowOutline';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import type {EclipsePaths, RiseSetBoundary, SolarEclipseMapSettings} from '../types/SolarEclipsePathTypes';
-import {calculateCentralLine} from './centralLine';
-import {horizonSinAltitude, UMBRA_REGION_STEP_HOURS} from './constants';
-import calculatePenumbraVisibilityAlpha from './penumbraVisibility';
 import {
     calculateMaxEclipseAtSunrise,
     calculateMaxEclipseAtSunset,
     calculateSunriseBoundary,
     calculateSunsetBoundary,
 } from './riseSetBoundary';
-import {calculateShadowRegionContours} from './shadowOutline';
 import {calculateGeometryParallel, calculatePenumbraVisibilityAlphaParallel, type EclipseGeometry} from './workerPool';
 
 // Each path is computed lazily on first access and memoized. A layer therefore never

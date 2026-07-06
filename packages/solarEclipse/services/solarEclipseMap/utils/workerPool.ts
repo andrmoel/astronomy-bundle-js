@@ -1,13 +1,14 @@
 import {availableParallelism} from 'node:os';
 import {isMainThread, parentPort, Worker, workerData} from 'node:worker_threads';
-import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {calculateCentralLine} from './centralLine';
-import {UMBRA_REGION_STEP_HOURS} from './constants';
+import {calculateCentralLine} from '@package/solarEclipse/services/shadowGeometry/utils/centralLine';
+import {UMBRA_REGION_STEP_HOURS} from '@package/solarEclipse/services/shadowGeometry/utils/constants';
 import calculatePenumbraVisibilityAlpha, {
     computePenumbraAlphaBand,
     computePenumbraInsideBand,
     PENUMBRA_TILE_SIZE,
-} from './penumbraVisibility';
+} from '@package/solarEclipse/services/shadowGeometry/utils/penumbraVisibility';
+import {calculateShadowRegionContours} from '@package/solarEclipse/services/shadowGeometry/utils/shadowOutline';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {assemblePng, deflatePngStrip, type PngStrip} from './pngEncode';
 import {
     calculateMaxEclipseAtSunrise,
@@ -15,7 +16,6 @@ import {
     calculateSunriseBoundary,
     calculateSunsetBoundary,
 } from './riseSetBoundary';
-import {calculateShadowRegionContours} from './shadowOutline';
 
 // The per-pixel penumbra masks dominate the map generation time by far, so they are fanned
 // out to a pool of worker threads; the pool also compresses the PNG strips of the final

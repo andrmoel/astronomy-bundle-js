@@ -1,14 +1,17 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
-import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
-import type {RiseSetBoundary} from '../types/SolarEclipsePathTypes';
 import {
     DEG,
     E_SQ,
     EARTH_ROTATION_DEG_PER_HOUR,
-    MAX_ECLIPSE_RING_SAMPLES,
     ONE_MINUS_F,
+} from '@package/solarEclipse/services/shadowGeometry/utils/constants';
+import {type RingPoint, terminatorRingPoint} from '@package/solarEclipse/services/shadowGeometry/utils/shadowOutline';
+import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import type {RiseSetBoundary} from '../types/SolarEclipsePathTypes';
+import {
+    MAX_ECLIPSE_RING_SAMPLES,
     RISE_SET_BOUNDARY_Q_SAMPLES,
     RISE_SET_BOUNDARY_STEP_HOURS,
     RISE_SET_GAP_SUBDIVISION_DEPTH,
@@ -16,7 +19,6 @@ import {
     RISE_SET_TIP_REFINEMENT_SAMPLES,
 } from './constants';
 import {calculateShadowBoundaryPoint, penumbraBoundaryFundamental} from './shadowBoundary';
-import {type RingPoint, terminatorRingPoint} from './shadowOutline';
 
 // Moves a crossing (penumbra limit meeting the terminator) onto the horizon ring at
 // zeta = z0. The refined point lies where the penumbra-limit circle of radius

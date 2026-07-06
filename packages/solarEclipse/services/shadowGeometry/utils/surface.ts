@@ -6,16 +6,10 @@ import {E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
 export interface SurfaceSolution {
     lat: number;
     lon: number;
-    // Distance of the surface point from the fundamental plane along the shadow axis (Earth
-    // equatorial radii). zeta / rho = sin(Sun's geocentric altitude); zeta = 0 is the
-    // geometric terminator, zeta < 0 the night side.
     zeta: number;
     sinU: number;
 }
 
-// Projects a fundamental-plane point (xi, eta) onto the Earth ellipsoid. farSide selects the
-// night-side intersection (zeta < 0) instead of the sunlit one, needed for the rise/set curves
-// once the terminator is depressed below the geometric horizon.
 export function solveSurfacePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,

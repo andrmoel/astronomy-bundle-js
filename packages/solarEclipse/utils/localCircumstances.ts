@@ -10,7 +10,7 @@ import type {EclipseContacts} from '@package/solarEclipse/types/EclipseContactTy
 import Sun from '@package/sun/models/Sun';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {BesselianElements} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime, tau2julianDay} from './besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT, tau2julianDay} from './besselianElements';
 
 export function getLocalEclipseCircumstances(
     elements: BesselianElements,

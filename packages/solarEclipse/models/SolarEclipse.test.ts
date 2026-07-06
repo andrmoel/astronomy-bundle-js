@@ -1,4 +1,5 @@
 import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import isPointInPolygon from '@package/solarEclipse/services/shadowGeometry/utils/pointInPolygon';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import SolarEclipse from './SolarEclipse';
 
@@ -74,6 +75,26 @@ it('tests getMaxCentralDuration', () => {
     const result = eclipse.getMaxCentralDuration();
 
     expect(result).toBeCloseTo(272.8, 1);
+});
+
+describe('getUmbraPathPolygon', () => {
+    it('returns a closed ring around the path of totality', () => {
+        const polygon = eclipse.getUmbraPathPolygon({stepsInSeconds: 60});
+
+        expect(polygon[0]).toEqual(polygon[polygon.length - 1]);
+        expect(isPointInPolygon({lat: -29.9027, lon: -71.252}, polygon)).toBe(true);
+        expect(isPointInPolygon({lat: -33.447, lon: -70.673}, polygon)).toBe(false);
+    });
+});
+
+describe('getPenumbraPathPolygon', () => {
+    it('returns a closed ring around the region of visibility', () => {
+        const polygon = eclipse.getPenumbraPathPolygon();
+
+        expect(polygon[0]).toEqual(polygon[polygon.length - 1]);
+        expect(isPointInPolygon({lat: -33.447, lon: -70.673}, polygon)).toBe(true);
+        expect(isPointInPolygon({lat: 40.7128, lon: -74.006}, polygon)).toBe(false);
+    });
 });
 
 describe('getCenterLine', () => {

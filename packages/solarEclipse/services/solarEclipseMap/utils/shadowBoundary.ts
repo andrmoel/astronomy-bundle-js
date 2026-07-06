@@ -1,7 +1,7 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import {E_SQ, ONE_MINUS_F} from '@package/solarEclipse/services/shadowGeometry/utils/constants';
+import {fundamentalToLatLon, solveSurfacePoint} from '@package/solarEclipse/services/shadowGeometry/utils/surface';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
-import {E_SQ, ONE_MINUS_F} from './constants';
-import {fundamentalToLatLon, solveSurfacePoint} from './surface';
 
 export function calculateShadowBoundaryPoint(
     elements: BesselianElements,

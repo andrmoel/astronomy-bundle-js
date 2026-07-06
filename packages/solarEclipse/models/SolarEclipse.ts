@@ -1,7 +1,10 @@
 import type {LatLon, Location} from '@app/types/LocationTypes';
+import type {ShadowPathOptions} from '@package/solarEclipse/services/shadowGeometry/types/ShadowPathTypes';
+import {getCentralLine} from '@package/solarEclipse/services/shadowGeometry/utils/centralLine';
+import calculatePenumbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/penumbraPathPolygon';
+import calculateUmbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/umbraPathPolygon';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
-import {getCentralLine} from '@package/solarEclipse/utils/eclipsePaths';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
 import {
     getJulianDayOfGreatestEclipse,
@@ -84,6 +87,14 @@ export default class SolarEclipse {
 
     public getCentralLine(stepsInSeconds = 10): Array<LatLon> {
         return getCentralLine(this.elements, stepsInSeconds);
+    }
+
+    public getUmbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculateUmbraPathPolygon(this.elements, options);
+    }
+
+    public getPenumbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculatePenumbraPathPolygon(this.elements, options);
     }
 
     // TODO

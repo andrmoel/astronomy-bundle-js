@@ -1,6 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import type {Canvas, SKRSContext2D} from '@napi-rs/canvas';
-import {unwrapPoints} from './contourGeometry';
+import {unwrapPoints} from '@package/solarEclipse/services/shadowGeometry/utils/contourGeometry';
 
 export function projectLonLatToPixel(point: LatLon, canvas: Canvas): {x: number; y: number} {
     return {

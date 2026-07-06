@@ -6,35 +6,20 @@ import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './consta
 import {closeContourAroundPole, lonWinding, shortestLonDelta, signedUnwrappedArea} from './contourGeometry';
 import {solveSurfacePoint} from './surface';
 
-// The region where an eclipse is visible is the union over time of the instantaneous shadow
-// outline: the shadow circle clipped to where the Sun is still up (zeta >= z0, the rise/set
-// horizon of the map's settings). Rendering every outline into one nonzero-winding fill makes the canvas
-// compute that union, so sunrise/sunset crescents, interior holes and polar caps all come out
-// of the same construction instead of needing to be stitched from separate boundary curves.
-
-// The tiny umbra circle needs far fewer edge samples than the penumbra for the same
-// on-map chord length, and it is outlined at 4× more time steps.
 const PENUMBRA_Q_SAMPLES = 240;
 const UMBRA_Q_SAMPLES = 64;
-// The rise/set horizon ring has a radius of ~1 Earth radius regardless of the shadow size,
-// so its sampling step is independent of the shadow's edge sampling. Near the limb the
-// map projection stretches a θ step into large lat/lon jumps, so segments longer than
-// RING_ARC_MAX_CHORD_DEG on the map are subdivided adaptively.
+
 const RING_ARC_STEP = (2 * Math.PI) / 240;
 const RING_ARC_MAX_CHORD_DEG = 0.1;
 const RING_ARC_MAX_DEPTH = 10;
 
-interface EdgeSample {
+export interface EdgeSample {
     point: LatLon;
     xi: number;
     eta: number;
 }
 
-// One point of the shadow edge at position angle q, projected onto the requested sheet of
-// the ellipsoid. The shadow radius depends on zeta, which depends on the surface point, so
-// both are converged by fixed-point iteration. Returns null when the edge misses the
-// ellipsoid or the surface point lies below the visibility horizon at zeta = z0.
-function shadowEdgePoint(
+export function shadowEdgePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     q: number,
@@ -74,9 +59,7 @@ function shadowEdgePoint(
     return {point, xi, eta};
 }
 
-// Bisects q between an accepted and a rejected edge sample down to the exact boundary of
-// acceptance (the limb fold or the rise/set horizon crossing).
-function bisectEdgeBoundary(
+export function bisectEdgeBoundary(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     qGood: number,
@@ -103,9 +86,6 @@ function bisectEdgeBoundary(
     return sample !== null ? {sample, q: good} : null;
 }
 
-// From the limb fold at qFold, the boundary doubles back on the night sheet (the ~50' sliver
-// between the geometric terminator and the rise/set horizon) until the edge drops below the
-// horizon. direction is -1 at a gap start (q decreasing) and +1 at a gap end.
 function nightSheetRun(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
@@ -116,11 +96,6 @@ function nightSheetRun(
     z0: number,
 ): Array<EdgeSample> {
     const run: Array<EdgeSample> = [];
-    // The sliver covers only a small q range, so it is walked at a finer step than the
-    // day-side sweep; the step count is capped at a full revolution as a safety net.
-    // The fold itself is on the sliver (zeta ≈ 0 there), so when even the first step is
-    // already past the horizon, the crossing is still bisected from the fold — otherwise
-    // a sliver narrower than one step would silently drop its whole flap.
     const nightStep = qStep / 4;
     const maxSteps = Math.ceil((2 * Math.PI) / nightStep);
     let qGood = qFold;
@@ -148,11 +123,6 @@ export interface RingPoint {
     sinU: number;
 }
 
-// Surface point of the horizon ring at Sun altitude asin(z0) and position angle theta.
-// On the ring sinU follows linearly from the coordinates
-// via (1 - f) sinU = eta cos d + zeta sin d, so only the ellipsoid radius needs a short
-// fixed-point iteration and every theta yields a point — the general surface solver would
-// sit exactly on its zetaSq >= 0 float boundary at z0 = 0 and fail intermittently.
 export function terminatorRingPoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
@@ -181,11 +151,6 @@ export function terminatorRingPoint(
     return {point: {lat, lon}, xi, eta, sinU};
 }
 
-// Arc of the rise/set horizon ring between two fundamental-plane points, taking the side
-// that stays inside the shadow circle. The direction is picked by which candidate arc's
-// midpoint lies closer to the shadow centre — for the umbra the shadow radius is of the
-// same order as the ring-radius convergence error, so a converged point is required to
-// make that comparison reliable.
 function terminatorRingArc(
     elements: BesselianElements,
     e: BesselianElementsAtTime,

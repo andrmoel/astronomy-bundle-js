@@ -2,40 +2,20 @@ import type {BesselianElements} from '@package/solarEclipse/types/BesselianEleme
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F} from './constants';
 
-// The penumbral region is shaded per pixel: a location is shaded iff at the moment of ITS
-// OWN maximum eclipse the Sun is up per the map's horizon convention (zeta >= z0: the
-// geometric horizon at z0 = 0, or the refracted upper-limb horizon at z0 = sin(-50'))
-// and the eclipse magnitude is positive (m <= L1). This
-// pointwise definition produces every boundary in one stroke — the penumbral limit
-// (m = L1 envelope), the maximum-eclipse-at-sunrise/sunset curves (the green
-// lines), their polar-midnight cusps, and the midnight-sun arcs joining them — where a
-// polygon assembly needs a fragile per-curve case analysis that breaks with the eclipse
-// geometry (compare the 2017-08-21 Arctic, where the rise/set curves swap sides at the
-// local-midnight cusp near 78N).
-//
-// Maximum eclipse is the tau minimizing the fundamental-plane separation m between the
-// location and the shadow axis — the same condition that defines the green curves, so the
-// mask's rise/set border coincides with them exactly.
-
-// Coarse scan step over [tMin, tMax]. Between samples m dips below the sampled minimum by
-// at most ~ m'' (step/2)^2 / 2 ~ 0.005 Earth radii, covered by the decision slacks below.
 const COARSE_STEP_HOURS = 0.25;
-// Coarse depth (L1 - m) below this is conclusively outside, above it conclusively eclipsed.
+
 const DEPTH_OUT_SLACK = 0.03;
 const DEPTH_IN_SLACK = 0.01;
-// Zeta moves by at most ~0.26/h (Earth rotation), i.e. ~0.033 per half step; a coarse zeta
-// farther than this slack from the horizon threshold stays on its side at the true minimum.
 const ZETA_SLACK = 0.05;
-// Square tiles whose corners stay this far outside the penumbra at every sample are skipped
-// wholesale; the slack covers the tile diagonal (~0.02 at 8 map pixels) plus the coarse
-// sampling dip.
+
 export const PENUMBRA_TILE_SIZE = 8;
 const TILE_SIZE = PENUMBRA_TILE_SIZE;
 const TILE_SLACK = 0.05;
+
 // Border pixels are supersampled on an n x n subgrid for antialiasing.
 const SUBSAMPLES = 3;
 
-interface ScanContext {
+export interface ScanContext {
     elements: BesselianElements;
     ghaOffset: number;
     tanF1: number;
@@ -50,7 +30,7 @@ interface ScanContext {
     cosGs: Float64Array;
 }
 
-function buildScanContext(elements: BesselianElements, z0: number): ScanContext {
+export function buildScanContext(elements: BesselianElements, z0: number): ScanContext {
     const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600) * DEG;
     const count = Math.max(2, Math.ceil((elements.tMax - elements.tMin) / COARSE_STEP_HOURS) + 1);
     const taus = new Float64Array(count);
@@ -78,7 +58,6 @@ function buildScanContext(elements: BesselianElements, z0: number): ScanContext 
     return {elements, ghaOffset, tanF1: elements.tanF1, z0, taus, xs, ys, l1s, sinDs, cosDs, sinGs, cosGs};
 }
 
-// Geocentric direction of a sea-level point at geodetic latitude: tan U = (1 - f) tan(lat).
 function parametricLatitude(latRad: number): {sinU: number; cosU: number} {
     const sinLat = Math.sin(latRad);
     const cosLat = Math.cos(latRad);
@@ -93,7 +72,6 @@ interface MaxEclipseState {
     l1Effective: number;
 }
 
-// Separation and horizon state of the location at one exact instant.
 function stateAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: number, cosU: number): MaxEclipseState {
     const e = getBesselianElementsAtTime(ctx.elements, tau);
     const H = e.mu - ctx.ghaOffset + lonRad;
@@ -109,19 +87,14 @@ function stateAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: number,
     return {m, zeta, l1Effective: e.l1 - zeta * ctx.tanF1};
 }
 
-// Separation only, at one exact instant: the m of stateAtTau computed by the identical
-// operations on the identical inputs, skipping the l1/zeta terms (and the intermediate
-// objects) that the golden-section comparisons below never look at, and with the
-// polynomial() accumulation loops unrolled operation for operation. Keeping the refinement
-// this lean matters — it runs for every pixel near the mask's borders.
 function separationAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: number, cosU: number): number {
     const elements = ctx.elements;
     const tau2 = tau * tau;
     const tau3 = tau2 * tau;
     const cd = elements.d;
-    const d = (0 + cd[0] * 1 + cd[1] * tau + cd[2] * tau2) * DEG;
+    const d = (cd[0] + cd[1] * tau + cd[2] * tau2) * DEG;
     const cMu = elements.mu;
-    const mu = (0 + cMu[0] * 1 + cMu[1] * tau + cMu[2] * tau2) * DEG;
+    const mu = (cMu[0] + cMu[1] * tau + cMu[2] * tau2) * DEG;
     const H = mu - ctx.ghaOffset + lonRad;
     const sinH = Math.sin(H);
     const cosH = Math.cos(H);
@@ -129,14 +102,13 @@ function separationAtTau(ctx: ScanContext, tau: number, lonRad: number, sinU: nu
     const xi = cosU * sinH;
     const eta = pSinU * Math.cos(d) - cosU * cosH * Math.sin(d);
     const cx = elements.x;
-    const x = 0 + cx[0] * 1 + cx[1] * tau + cx[2] * tau2 + cx[3] * tau3;
+    const x = cx[0] + cx[1] * tau + cx[2] * tau2 + cx[3] * tau3;
     const cy = elements.y;
-    const y = 0 + cy[0] * 1 + cy[1] * tau + cy[2] * tau2 + cy[3] * tau3;
+    const y = cy[0] + cy[1] * tau + cy[2] * tau2 + cy[3] * tau3;
 
     return Math.hypot(xi - x, eta - y);
 }
 
-// Golden-section refinement of the separation minimum inside the coarse bracket.
 const GOLDEN = (Math.sqrt(5) - 1) / 2;
 
 function refineMaxEclipse(
@@ -171,7 +143,6 @@ function refineMaxEclipse(
     return stateAtTau(ctx, (a + b) / 2, lonRad, sinU, cosU);
 }
 
-// Is the maximum eclipse of this location visible (Sun up, magnitude positive)?
 function isMaxEclipseVisible(
     ctx: ScanContext,
     lonRad: number,
@@ -214,18 +185,13 @@ function isMaxEclipseVisible(
     return state.zeta >= ctx.z0 && state.m <= state.l1Effective;
 }
 
-function isMaxEclipseVisibleAt(ctx: ScanContext, latDeg: number, lonDeg: number): boolean {
+export function isMaxEclipseVisibleAt(ctx: ScanContext, latDeg: number, lonDeg: number): boolean {
     const lonRad = lonDeg * DEG;
     const {sinU, cosU} = parametricLatitude(latDeg * DEG);
 
     return isMaxEclipseVisible(ctx, lonRad, Math.sin(lonRad), Math.cos(lonRad), sinU, cosU);
 }
 
-// Alpha mask (0..255 per pixel, row-major) of the visible penumbral eclipse on the
-// equirectangular map, antialiased along its boundary by subpixel supersampling. The two
-// passes below are split into row-band functions so that a worker pool can share the work
-// (see penumbraAlphaPool); each pass runs the exact per-pixel arithmetic of a single
-// full-image sweep, so banded evaluation is bit-identical to this single-threaded one.
 export default function calculatePenumbraVisibilityAlpha(
     elements: BesselianElements,
     width: number,
@@ -240,10 +206,6 @@ export default function calculatePenumbraVisibilityAlpha(
     return alpha;
 }
 
-// First pass, rows [yStart, yEnd) (multiples of the tile size, or the map edges, so the
-// tile-skip decisions match the full-image pass tile for tile): mark the pixels whose
-// maximum eclipse is visible in the full-size `inside` mask. Tiles are decided
-// independently of each other, so any tile-aligned banding writes identical values.
 export function computePenumbraInsideBand(
     elements: BesselianElements,
     width: number,
@@ -321,10 +283,6 @@ export function computePenumbraInsideBand(
     }
 }
 
-// Second pass, rows [yStart, yEnd): resolve the completed full-size `inside` mask into the
-// full-size `alpha` mask, supersampling the border pixels. Each pixel reads only its own
-// and its direct neighbours' `inside` values, so any row banding whose neighbouring rows
-// are complete writes identical values.
 export function computePenumbraAlphaBand(
     elements: BesselianElements,
     width: number,
