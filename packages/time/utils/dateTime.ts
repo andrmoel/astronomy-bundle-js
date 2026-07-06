@@ -2,6 +2,7 @@ import {EPOCH_J2000} from '@app/constants/epoch';
 import {DAYS_PER_JULIAN_CENTURY, HOURS_PER_DAY, MINUTES_PER_DAY, SECONDS_PER_DAY} from '@app/constants/time';
 import {round} from '@app/utils/math';
 import type {Time} from '../types/TimeTypes';
+import {getDeltaT} from './deltaT';
 
 export function sec2string(sec: number, short = false): string {
     const sign = sec < 0 ? '-' : '';
@@ -161,6 +162,18 @@ export function julianMillenniaJ20002julianDay(t: number): number {
     const T = t * 10;
 
     return julianCenturiesJ20002julianDay(T);
+}
+
+export function julianDay2julianDayEphemeris(jd: number): number {
+    const {year, month} = julianDay2time(jd);
+
+    return jd + getDeltaT(year, month) / SECONDS_PER_DAY;
+}
+
+export function julianDayEphemeris2julianDay(jde: number): number {
+    const {year, month} = julianDay2time(jde);
+
+    return jde - getDeltaT(year, month) / SECONDS_PER_DAY;
 }
 
 export function dayOfYear2time(year: number, dayOfYear: number): Time {

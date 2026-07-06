@@ -16,8 +16,10 @@ import {
     julianCenturiesJ20002julianDay,
     julianDay2julianCenturiesJ2000,
     julianDay2julianDay0,
+    julianDay2julianDayEphemeris,
     julianDay2julianMillenniaJ2000,
     julianDay2time,
+    julianDayEphemeris2julianDay,
     time2julianDay,
 } from '../utils/dateTime';
 import {getDeltaT} from '../utils/deltaT';
@@ -25,10 +27,13 @@ import {getDeltaT} from '../utils/deltaT';
 export default class TimeOfInterest {
     public readonly jd: number = 0.0;
 
+    public readonly jde: number = 0.0;
+
     public readonly T: number = 0.0;
 
     public constructor(public readonly time: Time) {
         this.jd = time2julianDay(time);
+        this.jde = julianDay2julianDayEphemeris(this.jd);
         this.T = julianDay2julianCenturiesJ2000(this.jd);
     }
 
@@ -70,6 +75,10 @@ export default class TimeOfInterest {
         const time = julianDay2time(jd);
 
         return new TimeOfInterest(time);
+    }
+
+    public static fromJulianDayEphemeris(jde: number): TimeOfInterest {
+        return TimeOfInterest.fromJulianDay(julianDayEphemeris2julianDay(jde));
     }
 
     public static fromJulianCenturiesJ2000(T: number): TimeOfInterest {
@@ -119,12 +128,24 @@ export default class TimeOfInterest {
         return julianDay2julianDay0(this.jd);
     }
 
+    public getJulianDayEphemeris(): number {
+        return this.jde;
+    }
+
     public getJulianCenturiesJ2000(): number {
         return this.T;
     }
 
+    public getJulianCenturiesJ2000Ephemeris(): number {
+        return julianDay2julianCenturiesJ2000(this.jde);
+    }
+
     public getJulianMillenniaJ2000(): number {
         return julianDay2julianMillenniaJ2000(this.jd);
+    }
+
+    public getJulianMillenniaJ2000Ephemeris(): number {
+        return julianDay2julianMillenniaJ2000(this.jde);
     }
 
     public getGreenwichMeanSiderealTime(): number {

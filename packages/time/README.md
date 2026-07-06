@@ -37,6 +37,10 @@ const toi = TimeOfInterest.fromJulianDay(jd);
 // Create from Julian Centuries since J2000
 const T = 0.17500741501255;
 const toi = TimeOfInterest.fromJulianCenturiesJ2000(T);
+
+// Create from a Julian Ephemeris Day (Dynamical Time), converted back to UTC via Delta T
+const jde = 2457937.1466295;
+const toi = TimeOfInterest.fromJulianDayEphemeris(jde);
 ```
 
 The result will be always: *2017-07-02 15:30:00*
@@ -90,6 +94,8 @@ Is leap year: *false*
 
 **Description:** These methods convert the TOI to the continuous time scales used in astronomical formulas. Julian Day is a simple day count from a fixed epoch; Julian Centuries and Julian Millennia express elapsed time relative to J2000.0 (1 January 2000, 12:00 TT).
 
+The TOI wraps a Universal Time (UTC) moment, so `getJulianDay()`, `getJulianCenturiesJ2000()` and `getJulianMillenniaJ2000()` are all based on UT. Many astronomical series (Sun, Moon and planet positions, nutation, obliquity) instead expect Dynamical Time (TT). For those, use the `*Ephemeris` variants, which add [Delta T](#delta-t) to obtain the Julian Ephemeris Day (JDE) and its centuries/millennia.
+
 **Example**: Get Julian Day, Julian Centuries and Julian Millennia for 02 July 2017 at 13:37 UTC
 
 ```javascript
@@ -97,17 +103,29 @@ import {TimeOfInterest} from '@astronomy-bundle/core';
 
 const toi = TimeOfInterest.fromTime(2017, 7, 2, 13, 37, 0);
 
-const jd = toi.getJulianDay();
 const jd0 = toi.getJulianDay0();
+
+// Universal Time (UT)
+const jd = toi.getJulianDay();
 const T = toi.getJulianCenturiesJ2000();
 const t = toi.getJulianMillenniaJ2000();
+
+// Dynamical Time (TT)
+const jde = toi.getJulianDayEphemeris();
+const Te = toi.getJulianCenturiesJ2000Ephemeris();
+const te = toi.getJulianMillenniaJ2000Ephemeris();
 ```
 
 The result of the calculation should be:\
-Julian Day: *2457937.0673611*\
 Julian Day 0: *2457936.5*\
+\
+Julian Day: *2457937.0673611*\
 Julian Centuries J2000: *0.1750052666*\
-Julian Millennia J2000: *0.0175005267*
+Julian Millennia J2000: *0.0175005267*\
+\
+Julian Ephemeris Day: *2457937.0681573*\
+Julian Centuries J2000 (Ephemeris): *0.1750052884*\
+Julian Millennia J2000 (Ephemeris): *0.0175005288*
 
 ---
 
@@ -155,7 +173,7 @@ LAST: *9h 13m 46.232s*
 
 ### Delta T
 
-**Description:** Delta T (ΔT) is the difference between Terrestrial Time (TT) and Universal Time (UT1), accounting for the gradual slowing of Earth's rotation. It is required when high-precision calculations need to align dynamical time with observed time.
+**Description:** Delta T (ΔT) is the difference between Terrestrial Time (TT) and Universal Time (UT1), accounting for the gradual slowing of Earth's rotation. It is required when high-precision calculations need to align dynamical time with observed time. The [`*Ephemeris` Julian Day methods](#julian-day-julian-centuries-and-julian-millennia) apply this offset for you, and `TimeOfInterest.fromJulianDayEphemeris(jde)` converts a Julian Ephemeris Day back to UTC.
 
 **Example**: Get Delta T for 20 May 2000 UTC
 

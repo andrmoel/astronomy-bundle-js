@@ -10,9 +10,11 @@ import {
     julianCenturiesJ20002julianDay,
     julianDay2julianCenturiesJ2000,
     julianDay2julianDay0,
+    julianDay2julianDayEphemeris,
     julianDay2julianMillenniaJ2000,
     julianDay2ModifiedJulianDay,
     julianDay2time,
+    julianDayEphemeris2julianDay,
     julianMillenniaJ20002julianDay,
     sec2string,
     shortYear2longYear,
@@ -122,6 +124,14 @@ it('tests julianDay2julianMillenniaJ2000', () => {
 
 it('tests julianMillenniaJ20002julianDay', () => {
     expect(round(julianMillenniaJ20002julianDay(-0.012729637235), 1)).toBe(2446895.5);
+});
+
+it('tests julianDay2julianDayEphemeris adds deltaT', () => {
+    expect(round((julianDay2julianDayEphemeris(2459300.5) - 2459300.5) * 86400, 3)).toBe(69.346);
+});
+
+it('tests julianDayEphemeris2julianDay is the inverse of julianDay2julianDayEphemeris', () => {
+    expect(round(julianDayEphemeris2julianDay(julianDay2julianDayEphemeris(2459300.5)), 8)).toBe(2459300.5);
 });
 
 it('tests dayOfYear2time', () => {
