@@ -72,6 +72,29 @@ describe('eclipseType', () => {
         expect(eclipseType).toBe(SolarEclipseType.Annular);
     });
 
+    it('gets the eclipse type for a non-central total eclipse whose axis misses the Earth sphere', () => {
+        // 2043-04-09 total (non-central) eclipse.
+        const elements: BesselianElements = {
+            t0Jde: 2467349.2900000215,
+            t0Hours: 19,
+            tMin: -4,
+            tMax: 4,
+            deltaT: 87.19999694824219,
+            x: [-0.4477890133857727, 0.5135998574197864, 0.0000564989165929136, -0.000008500010071101979],
+            y: [0.8979039788246155, 0.26973256548529156, -0.00009270025544070387, -0.0000047000154423563694],
+            d: [7.749800205230713, 0.014808012576071224, -0.0000020000320444593986],
+            mu: [104.61505126953125, 15.004059662775616, 0],
+            l1: [0.5353430507942324, -0.000054599056063942283, -0.000012799829096346935],
+            l2: [-0.010740775780510881, -0.00005439763420875544, -0.000012699850459303567],
+            tanF1: 0.004668001831082628,
+            tanF2: 0.004644799725337606
+        }
+
+        const eclipseType = getEclipseType(elements);
+
+        expect(eclipseType).toBe(SolarEclipseType.Total);
+    });
+
     it('gets the eclipse type for a hybrid eclipse', () => {
         // 2023-04-20
         const elements: BesselianElements = {
