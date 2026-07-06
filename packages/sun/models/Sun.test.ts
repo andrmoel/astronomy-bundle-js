@@ -274,3 +274,21 @@ it('tests getTopocentricApparentMagnitude', () => {
 
     expect(V).toBe(-26.74);
 });
+
+it('places the 2021 vernal equinox between 09:37 and 09:38 UT', () => {
+    const apparentLongitude = (min: number): number => {
+        const equinoxToi = TimeOfInterest.fromTime(2021, 3, 20, 9, min, 0);
+        const {lon} = new Sun(equinoxToi).getApparentGeocentricEclipticSphericalCoordinates();
+
+        return ((lon + 180) % 360) - 180;
+    };
+
+    const lon0936 = apparentLongitude(36);
+    const lon0937 = apparentLongitude(37);
+    const lon0938 = apparentLongitude(38);
+
+    expect(lon0936).toBeLessThan(lon0937);
+    expect(lon0937).toBeLessThan(lon0938);
+    expect(lon0937).toBeLessThan(0);
+    expect(lon0938).toBeGreaterThan(0);
+});
