@@ -20,9 +20,9 @@ import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {AstronomicalObjectInterface} from './AstronomicalObjectInterface';
 
 export default abstract class AstronomicalObject implements AstronomicalObjectInterface {
-    protected readonly jd: number = 0.0;
-
     protected readonly jd0: number = 0.0;
+
+    protected readonly jd: number = 0.0;
 
     // Julian Centuries J2000 in Dynamical Time (TT), for ephemeris series
     protected readonly Te: number = 0.0;
@@ -31,7 +31,7 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     protected readonly te: number = 0.0;
 
     // Julian Centuries J2000 in Universal Time (UT), for sidereal time
-    protected readonly Tut: number = 0.0;
+    protected readonly T: number = 0.0;
 
     protected constructor(
         protected readonly toi: TimeOfInterest = TimeOfInterest.fromCurrentTime(),
@@ -39,7 +39,7 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     ) {
         this.jd0 = toi.getJulianDay0();
         this.jd = toi.getJulianDay();
-        this.Tut = toi.getJulianCenturiesJ2000();
+        this.T = toi.getJulianCenturiesJ2000();
         this.Te = toi.getJulianCenturiesJ2000Ephemeris();
         this.te = toi.getJulianMillenniaJ2000Ephemeris();
     }
@@ -93,13 +93,13 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     public getApparentTopocentricEquatorialSphericalCoordinates(location: Location): EquatorialSphericalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return equatorialSpherical2topocentricSpherical(coords, location, this.Tut);
+        return equatorialSpherical2topocentricSpherical(coords, location, this.T);
     }
 
     public getApparentTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
         const coords = this.getApparentGeocentricEquatorialSphericalCoordinates();
 
-        return equatorialSpherical2topocentricHorizontal(coords, location, this.Tut);
+        return equatorialSpherical2topocentricHorizontal(coords, location, this.T);
     }
 
     public getRefractionCorrectedTopocentricHorizontalCoordinates(location: Location): LocalHorizontalCoordinates {
