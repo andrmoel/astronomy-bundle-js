@@ -9,6 +9,8 @@ import {
     buildScanContext,
     computePenumbraInsideBand,
     isMaxEclipseVisibleAt,
+    pixelCenterLat,
+    pixelCenterLon,
     type ScanContext,
 } from './penumbraVisibility';
 
@@ -78,7 +80,7 @@ function refineCrossing(ctx: ScanContext, crossing: GridCrossing): LatLon {
 }
 
 function gridPointLatLon(x: number, y: number): LatLon {
-    const lat = y < 0 ? 90 : y >= GRID_HEIGHT ? -90 : 90 - ((y + 0.5) / GRID_HEIGHT) * 180;
+    const lat = y < 0 ? 90 : y >= GRID_HEIGHT ? -90 : pixelCenterLat(y, GRID_HEIGHT);
 
-    return {lat, lon: ((x + 0.5) / GRID_WIDTH) * 360 - 180};
+    return {lat, lon: pixelCenterLon(x, GRID_WIDTH)};
 }

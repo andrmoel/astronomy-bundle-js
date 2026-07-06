@@ -3,7 +3,13 @@ import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
-import {closeContourAroundPole, lonWinding, shortestLonDelta, signedUnwrappedArea} from './contourGeometry';
+import {
+    closeContourAroundPole,
+    lonWinding,
+    shortestAngleDelta,
+    shortestLonDelta,
+    signedUnwrappedArea,
+} from './contourGeometry';
 import {solveSurfacePoint} from './surface';
 
 const PENUMBRA_Q_SAMPLES = 240;
@@ -17,6 +23,7 @@ export interface EdgeSample {
     point: LatLon;
     xi: number;
     eta: number;
+    zeta: number;
 }
 
 export function shadowEdgePoint(
@@ -56,7 +63,7 @@ export function shadowEdgePoint(
         return null;
     }
 
-    return {point, xi, eta};
+    return {point, xi, eta, zeta};
 }
 
 export function bisectEdgeBoundary(
@@ -168,13 +175,7 @@ function terminatorRingArc(
         return Math.hypot(ringPoint.xi - e.x, ringPoint.eta - e.y);
     };
 
-    let delta = thetaTo - thetaFrom;
-    while (delta > Math.PI) {
-        delta -= 2 * Math.PI;
-    }
-    while (delta < -Math.PI) {
-        delta += 2 * Math.PI;
-    }
+    let delta = shortestAngleDelta(thetaFrom, thetaTo);
     const deltaLong = delta - Math.sign(delta || 1) * 2 * Math.PI;
     if (distanceToShadowCentre(thetaFrom + deltaLong / 2) < distanceToShadowCentre(thetaFrom + delta / 2)) {
         delta = deltaLong;

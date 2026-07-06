@@ -12,6 +12,14 @@ export const PENUMBRA_TILE_SIZE = 8;
 const TILE_SIZE = PENUMBRA_TILE_SIZE;
 const TILE_SLACK = 0.05;
 
+export function pixelCenterLon(px: number, width: number): number {
+    return ((px + 0.5) / width) * 360 - 180;
+}
+
+export function pixelCenterLat(py: number, height: number): number {
+    return 90 - ((py + 0.5) / height) * 180;
+}
+
 // Border pixels are supersampled on an n x n subgrid for antialiasing.
 const SUBSAMPLES = 3;
 
@@ -222,7 +230,7 @@ export function computePenumbraInsideBand(
     const sinLons = new Float64Array(width);
     const cosLons = new Float64Array(width);
     for (let px = 0; px < width; px++) {
-        const lonRad = (((px + 0.5) / width) * 360 - 180) * DEG;
+        const lonRad = pixelCenterLon(px, width) * DEG;
         lonRads[px] = lonRad;
         sinLons[px] = Math.sin(lonRad);
         cosLons[px] = Math.cos(lonRad);
@@ -230,7 +238,7 @@ export function computePenumbraInsideBand(
     const sinUs = new Float64Array(height);
     const cosUs = new Float64Array(height);
     for (let py = yStart; py < yEnd; py++) {
-        const {sinU, cosU} = parametricLatitude((90 - ((py + 0.5) / height) * 180) * DEG);
+        const {sinU, cosU} = parametricLatitude(pixelCenterLat(py, height) * DEG);
         sinUs[py] = sinU;
         cosUs[py] = cosU;
     }

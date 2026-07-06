@@ -1,6 +1,7 @@
 import {
     closeContourAroundPole,
     lonWinding,
+    shortestAngleDelta,
     shortestLonDelta,
     signedUnwrappedArea,
     unwrapPoints,
@@ -16,6 +17,14 @@ describe('shortestLonDelta', () => {
     it('crosses the antimeridian the short way', () => {
         expect(shortestLonDelta(170, -170)).toBe(20);
         expect(shortestLonDelta(-170, 170)).toBe(-20);
+    });
+});
+
+describe('shortestAngleDelta', () => {
+    it('wraps radians to the shortest turn', () => {
+        expect(shortestAngleDelta(0, Math.PI / 2)).toBe(Math.PI / 2);
+        expect(shortestAngleDelta(0, (3 * Math.PI) / 2)).toBeCloseTo(-Math.PI / 2, 12);
+        expect(shortestAngleDelta(-Math.PI + 0.1, Math.PI - 0.1)).toBeCloseTo(-0.2, 12);
     });
 });
 

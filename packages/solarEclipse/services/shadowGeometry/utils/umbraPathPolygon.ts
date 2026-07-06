@@ -5,8 +5,8 @@ import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEcl
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import type {ShadowPathOptions} from '../types/ShadowPathTypes';
 import {horizonSinAltitude} from './constants';
-import {signedUnwrappedArea} from './contourGeometry';
-import {shadowEdgePoint} from './shadowOutline';
+import {shortestAngleDelta, signedUnwrappedArea} from './contourGeometry';
+import {type EdgeSample, shadowEdgePoint} from './shadowOutline';
 import {solveSurfacePoint} from './surface';
 
 const DEFAULT_STEP_SECONDS = 10;
@@ -194,43 +194,18 @@ function umbraTouchesSurface(elements: BesselianElements, tau: number, z0: numbe
     return umbraEdgePoint(elements, e, Math.atan2(-e.y, -e.x), z0) !== null;
 }
 
-interface UmbraEdgePoint {
-    point: LatLon;
-    xi: number;
-    eta: number;
-    zeta: number;
-}
-
 function umbraEdgePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     q: number,
     z0: number,
-): UmbraEdgePoint | null {
+): EdgeSample | null {
     for (const farSide of z0 < 0 ? [false, true] : [false]) {
         const sample = shadowEdgePoint(elements, e, q, true, farSide, z0);
-        if (sample === null) {
-            continue;
+        if (sample !== null) {
+            return sample;
         }
-        const solution = solveSurfacePoint(elements, e, sample.xi, sample.eta, farSide);
-        if (solution === null) {
-            continue;
-        }
-
-        return {point: sample.point, xi: sample.xi, eta: sample.eta, zeta: solution.zeta};
     }
 
     return null;
-}
-
-function shortestAngleDelta(from: number, to: number): number {
-    let delta = (to - from) % (2 * Math.PI);
-    if (delta > Math.PI) {
-        delta -= 2 * Math.PI;
-    }
-    if (delta < -Math.PI) {
-        delta += 2 * Math.PI;
-    }
-
-    return delta;
 }

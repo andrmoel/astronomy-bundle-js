@@ -1,4 +1,3 @@
-import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {
     getLocalEclipseCircumstances,
@@ -9,23 +8,7 @@ import {signedUnwrappedArea} from './contourGeometry';
 import isPointInPolygon from './pointInPolygon';
 import {bisectEdgeBoundary, calculateShadowRegionContours, shadowEdgePoint, terminatorRingPoint} from './shadowOutline';
 import {solveSurfacePoint} from './surface';
-
-// 2019-07-02 (total, South Pacific / Chile / Argentina)
-const elements: BesselianElements = {
-    t0Jde: 2458667.30842,
-    t0Hours: 19,
-    tMin: -3,
-    tMax: 3,
-    deltaT: 69.4,
-    x: [-0.215634, 0.56620872, 0.0000274, -0.00000879],
-    y: [-0.65070802, 0.0106399, -0.0001272, -2.7e-7],
-    d: [23.0129509, -0.003187, -0.000005],
-    mu: [103.9797287, 14.99950981, 0],
-    l1: [0.53763098, -0.0000898, -0.000012],
-    l2: [-0.008464, -0.0000894, -0.000012],
-    tanF1: 0.0045984,
-    tanF2: 0.0045755,
-};
+import {ELEMENTS_2019_07_02 as elements} from './testSupport';
 
 const e = getBesselianElementsAtTime(elements, 0);
 
@@ -34,18 +17,23 @@ describe('shadowEdgePoint', () => {
         const sample = shadowEdgePoint(elements, e, Math.PI / 2, false, false, 0);
 
         expect(sample).not.toBeNull();
-        const zeta = solveSurfacePoint(elements, e, sample?.xi ?? 0, sample?.eta ?? 0, false)?.zeta ?? 0;
         const radius = Math.hypot((sample?.xi ?? 0) - e.x, (sample?.eta ?? 0) - e.y);
-        expect(radius).toBeCloseTo(Math.abs(e.l1 - zeta * elements.tanF1), 6);
+        expect(radius).toBeCloseTo(Math.abs(e.l1 - (sample?.zeta ?? 0) * elements.tanF1), 6);
     });
 
     it('converges onto the umbra edge at the effective shadow radius', () => {
         const sample = shadowEdgePoint(elements, e, Math.PI / 2, true, false, 0);
 
         expect(sample).not.toBeNull();
-        const zeta = solveSurfacePoint(elements, e, sample?.xi ?? 0, sample?.eta ?? 0, false)?.zeta ?? 0;
         const radius = Math.hypot((sample?.xi ?? 0) - e.x, (sample?.eta ?? 0) - e.y);
-        expect(radius).toBeCloseTo(Math.abs(e.l2 - zeta * elements.tanF2), 6);
+        expect(radius).toBeCloseTo(Math.abs(e.l2 - (sample?.zeta ?? 0) * elements.tanF2), 6);
+    });
+
+    it('reports the zeta of the converged surface point', () => {
+        const sample = shadowEdgePoint(elements, e, Math.PI / 2, false, false, 0);
+
+        const solution = solveSurfacePoint(elements, e, sample?.xi ?? 0, sample?.eta ?? 0, false);
+        expect(sample?.zeta).toBe(solution?.zeta);
     });
 
     it('returns null when the edge point misses the ellipsoid', () => {
@@ -72,8 +60,7 @@ describe('bisectEdgeBoundary', () => {
         expect(crossing).not.toBeNull();
         // The acceptance boundary is where the radius iteration first loses its surface
         // solution, slightly before the converged point itself reaches zeta = 0.
-        const zeta = solveSurfacePoint(elements, e, crossing?.sample.xi ?? 0, crossing?.sample.eta ?? 0, false)?.zeta;
-        expect(Math.abs(zeta ?? 1)).toBeLessThan(0.05);
+        expect(Math.abs(crossing?.sample.zeta ?? 1)).toBeLessThan(0.05);
     });
 });
 

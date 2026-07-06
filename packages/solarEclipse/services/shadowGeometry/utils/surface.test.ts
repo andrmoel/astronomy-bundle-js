@@ -1,24 +1,8 @@
-import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
 import {getTauOfGreatestEclipse} from '@package/solarEclipse/utils/greatestEclipse';
-import {fundamentalToLatLon, solveSurfacePoint} from './surface';
-
-// 2019-07-02 (total, South Pacific / Chile / Argentina)
-const elements: BesselianElements = {
-    t0Jde: 2458667.30842,
-    t0Hours: 19,
-    tMin: -3,
-    tMax: 3,
-    deltaT: 69.4,
-    x: [-0.215634, 0.56620872, 0.0000274, -0.00000879],
-    y: [-0.65070802, 0.0106399, -0.0001272, -2.7e-7],
-    d: [23.0129509, -0.003187, -0.000005],
-    mu: [103.9797287, 14.99950981, 0],
-    l1: [0.53763098, -0.0000898, -0.000012],
-    l2: [-0.008464, -0.0000894, -0.000012],
-    tanF1: 0.0045984,
-    tanF2: 0.0045755,
-};
+import {EARTH_ROTATION_DEG_PER_HOUR} from './constants';
+import {fundamentalToLatLon, solveLimbClampedSurfacePoint, solveSurfacePoint} from './surface';
+import {ELEMENTS_2019_07_02 as elements} from './testSupport';
 
 const tau = getTauOfGreatestEclipse(elements);
 const e = getBesselianElementsAtTime(elements, tau);
@@ -51,6 +35,32 @@ it('selects the night-side intersection with farSide', () => {
 it('returns null when the point misses the ellipsoid', () => {
     expect(solveSurfacePoint(elements, e, 2, 0, false)).toBeNull();
     expect(solveSurfacePoint(elements, e, 0.9, 0.9, false)).toBeNull();
+});
+
+it('refers the longitude to the given deltaT', () => {
+    const reference = solveSurfacePoint(elements, e, e.x, e.y, false);
+    const shifted = solveSurfacePoint(elements, e, e.x, e.y, false, elements.deltaT + 3600);
+
+    expect(shifted?.lat).toBe(reference?.lat);
+    expect(shifted?.lon).toBeCloseTo((reference?.lon ?? 0) + EARTH_ROTATION_DEG_PER_HOUR, 8);
+});
+
+describe('solveLimbClampedSurfacePoint', () => {
+    it('matches the exact solution on the disk', () => {
+        const clamped = solveLimbClampedSurfacePoint(elements, e, e.x, e.y);
+        const exact = solveSurfacePoint(elements, e, e.x, e.y, false);
+
+        expect(clamped.lat).toBe(exact?.lat);
+        expect(clamped.lon).toBe(exact?.lon);
+        expect(clamped.zeta).toBe(exact?.zeta);
+    });
+
+    it('clamps a point beyond the ellipsoid onto the limb', () => {
+        const clamped = solveLimbClampedSurfacePoint(elements, e, 0.8, 0.6);
+
+        expect(clamped.zeta).toBe(0);
+        expect(Math.abs(clamped.lat)).toBeLessThanOrEqual(90);
+    });
 });
 
 it('fundamentalToLatLon mirrors the near-side solution', () => {

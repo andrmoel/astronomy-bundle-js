@@ -3,15 +3,23 @@ import type {LatLon} from '@app/types/LocationTypes';
 const POLE_EDGE_STEP_DEG = 5;
 
 export function shortestLonDelta(from: number, to: number): number {
-    let delta = to - from;
-    while (delta > 180) {
-        delta -= 360;
+    return shortestPeriodicDelta(to - from, 360);
+}
+
+export function shortestAngleDelta(from: number, to: number): number {
+    return shortestPeriodicDelta(to - from, 2 * Math.PI);
+}
+
+function shortestPeriodicDelta(delta: number, period: number): number {
+    let result = delta;
+    while (result > period / 2) {
+        result -= period;
     }
-    while (delta < -180) {
-        delta += 360;
+    while (result < -period / 2) {
+        result += period;
     }
 
-    return delta;
+    return result;
 }
 
 export function unwrapPoints(points: Array<LatLon>): Array<LatLon> {

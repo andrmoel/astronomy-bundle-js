@@ -1,8 +1,7 @@
 import type {LatLon} from '@app/types/LocationTypes';
-import {normalizeLongitude} from '@app/utils/location';
-import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
-import {CENTRAL_LINE_STEP_HOURS, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
+import {CENTRAL_LINE_STEP_HOURS} from './constants';
 import {solveSurfacePoint} from './surface';
 
 export function getCentralLine(elements: BesselianElements, stepsInSeconds = 10): Array<LatLon> {
@@ -48,47 +47,9 @@ export function calculateCentralLine(elements: BesselianElements, z0: number): A
 
 function calculateCentralLinePoint(elements: BesselianElements, tau: number): LatLon | null {
     const e = getBesselianElementsAtTime(elements, tau);
+    const solution = solveSurfacePoint(elements, e, e.x, e.y, false, getEclipseDeltaT(elements));
 
-    return fundamentalToLatLon(elements, e, e.x, e.y);
-}
-
-function fundamentalToLatLon(
-    elements: BesselianElements,
-    e: BesselianElementsAtTime,
-    xi: number,
-    eta: number,
-): LatLon | null {
-    const rho1Sq = 1 - E_SQ * e.cosD * e.cosD;
-    const rho1 = Math.sqrt(rho1Sq);
-    const sinD1 = e.sinD / rho1;
-    const cosD1 = (ONE_MINUS_F * e.cosD) / rho1;
-
-    const eta1 = eta / rho1;
-    const bSq = 1 - xi * xi - eta1 * eta1;
-
-    if (bSq < 0) {
-        return null;
-    }
-
-    const B = Math.sqrt(bSq);
-
-    const sinU = eta1 * cosD1 + B * sinD1;
-    const cosU = Math.sqrt(Math.max(0, 1 - sinU * sinU));
-
-    const zetaSq = 1 - E_SQ * sinU * sinU - xi * xi - eta * eta;
-
-    if (zetaSq < 0) {
-        return null;
-    }
-
-    const zeta = Math.sqrt(zetaSq);
-
-    const theta = Math.atan2(xi, (zeta - ONE_MINUS_F * sinU * e.sinD) / e.cosD);
-    const lat = Math.atan2(sinU, ONE_MINUS_F * cosU) * RAD;
-    let lon = (theta - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
-    lon = normalizeLongitude(lon);
-
-    return {lat, lon};
+    return solution !== null ? {lat: solution.lat, lon: solution.lon} : null;
 }
 
 function centralLineSurfacePoint(
