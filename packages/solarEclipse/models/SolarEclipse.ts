@@ -85,8 +85,8 @@ export default class SolarEclipse {
         });
     }
 
-    public getCentralLine(stepsInSeconds = 10): Array<LatLon> {
-        return getCentralLine(this.elements, stepsInSeconds);
+    public getCentralLine(options: ShadowPathOptions = {}): Array<LatLon> {
+        return getCentralLine(this.elements, options);
     }
 
     public getUmbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {

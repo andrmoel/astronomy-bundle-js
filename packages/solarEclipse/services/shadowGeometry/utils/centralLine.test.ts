@@ -1,16 +1,17 @@
 import {calculateCentralLine, getCentralLine} from './centralLine';
 import {REFRACTED_HORIZON_SIN_ALTITUDE} from './constants';
-import {ELEMENTS_2019_07_02, ELEMENTS_2021_12_04 as elements} from './testSupport';
+import {latLonChordDeg} from './contourGeometry';
+import isPointInPolygon from './pointInPolygon';
+import {ELEMENTS_2019_07_02, ELEMENTS_2021_12_04 as elements, maxEclipseCircumstances} from './testSupport';
+import calculateUmbraPathPolygon from './umbraPathPolygon';
 
 describe('calculateCentralLine', () => {
-    const geometric = calculateCentralLine(elements, 0);
+    it('follows the same track as getCentralLine at the same step', () => {
+        const geometric = calculateCentralLine(elements, 0);
+        const line = getCentralLine(elements, {stepsInSeconds: 1});
+        const mid = geometric[Math.floor(geometric.length / 2)];
 
-    it('follows the same track as getCentralLine at its 1 second step, plus one hook stub per end', () => {
-        const reference = getCentralLine(elements, 1);
-
-        expect(geometric).toHaveLength(reference.length + 2);
-        expect(geometric[1].lat).toBeCloseTo(reference[0].lat, 2);
-        expect(geometric[1].lon).toBeCloseTo(reference[0].lon, 2);
+        expect(line.some((point) => latLonChordDeg(point, mid) < 1e-9)).toBe(true);
     });
 
     it('extends past the geometric terminator with the refracted horizon', () => {
@@ -23,18 +24,46 @@ describe('calculateCentralLine', () => {
     });
 });
 
-describe('getCenterLine', () => {
-    it('returns the central line with default 10 sec steps', () => {
-        const result = getCentralLine(elements);
+describe('getCentralLine', () => {
+    const line = getCentralLine(elements);
 
-        expect(result).toHaveLength(365);
-        expect(result[0]).toEqual({lat: -54.04560676491059, lon: -49.35755916158149});
+    it('returns a continuous line', () => {
+        expect(line.length).toBeGreaterThan(300);
+        for (let i = 1; i < line.length; i++) {
+            expect(latLonChordDeg(line[i - 1], line[i])).toBeLessThan(1);
+        }
     });
 
-    it('returns the central line with custom 1 sec steps', () => {
-        const result = getCentralLine(elements, 1);
+    it('starts and ends with a central maximum eclipse on the horizon', () => {
+        for (const tip of [line[0], line[line.length - 1]]) {
+            const {magnitude, altitude} = maxEclipseCircumstances(elements, tip);
 
-        expect(result).toHaveLength(3654);
-        expect(result[0]).toEqual({lat: -53.42722771691792, lon: -50.51787435672037});
+            expect(magnitude).toBeGreaterThan(1);
+            expect(Math.abs(altitude)).toBeLessThan(0.5);
+        }
+    });
+
+    it('ends inside the end caps of the umbra path polygon', () => {
+        const polygon = calculateUmbraPathPolygon(elements);
+
+        for (const tip of [line[0], line[line.length - 1]]) {
+            expect(isPointInPolygon(tip, polygon)).toBe(true);
+            const gap = Math.min(...polygon.map((vertex) => latLonChordDeg(vertex, tip)));
+            expect(gap).toBeLessThan(1);
+        }
+    });
+
+    it('respects the refraction horizon convention', () => {
+        const refracted = getCentralLine(elements, {refraction: true});
+
+        expect(refracted.length).toBeGreaterThan(300);
+        expect(refracted[0]).not.toEqual(line[0]);
+        expect(refracted[refracted.length - 1]).not.toEqual(line[line.length - 1]);
+    });
+
+    it('respects the step size', () => {
+        const fine = getCentralLine(elements, {stepsInSeconds: 1});
+
+        expect(fine.length).toBeGreaterThan(line.length * 3);
     });
 });

@@ -1,5 +1,5 @@
 import isPointInPolygon from './pointInPolygon';
-import {ELEMENTS_2019_07_02 as elements, maxEclipseCircumstances} from './testSupport';
+import {ELEMENTS_2019_07_02 as elements, everInsideVisibleUmbra, maxEclipseCircumstances} from './testSupport';
 import calculateUmbraPathPolygon from './umbraPathPolygon';
 
 const polygon = calculateUmbraPathPolygon(elements);
@@ -28,6 +28,32 @@ it('places every vertex on the edge of totality or on the horizon', () => {
         if (magnitude > 1.01) {
             expect(Math.abs(altitude)).toBeLessThan(1);
         }
+    }
+});
+
+it('ends the path exactly where the umbra last shows above the horizon', () => {
+    const west = polygon.reduce((extreme, vertex) => (vertex.lon < extreme.lon ? vertex : extreme));
+    const east = polygon.reduce((extreme, vertex) => (vertex.lon > extreme.lon ? vertex : extreme));
+
+    for (const {cap, inward} of [
+        {cap: west, inward: 1},
+        {cap: east, inward: -1},
+    ]) {
+        expect(everInsideVisibleUmbra(elements, {lat: cap.lat, lon: cap.lon + inward * 0.2})).toBe(true);
+        expect(everInsideVisibleUmbra(elements, {lat: cap.lat, lon: cap.lon - inward * 0.2})).toBe(false);
+    }
+});
+
+it('caps each end on the horizon', () => {
+    const west = polygon.reduce((extreme, vertex) => (vertex.lon < extreme.lon ? vertex : extreme));
+    const east = polygon.reduce((extreme, vertex) => (vertex.lon > extreme.lon ? vertex : extreme));
+
+    for (const cap of [west, east]) {
+        const {magnitude, altitude} = maxEclipseCircumstances(elements, cap);
+
+        expect(magnitude).toBeGreaterThan(0.99);
+        expect(altitude).toBeLessThan(0.5);
+        expect(altitude).toBeGreaterThan(-3);
     }
 });
 

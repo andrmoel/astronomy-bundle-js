@@ -1,6 +1,14 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import {DEG} from './constants';
 
 const POLE_EDGE_STEP_DEG = 5;
+
+export function latLonChordDeg(a: LatLon, b: LatLon): number {
+    const dLat = b.lat - a.lat;
+    const dLon = shortestLonDelta(a.lon, b.lon) * Math.cos(((a.lat + b.lat) / 2) * DEG);
+
+    return Math.hypot(dLat, dLon);
+}
 
 export function shortestLonDelta(from: number, to: number): number {
     return shortestPeriodicDelta(to - from, 360);

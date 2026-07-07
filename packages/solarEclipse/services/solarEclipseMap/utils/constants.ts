@@ -7,5 +7,3 @@ export const RISE_SET_TIP_REFINEMENT_SAMPLES = 16;
 // crossings jump further are bisected in tau (see feedRefined), at most this many times.
 export const RISE_SET_MAX_CHORD_DEG = 0.75;
 export const RISE_SET_GAP_SUBDIVISION_DEPTH = 5;
-// Ring positions sampled per instant when locating the maximum-eclipse-at-horizon root.
-export const MAX_ECLIPSE_RING_SAMPLES = 240;
