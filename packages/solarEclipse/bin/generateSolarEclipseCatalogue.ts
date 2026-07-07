@@ -74,7 +74,98 @@ const JD_2101 = 2488434.5;
 type EclipseData = {
     julianDay: number;
     eclCode: string;
+    saros: number;
 };
+
+async function main() {
+    console.log('Fetching solar eclipse catalog from NASA...\n');
+
+    const allEclipses: EclipseData[] = [];
+    const BATCH_SIZE = 5;
+
+    for (let i = 0; i < CENTURY_PAGES.length; i += BATCH_SIZE) {
+        const batch = CENTURY_PAGES.slice(i, i + BATCH_SIZE);
+        console.log(`Batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(CENTURY_PAGES.length / BATCH_SIZE)}:`);
+        const eclipses = await fetchBatch(batch);
+        allEclipses.push(...eclipses);
+
+        if (i + BATCH_SIZE < CENTURY_PAGES.length) {
+            await new Promise((r) => setTimeout(r, 1000));
+        }
+    }
+
+    // Fetch Besselian elements for each eclipse from its NASA detail page
+    console.log('\nFetching Besselian elements from NASA detail pages...');
+    const allEntries = await fetchAllBesselian(allEclipses, 10);
+    console.log(`\nFetched Besselian elements for ${allEntries.length} eclipses.`);
+
+    allEntries.sort((a, b) => a.jd - b.jd);
+
+    const resourcesDir = path.join(__dirname, '../resources');
+
+    const catalogueEntries = allEntries.filter((e) => e.jd >= JD_1900 && e.jd < JD_2101);
+    fs.writeFileSync(
+        path.join(resourcesDir, 'catalogue.ts'),
+        generateCatalogueFile(catalogueEntries, 'BESSELIAN_ELEMENTS_CATALOGUE'),
+    );
+    console.log(`Generated catalogue.ts with ${catalogueEntries.length} entries (1900–2100)`);
+
+    fs.writeFileSync(
+        path.join(resourcesDir, 'catalogueFull.ts'),
+        generateCatalogueFile(allEntries, 'BESSELIAN_ELEMENTS_CATALOGUE_FULL'),
+    );
+    console.log(`Generated catalogueFull.ts with ${allEntries.length} entries (full range)`);
+}
+
+async function fetchBatch(pages: string[]): Promise<EclipseData[]> {
+    const results = await Promise.all(
+        pages.map(async (page) => {
+            const url = BASE_URL + page;
+            process.stdout.write(`  Fetching ${page}... `);
+            const html = await fetchPage(url);
+            const eclipses = parsePage(html);
+            process.stdout.write(`${eclipses.length} eclipses\n`);
+            return eclipses;
+        }),
+    );
+    return results.flat();
+}
+
+async function fetchPage(url: string, retries = 3): Promise<string> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) {
+                lastError = new Error(`HTTP ${res.status}`);
+            } else {
+                return await res.text();
+            }
+        } catch (err) {
+            lastError = err;
+        }
+        if (attempt < retries - 1) {
+            await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+        }
+    }
+    throw lastError;
+}
+
+function parsePage(html: string): EclipseData[] {
+    const eclipses: EclipseData[] = [];
+
+    for (const line of html.split('\n')) {
+        const eclMatch = line.match(/SEdata\.php\?Ecl=(-?\d+)/);
+        if (!eclMatch) {
+            continue;
+        }
+        const eclCode = eclMatch[1];
+        const {year, month, day} = parseEclCode(eclCode);
+        eclipses.push({julianDay: dateToJulianDay(year, month, day), eclCode, saros: parseSaros(line)});
+    }
+
+    return eclipses;
+}
 
 /**
  * Parse Ecl date code (YYYYMMDD or -YYYYMMDD) into year/month/day.
@@ -124,60 +215,50 @@ function dateToJulianDay(year: number, month: number, day: number): number {
     return jdn - 0.5;
 }
 
-function parsePage(html: string): EclipseData[] {
-    const eclipses: EclipseData[] = [];
-
-    for (const line of html.split('\n')) {
-        const eclMatch = line.match(/SEdata\.php\?Ecl=(-?\d+)/);
-        if (!eclMatch) {
-            continue;
-        }
-        const eclCode = eclMatch[1];
-        const {year, month, day} = parseEclCode(eclCode);
-        eclipses.push({julianDay: dateToJulianDay(year, month, day), eclCode});
-    }
-
-    return eclipses;
+/**
+ * Extract the Saros series number from a catalog table row.
+ * Column layout after the greatest-eclipse time: ΔT, lunation, saros, type letter (T/A/H/P).
+ */
+function parseSaros(line: string): number {
+    const plain = line.replace(/<[^>]+>/g, ' ');
+    const match = plain.match(/\d+:\d{2}:\d{2}\s+-?\d+\s+-?\d+\s+(\d+)\s+[TAHP]/);
+    return match ? parseInt(match[1], 10) : 0;
 }
 
-/**
- * Parse the Besselian elements table (4 rows × 6 columns) from plain text.
- * Returns a 4×6 array: rows[n] = [x_n, y_n, d_n, l1_n, l2_n, mu_n]
- *
- * Row n=3 is often truncated by a PHP error on the NASA page; x3/y3 are extracted
- * when present and d3..mu3 default to 0 (they are always 0 in this catalog).
- */
-function parseCoeffTable(plain: string): number[][] | null {
-    const rows: number[][] = new Array(4);
+async function fetchAllBesselian(
+    eclipses: EclipseData[],
+    concurrency: number,
+): Promise<Array<{jd: number; raw: number[]}>> {
+    const entries: Array<{jd: number; raw: number[]}> = [];
+    let nextIndex = 0;
+    let completed = 0;
 
-    // Match complete rows: n (0-3) followed by exactly 6 decimal numbers
-    const fullRowPattern =
-        /(?:^|\s)([0-3])\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)/gm;
-    let match = fullRowPattern.exec(plain);
-
-    while (match !== null) {
-        const n = parseInt(match[1], 10);
-        if (!rows[n]) {
-            rows[n] = [
-                parseFloat(match[2]),
-                parseFloat(match[3]),
-                parseFloat(match[4]),
-                parseFloat(match[5]),
-                parseFloat(match[6]),
-                parseFloat(match[7]),
-            ];
+    async function worker() {
+        while (true) {
+            const i = nextIndex++;
+            if (i >= eclipses.length) {
+                return;
+            }
+            const eclipse = eclipses[i];
+            try {
+                const html = await fetchPage(DETAIL_URL + eclipse.eclCode);
+                const raw = parseBesselianElementsFromHtml(html);
+                if (!raw) {
+                    process.stderr.write(`  Warning: could not parse Besselian elements for Ecl=${eclipse.eclCode}\n`);
+                } else {
+                    raw.push(eclipse.saros);
+                    entries.push({jd: eclipse.julianDay, raw});
+                }
+            } catch (err) {
+                process.stderr.write(`  Warning: failed to fetch Ecl=${eclipse.eclCode}: ${err}\n`);
+            }
+            completed++;
+            process.stdout.write(`  ${completed} / ${eclipses.length}\r`);
         }
-        match = fullRowPattern.exec(plain);
     }
 
-    // Row n=3 is truncated by a PHP error – try to salvage x3 and y3
-    if (!rows[3]) {
-        const partialRow3Pattern = /(?:^|\s)3\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)/m;
-        const partial = plain.match(partialRow3Pattern);
-        rows[3] = partial ? [parseFloat(partial[1]), parseFloat(partial[2]), 0, 0, 0, 0] : [0, 0, 0, 0, 0, 0];
-    }
-
-    return rows.filter(Boolean).length === 4 ? rows : null;
+    await Promise.all(Array.from({length: concurrency}, worker));
+    return entries;
 }
 
 /**
@@ -256,77 +337,62 @@ function parseBesselianElementsFromHtml(html: string): number[] | null {
     ];
 }
 
-async function fetchPage(url: string, retries = 3): Promise<string> {
-    let lastError: unknown;
-    for (let attempt = 0; attempt < retries; attempt++) {
-        try {
-            const res = await fetch(url);
-            if (!res.ok) {
-                lastError = new Error(`HTTP ${res.status}`);
-            } else {
-                return await res.text();
-            }
-        } catch (err) {
-            lastError = err;
-        }
-        if (attempt < retries - 1) {
-            await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
-        }
-    }
-    throw lastError;
-}
+/**
+ * Parse the Besselian elements table (4 rows × 6 columns) from plain text.
+ * Returns a 4×6 array: rows[n] = [x_n, y_n, d_n, l1_n, l2_n, mu_n]
+ *
+ * Row n=3 is often truncated by a PHP error on the NASA page; x3/y3 are extracted
+ * when present and d3..mu3 default to 0 (they are always 0 in this catalog).
+ */
+function parseCoeffTable(plain: string): number[][] | null {
+    const rows: number[][] = new Array(4);
 
-async function fetchBatch(pages: string[]): Promise<EclipseData[]> {
-    const results = await Promise.all(
-        pages.map(async (page) => {
-            const url = BASE_URL + page;
-            process.stdout.write(`  Fetching ${page}... `);
-            const html = await fetchPage(url);
-            const eclipses = parsePage(html);
-            process.stdout.write(`${eclipses.length} eclipses\n`);
-            return eclipses;
-        }),
-    );
-    return results.flat();
-}
+    // Match complete rows: n (0-3) followed by exactly 6 decimal numbers
+    const fullRowPattern =
+        /(?:^|\s)([0-3])\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)/gm;
+    let match = fullRowPattern.exec(plain);
 
-async function fetchAllBesselian(
-    eclipses: EclipseData[],
-    concurrency: number,
-): Promise<Array<{jd: number; raw: number[]}>> {
-    const entries: Array<{jd: number; raw: number[]}> = [];
-    let nextIndex = 0;
-    let completed = 0;
-
-    async function worker() {
-        while (true) {
-            const i = nextIndex++;
-            if (i >= eclipses.length) {
-                return;
-            }
-            const eclipse = eclipses[i];
-            try {
-                const html = await fetchPage(DETAIL_URL + eclipse.eclCode);
-                const raw = parseBesselianElementsFromHtml(html);
-                if (!raw) {
-                    process.stderr.write(`  Warning: could not parse Besselian elements for Ecl=${eclipse.eclCode}\n`);
-                } else {
-                    entries.push({jd: eclipse.julianDay, raw});
-                }
-            } catch (err) {
-                process.stderr.write(`  Warning: failed to fetch Ecl=${eclipse.eclCode}: ${err}\n`);
-            }
-            completed++;
-            process.stdout.write(`  ${completed} / ${eclipses.length}\r`);
+    while (match !== null) {
+        const n = parseInt(match[1], 10);
+        if (!rows[n]) {
+            rows[n] = [
+                parseFloat(match[2]),
+                parseFloat(match[3]),
+                parseFloat(match[4]),
+                parseFloat(match[5]),
+                parseFloat(match[6]),
+                parseFloat(match[7]),
+            ];
         }
+        match = fullRowPattern.exec(plain);
     }
 
-    await Promise.all(Array.from({length: concurrency}, worker));
-    return entries;
+    // Row n=3 is truncated by a PHP error – try to salvage x3 and y3
+    if (!rows[3]) {
+        const partialRow3Pattern = /(?:^|\s)3\s+([-+]?\d+\.\d+)\s+([-+]?\d+\.\d+)/m;
+        const partial = plain.match(partialRow3Pattern);
+        rows[3] = partial ? [parseFloat(partial[1]), parseFloat(partial[2]), 0, 0, 0, 0] : [0, 0, 0, 0, 0, 0];
+    }
+
+    return rows.filter(Boolean).length === 4 ? rows : null;
+}
+
+function generateCatalogueFile(entries: Array<{jd: number; raw: number[]}>, exportName: string): string {
+    const chunks = entries.map(({jd, raw}) => encodeEntry(jd, raw));
+    const encoded = Buffer.concat(chunks).toString('base64');
+    return [
+        `import {decodeCatalogue} from '../utils/catalogueDecoder';`,
+        ``,
+        `const ENCODED_DATA =`,
+        `    '${encoded}';`,
+        ``,
+        `export const ${exportName} = decodeCatalogue(ENCODED_DATA);`,
+        ``,
+    ].join('\n');
 }
 
 // ── Binary catalogue encoding ─────────────────────────────────────────────────
-// Each entry is packed into 63 bytes (see catalogueDecoder.ts for full layout).
+// Each entry is packed into 65 bytes (see catalogueDecoder.ts for full layout).
 // Fields with narrow physical ranges are quantized to uint16/int16 to halve
 // their storage cost; fields covering wide or unbounded ranges stay as float32.
 // mu2 is always 0 across the entire NASA catalogue and is omitted entirely.
@@ -355,23 +421,7 @@ const L20_SC = 32767 / 0.031;
 const L21_SC = 32767 / 1.5e-4;
 const L22_SC = 32767 / 1.4e-5;
 
-function encodeU16(val: number, off: number, sc: number, field: string): number {
-    const e = Math.round((val - off) * sc);
-    if (e < 0 || e > 65535) {
-        throw new Error(`uint16 overflow in ${field}: value=${val} → encoded=${e}`);
-    }
-    return e;
-}
-
-function encodeI16(val: number, sc: number, field: string): number {
-    const e = Math.round(val * sc);
-    if (e < -32768 || e > 32767) {
-        throw new Error(`int16 overflow in ${field}: value=${val} → encoded=${e}`);
-    }
-    return e;
-}
-
-const ENTRY_BYTES = 63;
+const ENTRY_BYTES = 65;
 
 function encodeEntry(jd: number, raw: number[]): Buffer {
     const keyInt = Math.round(jd - 0.5);
@@ -430,62 +480,26 @@ function encodeEntry(jd: number, raw: number[]): Buffer {
     o += 2;
     buf.writeUInt16LE(encodeU16(raw[27], TF2_OFF, TF2_SC, 'tanF2'), o);
     o += 2;
+    buf.writeUInt16LE(raw[28], o);
+    o += 2; // saros
 
     return buf;
 }
 
-function generateCatalogueFile(entries: Array<{jd: number; raw: number[]}>, exportName: string): string {
-    const chunks = entries.map(({jd, raw}) => encodeEntry(jd, raw));
-    const encoded = Buffer.concat(chunks).toString('base64');
-    return [
-        `import {decodeCatalogue} from '../utils/catalogueDecoder';`,
-        ``,
-        `const ENCODED_DATA =`,
-        `    '${encoded}';`,
-        ``,
-        `export const ${exportName} = decodeCatalogue(ENCODED_DATA);`,
-        ``,
-    ].join('\n');
+function encodeU16(val: number, off: number, sc: number, field: string): number {
+    const e = Math.round((val - off) * sc);
+    if (e < 0 || e > 65535) {
+        throw new Error(`uint16 overflow in ${field}: value=${val} → encoded=${e}`);
+    }
+    return e;
 }
 
-async function main() {
-    console.log('Fetching solar eclipse catalog from NASA...\n');
-
-    const allEclipses: EclipseData[] = [];
-    const BATCH_SIZE = 5;
-
-    for (let i = 0; i < CENTURY_PAGES.length; i += BATCH_SIZE) {
-        const batch = CENTURY_PAGES.slice(i, i + BATCH_SIZE);
-        console.log(`Batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(CENTURY_PAGES.length / BATCH_SIZE)}:`);
-        const eclipses = await fetchBatch(batch);
-        allEclipses.push(...eclipses);
-
-        if (i + BATCH_SIZE < CENTURY_PAGES.length) {
-            await new Promise((r) => setTimeout(r, 1000));
-        }
+function encodeI16(val: number, sc: number, field: string): number {
+    const e = Math.round(val * sc);
+    if (e < -32768 || e > 32767) {
+        throw new Error(`int16 overflow in ${field}: value=${val} → encoded=${e}`);
     }
-
-    // Fetch Besselian elements for each eclipse from its NASA detail page
-    console.log('\nFetching Besselian elements from NASA detail pages...');
-    const allEntries = await fetchAllBesselian(allEclipses, 10);
-    console.log(`\nFetched Besselian elements for ${allEntries.length} eclipses.`);
-
-    allEntries.sort((a, b) => a.jd - b.jd);
-
-    const resourcesDir = path.join(__dirname, '../resources');
-
-    const catalogueEntries = allEntries.filter((e) => e.jd >= JD_1900 && e.jd < JD_2101);
-    fs.writeFileSync(
-        path.join(resourcesDir, 'catalogue.ts'),
-        generateCatalogueFile(catalogueEntries, 'BESSELIAN_ELEMENTS_CATALOGUE'),
-    );
-    console.log(`Generated catalogue.ts with ${catalogueEntries.length} entries (1900–2100)`);
-
-    fs.writeFileSync(
-        path.join(resourcesDir, 'catalogueFull.ts'),
-        generateCatalogueFile(allEntries, 'BESSELIAN_ELEMENTS_CATALOGUE_FULL'),
-    );
-    console.log(`Generated catalogueFull.ts with ${allEntries.length} entries (full range)`);
+    return e;
 }
 
 main().catch((err) => {

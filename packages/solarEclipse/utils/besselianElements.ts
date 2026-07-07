@@ -15,8 +15,8 @@ export function getBesselianElementsFromCatalogue(catalogue: Catalogue, julianDa
 }
 
 export function parseBesselianElements(raw: Array<number>): BesselianElements {
-    if (raw.length !== 28) {
-        throw new Error(`Expected 28 Besselian element values, got ${raw.length}`);
+    if (raw.length !== 29) {
+        throw new Error(`Expected 29 Besselian element values, got ${raw.length}`);
     }
 
     return {
@@ -33,6 +33,7 @@ export function parseBesselianElements(raw: Array<number>): BesselianElements {
         l2: [raw[23], raw[24], raw[25]],
         tanF1: raw[26],
         tanF2: raw[27],
+        saros: raw[28],
     };
 }
 

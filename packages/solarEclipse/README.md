@@ -14,6 +14,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
   - [SolarEclipse](#solareclipse)
     - [Create a SolarEclipse object](#create-a-solareclipse-object)
     - [Eclipse type](#eclipse-type)
+    - [Saros series](#saros-series)
     - [Location of greatest eclipse](#location-of-greatest-eclipse)
     - [Time of greatest eclipse](#time-of-greatest-eclipse)
     - [Maximum magnitude](#maximum-magnitude)
@@ -141,6 +142,18 @@ const type = eclipse.getType();
 ```
 
 The result of the calculation should be: *total*
+
+---
+
+#### Saros series
+
+**Description:** Returns the Saros series number the eclipse belongs to. Eclipses of the same Saros series recur roughly every 18 years, 11 days, and 8 hours.
+
+```javascript
+const saros = eclipse.getSaros();
+```
+
+The result of the calculation should be: *127*
 
 ---
 
@@ -300,7 +313,7 @@ const location = Location.create(-21.32947, 55.45174, 43);
 const elements = Catalogue.getBesselianElements('2016-09-01');
 
 const localEclipse = SolarEclipse
-    .createFromBesselianElements(elements);
+    .createFromBesselianElements(elements)
     .getLocalEclipse(location);
 ```
 

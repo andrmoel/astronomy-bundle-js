@@ -1,12 +1,12 @@
 import {decodeCatalogue, getAvailableEclipseDates, getBesselianElements} from './catalogue';
 
 const REAL_2017_TOTAL_ECLIPSE_ENTRY =
-    'goElAC/dRD8SmpmMQkOuBL4HsV/awKFyiPg+ksNj2YsuEd89QXCZ3t2pfbJC6dGhSeVpHpRi70xpCJXvSRpR';
+    'goElAC/dRD8SmpmMQkOuBL4HsV/awKFyiPg+ksNj2YsuEd89QXCZ3t2pfbJC6dGhSeVpHpRi70xpCJXvSRpRkQA=';
 
 const EXPECTED_2017_TOTAL_ECLIPSE_RAW = [
     2457987.269, 18, -4, 4, 70.3, 0, -0.129571, 0.5406426, -0.0000294, -0.0000081, 0.485416, -0.14164, -0.0000905,
     0.000002, 11.8669596, -0.013622, -0.000002, 89.24543, 15.00394, 0, 0.542093, 0.0001241, -0.0000118, -0.004025,
-    0.0001234, -0.0000117, 0.0046222, 0.0045992,
+    0.0001234, -0.0000117, 0.0046222, 0.0045992, 145,
 ];
 
 describe('decodeCatalogue', () => {
@@ -15,7 +15,7 @@ describe('decodeCatalogue', () => {
         const raw = catalogue[2457986.5];
 
         expect(Object.keys(catalogue)).toEqual(['2457986.5']);
-        expect(raw).toHaveLength(28);
+        expect(raw).toHaveLength(29);
 
         EXPECTED_2017_TOTAL_ECLIPSE_RAW.forEach((expected, index) => {
             expect(raw[index]).toBeCloseTo(expected, 5);
@@ -53,6 +53,7 @@ describe('getBesselianElements', () => {
             l2: [-0.004024597918637654, 0.00012339835291855691, -0.000011700064088869899],
             tanF1: 0.004622201876859694,
             tanF2: 0.004599201953154802,
+            saros: 145,
         });
     });
 

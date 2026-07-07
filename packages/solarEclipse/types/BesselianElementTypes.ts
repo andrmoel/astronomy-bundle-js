@@ -14,6 +14,7 @@ export interface BesselianElements {
     l2: Array<number>;
     tanF1: number;
     tanF2: number;
+    saros: number;
 }
 
 export interface BesselianElementsAtTime {

@@ -49,6 +49,10 @@ export default class SolarEclipse {
         return getEclipseType(this.elements);
     }
 
+    public getSaros(): number {
+        return this.elements.saros;
+    }
+
     public getLocationOfGreatestEclipse(): LatLon {
         return this.locationOfGreatestEclipse;
     }
@@ -96,9 +100,4 @@ export default class SolarEclipse {
     public getPenumbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
         return calculatePenumbraPathPolygon(this.elements, options);
     }
-
-    // TODO
-    // public getSarosNumber(): number {
-    //     return 0; // TODO implement
-    // }
 }
