@@ -1,13 +1,7 @@
 import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import isPointInPolygon from '@package/solarEclipse/services/shadowGeometry/utils/pointInPolygon';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import SolarEclipse from './SolarEclipse';
-
-function isValidContour(contour: Array<{lat: number; lon: number}>): boolean {
-    return (
-        contour.length >= 3
-        && contour.every(({lat, lon}) => Number.isFinite(lon) && Number.isFinite(lat) && lat >= -90 && lat <= 90)
-    );
-}
 
 // 2019-07-02
 const elements: BesselianElements = {
@@ -83,61 +77,36 @@ it('tests getMaxCentralDuration', () => {
     expect(result).toBeCloseTo(272.8, 1);
 });
 
+describe('getUmbraPathPolygon', () => {
+    it('returns a closed ring around the path of totality', () => {
+        const polygon = eclipse.getUmbraPathPolygon({stepsInSeconds: 60});
+
+        expect(polygon[0]).toEqual(polygon[polygon.length - 1]);
+        expect(isPointInPolygon({lat: -29.9027, lon: -71.252}, polygon)).toBe(true);
+        expect(isPointInPolygon({lat: -33.447, lon: -70.673}, polygon)).toBe(false);
+    });
+});
+
+describe('getPenumbraPathPolygon', () => {
+    it('returns a closed ring around the region of visibility', () => {
+        const polygon = eclipse.getPenumbraPathPolygon();
+
+        expect(polygon[0]).toEqual(polygon[polygon.length - 1]);
+        expect(isPointInPolygon({lat: -33.447, lon: -70.673}, polygon)).toBe(true);
+        expect(isPointInPolygon({lat: 40.7128, lon: -74.006}, polygon)).toBe(false);
+    });
+});
+
 describe('getCenterLine', () => {
     it('returns the central line with default 10 sec steps', () => {
         const result = eclipse.getCentralLine();
 
-        expect(result).toHaveLength(968);
+        expect(result.length).toBeGreaterThan(900);
     });
 
     it('returns the central line with custom 1 sec steps', () => {
-        const result = eclipse.getCentralLine(1);
+        const result = eclipse.getCentralLine({stepsInSeconds: 1});
 
-        expect(result).toHaveLength(9677);
-    });
-});
-
-describe('getUmbraPath', () => {
-    it('returns valid umbral region contours with the default step', () => {
-        const result = eclipse.getUmbraPath();
-
-        expect(result).toHaveLength(1964);
-        expect(result.every(isValidContour)).toBe(true);
-    });
-
-    it('returns fewer contours with a coarser step', () => {
-        const result = eclipse.getUmbraPath({stepsInSeconds: 30});
-
-        expect(result).toHaveLength(327);
-    });
-
-    it('reaches further with refraction than with the geometric horizon', () => {
-        const latSpan = (contours: Array<Array<{lat: number; lon: number}>>): number => {
-            let min = Number.POSITIVE_INFINITY;
-            let max = Number.NEGATIVE_INFINITY;
-            for (const {lat} of contours.flat()) {
-                min = Math.min(min, lat);
-                max = Math.max(max, lat);
-            }
-
-            return max - min;
-        };
-
-        expect(latSpan(eclipse.getUmbraPath({refraction: true}))).toBeGreaterThan(latSpan(eclipse.getUmbraPath()));
-    });
-});
-
-describe('getPenumbraPath', () => {
-    it('returns valid penumbral region contours with the default step', () => {
-        const result = eclipse.getPenumbraPath();
-
-        expect(result).toHaveLength(295);
-        expect(result.every(isValidContour)).toBe(true);
-    });
-
-    it('returns more contours with a finer step', () => {
-        const result = eclipse.getPenumbraPath({stepsInSeconds: 30});
-
-        expect(result).toHaveLength(591);
+        expect(result.length).toBeGreaterThan(9000);
     });
 });

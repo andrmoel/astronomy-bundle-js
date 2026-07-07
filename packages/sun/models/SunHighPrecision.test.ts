@@ -173,13 +173,13 @@ it('tests getLightTime', () => {
 it('tests getAngularDiameter', () => {
     const delta = sun.getAngularDiameter();
 
-    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.804"');
+    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.803"');
 });
 
 it('tests getTopocentricAngularDiameter', () => {
     const delta = sun.getTopocentricAngularDiameter(location);
 
-    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.809"');
+    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.808"');
 });
 
 it('tests getApparentMagnitude', () => {

@@ -21,7 +21,10 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
     - [Maximum obscuration](#maximum-obscuration)
     - [Maximum duration](#maximum-duration)
     - [Maximum central duration](#maximum-central-duration)
-    - [Central line](#central-line)
+    - [Shadow geometry](#shadow-geometry)
+      - [Central line](#central-line)
+      - [Umbra path polygon](#umbra-path-polygon)
+      - [Penumbra path polygon](#penumbra-path-polygon)
     - [Local eclipse for an observer](#local-eclipse-for-an-observer)
   - [LocalSolarEclipse (Eclipse + Location)](#localsolareclipse-eclipse--location)
     - [Local eclipse type](#local-eclipse-type)
@@ -228,16 +231,43 @@ The result of the calculation should be: *272.8*
 
 ---
 
-#### Central line
+#### Shadow geometry
 
-**Description:** Returns the path of the central eclipse (totality or annularity) as an array of `{lat, lon}` coordinate objects in decimal degrees. Points are computed by stepping through the eclipse duration and projecting the Moon's shadow axis onto Earth's surface. Points where the shadow axis misses Earth are omitted. The optional `stepsInSeconds` parameter (default: `10`) controls the time resolution between points — smaller values produce a denser path.
+**Description:** The following three methods trace the Moon's shadow across Earth's surface: the central line, the umbra (path of totality/annularity), and the penumbra (region of partial visibility). They all accept the same optional `ShadowPathOptions` object:
+
+- `stepsInSeconds` (default: `10`) — the time resolution in seconds between sampled points; smaller values produce a denser, more precise path.
+- `refraction` (default: `false`) — the horizon convention used for the endpoints. When `false`, the geometric horizon (Sun altitude 0°) is used. When `true`, the standard rise/set horizon (−50′, i.e. 34′ atmospheric refraction plus the Sun's 16′ semidiameter) is used, so the path reaches slightly further to where the Sun is still visible at the horizon.
+
+##### Central line
+
+Returns the path of the central eclipse (totality or annularity) as an array of `{lat, lon}` coordinate objects in decimal degrees. Points are computed by stepping through the eclipse duration and projecting the Moon's shadow axis onto Earth's surface, ending exactly where the axis crosses the horizon. Points where the shadow axis misses Earth are omitted.
 
 ```javascript
 const path = eclipse.getCentralLine();
 // [{lat: ..., lon: ...}, ...]
 
 // Higher resolution (1-second steps)
-const densePath = eclipse.getCentralLine(1);
+const densePath = eclipse.getCentralLine({stepsInSeconds: 1});
+```
+
+##### Umbra path polygon
+
+Returns the path of totality (or annularity) as a single closed polygon — the region ever covered by the Moon's umbra while the Sun stands above the horizon, matching the umbral shading on eclipse maps. The result is an array of `{lat, lon}` coordinate objects in decimal degrees whose first and last points are identical, so the ring is closed. Returns an empty array for a purely partial eclipse, where the umbra never touches the surface.
+
+```javascript
+const polygon = eclipse.getUmbraPathPolygon();
+// [{lat: ..., lon: ...}, ..., {lat: ..., lon: ...}] — first point equals last
+```
+
+The closed ring is ready to draw on a map or to run a point-in-polygon test against to check whether a location lies within the path of totality.
+
+##### Penumbra path polygon
+
+Returns the region of the partial eclipse as a single closed polygon — the area where any part of the eclipse is visible (the Moon's penumbra touches the ground) while the Sun stands above the horizon. The result is an array of `{lat, lon}` coordinate objects in decimal degrees whose first and last points are identical, so the ring is closed.
+
+```javascript
+const polygon = eclipse.getPenumbraPathPolygon();
+// [{lat: ..., lon: ...}, ..., {lat: ..., lon: ...}] — first point equals last
 ```
 
 ---

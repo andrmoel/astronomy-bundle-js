@@ -1,14 +1,15 @@
-import {
-    ECCENTRICITY_SQUARED as E_SQ,
-    EARTH_ROTATION_DEG_PER_HOUR,
-    EARTH_POLAR_RADIUS_RATIO as ONE_MINUS_F,
-} from '@app/constants/earth';
-import {DEG, RAD} from '@app/constants/math';
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
-import type {BesselianElements, BesselianElementsAtTime} from '../../types/BesselianElementTypes';
-import {getBesselianElementsAtTime, getEclipseDeltaT} from '../../utils/besselianElements';
-import {closeContourAroundPole, lonWinding, shortestLonDelta, signedUnwrappedArea} from './contourGeometry';
+import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
+import {
+    closeContourAroundPole,
+    lonWinding,
+    shortestAngleDelta,
+    shortestLonDelta,
+    signedUnwrappedArea,
+} from './contourGeometry';
 import {solveSurfacePoint} from './surface';
 
 const PENUMBRA_Q_SAMPLES = 240;
@@ -18,17 +19,14 @@ const RING_ARC_STEP = (2 * Math.PI) / 240;
 const RING_ARC_MAX_CHORD_DEG = 0.1;
 const RING_ARC_MAX_DEPTH = 10;
 
-interface EdgeSample {
+export interface EdgeSample {
     point: LatLon;
     xi: number;
     eta: number;
+    zeta: number;
 }
 
-// One point of the shadow edge at position angle q, projected onto the requested sheet of
-// the ellipsoid. The shadow radius depends on zeta, which depends on the surface point, so
-// both are converged by fixed-point iteration. Returns null when the edge misses the
-// ellipsoid or the surface point lies below the visibility horizon at zeta = z0.
-function shadowEdgePoint(
+export function shadowEdgePoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     q: number,
@@ -65,10 +63,10 @@ function shadowEdgePoint(
         return null;
     }
 
-    return {point, xi, eta};
+    return {point, xi, eta, zeta};
 }
 
-function bisectEdgeBoundary(
+export function bisectEdgeBoundary(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     qGood: number,
@@ -95,9 +93,6 @@ function bisectEdgeBoundary(
     return sample !== null ? {sample, q: good} : null;
 }
 
-// From the limb fold at qFold, the boundary doubles back on the night sheet (the ~50' sliver
-// between the geometric terminator and the rise/set horizon) until the edge drops below the
-// horizon. direction is -1 at a gap start (q decreasing) and +1 at a gap end.
 function nightSheetRun(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
@@ -108,11 +103,6 @@ function nightSheetRun(
     z0: number,
 ): Array<EdgeSample> {
     const run: Array<EdgeSample> = [];
-    // The sliver covers only a small q range, so it is walked at a finer step than the
-    // day-side sweep; the step count is capped at a full revolution as a safety net.
-    // The fold itself is on the sliver (zeta ≈ 0 there), so when even the first step is
-    // already past the horizon, the crossing is still bisected from the fold — otherwise
-    // a sliver narrower than one step would silently drop its whole flap.
     const nightStep = qStep / 4;
     const maxSteps = Math.ceil((2 * Math.PI) / nightStep);
     let qGood = qFold;
@@ -133,19 +123,14 @@ function nightSheetRun(
     return run;
 }
 
-interface RingPoint {
+export interface RingPoint {
     point: LatLon;
     xi: number;
     eta: number;
     sinU: number;
 }
 
-// Surface point of the horizon ring at Sun altitude asin(z0) and position angle theta.
-// On the ring sinU follows linearly from the coordinates
-// via (1 - f) sinU = eta cos d + zeta sin d, so only the ellipsoid radius needs a short
-// fixed-point iteration and every theta yields a point — the general surface solver would
-// sit exactly on its zetaSq >= 0 float boundary at z0 = 0 and fail intermittently.
-function terminatorRingPoint(
+export function terminatorRingPoint(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
     theta: number,
@@ -168,18 +153,11 @@ function terminatorRingPoint(
     const cosU = Math.sqrt(Math.max(0, 1 - sinU * sinU));
     const lat = Math.atan2(sinU, ONE_MINUS_F * cosU) * RAD;
     const thetaG = Math.atan2(xi, (z0 - ONE_MINUS_F * sinU * e.sinD) / e.cosD);
-    const lon = normalizeLongitude(
-        (thetaG - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600,
-    );
+    const lon = normalizeLongitude((thetaG - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600);
 
     return {point: {lat, lon}, xi, eta, sinU};
 }
 
-// Arc of the rise/set horizon ring between two fundamental-plane points, taking the side
-// that stays inside the shadow circle. The direction is picked by which candidate arc's
-// midpoint lies closer to the shadow centre — for the umbra the shadow radius is of the
-// same order as the ring-radius convergence error, so a converged point is required to
-// make that comparison reliable.
 function terminatorRingArc(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
@@ -197,13 +175,7 @@ function terminatorRingArc(
         return Math.hypot(ringPoint.xi - e.x, ringPoint.eta - e.y);
     };
 
-    let delta = thetaTo - thetaFrom;
-    while (delta > Math.PI) {
-        delta -= 2 * Math.PI;
-    }
-    while (delta < -Math.PI) {
-        delta += 2 * Math.PI;
-    }
+    let delta = shortestAngleDelta(thetaFrom, thetaTo);
     const deltaLong = delta - Math.sign(delta || 1) * 2 * Math.PI;
     if (distanceToShadowCentre(thetaFrom + deltaLong / 2) < distanceToShadowCentre(thetaFrom + delta / 2)) {
         delta = deltaLong;
@@ -329,10 +301,6 @@ function isPoleInsideInstantShadow(
     return Math.hypot(e.x, e.y - eta) < Math.abs(l0 - zeta * tanF);
 }
 
-// Ordered contours (outer rings CCW) of the union of instantaneous shadow outlines from
-// tMin to tMax. useUmbra selects the umbral (total/annular) shadow instead of the
-// penumbral (partial) one; z0 is the rise/set horizon (sin of the Sun's centre altitude,
-// 0 for the geometric terminator).
 export function calculateShadowRegionContours(
     elements: BesselianElements,
     useUmbra: boolean,
