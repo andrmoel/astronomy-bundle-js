@@ -1,6 +1,7 @@
 import type {Location} from '@app/types/LocationTypes';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getContactTaus} from './contacts';
 import {
     getLocalEclipseCircumstances,
     getLocalEclipseType,
@@ -9,6 +10,7 @@ import {
     getMaximumEclipse,
     getMoonSunRatio,
     getObscuration,
+    isEclipseVisible,
 } from './localCircumstances';
 
 // HSE 2023-04-20
@@ -80,6 +82,24 @@ describe('getLocalEclipseCircumstances', () => {
         const result = getLocalEclipseCircumstances(elements, locationTotal, tauMaxEclipse);
 
         expect(result).toEqual(circumstancesMaximumEclipseExmouth);
+    });
+});
+
+describe('isEclipseVisible', () => {
+    it('returns true when the Sun is above the horizon during the eclipse', () => {
+        const contactTaus = getContactTaus(elements, locationTotal);
+
+        expect(contactTaus).not.toBeNull();
+        expect(isEclipseVisible(elements, locationTotal, contactTaus!)).toBe(true);
+    });
+
+    it('returns false when the Sun stays below the horizon throughout the eclipse', () => {
+        // Antarctic location where contact times exist but the Sun never rises above the horizon
+        const location: Location = {lat: -79, lon: 104, elevation: 0};
+        const contactTaus = getContactTaus(elements, location);
+
+        expect(contactTaus).not.toBeNull();
+        expect(isEclipseVisible(elements, location, contactTaus!)).toBe(false);
     });
 });
 

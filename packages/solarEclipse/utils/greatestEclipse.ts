@@ -1,9 +1,7 @@
-import {EARTH_POLAR_RADIUS_RATIO, EARTH_ROTATION_DEG_PER_HOUR, ECCENTRICITY_SQUARED} from '@app/constants/earth';
-import {DEG} from '@app/constants/math';
 import {SECONDS_PER_DAY} from '@app/constants/time';
 import type {LatLon} from '@app/types/LocationTypes';
-import {normalizeLongitude} from '@app/utils/location';
 import {polynomialDerivative} from '@app/utils/polynoms';
+import {solveLimbClampedSurfacePoint} from '@package/solarEclipse/services/shadowGeometry/utils/surface';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 
@@ -14,32 +12,15 @@ const ECLIPSE_SEARCH_RANGE_HOURS = 4;
 export function getLocationOfGreatestEclipse(elements: BesselianElements): LatLon {
     const tau = getTauOfGreatestEclipse(elements);
     const e = getBesselianElementsAtTime(elements, tau);
-    const {sinD, cosD} = e;
 
     // If the shadow axis misses Earth, project it onto the limb
     const dist = Math.sqrt(e.x * e.x + e.y * e.y);
     const xi = dist > 1 ? e.x / dist : e.x;
     const eta = dist > 1 ? e.y / dist : e.y;
 
-    const rho1 = Math.sqrt(1 - ECCENTRICITY_SQUARED * cosD * cosD);
-    const sinD1 = sinD / rho1;
-    const cosD1 = (EARTH_POLAR_RADIUS_RATIO * cosD) / rho1;
-    const eta1 = eta / rho1;
-    const B = Math.sqrt(Math.max(0, 1 - xi * xi - eta1 * eta1));
+    const {lat, lon} = solveLimbClampedSurfacePoint(elements, e, xi, eta, getEclipseDeltaT(elements));
 
-    const sinU = Math.max(-1, Math.min(1, eta1 * cosD1 + B * sinD1));
-    const cosU = Math.sqrt(1 - sinU * sinU);
-
-    const zeta = Math.sqrt(Math.max(0, 1 - ECCENTRICITY_SQUARED * sinU * sinU - xi * xi - eta * eta));
-
-    const theta = Math.atan2(xi, (zeta - EARTH_POLAR_RADIUS_RATIO * sinU * sinD) / cosD);
-    const lat = Math.atan2(sinU, EARTH_POLAR_RADIUS_RATIO * cosU) / DEG;
-    const lon = (theta - e.mu) / DEG + (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600;
-
-    return {
-        lat: lat,
-        lon: normalizeLongitude(lon),
-    };
+    return {lat, lon};
 }
 
 export function getJulianDayOfGreatestEclipse(elements: BesselianElements): number {
