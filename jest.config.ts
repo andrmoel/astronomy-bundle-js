@@ -5,7 +5,7 @@ const config: Config = {
     roots: ['<rootDir>/app', '<rootDir>/packages'],
     testMatch: ['**/*.test.ts'],
     transform: {
-        '^.+\\.(t|j)sx?$': ['@swc/jest'],
+        '^.+\\.(t|j)sx?$': ['@swc/jest', {}],
     },
     moduleNameMapper: {
         '^@app/(.*)$': '<rootDir>/app/$1',
