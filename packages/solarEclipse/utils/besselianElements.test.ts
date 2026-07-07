@@ -8,11 +8,11 @@ import {
     tau2julianDay,
 } from '../utils/besselianElements';
 
-// 28-element raw Besselian data for the 2017-08-21 total solar eclipse.
+// 29-element raw Besselian data for the 2017-08-21 total solar eclipse (last value is the Saros number).
 const rawElements: Array<number> = [
     2457987.27083, 18.5, -2.0, 2.0, 69.1, 0.0, 0.025209, 0.56830281, 0.0000391, -0.00000965, -0.98365301, -0.13151421,
     0.0002213, 0.0000024, -22.27471924, -0.005178, 0.000006, 302.45217896, 14.99728012, 0.0, 0.53780502, -0.000016,
-    -0.0000131, -0.008292, -0.000016, -0.0000131, 0.0046, 0.0046,
+    -0.0000131, -0.008292, -0.000016, -0.0000131, 0.0046, 0.0046, 145,
 ];
 
 // 2021-12-04 total solar eclipse
@@ -30,6 +30,7 @@ const besselianElements: BesselianElements = {
     l2: [-0.008292, -0.000016, -0.0000131],
     tanF1: 0.0047434,
     tanF2: 0.0047198,
+    saros: 152,
 };
 
 describe('getBesselianElementsFromCatalogue', () => {
@@ -54,7 +55,7 @@ describe('getBesselianElementsFromCatalogue', () => {
 });
 
 describe('parseBesselianElements', () => {
-    it('parses all fields from a 28-element array', () => {
+    it('parses all fields from a 29-element array', () => {
         const result = parseBesselianElements(rawElements);
 
         expect(result.t0Jde).toBe(2457987.27083);
@@ -70,11 +71,12 @@ describe('parseBesselianElements', () => {
         expect(result.l2).toEqual([-0.008292, -0.000016, -0.0000131]);
         expect(result.tanF1).toBe(0.0046);
         expect(result.tanF2).toBe(0.0046);
+        expect(result.saros).toBe(145);
     });
 
-    it('throws when the array does not have exactly 28 elements', () => {
-        expect(() => parseBesselianElements(rawElements.slice(0, 27))).toThrow(
-            'Expected 28 Besselian element values, got 27',
+    it('throws when the array does not have exactly 29 elements', () => {
+        expect(() => parseBesselianElements(rawElements.slice(0, 28))).toThrow(
+            'Expected 29 Besselian element values, got 28',
         );
     });
 });

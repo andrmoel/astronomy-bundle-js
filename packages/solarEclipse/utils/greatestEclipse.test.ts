@@ -21,6 +21,7 @@ const elementsPartial: BesselianElements = {
     l2: [0.014861, 0.0000843, -0.0000102],
     tanF1: 0.004642,
     tanF2: 0.0046189,
+    saros: 119,
 };
 
 // 2026-08-12 total solar eclipse
@@ -38,6 +39,7 @@ const elementsTotal: BesselianElements = {
     l2: [-0.008142, 0.0000935, -0.0000121],
     tanF1: 0.0046141,
     tanF2: 0.0045911,
+    saros: 126,
 };
 
 describe('getLocationOfGreatestEclipse', () => {

@@ -19,6 +19,7 @@ const elements: BesselianElements = {
     l2: [-0.015464, 0.0000137, -0.0000128],
     tanF1: 0.0046064,
     tanF2: 0.0045834,
+    saros: 136,
 };
 
 // Jeddah
@@ -67,6 +68,7 @@ describe('getType', () => {
             l2: [0.017447, 0.0000784, -0.00001],
             tanF1: 0.0046313,
             tanF2: 0.0046082,
+            saros: 138,
         };
         const capeTown = Location.create(-33.9249, 18.4241, 25);
         const toi = TimeOfInterest.fromTime(2013, 5, 9, 23, 51, 8);

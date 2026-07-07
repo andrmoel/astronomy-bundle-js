@@ -18,6 +18,7 @@ const elements: BesselianElements = {
     l2: [-0.008464, -0.0000894, -0.000012],
     tanF1: 0.0045984,
     tanF2: 0.0045755,
+    saros: 127,
 };
 
 const eclipse = SolarEclipse.createFromBesselianElements(elements);
@@ -26,6 +27,12 @@ it('tests getType', () => {
     const result = eclipse.getType();
 
     expect(result).toBe(SolarEclipseType.Total);
+});
+
+it('tests getSaros', () => {
+    const result = eclipse.getSaros();
+
+    expect(result).toBe(127);
 });
 
 it('tests getLocationOfGreatestEclipse', () => {

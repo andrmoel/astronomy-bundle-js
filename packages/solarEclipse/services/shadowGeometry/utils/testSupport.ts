@@ -23,6 +23,7 @@ export const ELEMENTS_2019_07_02: BesselianElements = {
     l2: [-0.008464, -0.0000894, -0.000012],
     tanF1: 0.0045984,
     tanF2: 0.0045755,
+    saros: 127,
 };
 
 // 2021-12-04 (total, Antarctica)
@@ -40,6 +41,7 @@ export const ELEMENTS_2021_12_04: BesselianElements = {
     l2: [-0.008292, -0.000016, -0.0000131],
     tanF1: 0.0047434,
     tanF2: 0.0047198,
+    saros: 152,
 };
 
 // 2029-12-05 (partial, southern South America and Antarctica, south pole inside)
@@ -57,6 +59,7 @@ export const ELEMENTS_2029_12_05: BesselianElements = {
     l2: [-0.005469252601702933, 0.0000694996955783325, -0.000012799829096346935],
     tanF1: 0.00474459830624857,
     tanF2: 0.004720900282291905,
+    saros: 123,
 };
 
 // Whether the umbra/antumbra ever covers the point while the Sun stands above the geometric

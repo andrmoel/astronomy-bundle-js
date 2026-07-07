@@ -17,6 +17,7 @@ const elements: BesselianElements = {
     l2: [0.017447, 0.0000784, -0.00001],
     tanF1: 0.0046313,
     tanF2: 0.0046082,
+    saros: 138,
 };
 
 // Coen, Australia - central line, full annular eclipse with the Sun well up.

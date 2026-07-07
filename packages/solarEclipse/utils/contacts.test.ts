@@ -17,6 +17,7 @@ const besselianElements: BesselianElements = {
     l2: [-0.008292, -0.000016, -0.0000131],
     tanF1: 0.0047434,
     tanF2: 0.0047198,
+    saros: 152,
 };
 
 describe('getContactTaus', () => {
@@ -113,6 +114,7 @@ describe('getContactTaus', () => {
             l2: [0.017447, 0.0000784, -0.00001],
             tanF1: 0.0046313,
             tanF2: 0.0046082,
+            saros: 138,
         };
 
         it('had an observer whose eclipse begins while the Sun is still below the horizon', () => {

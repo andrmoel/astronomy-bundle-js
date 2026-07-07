@@ -40,9 +40,10 @@ const STANDARD_CATALOGUE_RANGE: CatalogueRange = {
 //  [57] int16   l2_2          — quantized: val * 2.3405e9
 //  [59] uint16  tanF1         — quantized: (val - 0.00455) * 2.6214e8
 //  [61] uint16  tanF2         — quantized: (val - 0.00452) * 2.6214e8
+//  [63] uint16  saros         — Saros series number
 //  mu2 omitted — always 0 in all catalogue entries
 
-const ENTRY_BYTES = 63;
+const ENTRY_BYTES = 65;
 
 // Decode scales (reciprocals stored to avoid repeated division)
 const X1_OFF = 0.43,
@@ -124,6 +125,7 @@ export function decodeCatalogue(base64: string): Catalogue {
             view.getInt16(o + 57, true) * L22_SC, // 25 l2_2
             view.getUint16(o + 59, true) * TF1_SC + TF1_OFF, // 26 tanF1
             view.getUint16(o + 61, true) * TF2_SC + TF2_OFF, // 27 tanF2
+            view.getUint16(o + 63, true), // 28 saros
         ];
     }
 

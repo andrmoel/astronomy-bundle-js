@@ -28,6 +28,7 @@ const elements: BesselianElements = {
     l2: [0.000663, 0.000121, -0.0000115],
     tanF1: 0.004655,
     tanF2: 0.0046318,
+    saros: 129,
 };
 
 // Exmouth, Australia

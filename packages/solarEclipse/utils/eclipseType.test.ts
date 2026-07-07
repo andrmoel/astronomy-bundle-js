@@ -19,6 +19,7 @@ describe('eclipseType', () => {
             l2: [-0.01032, -0.000053, -0.0000128],
             tanF1: 0.0046823,
             tanF2: 0.004659,
+            saros: 149,
         };
 
         const eclipseType = getEclipseType(elements);
@@ -42,6 +43,7 @@ describe('eclipseType', () => {
             l2: [-0.004025, 0.0001234, -0.0000117],
             tanF1: 0.0046222,
             tanF2: 0.0045992,
+            saros: 145,
         };
 
         const eclipseType = getEclipseType(elements);
@@ -65,6 +67,7 @@ describe('eclipseType', () => {
             l2: [0.024091, -2e-7, -0.0000097],
             tanF1: 0.0046734,
             tanF2: 0.0046501,
+            saros: 144,
         };
 
         const eclipseType = getEclipseType(elements);
@@ -88,6 +91,7 @@ describe('eclipseType', () => {
             l2: [-0.010740775780510881, -0.00005439763420875544, -0.000012699850459303567],
             tanF1: 0.004668001831082628,
             tanF2: 0.004644799725337606,
+            saros: 149,
         };
 
         const eclipseType = getEclipseType(elements);
@@ -111,6 +115,7 @@ describe('eclipseType', () => {
             l2: [0.000663, 0.000121, -0.0000115],
             tanF1: 0.004655,
             tanF2: 0.0046318,
+            saros: 129,
         };
 
         const eclipseType = getEclipseType(elements);
