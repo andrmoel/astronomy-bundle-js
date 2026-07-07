@@ -31,6 +31,9 @@ jobs:
       - name: 'Check code style'
         run: yarn lint
 
+      - name: 'Check TypeScript'
+        run: yarn check:typescript
+
       - name: 'Run unit tests'
         run: yarn test
 
