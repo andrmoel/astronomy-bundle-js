@@ -79,8 +79,8 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const {rightAscension, declination, radiusVector} = neptune.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(rightAscension).toBeCloseTo(305.4254342988, 8);
-    expect(declination).toBeCloseTo(-19.2148988934, 8);
+    expect(rightAscension).toBeCloseTo(305.4257577361702, 8);
+    expect(declination).toBeCloseTo(-19.216203446006087, 8);
     expect(radiusVector).toBeCloseTo(31.02103753, 8);
 });
 

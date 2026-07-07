@@ -152,9 +152,23 @@ export function eclipticSpherical2equatorialSpherical(
     T: number,
     normalize = true,
 ): EquatorialSphericalCoordinates {
+    return eclipticSpherical2equatorialSphericalByObliquity(coords, earth.getTrueObliquityOfEcliptic(T), normalize);
+}
+
+export function eclipticSphericalJ20002equatorialSphericalJ2000(
+    coords: EclipticSphericalCoordinates,
+    normalize = true,
+): EquatorialSphericalCoordinates {
+    return eclipticSpherical2equatorialSphericalByObliquity(coords, earth.getMeanObliquityOfEcliptic(0), normalize);
+}
+
+export function eclipticSpherical2equatorialSphericalByObliquity(
+    coords: EclipticSphericalCoordinates,
+    eps: number,
+    normalize = true,
+): EquatorialSphericalCoordinates {
     const {lon, lat, radiusVector} = coords;
 
-    const eps = earth.getTrueObliquityOfEcliptic(T);
     const epsRad = eps * DEG;
     const lonRad = lon * DEG;
     const latRad = lat * DEG;
