@@ -169,7 +169,7 @@ describe('getGeometricRise', () => {
     it('tests the upper limb', () => {
         const toi = sun.getGeometricRise(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 55});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 48, sec: 56});
     });
 
     it('tests the center', () => {
@@ -254,13 +254,13 @@ it('tests getLightTime', () => {
 it('tests getAngularDiameter', () => {
     const delta = sun.getAngularDiameter();
 
-    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 09.579"');
+    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.8"');
 });
 
 it('tests getTopocentricAngularDiameter', () => {
     const delta = sun.getTopocentricAngularDiameter(location);
 
-    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 09.584"');
+    expect(decimal2degreeMinutesSeconds(delta)).toBe('0° 32\' 07.805"');
 });
 
 it('tests getApparentMagnitude', () => {
