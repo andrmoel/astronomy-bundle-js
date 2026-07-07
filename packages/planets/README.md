@@ -389,8 +389,8 @@ const topocentricDiameter = mars.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 00' 05.071"*\
-Topocentric angular diameter: *0° 00' 05.071"*
+Geocentric angular diameter: *0° 00' 05.071"* (0.001409°)\
+Topocentric angular diameter: *0° 00' 05.071"* (0.001409°)
 
 ---
 

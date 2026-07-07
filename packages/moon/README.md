@@ -305,8 +305,8 @@ const topocentricDiameter = moon.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 32' 25.456"*\
-Topocentric angular diameter: *0° 32' 42.685"*
+Geocentric angular diameter: *0° 32' 25.456"* (0.540404°)\
+Topocentric angular diameter: *0° 32' 42.685"* (0.545190°)
 
 ---
 

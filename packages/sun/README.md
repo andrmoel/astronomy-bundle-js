@@ -309,8 +309,8 @@ const topocentricDiameter = sun.getTopocentricAngularDiameter(location);
 ```
 
 The result of the calculation should be:\
-Geocentric angular diameter: *0° 32' 07.8"*\
-Topocentric angular diameter: *0° 32' 07.805"*
+Geocentric angular diameter: *0° 32' 07.8"* (0.535500°)\
+Topocentric angular diameter: *0° 32' 07.805"* (0.535501°)
 
 ---
 
