@@ -1,9 +1,8 @@
 import type {LatLon, Location} from '@app/types/LocationTypes';
-import {
-    getCentralLine,
-    getPenumbraPath,
-    getUmbraPath,
-} from '@package/solarEclipse/services/shadowGeometry/eclipsePaths';
+import type {ShadowPathOptions} from '@package/solarEclipse/services/shadowGeometry/types/ShadowPathTypes';
+import {getCentralLine} from '@package/solarEclipse/services/shadowGeometry/utils/centralLine';
+import calculatePenumbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/penumbraPathPolygon';
+import calculateUmbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/umbraPathPolygon';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
@@ -20,7 +19,6 @@ import {
 } from '@package/solarEclipse/utils/localCircumstances';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {SolarEclipseType} from '../enums/SolarEclipseType';
-import type {ShadowPathOptions} from '../services/shadowGeometry/types/ShadowPathTypes';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import LocalSolarEclipse from './LocalSolarEclipse';
 
@@ -87,16 +85,16 @@ export default class SolarEclipse {
         });
     }
 
-    public getCentralLine(stepsInSeconds = 10): Array<LatLon> {
-        return getCentralLine(this.elements, stepsInSeconds);
+    public getCentralLine(options: ShadowPathOptions = {}): Array<LatLon> {
+        return getCentralLine(this.elements, options);
     }
 
-    public getUmbraPath(options: ShadowPathOptions = {}): Array<Array<LatLon>> {
-        return getUmbraPath(this.elements, options);
+    public getUmbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculateUmbraPathPolygon(this.elements, options);
     }
 
-    public getPenumbraPath(options: ShadowPathOptions = {}): Array<Array<LatLon>> {
-        return getPenumbraPath(this.elements, options);
+    public getPenumbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculatePenumbraPathPolygon(this.elements, options);
     }
 
     // TODO

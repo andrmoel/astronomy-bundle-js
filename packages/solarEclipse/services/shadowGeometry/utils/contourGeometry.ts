@@ -1,21 +1,35 @@
 import type {LatLon} from '@app/types/LocationTypes';
+import {DEG} from './constants';
 
 const POLE_EDGE_STEP_DEG = 5;
 
-export function shortestLonDelta(from: number, to: number): number {
-    let delta = to - from;
-    while (delta > 180) {
-        delta -= 360;
-    }
-    while (delta < -180) {
-        delta += 360;
-    }
+export function latLonChordDeg(a: LatLon, b: LatLon): number {
+    const dLat = b.lat - a.lat;
+    const dLon = shortestLonDelta(a.lon, b.lon) * Math.cos(((a.lat + b.lat) / 2) * DEG);
 
-    return delta;
+    return Math.hypot(dLat, dLon);
 }
 
-// Rewrites longitudes so consecutive points never jump more than 180°, letting a contour
-// that crosses the antimeridian keep a continuous coordinate run (values may leave ±180).
+export function shortestLonDelta(from: number, to: number): number {
+    return shortestPeriodicDelta(to - from, 360);
+}
+
+export function shortestAngleDelta(from: number, to: number): number {
+    return shortestPeriodicDelta(to - from, 2 * Math.PI);
+}
+
+function shortestPeriodicDelta(delta: number, period: number): number {
+    let result = delta;
+    while (result > period / 2) {
+        result -= period;
+    }
+    while (result < -period / 2) {
+        result += period;
+    }
+
+    return result;
+}
+
 export function unwrapPoints(points: Array<LatLon>): Array<LatLon> {
     if (points.length === 0) {
         return points;
@@ -28,8 +42,6 @@ export function unwrapPoints(points: Array<LatLon>): Array<LatLon> {
     return result;
 }
 
-// Total longitude travel of the closed contour. ~0 for an ordinary loop; ~±360 when the
-// contour winds around the globe, i.e. encloses a pole.
 export function lonWinding(path: Array<LatLon>): number {
     let winding = shortestLonDelta(path[path.length - 1].lon, path[0].lon);
     for (let i = 1; i < path.length; i++) {
@@ -39,11 +51,6 @@ export function lonWinding(path: Array<LatLon>): number {
     return winding;
 }
 
-// A contour that winds a full 360° around the globe cannot be filled on an equirectangular
-// map as-is, so it is closed explicitly: repeat the start point (the short hop from the last
-// point back to the first is a real boundary segment), drop to the enclosed pole, and run
-// along the pole back across the wound longitudes. The pole edge is emitted in small steps
-// so longitude unwrapping follows it instead of collapsing the 360° travel to zero.
 export function closeContourAroundPole(path: Array<LatLon>, poleLat: number, winding: number): Array<LatLon> {
     const start = path[0];
     const closed = [...path, {lat: start.lat, lon: start.lon}, {lat: poleLat, lon: start.lon}];
@@ -55,9 +62,6 @@ export function closeContourAroundPole(path: Array<LatLon>, poleLat: number, win
     return closed;
 }
 
-// Shoelace area over unwrapped lon/lat. Only the sign is meaningful; it is used to bring
-// every contour to the same orientation so overlapping contours union under nonzero fill
-// instead of cancelling.
 export function signedUnwrappedArea(path: Array<LatLon>): number {
     const unwrapped = unwrapPoints(path);
     let area = 0;
