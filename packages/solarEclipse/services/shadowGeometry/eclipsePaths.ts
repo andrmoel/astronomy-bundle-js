@@ -1,9 +1,22 @@
-import {EARTH_POLAR_RADIUS_RATIO, EARTH_ROTATION_DEG_PER_HOUR, ECCENTRICITY_SQUARED} from '@app/constants/earth';
-import {RAD} from '@app/constants/math';
+import {
+    EARTH_POLAR_RADIUS_RATIO,
+    EARTH_ROTATION_DEG_PER_HOUR,
+    ECCENTRICITY_SQUARED,
+    SUNRISE_SUNSET_ALTITUDE_DEG,
+} from '@app/constants/earth';
+import {DEG, RAD} from '@app/constants/math';
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
-import type {BesselianElements, BesselianElementsAtTime} from '../types/BesselianElementTypes';
-import {getBesselianElementsAtTime, getEclipseDeltaT} from '../utils/besselianElements';
+import type {BesselianElements, BesselianElementsAtTime} from '../../types/BesselianElementTypes';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '../../utils/besselianElements';
+import {calculateShadowRegionContours} from './shadowOutline';
+import type {ShadowPathOptions} from './types/ShadowPathTypes';
+
+const DEFAULT_UMBRA_STEP_SECONDS = 5;
+const DEFAULT_PENUMBRA_STEP_SECONDS = 60;
+
+const GEOMETRIC_HORIZON_SIN_ALTITUDE = 0;
+const REFRACTED_HORIZON_SIN_ALTITUDE = Math.sin(SUNRISE_SUNSET_ALTITUDE_DEG * DEG);
 
 export function getCentralLine(elements: BesselianElements, stepsInSeconds = 10): Array<LatLon> {
     const points: Array<LatLon> = [];
@@ -17,6 +30,22 @@ export function getCentralLine(elements: BesselianElements, stepsInSeconds = 10)
     }
 
     return points;
+}
+
+export function getUmbraPath(elements: BesselianElements, options: ShadowPathOptions = {}): Array<Array<LatLon>> {
+    const stepHours = (options.stepsInSeconds ?? DEFAULT_UMBRA_STEP_SECONDS) / 3600;
+
+    return calculateShadowRegionContours(elements, true, stepHours, horizonSinAltitude(options));
+}
+
+export function getPenumbraPath(elements: BesselianElements, options: ShadowPathOptions = {}): Array<Array<LatLon>> {
+    const stepHours = (options.stepsInSeconds ?? DEFAULT_PENUMBRA_STEP_SECONDS) / 3600;
+
+    return calculateShadowRegionContours(elements, false, stepHours, horizonSinAltitude(options));
+}
+
+function horizonSinAltitude(options: ShadowPathOptions): number {
+    return options.refraction ? REFRACTED_HORIZON_SIN_ALTITUDE : GEOMETRIC_HORIZON_SIN_ALTITUDE;
 }
 
 function calculateCentralLinePoint(elements: BesselianElements, tau: number): LatLon | null {

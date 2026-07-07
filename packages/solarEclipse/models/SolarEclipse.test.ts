@@ -2,6 +2,13 @@ import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import SolarEclipse from './SolarEclipse';
 
+function isValidContour(contour: Array<{lat: number; lon: number}>): boolean {
+    return (
+        contour.length >= 3
+        && contour.every(({lat, lon}) => Number.isFinite(lon) && Number.isFinite(lat) && lat >= -90 && lat <= 90)
+    );
+}
+
 // 2019-07-02
 const elements: BesselianElements = {
     t0Jde: 2458667.30842,
@@ -87,5 +94,50 @@ describe('getCenterLine', () => {
         const result = eclipse.getCentralLine(1);
 
         expect(result).toHaveLength(9677);
+    });
+});
+
+describe('getUmbraPath', () => {
+    it('returns valid umbral region contours with the default step', () => {
+        const result = eclipse.getUmbraPath();
+
+        expect(result).toHaveLength(1964);
+        expect(result.every(isValidContour)).toBe(true);
+    });
+
+    it('returns fewer contours with a coarser step', () => {
+        const result = eclipse.getUmbraPath({stepsInSeconds: 30});
+
+        expect(result).toHaveLength(327);
+    });
+
+    it('reaches further with refraction than with the geometric horizon', () => {
+        const latSpan = (contours: Array<Array<{lat: number; lon: number}>>): number => {
+            let min = Number.POSITIVE_INFINITY;
+            let max = Number.NEGATIVE_INFINITY;
+            for (const {lat} of contours.flat()) {
+                min = Math.min(min, lat);
+                max = Math.max(max, lat);
+            }
+
+            return max - min;
+        };
+
+        expect(latSpan(eclipse.getUmbraPath({refraction: true}))).toBeGreaterThan(latSpan(eclipse.getUmbraPath()));
+    });
+});
+
+describe('getPenumbraPath', () => {
+    it('returns valid penumbral region contours with the default step', () => {
+        const result = eclipse.getPenumbraPath();
+
+        expect(result).toHaveLength(295);
+        expect(result.every(isValidContour)).toBe(true);
+    });
+
+    it('returns more contours with a finer step', () => {
+        const result = eclipse.getPenumbraPath({stepsInSeconds: 30});
+
+        expect(result).toHaveLength(591);
     });
 });

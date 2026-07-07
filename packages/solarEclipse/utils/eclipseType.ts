@@ -1,17 +1,18 @@
-import {polynomial, polynomialDerivative} from '@app/utils/polynoms';
-import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
-import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {polynomial} from '@app/utils/polynoms';
+import {LocalSolarEclipseType, SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getLocationOfGreatestEclipse, getTauOfGreatestEclipse} from '@package/solarEclipse/utils/greatestEclipse';
+import {getLocalEclipseCircumstances, getLocalEclipseType} from '@package/solarEclipse/utils/localCircumstances';
 
 const ECLIPSE_SEARCH_RANGE_HOURS = 4;
-const NEWTON_CONVERGENCE_TOLERANCE = 1e-8;
-const MAX_NEWTON_ITERATIONS = 50;
 
 export function getEclipseType(elements: BesselianElements): SolarEclipseType {
-    const tauGE = findGreatestEclipseTau(elements);
-    const e = getBesselianElementsAtTime(elements, tauGE);
+    const tau = getTauOfGreatestEclipse(elements);
+    const location = getLocationOfGreatestEclipse(elements);
+    const circumstances = getLocalEclipseCircumstances(elements, {...location, elevation: 0}, tau);
+    const localType = getLocalEclipseType(circumstances);
 
-    if (isPartialEclipse(e)) {
+    if (localType !== LocalSolarEclipseType.Total && localType !== LocalSolarEclipseType.Annular) {
         return SolarEclipseType.Partial;
     }
 
@@ -19,54 +20,10 @@ export function getEclipseType(elements: BesselianElements): SolarEclipseType {
         return SolarEclipseType.Hybrid;
     }
 
-    const zetaGE = Math.sqrt(Math.max(0, 1 - e.x * e.x - e.y * e.y));
-    return e.l2 - zetaGE * elements.tanF2 < 0 ? SolarEclipseType.Total : SolarEclipseType.Annular;
-}
-
-function findGreatestEclipseTau(elements: BesselianElements): number {
-    let tau = 0;
-
-    for (let i = 0; i < MAX_NEWTON_ITERATIONS; i++) {
-        const x = polynomial(elements.x, tau);
-        const y = polynomial(elements.y, tau);
-        const xp = polynomialDerivative(elements.x, tau);
-        const yp = polynomialDerivative(elements.y, tau);
-        // x[2] and x[3] are the quadratic and cubic coefficients
-        const xpp = 2 * elements.x[2] + 6 * elements.x[3] * tau;
-        const ypp = 2 * elements.y[2] + 6 * elements.y[3] * tau;
-
-        const f = x * xp + y * yp;
-        const fp = xp * xp + x * xpp + yp * yp + y * ypp;
-
-        if (Math.abs(fp) < 1e-12) {
-            break;
-        }
-
-        const delta = -f / fp;
-        tau += delta;
-
-        if (Math.abs(tau) > ECLIPSE_SEARCH_RANGE_HOURS) {
-            tau = Math.sign(tau) * ECLIPSE_SEARCH_RANGE_HOURS;
-            break;
-        }
-
-        if (Math.abs(delta) < NEWTON_CONVERGENCE_TOLERANCE) {
-            break;
-        }
-    }
-
-    return tau;
-}
-
-function isPartialEclipse(e: BesselianElementsAtTime): boolean {
-    return e.x * e.x + e.y * e.y >= 1;
+    return localType === LocalSolarEclipseType.Total ? SolarEclipseType.Total : SolarEclipseType.Annular;
 }
 
 function isHybridEclipse(elements: BesselianElements): boolean {
-    // Hybrid: effective l2 changes sign along the path when accounting for Earth's curvature.
-    // For an observer on Earth's surface at zeta = sqrt(1 - x² - y²), the corrected shadow
-    // radius is l2' = l2 - zeta·tanF2. The umbra reaches Earth when l2' < 0 at the axis
-    // (zeta_max), while l2 > 0 at the path edge (zeta = 0) means the antumbra is also present.
     let hasUmbra = false;
     let hasAntumbra = false;
     for (let tau = -ECLIPSE_SEARCH_RANGE_HOURS; tau <= ECLIPSE_SEARCH_RANGE_HOURS; tau += 0.01) {
