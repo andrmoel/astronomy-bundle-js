@@ -15,148 +15,148 @@ it('tests if name is correct', () => {
 it('tests getHeliocentricEclipticRectangularJ2000Coordinates', () => {
     const {x, y, z} = uranus.getHeliocentricEclipticRectangularJ2000Coordinates();
 
-    expect(x).toBeCloseTo(14.430553871368845, 8);
-    expect(y).toBeCloseTo(-13.735652336982506, 8);
-    expect(z).toBeCloseTo(-0.23812985943991055, 8);
+    expect(x).toBeCloseTo(14.4305558514, 8);
+    expect(y).toBeCloseTo(-13.7356503613, 8);
+    expect(z).toBeCloseTo(-0.2381298778, 8);
 });
 
 it('tests getHeliocentricEclipticRectangularDateCoordinates', () => {
     const {x, y, z} = uranus.getHeliocentricEclipticRectangularDateCoordinates();
 
-    expect(x).toBeCloseTo(14.430550255485928, 8);
-    expect(y).toBeCloseTo(-13.73565667720361, 8);
-    expect(z).toBeCloseTo(-0.23812974527010336, 8);
+    expect(x).toBeCloseTo(14.4305522423, 8);
+    expect(y).toBeCloseTo(-13.7356546944, 8);
+    expect(z).toBeCloseTo(-0.2381297636, 8);
 });
 
 it('tests getHeliocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = uranus.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(316.41328404522187, 8);
-    expect(lat).toBeCloseTo(-0.684810352505467, 8);
-    expect(radiusVector).toBeCloseTo(19.923998995856437, 8);
+    expect(lon).toBeCloseTo(316.4132920869, 8);
+    expect(lat).toBeCloseTo(-0.6848104027, 8);
+    expect(radiusVector).toBeCloseTo(19.9239990682, 8);
 });
 
 it('tests getHeliocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = uranus.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(316.413267834407, 8);
-    expect(lat).toBeCloseTo(-0.6848100113793235, 8);
-    expect(radiusVector).toBeCloseTo(19.92399936773979, 8);
+    expect(lon).toBeCloseTo(316.4132759044, 8);
+    expect(lat).toBeCloseTo(-0.6848100617, 8);
+    expect(radiusVector).toBeCloseTo(19.92399944, 8);
 });
 
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', () => {
     const {x, y, z} = uranus.getGeocentricEclipticRectangularJ2000Coordinates();
 
-    expect(x).toBeCloseTo(14.599078869904533, 8);
-    expect(y).toBeCloseTo(-14.704435584129264, 8);
-    expect(z).toBeCloseTo(-0.23812592384848005, 8);
+    expect(x).toBeCloseTo(14.5990935907, 8);
+    expect(y).toBeCloseTo(-14.7044313848, 8);
+    expect(z).toBeCloseTo(-0.2381259422, 8);
 });
 
 it('tests getGeocentricEclipticRectangularDateCoordinates', () => {
     const {x, y, z} = uranus.getGeocentricEclipticRectangularDateCoordinates();
 
-    expect(x).toBeCloseTo(14.599074934271254, 8);
-    expect(y).toBeCloseTo(-14.704439979555538, 8);
-    expect(z).toBeCloseTo(-0.23812580671601055, 8);
+    expect(x).toBeCloseTo(14.5990896623, 8);
+    expect(y).toBeCloseTo(-14.7044357731, 8);
+    expect(z).toBeCloseTo(-0.2381258251, 8);
 });
 
 it('tests getGeocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = uranus.getGeocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(314.7940018741568, 8);
-    expect(lat).toBeCloseTo(-0.6584194836311452, 8);
-    expect(radiusVector).toBeCloseTo(20.72221594456318, 8);
+    expect(lon).toBeCloseTo(314.7940389411, 8);
+    expect(lat).toBeCloseTo(-0.6584192995, 8);
+    expect(radiusVector).toBeCloseTo(20.722223336, 8);
 });
 
 it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = uranus.getGeocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(314.7939855882721, 8);
-    expect(lat).toBeCloseTo(-0.6584191487847408, 8);
-    expect(radiusVector).toBeCloseTo(20.72221628949574, 8);
+    expect(lon).toBeCloseTo(314.7940226835, 8);
+    expect(lat).toBeCloseTo(-0.6584189648, 8);
+    expect(radiusVector).toBeCloseTo(20.7222236809, 8);
 });
 
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const {rightAscension, declination, radiusVector} = uranus.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(rightAscension).toBeCloseTo(317.45967767476515, 8);
-    expect(declination).toBeCloseTo(-17.024869294453723, 8);
-    expect(radiusVector).toBeCloseTo(20.72221594456318, 8);
+    expect(rightAscension).toBeCloseTo(317.4597146784, 8);
+    expect(declination).toBeCloseTo(-17.0248582527, 8);
+    expect(radiusVector).toBeCloseTo(20.722223336, 8);
 });
 
 it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
     const {rightAscension, declination, radiusVector} = uranus.getGeocentricEquatorialSphericalDateCoordinates();
 
-    expect(rightAscension).toBeCloseTo(317.4596612888673, 8);
-    expect(declination).toBeCloseTo(-17.024873747117287, 8);
-    expect(radiusVector).toBeCloseTo(20.72221628949574, 8);
+    expect(rightAscension).toBeCloseTo(317.4596983208, 8);
+    expect(declination).toBeCloseTo(-17.0248626972, 8);
+    expect(radiusVector).toBeCloseTo(20.7222236809, 8);
 });
 
 it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = uranus.getApparentGeocentricEclipticRectangularCoordinates();
 
-    expect(x).toBeCloseTo(14.596541517734432, 8);
-    expect(y).toBeCloseTo(-14.70695623587461, 8);
-    expect(z).toBeCloseTo(-0.23813658416452357, 8);
+    expect(x).toBeCloseTo(14.5965562347, 8);
+    expect(y).toBeCloseTo(-14.7069520433, 8);
+    expect(z).toBeCloseTo(-0.2381366023, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = uranus.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(314.784112208734, 8);
-    expect(lat).toBeCloseTo(-0.6584489136976424, 8);
-    expect(radiusVector).toBeCloseTo(20.722217425642302, 8);
+    expect(lon).toBeCloseTo(314.7841492586, 8);
+    expect(lat).toBeCloseTo(-0.658448729, 8);
+    expect(radiusVector).toBeCloseTo(20.7222248168, 8);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = uranus.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(317.44979847142554, 8);
-    expect(declination).toBeCloseTo(-17.027795507942773, 8);
-    expect(radiusVector).toBeCloseTo(20.722217425642302, 8);
+    expect(rightAscension).toBeCloseTo(317.449835459, 8);
+    expect(declination).toBeCloseTo(-17.0277844724, 8);
+    expect(radiusVector).toBeCloseTo(20.7222248168, 8);
 });
 
 it('tests getApparentTopocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} =
         uranus.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
-    expect(rightAscension).toBeCloseTo(317.4497678007532, 6);
-    expect(declination).toBeCloseTo(-17.02786532369055, 6);
-    expect(radiusVector).toBeCloseTo(20.72224998300646, 6);
+    expect(rightAscension).toBeCloseTo(317.44980479, 6);
+    expect(declination).toBeCloseTo(-17.02785429, 6);
+    expect(radiusVector).toBeCloseTo(20.72225737, 6);
 });
 
 it('tests getApparentTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = uranus.getApparentTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(322.83423705337424, 6);
-    expect(altitude).toBeCloseTo(-49.78113134118196, 6);
-    expect(radiusVector).toBeCloseTo(20.72224998300646, 6);
+    expect(azimuth).toBeCloseTo(322.83419306, 6);
+    expect(altitude).toBeCloseTo(-49.78110756, 6);
+    expect(radiusVector).toBeCloseTo(20.72225737, 6);
 });
 
 it('tests getRefractionCorrectedTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = uranus.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(322.83423705337424, 6);
-    expect(altitude).toBeCloseTo(-49.78113134118196, 6);
-    expect(radiusVector).toBeCloseTo(20.72224998300646, 6);
+    expect(azimuth).toBeCloseTo(322.83419306, 6);
+    expect(altitude).toBeCloseTo(-49.78110756, 6);
+    expect(radiusVector).toBeCloseTo(20.72225737, 6);
 });
 
 it('tests getDistanceToEarth', () => {
     const d = uranus.getDistanceToEarth();
 
-    expect(d).toBeCloseTo(3099999433.093417, 6);
+    expect(d).toBeCloseTo(3100000538.83206034, 6);
 });
 
 it('tests getApparentDistanceToEarth', () => {
     const d = uranus.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(3099999603.0585237, 6);
+    expect(d).toBeCloseTo(3100000708.76353359, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = uranus.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(3100004473.5708776, 6);
+    expect(d).toBeCloseTo(3100005579.27417994, 6);
 });
 
 it('tests getLightTime', () => {
@@ -180,25 +180,25 @@ it('tests getTopocentricAngularDiameter', () => {
 it('tests getElongation', () => {
     const phi = uranus.getElongation();
 
-    expect(phi).toBeCloseTo(34.93105134524443, 6);
+    expect(phi).toBeCloseTo(34.93033493, 6);
 });
 
 it('tests getTopocentricElongation', () => {
     const phi = uranus.getTopocentricElongation(location);
 
-    expect(phi).toBeCloseTo(34.93100381190323, 6);
+    expect(phi).toBeCloseTo(34.93028739, 6);
 });
 
 it('tests getPhaseAngle', () => {
     const i = uranus.getPhaseAngle();
 
-    expect(i).toBeCloseTo(1.619377336549272, 6);
+    expect(i).toBeCloseTo(1.61934832, 6);
 });
 
 it('tests getTopocentricPhaseAngle', () => {
     const i = uranus.getTopocentricPhaseAngle(location);
 
-    expect(i).toBeCloseTo(1.619372806126538, 6);
+    expect(i).toBeCloseTo(1.61934379, 6);
 });
 
 it('tests getIlluminatedFraction', () => {
@@ -216,13 +216,13 @@ it('tests getTopocentricIlluminatedFraction', () => {
 it('tests getPositionAngleOfBrightLimb', () => {
     const chi = uranus.getPositionAngleOfBrightLimb();
 
-    expect(chi).toBeCloseTo(253.90339705352363, 6);
+    expect(chi).toBeCloseTo(253.90341151, 6);
 });
 
 it('tests getTopocentricPositionAngleOfBrightLimb', () => {
     const chi = uranus.getTopocentricPositionAngleOfBrightLimb(location);
 
-    expect(chi).toBeCloseTo(253.90349043725587, 6);
+    expect(chi).toBeCloseTo(253.90350489, 6);
 });
 
 it('tests isWaxing', () => {
@@ -240,13 +240,13 @@ it('tests isTopocentricWaxing', () => {
 it('tests getApparentMagnitude', () => {
     const V = uranus.getApparentMagnitude();
 
-    expect(V).toBeCloseTo(5.892302362905254, 6);
+    expect(V).toBeCloseTo(5.89230309, 6);
 });
 
 it('tests getTopocentricApparentMagnitude', () => {
     const V = uranus.getTopocentricApparentMagnitude(location);
 
-    expect(V).toBeCloseTo(5.8923058845704865, 6);
+    expect(V).toBeCloseTo(5.89230661, 6);
 });
 
 it('tests getTransit', () => {

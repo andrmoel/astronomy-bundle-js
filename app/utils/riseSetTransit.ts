@@ -10,8 +10,7 @@ import {
     equatorialSpherical2topocentricSphericalByLocalHourAngle,
 } from '@app/utils/coordinateTransformation';
 import {getGreenwichApparentSiderealTime} from '@app/utils/siderealTime';
-import {julianDay2julianCenturiesJ2000, julianDay2time} from '@package/time/utils/dateTime';
-import {getDeltaT} from '@package/time/utils/deltaT';
+import {julianDay2julianCenturiesJ2000} from '@package/time/utils/dateTime';
 
 export type EquatorialCoordinatesProvider = (jd: number) => EquatorialSphericalCoordinates;
 
@@ -23,7 +22,6 @@ const MAX_ITERATIONS = 100;
 
 export function getTransit(location: Location, jd0: number, getCoords: EquatorialCoordinatesProvider): number {
     const GAST = getGreenwichSiderealTimeAtMidnight(jd0);
-    const dynamicalTimeOffset = getDynamicalTimeOffset(jd0);
 
     const {rightAscension} = getCoords(jd0);
 
@@ -33,7 +31,7 @@ export function getTransit(location: Location, jd0: number, getCoords: Equatoria
 
     let cnt = 0;
     do {
-        const coords = getCoords(jd0 + m + dynamicalTimeOffset);
+        const coords = getCoords(jd0 + m);
         const H = getLocalHourAngle(coords.rightAscension, location.lon, GAST, m);
 
         dm = -H / 360;
@@ -86,7 +84,6 @@ function getRiseSet(
     event: 'rise' | 'set',
 ): number {
     const GAST = getGreenwichSiderealTimeAtMidnight(jd0);
-    const dynamicalTimeOffset = getDynamicalTimeOffset(jd0);
 
     const {rightAscension, declination} = getCoords(jd0);
 
@@ -102,7 +99,7 @@ function getRiseSet(
 
     let cnt = 0;
     do {
-        const coords = getCoords(jd0 + m + dynamicalTimeOffset);
+        const coords = getCoords(jd0 + m);
         const geocentricH = getLocalHourAngle(coords.rightAscension, location.lon, GAST, m);
 
         // Reduce the geocentric position to the observer's location. This matters for the
@@ -166,10 +163,4 @@ function getGreenwichSiderealTimeAtMidnight(jd0: number): number {
     const T = julianDay2julianCenturiesJ2000(jd0);
 
     return getGreenwichApparentSiderealTime(T);
-}
-
-function getDynamicalTimeOffset(jd0: number): number {
-    const {year, month} = julianDay2time(jd0);
-
-    return getDeltaT(year, month) / 86400;
 }
