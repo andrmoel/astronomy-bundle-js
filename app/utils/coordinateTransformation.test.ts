@@ -2,6 +2,8 @@ import {
     earthEclipticSpherical2sunEclipticSpherical,
     eclipticJ20002eclipticDate,
     eclipticSpherical2equatorialSpherical,
+    eclipticSpherical2equatorialSphericalByObliquity,
+    eclipticSphericalJ20002equatorialSphericalJ2000,
     equatorialSpherical2eclipticSpherical,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
@@ -117,6 +119,35 @@ it('tests eclipticSpherical2equatorialSpherical', () => {
     expect(rightAscension).toBeCloseTo(316.174262, 6);
     expect(declination).toBeCloseTo(-18.887468, 6);
     expect(radiusVector).toBeCloseTo(0.910845, 6);
+});
+
+it('tests eclipticSpherical2equatorialSphericalByObliquity', () => {
+    // Meeus example 13.a
+    const coords = {
+        lon: 113.21563,
+        lat: 6.68417,
+        radiusVector: 1,
+    };
+
+    const {rightAscension, declination} = eclipticSpherical2equatorialSphericalByObliquity(coords, 23.4392911);
+
+    expect(rightAscension).toBeCloseTo(116.328942, 5);
+    expect(declination).toBeCloseTo(28.026183, 5);
+});
+
+it('tests eclipticSphericalJ20002equatorialSphericalJ2000 uses the fixed J2000 mean obliquity', () => {
+    // Meeus example 13.a. The J2000 conversion applies the mean obliquity at epoch (23.4392911°),
+    // so it reproduces the reference result regardless of any date.
+    const coords = {
+        lon: 113.21563,
+        lat: 6.68417,
+        radiusVector: 1,
+    };
+
+    const {rightAscension, declination} = eclipticSphericalJ20002equatorialSphericalJ2000(coords);
+
+    expect(rightAscension).toBeCloseTo(116.328942, 5);
+    expect(declination).toBeCloseTo(28.026183, 5);
 });
 
 it('tests equatorialSpherical2eclipticSpherical', () => {

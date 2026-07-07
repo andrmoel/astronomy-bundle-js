@@ -10,6 +10,7 @@ import type {Location} from '@app/types/LocationTypes';
 import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import {
     eclipticSpherical2equatorialSpherical,
+    eclipticSphericalJ20002equatorialSphericalJ2000,
     equatorialSpherical2topocentricHorizontal,
     equatorialSpherical2topocentricSpherical,
     spherical2rectangular,
@@ -67,7 +68,7 @@ export default abstract class AstronomicalObject implements AstronomicalObjectIn
     public getGeocentricEquatorialSphericalJ2000Coordinates(): EquatorialSphericalCoordinates {
         const coords = this.getGeocentricEclipticSphericalJ2000Coordinates();
 
-        return eclipticSpherical2equatorialSpherical(coords, this.Te);
+        return eclipticSphericalJ20002equatorialSphericalJ2000(coords);
     }
 
     public getGeocentricEquatorialSphericalDateCoordinates(): EquatorialSphericalCoordinates {

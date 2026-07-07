@@ -79,8 +79,8 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const {rightAscension, declination, radiusVector} = uranus.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(rightAscension).toBeCloseTo(317.4597146784, 8);
-    expect(declination).toBeCloseTo(-17.0248582527, 8);
+    expect(rightAscension).toBeCloseTo(317.46007588288364, 8);
+    expect(declination).toBeCloseTo(-17.025940654901092, 8);
     expect(radiusVector).toBeCloseTo(20.722223336, 8);
 });
 

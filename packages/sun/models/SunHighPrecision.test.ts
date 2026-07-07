@@ -84,8 +84,8 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const coords = sun.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(coords.rightAscension).toBeCloseTo(206.9818265112, 8);
-    expect(coords.declination).toBeCloseTo(-11.1256928896, 8);
+    expect(coords.rightAscension).toBeCloseTo(206.98142361646916, 8);
+    expect(coords.declination).toBeCloseTo(-11.12673588100559, 8);
     expect(coords.radiusVector).toBeCloseTo(0.9951436361, 8);
 });
 
