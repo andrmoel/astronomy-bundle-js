@@ -18,6 +18,7 @@ import {
     getMoonSunRatio,
     getObscuration,
 } from '@package/solarEclipse/utils/localCircumstances';
+import {getUmbraPathWidth} from '@package/solarEclipse/utils/pathWidth';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {SolarEclipseType} from '../enums/SolarEclipseType';
 import type {BesselianElements} from '../types/BesselianElementTypes';
@@ -78,6 +79,10 @@ export default class SolarEclipse {
 
     public getMaxObscuration(): number {
         return getObscuration(this.greatestEclipseCircumstances);
+    }
+
+    public getUmbraPathWidth(): number {
+        return getUmbraPathWidth(this.elements, this.tauOfGreatestEclipse);
     }
 
     public getMaxDuration(): number {

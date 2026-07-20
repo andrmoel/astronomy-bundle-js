@@ -117,6 +117,12 @@ it('tests getCentralDuration', () => {
     expect(result).toBeCloseTo(172.0, 1);
 });
 
+it('tests getUmbraPathWidth', () => {
+    const result = localSolarEclipse.getUmbraPathWidth();
+
+    expect(result).toBeCloseTo(139099.4, 1);
+});
+
 describe('visibility above the horizon', () => {
     it('reports only the above-horizon eclipse for an observer whose eclipse begins at sunrise', () => {
         // Perth
@@ -125,6 +131,7 @@ describe('visibility above the horizon', () => {
         const contactTimes = localEclipse.getContactTimes();
 
         expect(localEclipse.getType()).toBe(LocalSolarEclipseType.Partial);
+        expect(localEclipse.getUmbraPathWidth()).toBe(0);
         expect(localEclipse.getDuration()).toBeCloseTo(3058.0, 2);
         expect(contactTimes?.c1.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 21, min: 33, sec: 38});
         expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 4});

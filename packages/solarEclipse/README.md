@@ -21,6 +21,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
     - [Maximum magnitude](#maximum-magnitude)
     - [Maximum Moon/Sun ratio](#maximum-moonsun-ratio)
     - [Maximum obscuration](#maximum-obscuration)
+    - [Umbra path width](#umbra-path-width)
     - [Maximum duration](#maximum-duration)
     - [Maximum central duration](#maximum-central-duration)
     - [Shadow geometry](#shadow-geometry)
@@ -35,6 +36,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
     - [Maximum magnitude](#maximum-magnitude-1)
     - [Maximum Moon/Sun ratio](#maximum-moonsun-ratio-1)
     - [Maximum obscuration](#maximum-obscuration-1)
+    - [Umbra path width](#umbra-path-width-1)
     - [Duration](#duration)
     - [Central duration](#central-duration)
     - [Circumstances at a given time](#circumstances-at-a-given-time)
@@ -233,6 +235,18 @@ The result of the calculation should be: *1*
 
 ---
 
+#### Umbra path width
+
+**Description:** Returns the width of the path of totality (or annularity) at greatest eclipse, in **meters** — the width of the band swept by the Moon's umbra (or antumbra) across Earth's surface. The band widens as the Sun sinks toward the horizon. Returns `0` for partial eclipses, where the shadow axis never reaches the ground.
+
+```javascript
+const pathWidthMeters = eclipse.getUmbraPathWidth();
+```
+
+The result of the calculation should be: *200604.3*
+
+---
+
 #### Maximum duration
 
 **Description:** Returns the total duration of the eclipse in seconds at the point of greatest eclipse, measured from first contact (C1) to last contact (C4).
@@ -419,6 +433,18 @@ const obscuration = localEclipse.getMaxObscuration();
 ```
 
 The result of the calculation should be: *0.941717*
+
+---
+
+#### Umbra path width
+
+**Description:** Returns the width of the path of totality (or annularity) at the observer's location, in **meters** — the width of the band swept by the Moon's umbra (or antumbra) as it passes the observer at greatest local eclipse. The band widens as the Sun sinks toward the horizon, so the value can differ from the eclipse's maximum width. Returns `0` when the observer sees only a partial eclipse.
+
+```javascript
+const pathWidthMeters = localEclipse.getUmbraPathWidth();
+```
+
+The result of the calculation should be: *139099.4*
 
 ---
 

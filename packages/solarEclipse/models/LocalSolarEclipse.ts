@@ -9,14 +9,16 @@ import {
     getObscuration,
     isEclipseVisible,
 } from '@package/solarEclipse/utils/localCircumstances';
+import {getUmbraPathWidth} from '@package/solarEclipse/utils/pathWidth';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
+import {LocalSolarEclipseType} from '../enums/SolarEclipseType';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {EclipseContacts, EclipseContactsToi} from '../types/EclipseContactTypes';
 import {contactTausToContactJulianDays, getContactTaus} from '../utils/contacts';
 import LocalEclipseCircumstances from './LocalEclipseCircumstances';
 
 export default class LocalSolarEclipse {
+    private readonly greatestEclipseTau: number;
     private readonly greatestEclipseCircumstances: LocalEclipseCircumstancesType;
 
     private constructor(
@@ -26,8 +28,8 @@ export default class LocalSolarEclipse {
     ) {
         // Greatest eclipse restricted to the above-horizon part, since max may be below the horizon.
         const {c1, c4, max, sunrise, sunset} = contactTaus;
-        const visibleMax = Math.min(Math.max(max, sunrise ?? c1), sunset ?? c4);
-        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(elements, location, visibleMax);
+        this.greatestEclipseTau = Math.min(Math.max(max, sunrise ?? c1), sunset ?? c4);
+        this.greatestEclipseCircumstances = getLocalEclipseCircumstances(elements, location, this.greatestEclipseTau);
     }
 
     public static create(elements: BesselianElements, location: Location): LocalSolarEclipse {
@@ -80,6 +82,15 @@ export default class LocalSolarEclipse {
 
     public getMaxObscuration(): number {
         return getObscuration(this.greatestEclipseCircumstances);
+    }
+
+    public getUmbraPathWidth(): number {
+        const type = this.getType();
+        if (type !== LocalSolarEclipseType.Total && type !== LocalSolarEclipseType.Annular) {
+            return 0;
+        }
+
+        return getUmbraPathWidth(this.elements, this.greatestEclipseTau);
     }
 
     public getDuration(): number {
