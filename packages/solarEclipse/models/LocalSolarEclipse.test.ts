@@ -120,7 +120,7 @@ it('tests getCentralDuration', () => {
 it('tests getUmbraPathWidth', () => {
     const result = localSolarEclipse.getUmbraPathWidth();
 
-    expect(result).toBeCloseTo(139099.4, 1);
+    expect(result).toBeCloseTo(108317.1, 1);
 });
 
 describe('visibility above the horizon', () => {

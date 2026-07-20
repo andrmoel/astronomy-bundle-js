@@ -81,7 +81,7 @@ it('tests getMaxObscuration', () => {
 it('tests getUmbraPathWidth', () => {
     const result = eclipse.getUmbraPathWidth();
 
-    expect(result).toBeCloseTo(200604.3, 1);
+    expect(result).toBeCloseTo(200867.2, 1);
 });
 
 it('tests getMaxDuration', () => {

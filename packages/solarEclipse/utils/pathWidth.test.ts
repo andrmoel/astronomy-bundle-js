@@ -1,3 +1,4 @@
+import {Catalogue} from '@package/solarEclipse/index.catalogue-full';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getTauOfGreatestEclipse} from '@package/solarEclipse/utils/greatestEclipse';
 import {getUmbraPathWidth} from '@package/solarEclipse/utils/pathWidth';
@@ -56,22 +57,40 @@ const elementsPartial: BesselianElements = {
     saros: 119,
 };
 
+// NASA/Espenak central-line path widths in kilometres.
+const nasaReferenceWidthsKm = [
+    {date: '2024-10-02', widthKm: 266},
+    {date: '2026-08-12', widthKm: 294},
+    {date: '2021-06-10', widthKm: 527},
+    {date: '2024-04-08', widthKm: 198},
+    {date: '2017-08-21', widthKm: 115},
+];
+
 describe('getUmbraPathWidth', () => {
-    it('returns the umbra path width for a total eclipse', () => {
+    it('returns the umbra path width in metres for a total eclipse', () => {
         const tau = getTauOfGreatestEclipse(elementsTotal);
 
-        expect(getUmbraPathWidth(elementsTotal, tau)).toBeCloseTo(200604.3, 1);
+        expect(getUmbraPathWidth(elementsTotal, tau)).toBeCloseTo(200867.2, 1);
     });
 
-    it('returns the antumbra path width for an annular eclipse', () => {
+    it('returns the antumbra path width in metres for an annular eclipse', () => {
         const tau = getTauOfGreatestEclipse(elementsAnnular);
 
-        expect(getUmbraPathWidth(elementsAnnular, tau)).toBeCloseTo(100102.6, 1);
+        expect(getUmbraPathWidth(elementsAnnular, tau)).toBeCloseTo(99752.1, 1);
     });
 
     it('returns 0 for a partial eclipse whose axis misses the Earth', () => {
         const tau = getTauOfGreatestEclipse(elementsPartial);
 
         expect(getUmbraPathWidth(elementsPartial, tau)).toBe(0);
+    });
+
+    it.each(nasaReferenceWidthsKm)('is within 0.5% of the NASA path width for $date', ({date, widthKm}) => {
+        const elements = Catalogue.getBesselianElements(date);
+        const tau = getTauOfGreatestEclipse(elements);
+
+        const widthKmActual = getUmbraPathWidth(elements, tau) / 1000;
+
+        expect(Math.abs(widthKmActual - widthKm) / widthKm).toBeLessThan(0.005);
     });
 });

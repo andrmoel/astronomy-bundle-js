@@ -53,7 +53,7 @@ export default function calculateUmbraPathPolygon(
     const sideA: Array<SidePoint> = [];
     const sideB: Array<SidePoint> = [];
     for (let i = first; i <= last; i++) {
-        const {a, b} = limitPointsAt(elements, taus[i], z0);
+        const {a, b} = getUmbraLimitPoints(elements, taus[i], z0);
         if (a !== null) {
             sideA.push({tau: taus[i], point: a});
         }
@@ -88,7 +88,11 @@ export default function calculateUmbraPathPolygon(
     return ring;
 }
 
-function limitPointsAt(elements: BesselianElements, tau: number, z0: number): {a: LatLon | null; b: LatLon | null} {
+export function getUmbraLimitPoints(
+    elements: BesselianElements,
+    tau: number,
+    z0: number,
+): {a: LatLon | null; b: LatLon | null} {
     const e = getBesselianElementsAtTime(elements, tau);
     const derivatives: ShadowDerivatives = {
         xDot: polynomialDerivative(elements.x, tau),

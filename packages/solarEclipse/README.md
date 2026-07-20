@@ -243,7 +243,7 @@ The result of the calculation should be: *1*
 const pathWidthMeters = eclipse.getUmbraPathWidth();
 ```
 
-The result of the calculation should be: *200604.3*
+The result of the calculation should be: *200867.2*
 
 ---
 
@@ -444,7 +444,7 @@ The result of the calculation should be: *0.941717*
 const pathWidthMeters = localEclipse.getUmbraPathWidth();
 ```
 
-The result of the calculation should be: *139099.4*
+The result of the calculation should be: *108317.1*
 
 ---
 
