@@ -26,8 +26,12 @@ function encodeEntry(block: number[]): Buffer {
     buf.writeFloatLE(block[6], 22);
     buf.writeUInt16LE(Math.round((block[7] - PARALLAX_OFF) * PARALLAX_SC), 26);
     buf.writeUInt16LE(Math.round((block[8] - SD_OFF) * SD_SC), 28);
-    [9, 10, 11, 12, 13, 14, 15].forEach((idx, i) => buf.writeInt16LE(Math.round(block[idx] * CONTACT_SC), 30 + i * 2));
-    [16, 17, 18, 19, 20, 21].forEach((idx, i) => buf.writeFloatLE(block[idx], 44 + i * 4));
+    [9, 10, 11, 12, 13, 14, 15].forEach((idx, i) => {
+        buf.writeInt16LE(Math.round(block[idx] * CONTACT_SC), 30 + i * 2);
+    });
+    [16, 17, 18, 19, 20, 21].forEach((idx, i) => {
+        buf.writeFloatLE(block[idx], 44 + i * 4);
+    });
 
     return buf;
 }
