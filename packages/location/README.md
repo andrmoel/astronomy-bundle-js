@@ -4,6 +4,14 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `location` package provides the `Location` object — a geographic coordinate container used throughout the astronomy-bundle library wherever an observer's position on Earth is required. It holds latitude, longitude, and optional elevation, and exposes helpers for coordinate formatting and distance calculations.
 
+## Contents
+
+- [Install](#install)
+- [API Reference](#api-reference)
+  - [Create a Location object](#create-a-location-object)
+  - [Coordinate formatting](#coordinate-formatting)
+  - [Distance between two locations](#distance-between-two-locations)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/core`\

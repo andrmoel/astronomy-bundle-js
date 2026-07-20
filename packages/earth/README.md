@@ -4,6 +4,17 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `earth` package provides the `Earth` object — the reference body used throughout the astronomy-bundle library. It computes Earth's heliocentric position in the ecliptic coordinate frame using the VSOP87 theory, and exposes Earth-specific quantities such as nutation and the obliquity of the ecliptic.
 
+## Contents
+
+- [Install](#install)
+- [High precision](#high-precision)
+- [API Reference](#api-reference)
+  - [Create the Earth object](#create-the-earth-object)
+  - [Heliocentric ecliptic spherical coordinates](#heliocentric-ecliptic-spherical-coordinates)
+  - [Heliocentric ecliptic rectangular coordinates](#heliocentric-ecliptic-rectangular-coordinates)
+  - [Nutation](#nutation)
+  - [Obliquity of the ecliptic](#obliquity-of-the-ecliptic)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/earth @astronomy-bundle/core`\

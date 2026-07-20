@@ -4,6 +4,16 @@ Part of the [Astronomy Bundle](../../README.md).
 
 The `time` package provides the `TimeOfInterest` (TOI) object — the central time representation used throughout the astronomy-bundle library. It wraps a UTC moment in time and exposes conversions to Julian Day, Julian Centuries/Millennia, Greenwich and Local Sidereal Time, Delta T, and common calendar calculations.
 
+## Contents
+
+- [Install](#install)
+- [API Reference](#api-reference)
+  - [Create the TimeOfInterest object](#create-the-timeofinterest-object)
+  - [Calendar methods](#calendar-methods)
+  - [Julian Day, Julian Centuries and Julian Millennia](#julian-day-julian-centuries-and-julian-millennia)
+  - [Greenwich Sidereal Time and Local Sidereal Time](#greenwich-sidereal-time-and-local-sidereal-time)
+  - [Delta T](#delta-t)
+
 ## Install
 
 With npm: `npm install @astronomy-bundle/core`\
