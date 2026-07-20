@@ -7,6 +7,7 @@ import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/Eclips
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
 import {
+    getGamma,
     getJulianDayOfGreatestEclipse,
     getLocationOfGreatestEclipse,
     getTauOfGreatestEclipse,
@@ -61,6 +62,10 @@ export default class SolarEclipse {
         const jd = getJulianDayOfGreatestEclipse(this.elements);
 
         return TimeOfInterest.fromJulianDay(jd);
+    }
+
+    public getGamma(): number {
+        return getGamma(this.elements);
     }
 
     public getMaxMagnitude(): number {

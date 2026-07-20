@@ -54,6 +54,12 @@ it('tests getTimeOfGreatestEclipse', () => {
     expect(time.sec).toBe(58);
 });
 
+it('tests getGamma', () => {
+    const result = eclipse.getGamma();
+
+    expect(result).toBeCloseTo(-0.646562, 6);
+});
+
 it('tests getMaxMagnitude', () => {
     const result = eclipse.getMaxMagnitude();
 

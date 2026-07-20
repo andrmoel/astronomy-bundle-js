@@ -27,6 +27,14 @@ export function getJulianDayOfGreatestEclipse(elements: BesselianElements): numb
     return elements.t0Jde - getEclipseDeltaT(elements) / SECONDS_PER_DAY;
 }
 
+export function getGamma(elements: BesselianElements): number {
+    const tau = getTauOfGreatestEclipse(elements);
+    const e = getBesselianElementsAtTime(elements, tau);
+    const distance = Math.sqrt(e.x * e.x + e.y * e.y);
+
+    return e.y < 0 ? -distance : distance;
+}
+
 export function getTauOfGreatestEclipse(elements: BesselianElements): number {
     let tau = 0;
 

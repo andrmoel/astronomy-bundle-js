@@ -1,5 +1,6 @@
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import {
+    getGamma,
     getJulianDayOfGreatestEclipse,
     getLocationOfGreatestEclipse,
     getTauOfGreatestEclipse,
@@ -87,6 +88,16 @@ describe('getJulianDayOfGreatestEclipse', () => {
             min: 45,
             sec: 56,
         });
+    });
+});
+
+describe('getGamma', () => {
+    it('returns a negative gamma when the shadow axis passes south of the centre', () => {
+        expect(getGamma(elementsPartial)).toBeCloseTo(-1.190087, 5);
+    });
+
+    it('returns a positive gamma when the shadow axis passes north of the centre', () => {
+        expect(getGamma(elementsTotal)).toBeCloseTo(0.897743, 5);
     });
 });
 

@@ -17,6 +17,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
     - [Saros series](#saros-series)
     - [Location of greatest eclipse](#location-of-greatest-eclipse)
     - [Time of greatest eclipse](#time-of-greatest-eclipse)
+    - [Gamma](#gamma)
     - [Maximum magnitude](#maximum-magnitude)
     - [Maximum Moon/Sun ratio](#maximum-moonsun-ratio)
     - [Maximum obscuration](#maximum-obscuration)
@@ -181,6 +182,18 @@ const {year, month, day, hour, min, sec} = toi.getTime();
 ```
 
 The result of the calculation should be: *2019-07-02 19:22:58*
+
+---
+
+#### Gamma
+
+**Description:** Returns gamma — the least distance of the Moon's shadow axis from the centre of the Earth at greatest eclipse, measured in units of Earth's equatorial radius. It is positive when the axis passes north of the centre and negative when it passes south. A value near 0 indicates a central eclipse crossing near the equator, while a magnitude above roughly 1 indicates a partial eclipse whose axis misses the Earth.
+
+```javascript
+const gamma = eclipse.getGamma();
+```
+
+The result of the calculation should be: *-0.646562*
 
 ---
 
