@@ -169,7 +169,7 @@ const SD_OFF = 0.2,
     SD_SC = 65535 / 0.15; // moonSemidiameter ∈ [0.2, 0.35] deg
 const CONTACT_SC = 32767 / 8; // contact times ∈ [-8, 8] hours from t0
 
-const ENTRY_BYTES = 68;
+const ENTRY_BYTES = 64;
 
 function encodeEntry(block: number[]): Buffer {
     const t0Jde = block[0];
@@ -180,25 +180,24 @@ function encodeEntry(block: number[]): Buffer {
     buf.writeFloatLE(t0Jde - midnight, 4);
     buf.writeUInt8(encodeHour(block[1]), 8);
     buf.writeUInt8(block[5], 9); // eclipseType
-    buf.writeFloatLE(block[2], 10); // deltaT
-    buf.writeFloatLE(block[3], 14); // penumbralMagnitude
-    buf.writeFloatLE(block[4], 18); // umbralMagnitude
-    buf.writeFloatLE(block[6], 22); // apparentSiderealTime
-    buf.writeUInt16LE(encodeU16(block[7], PARALLAX_OFF, PARALLAX_SC, 'moonParallax'), 26);
-    buf.writeUInt16LE(encodeU16(block[8], SD_OFF, SD_SC, 'moonSemidiameter'), 28);
-    buf.writeInt16LE(encodeI16(block[9], CONTACT_SC, 'p1'), 30);
-    buf.writeInt16LE(encodeI16(block[10], CONTACT_SC, 'u1'), 32);
-    buf.writeInt16LE(encodeI16(block[11], CONTACT_SC, 'u2'), 34);
-    buf.writeInt16LE(encodeI16(block[12], CONTACT_SC, 'greatest'), 36);
-    buf.writeInt16LE(encodeI16(block[13], CONTACT_SC, 'u3'), 38);
-    buf.writeInt16LE(encodeI16(block[14], CONTACT_SC, 'u4'), 40);
-    buf.writeInt16LE(encodeI16(block[15], CONTACT_SC, 'p4'), 42);
-    buf.writeFloatLE(block[16], 44); // ra0
-    buf.writeFloatLE(block[17], 48); // ra1
-    buf.writeFloatLE(block[18], 52); // ra2
-    buf.writeFloatLE(block[19], 56); // dec0
-    buf.writeFloatLE(block[20], 60); // dec1
-    buf.writeFloatLE(block[21], 64); // dec2
+    buf.writeFloatLE(block[3], 10); // penumbralMagnitude
+    buf.writeFloatLE(block[4], 14); // umbralMagnitude
+    buf.writeFloatLE(block[6], 18); // apparentSiderealTime
+    buf.writeUInt16LE(encodeU16(block[7], PARALLAX_OFF, PARALLAX_SC, 'moonParallax'), 22);
+    buf.writeUInt16LE(encodeU16(block[8], SD_OFF, SD_SC, 'moonSemidiameter'), 24);
+    buf.writeInt16LE(encodeI16(block[9], CONTACT_SC, 'p1'), 26);
+    buf.writeInt16LE(encodeI16(block[10], CONTACT_SC, 'u1'), 28);
+    buf.writeInt16LE(encodeI16(block[11], CONTACT_SC, 'u2'), 30);
+    buf.writeInt16LE(encodeI16(block[12], CONTACT_SC, 'greatest'), 32);
+    buf.writeInt16LE(encodeI16(block[13], CONTACT_SC, 'u3'), 34);
+    buf.writeInt16LE(encodeI16(block[14], CONTACT_SC, 'u4'), 36);
+    buf.writeInt16LE(encodeI16(block[15], CONTACT_SC, 'p4'), 38);
+    buf.writeFloatLE(block[16], 40); // ra0
+    buf.writeFloatLE(block[17], 44); // ra1
+    buf.writeFloatLE(block[18], 48); // ra2
+    buf.writeFloatLE(block[19], 52); // dec0
+    buf.writeFloatLE(block[20], 56); // dec1
+    buf.writeFloatLE(block[21], 60); // dec2
 
     return buf;
 }

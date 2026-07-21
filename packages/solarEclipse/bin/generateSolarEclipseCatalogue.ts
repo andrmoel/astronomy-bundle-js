@@ -263,7 +263,7 @@ async function fetchAllBesselian(
 
 /**
  * Parse the raw 28-element Besselian array from a NASA eclipse detail page.
- * Layout: [t0Jde, t0Hours, tMin, tMax, deltaT, 0, x0..x3, y0..y3, d0..d2, mu0..mu2, l10..l12, l20..l22, tanF1, tanF2]
+ * Layout: [t0Jde, t0Hours, tMin, tMax, 0, 0, x0..x3, y0..y3, d0..d2, mu0..mu2, l10..l12, l20..l22, tanF1, tanF2]
  */
 function parseBesselianElementsFromHtml(html: string): number[] | null {
     const plain = html.replace(/<[^>]+>/g, ' ').replace(/&[a-zA-Z0-9#]+;/g, ' ');
@@ -282,12 +282,12 @@ function parseBesselianElementsFromHtml(html: string): number[] | null {
     }
     const t0Hours = parseFloat(t0Match[1]);
 
-    // Delta T in seconds (appears as "ΔT = X.X s" or "delta T = X.X s")
+    // Require the "ΔT = X.X s" line as a page-validity check; the value itself is not stored
+    // (circumstances derive deltaT from the time model via getEclipseDeltaT).
     const dtMatch = plain.match(/[Δδ ]\s*T\s*=\s*([-\d.]+)\s*s\b/i) || plain.match(/delta\s*T\s*=\s*([-\d.]+)\s*s\b/i);
     if (!dtMatch) {
         return null;
     }
-    const deltaT = parseFloat(dtMatch[1]);
 
     // Besselian coefficient table: 4 rows × 6 columns [x, y, d, l1, l2, mu]
     const rows = parseCoeffTable(plain);
@@ -310,7 +310,7 @@ function parseBesselianElementsFromHtml(html: string): number[] | null {
         t0Hours, // [1]  t0Hours
         -4.0, // [2]  tMin (hours relative to polynomial reference)
         4.0, // [3]  tMax
-        deltaT, // [4]  deltaT (seconds)
+        0, // [4]  reserved
         0, // [5]  unused
         rows[0][0],
         rows[1][0],
@@ -392,7 +392,7 @@ function generateCatalogueFile(entries: Array<{jd: number; raw: number[]}>, expo
 }
 
 // ── Binary catalogue encoding ─────────────────────────────────────────────────
-// Each entry is packed into 65 bytes (see catalogueDecoder.ts for full layout).
+// Each entry is packed into 61 bytes (see catalogueDecoder.ts for full layout).
 // Fields with narrow physical ranges are quantized to uint16/int16 to halve
 // their storage cost; fields covering wide or unbounded ranges stay as float32.
 // mu2 is always 0 across the entire NASA catalogue and is omitted entirely.
@@ -421,7 +421,7 @@ const L20_SC = 32767 / 0.031;
 const L21_SC = 32767 / 1.5e-4;
 const L22_SC = 32767 / 1.4e-5;
 
-const ENTRY_BYTES = 65;
+const ENTRY_BYTES = 61;
 
 function encodeEntry(jd: number, raw: number[]): Buffer {
     const keyInt = Math.round(jd - 0.5);
@@ -435,8 +435,6 @@ function encodeEntry(jd: number, raw: number[]): Buffer {
     o += 4;
     buf.writeUInt8(raw[1], o);
     o += 1;
-    buf.writeFloatLE(raw[4], o);
-    o += 4;
     buf.writeFloatLE(raw[6], o);
     o += 4; // x0
     buf.writeUInt16LE(encodeU16(raw[7], X1_OFF, X1_SC, 'x1'), o);

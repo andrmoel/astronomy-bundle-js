@@ -1,4 +1,4 @@
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {getTauOfGreatestEclipse} from '@package/solarEclipse/utils/greatestEclipse';
 import {EARTH_ROTATION_DEG_PER_HOUR} from './constants';
 import {fundamentalToLatLon, solveLimbClampedSurfacePoint, solveSurfacePoint} from './surface';
@@ -39,7 +39,7 @@ it('returns null when the point misses the ellipsoid', () => {
 
 it('refers the longitude to the given deltaT', () => {
     const reference = solveSurfacePoint(elements, e, e.x, e.y, false);
-    const shifted = solveSurfacePoint(elements, e, e.x, e.y, false, elements.deltaT + 3600);
+    const shifted = solveSurfacePoint(elements, e, e.x, e.y, false, getEclipseDeltaT(elements) + 3600);
 
     expect(shifted?.lat).toBe(reference?.lat);
     expect(shifted?.lon).toBeCloseTo((reference?.lon ?? 0) + EARTH_ROTATION_DEG_PER_HOUR, 8);

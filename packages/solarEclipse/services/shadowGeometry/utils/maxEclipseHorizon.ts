@@ -1,7 +1,7 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, EARTH_ROTATION_DEG_PER_HOUR} from './constants';
 import {type RingPoint, terminatorRingPoint} from './shadowOutline';
 
@@ -29,6 +29,7 @@ export function maxEclipseHorizonRootAtTau(
     z0: number,
 ): MaxEclipseHorizonRoot | null {
     const e = getBesselianElementsAtTime(elements, tau);
+    const deltaT = getEclipseDeltaT(elements);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
     const muDot = polynomialDerivative(elements.mu, tau) * DEG;
@@ -84,7 +85,7 @@ export function maxEclipseHorizonRootAtTau(
         if (separation > penumbraRadius) {
             continue;
         }
-        if (isOnSunsetSide(root.point, e, elements.deltaT) !== isSunset) {
+        if (isOnSunsetSide(root.point, e, deltaT) !== isSunset) {
             continue;
         }
         if (best === null || separation < best.separation) {

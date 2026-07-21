@@ -14,32 +14,31 @@ const STANDARD_CATALOGUE_RANGE: CatalogueRange = {
     outOfRangeHint: ' Use catalogue-full for dates outside this range.',
 };
 
-// Binary format per entry (68 bytes):
+// Binary format per entry (64 bytes):
 //  [0]  uint32  keyInt        — midnight JD key integer part (key = keyInt + 0.5)
 //  [4]  float32 t0Offset      — t0Jde - key, range [0, 1)
 //  [8]  uint8   t0Hours       — reference hour of t0 (0–23)
 //  [9]  uint8   eclipseType   — 1 = total, 2 = partial, 3 = penumbral
-//  [10] float32 deltaT        — deltaT in seconds
-//  [14] float32 penumbralMagnitude
-//  [18] float32 umbralMagnitude
-//  [22] float32 apparentSiderealTime — hours
-//  [26] uint16  moonParallax  — quantized: (val - 0.8) * (65535 / 0.3)
-//  [28] uint16  moonSemidiameter — quantized: (val - 0.2) * (65535 / 0.15)
-//  [30] int16   p1            — quantized contact: val * (32767 / 8), hours from t0
-//  [32] int16   u1
-//  [34] int16   u2
-//  [36] int16   greatest
-//  [38] int16   u3
-//  [40] int16   u4
-//  [42] int16   p4
-//  [44] float32 ra0           — right ascension polynomial coefficients (degrees)
-//  [48] float32 ra1
-//  [52] float32 ra2
-//  [56] float32 dec0          — declination polynomial coefficients (degrees)
-//  [60] float32 dec1
-//  [64] float32 dec2
+//  [10] float32 penumbralMagnitude
+//  [14] float32 umbralMagnitude
+//  [18] float32 apparentSiderealTime — hours
+//  [22] uint16  moonParallax  — quantized: (val - 0.8) * (65535 / 0.3)
+//  [24] uint16  moonSemidiameter — quantized: (val - 0.2) * (65535 / 0.15)
+//  [26] int16   p1            — quantized contact: val * (32767 / 8), hours from t0
+//  [28] int16   u1
+//  [30] int16   u2
+//  [32] int16   greatest
+//  [34] int16   u3
+//  [36] int16   u4
+//  [38] int16   p4
+//  [40] float32 ra0           — right ascension polynomial coefficients (degrees)
+//  [44] float32 ra1
+//  [48] float32 ra2
+//  [52] float32 dec0          — declination polynomial coefficients (degrees)
+//  [56] float32 dec1
+//  [60] float32 dec2
 
-const ENTRY_BYTES = 68;
+const ENTRY_BYTES = 64;
 
 const PARALLAX_OFF = 0.8,
     PARALLAX_SC = 0.3 / 65535;
@@ -61,26 +60,26 @@ export function decodeCatalogue(base64: string): Catalogue {
         catalogue[jd] = [
             jd + view.getFloat32(o + 4, true), // 0  t0Jde
             view.getUint8(o + 8), // 1  t0Hours
-            view.getFloat32(o + 10, true), // 2  deltaT
-            view.getFloat32(o + 14, true), // 3  penumbralMagnitude
-            view.getFloat32(o + 18, true), // 4  umbralMagnitude
+            0, // 2  reserved (constant)
+            view.getFloat32(o + 10, true), // 3  penumbralMagnitude
+            view.getFloat32(o + 14, true), // 4  umbralMagnitude
             view.getUint8(o + 9), // 5  eclipseType
-            view.getFloat32(o + 22, true), // 6  apparentSiderealTime
-            view.getUint16(o + 26, true) * PARALLAX_SC + PARALLAX_OFF, // 7  moonParallax
-            view.getUint16(o + 28, true) * SD_SC + SD_OFF, // 8  moonSemidiameter
-            view.getInt16(o + 30, true) * CONTACT_SC, // 9  p1
-            view.getInt16(o + 32, true) * CONTACT_SC, // 10 u1
-            view.getInt16(o + 34, true) * CONTACT_SC, // 11 u2
-            view.getInt16(o + 36, true) * CONTACT_SC, // 12 greatest
-            view.getInt16(o + 38, true) * CONTACT_SC, // 13 u3
-            view.getInt16(o + 40, true) * CONTACT_SC, // 14 u4
-            view.getInt16(o + 42, true) * CONTACT_SC, // 15 p4
-            view.getFloat32(o + 44, true), // 16 ra0
-            view.getFloat32(o + 48, true), // 17 ra1
-            view.getFloat32(o + 52, true), // 18 ra2
-            view.getFloat32(o + 56, true), // 19 dec0
-            view.getFloat32(o + 60, true), // 20 dec1
-            view.getFloat32(o + 64, true), // 21 dec2
+            view.getFloat32(o + 18, true), // 6  apparentSiderealTime
+            view.getUint16(o + 22, true) * PARALLAX_SC + PARALLAX_OFF, // 7  moonParallax
+            view.getUint16(o + 24, true) * SD_SC + SD_OFF, // 8  moonSemidiameter
+            view.getInt16(o + 26, true) * CONTACT_SC, // 9  p1
+            view.getInt16(o + 28, true) * CONTACT_SC, // 10 u1
+            view.getInt16(o + 30, true) * CONTACT_SC, // 11 u2
+            view.getInt16(o + 32, true) * CONTACT_SC, // 12 greatest
+            view.getInt16(o + 34, true) * CONTACT_SC, // 13 u3
+            view.getInt16(o + 36, true) * CONTACT_SC, // 14 u4
+            view.getInt16(o + 38, true) * CONTACT_SC, // 15 p4
+            view.getFloat32(o + 40, true), // 16 ra0
+            view.getFloat32(o + 44, true), // 17 ra1
+            view.getFloat32(o + 48, true), // 18 ra2
+            view.getFloat32(o + 52, true), // 19 dec0
+            view.getFloat32(o + 56, true), // 20 dec1
+            view.getFloat32(o + 60, true), // 21 dec2
         ];
     }
 

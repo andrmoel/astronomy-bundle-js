@@ -73,7 +73,7 @@ const elements = parseBesselianElements([
 
 The returned `BesselianElements` object contains:
 
-- `t0Jde`, `t0Hours`, `deltaT`: the reference instant of the eclipse in Terrestrial Time and the value of ΔT in seconds.
+- `t0Jde`, `t0Hours`: the reference instant of the eclipse in Terrestrial Time.
 - `penumbralMagnitude`, `umbralMagnitude`: the eclipse magnitudes at greatest eclipse.
 - `eclipseType`: `1` for total, `2` for partial, `3` for penumbral.
 - `apparentSiderealTime`, `moonParallax`, `moonSemidiameter`: the apparent sidereal time at `t0` (hours), and the Moon's horizontal parallax and semidiameter (degrees).

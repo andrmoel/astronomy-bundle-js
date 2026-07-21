@@ -1,5 +1,5 @@
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F} from './constants';
 
 const COARSE_STEP_HOURS = 0.25;
@@ -39,7 +39,7 @@ export interface ScanContext {
 }
 
 export function buildScanContext(elements: BesselianElements, z0: number): ScanContext {
-    const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600) * DEG;
+    const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600) * DEG;
     const count = Math.max(2, Math.ceil((elements.tMax - elements.tMin) / COARSE_STEP_HOURS) + 1);
     const taus = new Float64Array(count);
     const xs = new Float64Array(count);

@@ -4,7 +4,6 @@ import {getCentralLine} from '@package/solarEclipse/services/shadowGeometry/util
 import calculatePenumbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/penumbraPathPolygon';
 import calculateUmbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/umbraPathPolygon';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
-import {getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
 import {getEclipseType} from '@package/solarEclipse/utils/eclipseType';
 import {
@@ -32,12 +31,7 @@ export default class SolarEclipse {
     private readonly greatestEclipseCircumstances: LocalEclipseCircumstances;
 
     private constructor(elements: BesselianElements) {
-        // The elements' baked-in deltaT is the prediction of their source canon, which
-        // drifts from the observed value (73.4s vs 69.2s for 2023) and shifts every drawn
-        // longitude by ~0.004 deg per second of difference. Local circumstances derive
-        // deltaT from the model instead, so the shadow-path geometry must use the same
-        // value or the drawn paths disagree with the computed local eclipse type.
-        this.elements = {...elements, deltaT: getEclipseDeltaT(elements)};
+        this.elements = elements;
         this.locationOfGreatestEclipse = getLocationOfGreatestEclipse(this.elements);
         this.tauOfGreatestEclipse = getTauOfGreatestEclipse(this.elements);
         this.greatestEclipseCircumstances = getLocalEclipseCircumstances(

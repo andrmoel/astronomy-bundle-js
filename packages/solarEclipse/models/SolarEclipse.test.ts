@@ -9,7 +9,6 @@ const elements: BesselianElements = {
     t0Hours: 19,
     tMin: -3,
     tMax: 3,
-    deltaT: 69.4,
     x: [-0.215634, 0.56620872, 0.0000274, -0.00000879],
     y: [-0.65070802, 0.0106399, -0.0001272, -2.7e-7],
     d: [23.0129509, -0.003187, -0.000005],
@@ -130,17 +129,16 @@ describe('getCenterLine', () => {
     });
 });
 
-describe('deltaT normalization', () => {
-    // HSE 2023-04-20 with the catalogue's baked-in deltaT of 73.4s (the canon's prediction;
-    // the observed value is 69.2s). The location lies on a ~330m wide strip of totality near
-    // the total/annular transition, confirmed by Espenak/Jubier — the polygon only contains
-    // it when the drawn longitudes use the modelled deltaT, as local circumstances do.
+describe('modelled deltaT geometry', () => {
+    // HSE 2023-04-20. The location lies on a ~330m wide strip of totality near the
+    // total/annular transition, confirmed by Espenak/Jubier — the polygon only contains
+    // it when the drawn longitudes use the modelled deltaT (getEclipseDeltaT), the same
+    // value local circumstances derive, rather than the canon's prediction of 73.4s.
     const hybridElements: BesselianElements = {
         t0Jde: 2460054.679000005,
         t0Hours: 4,
         tMin: -4,
         tMax: 4,
-        deltaT: 73.4000015258789,
         x: [0.026850000023841858, 0.4950180422564784, 0.000013501388592181158, -0.000007100126895884948],
         y: [-0.4273659884929657, 0.24419765067797075, -0.000049403513911904996, -0.000003699955015744489],
         d: [11.411789894104004, 0.01374081049251091, -0.000003000048066689098],

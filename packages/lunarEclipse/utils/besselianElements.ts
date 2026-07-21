@@ -8,7 +8,6 @@ export function parseBesselianElements(raw: Array<number>): BesselianElements {
     return {
         t0Jde: raw[0],
         t0Hours: raw[1],
-        deltaT: raw[2],
         penumbralMagnitude: raw[3],
         umbralMagnitude: raw[4],
         eclipseType: raw[5],

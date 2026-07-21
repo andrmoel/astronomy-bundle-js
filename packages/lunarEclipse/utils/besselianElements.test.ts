@@ -12,7 +12,6 @@ describe('parseBesselianElements', () => {
 
         expect(result.t0Jde).toBe(2451919.348374);
         expect(result.t0Hours).toBe(20);
-        expect(result.deltaT).toBe(64.1);
         expect(result.penumbralMagnitude).toBe(2.162);
         expect(result.umbralMagnitude).toBe(1.189);
         expect(result.eclipseType).toBe(1);

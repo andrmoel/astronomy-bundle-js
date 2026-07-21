@@ -21,7 +21,6 @@ const besselianElements: BesselianElements = {
     t0Hours: 8,
     tMin: -76.8,
     tMax: -46.2,
-    deltaT: 72.6,
     x: [0.025209, 0.5683028, 0.0000391, -0.0000097],
     y: [-0.983653, -0.1315142, 0.0002213, 0.0000024],
     d: [-22.2747192, -0.005178, 0.000006],
@@ -62,7 +61,6 @@ describe('parseBesselianElements', () => {
         expect(result.t0Hours).toBe(18.5);
         expect(result.tMin).toBe(-2.0);
         expect(result.tMax).toBe(2.0);
-        expect(result.deltaT).toBe(69.1);
         expect(result.x).toEqual([0.025209, 0.56830281, 0.0000391, -0.00000965]);
         expect(result.y).toEqual([-0.98365301, -0.13151421, 0.0002213, 0.0000024]);
         expect(result.d).toEqual([-22.27471924, -0.005178, 0.000006]);

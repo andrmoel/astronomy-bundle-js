@@ -14,23 +14,22 @@ const ELEMENTS_2001_JAN_09 = [
 
 function encodeEntry(block: number[]): Buffer {
     const midnight = Math.floor(block[0] - 0.5) + 0.5;
-    const buf = Buffer.allocUnsafe(68);
+    const buf = Buffer.allocUnsafe(64);
 
     buf.writeUInt32LE(midnight - 0.5, 0);
     buf.writeFloatLE(block[0] - midnight, 4);
     buf.writeUInt8(block[1], 8);
     buf.writeUInt8(block[5], 9);
-    buf.writeFloatLE(block[2], 10);
-    buf.writeFloatLE(block[3], 14);
-    buf.writeFloatLE(block[4], 18);
-    buf.writeFloatLE(block[6], 22);
-    buf.writeUInt16LE(Math.round((block[7] - PARALLAX_OFF) * PARALLAX_SC), 26);
-    buf.writeUInt16LE(Math.round((block[8] - SD_OFF) * SD_SC), 28);
+    buf.writeFloatLE(block[3], 10);
+    buf.writeFloatLE(block[4], 14);
+    buf.writeFloatLE(block[6], 18);
+    buf.writeUInt16LE(Math.round((block[7] - PARALLAX_OFF) * PARALLAX_SC), 22);
+    buf.writeUInt16LE(Math.round((block[8] - SD_OFF) * SD_SC), 24);
     [9, 10, 11, 12, 13, 14, 15].forEach((idx, i) => {
-        buf.writeInt16LE(Math.round(block[idx] * CONTACT_SC), 30 + i * 2);
+        buf.writeInt16LE(Math.round(block[idx] * CONTACT_SC), 26 + i * 2);
     });
     [16, 17, 18, 19, 20, 21].forEach((idx, i) => {
-        buf.writeFloatLE(block[idx], 44 + i * 4);
+        buf.writeFloatLE(block[idx], 40 + i * 4);
     });
 
     return buf;
@@ -46,6 +45,9 @@ describe('decodeCatalogue', () => {
         expect(Object.keys(catalogue)).toEqual(['2451918.5']);
         expect(raw).toHaveLength(22);
         ELEMENTS_2001_JAN_09.forEach((expected, index) => {
+            if (index === 2) {
+                return; // index 2 is a reserved slot (deltaT removed)
+            }
             expect(raw[index]).toBeCloseTo(expected, 3);
         });
     });

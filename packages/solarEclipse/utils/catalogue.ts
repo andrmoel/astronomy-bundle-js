@@ -14,36 +14,35 @@ const STANDARD_CATALOGUE_RANGE: CatalogueRange = {
     outOfRangeHint: ' Use catalogue-full for dates outside this range.',
 };
 
-// Binary format per entry (63 bytes):
+// Binary format per entry (61 bytes):
 //  [0]  uint32  keyInt        — JD key integer part (key = keyInt + 0.5)
 //  [4]  float32 t0Offset      — t0Jde - key, range [0, 1)
 //  [8]  uint8   t0Hours       — hours 0–23
-//  [9]  float32 deltaT        — deltaT in seconds
-//  [13] float32 x0
-//  [17] uint16  x1            — quantized: (val - 0.43) * 409594
-//  [19] int16   x2            — quantized: val * 3.2767e8
-//  [21] int16   x3            — quantized: val * 2.97882e9
-//  [23] float32 y0
-//  [27] int16   y1            — quantized: val * 109223
-//  [29] int16   y2            — quantized: val * 1.09223e8
-//  [31] int16   y3            — quantized: val * 5.95764e9
-//  [33] float32 d0
-//  [37] int16   d1            — quantized: val * 1.92747e6
-//  [39] int16   d2            — quantized: val * 4.36893e9
-//  [41] float32 mu0
-//  [45] uint16  mu1           — quantized: (val - 14.99) * 3.855e6
-//  [47] uint16  l1_0          — quantized: (val - 0.528) * 1337455
-//  [49] int16   l1_1          — quantized: val * 2.18447e8
-//  [51] int16   l1_2          — quantized: val * 2.3405e9
-//  [53] int16   l2_0          — quantized: val * 1057000
-//  [55] int16   l2_1          — quantized: val * 2.18447e8
-//  [57] int16   l2_2          — quantized: val * 2.3405e9
-//  [59] uint16  tanF1         — quantized: (val - 0.00455) * 2.6214e8
-//  [61] uint16  tanF2         — quantized: (val - 0.00452) * 2.6214e8
-//  [63] uint16  saros         — Saros series number
+//  [9]  float32 x0
+//  [13] uint16  x1            — quantized: (val - 0.43) * 409594
+//  [15] int16   x2            — quantized: val * 3.2767e8
+//  [17] int16   x3            — quantized: val * 2.97882e9
+//  [19] float32 y0
+//  [23] int16   y1            — quantized: val * 109223
+//  [25] int16   y2            — quantized: val * 1.09223e8
+//  [27] int16   y3            — quantized: val * 5.95764e9
+//  [29] float32 d0
+//  [33] int16   d1            — quantized: val * 1.92747e6
+//  [35] int16   d2            — quantized: val * 4.36893e9
+//  [37] float32 mu0
+//  [41] uint16  mu1           — quantized: (val - 14.99) * 3.855e6
+//  [43] uint16  l1_0          — quantized: (val - 0.528) * 1337455
+//  [45] int16   l1_1          — quantized: val * 2.18447e8
+//  [47] int16   l1_2          — quantized: val * 2.3405e9
+//  [49] int16   l2_0          — quantized: val * 1057000
+//  [51] int16   l2_1          — quantized: val * 2.18447e8
+//  [53] int16   l2_2          — quantized: val * 2.3405e9
+//  [55] uint16  tanF1         — quantized: (val - 0.00455) * 2.6214e8
+//  [57] uint16  tanF2         — quantized: (val - 0.00452) * 2.6214e8
+//  [59] uint16  saros         — Saros series number
 //  mu2 omitted — always 0 in all catalogue entries
 
-const ENTRY_BYTES = 65;
+const ENTRY_BYTES = 61;
 
 // Decode scales (reciprocals stored to avoid repeated division)
 const X1_OFF = 0.43,
@@ -92,7 +91,6 @@ export function decodeCatalogue(base64: string): Catalogue {
         const keyInt = view.getUint32(o, true);
         const t0Off = view.getFloat32(o + 4, true);
         const t0Hours = view.getUint8(o + 8);
-        const deltaT = view.getFloat32(o + 9, true);
 
         const jd = keyInt + 0.5;
 
@@ -101,31 +99,31 @@ export function decodeCatalogue(base64: string): Catalogue {
             t0Hours, // 1  t0Hours
             -4, // 2  tMin  (constant)
             4, // 3  tMax  (constant)
-            deltaT, // 4  deltaT
+            0, // 4  reserved (constant)
             0, // 5  unused (constant)
-            view.getFloat32(o + 13, true), // 6  x0
-            view.getUint16(o + 17, true) * X1_SC + X1_OFF, // 7  x1
-            view.getInt16(o + 19, true) * X2_SC, // 8  x2
-            view.getInt16(o + 21, true) * X3_SC, // 9  x3
-            view.getFloat32(o + 23, true), // 10 y0
-            view.getInt16(o + 27, true) * Y1_SC, // 11 y1
-            view.getInt16(o + 29, true) * Y2_SC, // 12 y2
-            view.getInt16(o + 31, true) * Y3_SC, // 13 y3
-            view.getFloat32(o + 33, true), // 14 d0
-            view.getInt16(o + 37, true) * D1_SC, // 15 d1
-            view.getInt16(o + 39, true) * D2_SC, // 16 d2
-            view.getFloat32(o + 41, true), // 17 mu0
-            view.getUint16(o + 45, true) * MU1_SC + MU1_OFF, // 18 mu1
+            view.getFloat32(o + 9, true), // 6  x0
+            view.getUint16(o + 13, true) * X1_SC + X1_OFF, // 7  x1
+            view.getInt16(o + 15, true) * X2_SC, // 8  x2
+            view.getInt16(o + 17, true) * X3_SC, // 9  x3
+            view.getFloat32(o + 19, true), // 10 y0
+            view.getInt16(o + 23, true) * Y1_SC, // 11 y1
+            view.getInt16(o + 25, true) * Y2_SC, // 12 y2
+            view.getInt16(o + 27, true) * Y3_SC, // 13 y3
+            view.getFloat32(o + 29, true), // 14 d0
+            view.getInt16(o + 33, true) * D1_SC, // 15 d1
+            view.getInt16(o + 35, true) * D2_SC, // 16 d2
+            view.getFloat32(o + 37, true), // 17 mu0
+            view.getUint16(o + 41, true) * MU1_SC + MU1_OFF, // 18 mu1
             0, // 19 mu2  (constant)
-            view.getUint16(o + 47, true) * L10_SC + L10_OFF, // 20 l1_0
-            view.getInt16(o + 49, true) * L11_SC, // 21 l1_1
-            view.getInt16(o + 51, true) * L12_SC, // 22 l1_2
-            view.getInt16(o + 53, true) * L20_SC, // 23 l2_0
-            view.getInt16(o + 55, true) * L21_SC, // 24 l2_1
-            view.getInt16(o + 57, true) * L22_SC, // 25 l2_2
-            view.getUint16(o + 59, true) * TF1_SC + TF1_OFF, // 26 tanF1
-            view.getUint16(o + 61, true) * TF2_SC + TF2_OFF, // 27 tanF2
-            view.getUint16(o + 63, true), // 28 saros
+            view.getUint16(o + 43, true) * L10_SC + L10_OFF, // 20 l1_0
+            view.getInt16(o + 45, true) * L11_SC, // 21 l1_1
+            view.getInt16(o + 47, true) * L12_SC, // 22 l1_2
+            view.getInt16(o + 49, true) * L20_SC, // 23 l2_0
+            view.getInt16(o + 51, true) * L21_SC, // 24 l2_1
+            view.getInt16(o + 53, true) * L22_SC, // 25 l2_2
+            view.getUint16(o + 55, true) * TF1_SC + TF1_OFF, // 26 tanF1
+            view.getUint16(o + 57, true) * TF2_SC + TF2_OFF, // 27 tanF2
+            view.getUint16(o + 59, true), // 28 saros
         ];
     }
 

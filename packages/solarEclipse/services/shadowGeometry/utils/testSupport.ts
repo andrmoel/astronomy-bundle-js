@@ -1,6 +1,6 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {
     getLocalEclipseCircumstances,
     getLocalHorizontalCoordinates,
@@ -14,7 +14,6 @@ export const ELEMENTS_2019_07_02: BesselianElements = {
     t0Hours: 19,
     tMin: -3,
     tMax: 3,
-    deltaT: 69.4,
     x: [-0.215634, 0.56620872, 0.0000274, -0.00000879],
     y: [-0.65070802, 0.0106399, -0.0001272, -2.7e-7],
     d: [23.0129509, -0.003187, -0.000005],
@@ -32,7 +31,6 @@ export const ELEMENTS_2021_12_04: BesselianElements = {
     t0Hours: 8,
     tMin: -3,
     tMax: 3,
-    deltaT: 69.4,
     x: [0.025209, 0.56830281, 0.0000391, -0.00000965],
     y: [-0.98365301, -0.13151421, 0.0002213, 0.0000024],
     d: [-22.27471924, -0.005178, 0.000006],
@@ -50,7 +48,6 @@ export const ELEMENTS_2029_12_05: BesselianElements = {
     t0Hours: 15,
     tMin: -4,
     tMax: 4,
-    deltaT: 77.5,
     x: [-0.06383299827575684, 0.5766354487614564, -0.0000027008880886257518, -0.00000950007049771386],
     y: [-1.0596660375595093, -0.014017194180712853, 0.00022950294351922212, 1.0003961300112125e-7],
     d: [-22.445449829101562, -0.0050537751560335575, 0.000006000096133378196],
@@ -73,7 +70,7 @@ export function everInsideVisibleUmbra(eclipse: BesselianElements, point: LatLon
     const norm = Math.hypot(cosLat, ONE_MINUS_F * sinLat);
     const sinU = (ONE_MINUS_F * sinLat) / norm;
     const cosU = cosLat / norm;
-    const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * eclipse.deltaT) / 3600) * DEG;
+    const ghaOffset = ((EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(eclipse)) / 3600) * DEG;
 
     const depth = (tau: number): number => {
         const e = getBesselianElementsAtTime(eclipse, tau);

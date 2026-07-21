@@ -1,6 +1,7 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
+import {getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
 
 export interface SurfaceSolution {
@@ -16,7 +17,7 @@ export function solveSurfacePoint(
     xi: number,
     eta: number,
     farSide: boolean,
-    deltaT: number = elements.deltaT,
+    deltaT: number = getEclipseDeltaT(elements),
 ): SurfaceSolution | null {
     const {eta1, sinD1, cosD1} = diskTerms(e, eta);
     const bSq = 1 - xi * xi - eta1 * eta1;
@@ -44,7 +45,7 @@ export function solveLimbClampedSurfacePoint(
     e: BesselianElementsAtTime,
     xi: number,
     eta: number,
-    deltaT: number = elements.deltaT,
+    deltaT: number = getEclipseDeltaT(elements),
 ): SurfaceSolution {
     const {eta1, sinD1, cosD1} = diskTerms(e, eta);
     const B = Math.sqrt(Math.max(0, 1 - xi * xi - eta1 * eta1));

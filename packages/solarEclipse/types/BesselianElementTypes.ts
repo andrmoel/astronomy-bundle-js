@@ -5,7 +5,6 @@ export interface BesselianElements {
     t0Hours: number;
     tMin: number;
     tMax: number;
-    deltaT: number;
     x: Array<number>;
     y: Array<number>;
     d: Array<number>;

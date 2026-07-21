@@ -1,4 +1,4 @@
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {isOnSunsetSide, maxEclipseHorizonRootAtTau} from './maxEclipseHorizon';
 import {ELEMENTS_2019_07_02 as elements, maxEclipseCircumstances} from './testSupport';
 
@@ -41,16 +41,16 @@ describe('isOnSunsetSide', () => {
     const e = getBesselianElementsAtTime(elements, 0);
 
     it('reports the setting side when the Sun stands west of the local zenith', () => {
-        expect(isOnSunsetSide({lat: -30, lon: 0}, e, elements.deltaT)).toBe(true);
+        expect(isOnSunsetSide({lat: -30, lon: 0}, e, getEclipseDeltaT(elements))).toBe(true);
     });
 
     it('reports the rising side when the Sun stands east of the local zenith', () => {
-        expect(isOnSunsetSide({lat: -30, lon: 90}, e, elements.deltaT)).toBe(false);
+        expect(isOnSunsetSide({lat: -30, lon: 90}, e, getEclipseDeltaT(elements))).toBe(false);
     });
 
     it('flips between rising and setting for antimeridian longitudes', () => {
-        const west = isOnSunsetSide({lat: -30, lon: 0}, e, elements.deltaT);
-        const east = isOnSunsetSide({lat: -30, lon: 180}, e, elements.deltaT);
+        const west = isOnSunsetSide({lat: -30, lon: 0}, e, getEclipseDeltaT(elements));
+        const east = isOnSunsetSide({lat: -30, lon: 180}, e, getEclipseDeltaT(elements));
 
         expect(east).toBe(!west);
     });

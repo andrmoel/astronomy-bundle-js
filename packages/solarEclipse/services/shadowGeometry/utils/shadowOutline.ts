@@ -1,7 +1,7 @@
 import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
-import {getBesselianElementsAtTime} from '@package/solarEclipse/utils/besselianElements';
+import {getBesselianElementsAtTime, getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
 import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
 import {
     closeContourAroundPole,
@@ -153,7 +153,9 @@ export function terminatorRingPoint(
     const cosU = Math.sqrt(Math.max(0, 1 - sinU * sinU));
     const lat = Math.atan2(sinU, ONE_MINUS_F * cosU) * RAD;
     const thetaG = Math.atan2(xi, (z0 - ONE_MINUS_F * sinU * e.sinD) / e.cosD);
-    const lon = normalizeLongitude((thetaG - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * elements.deltaT) / 3600);
+    const lon = normalizeLongitude(
+        (thetaG - e.mu) * RAD + (EARTH_ROTATION_DEG_PER_HOUR * getEclipseDeltaT(elements)) / 3600,
+    );
 
     return {point: {lat, lon}, xi, eta, sinU};
 }

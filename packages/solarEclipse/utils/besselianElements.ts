@@ -24,7 +24,6 @@ export function parseBesselianElements(raw: Array<number>): BesselianElements {
         t0Hours: raw[1],
         tMin: raw[2],
         tMax: raw[3],
-        deltaT: raw[4],
         x: [raw[6], raw[7], raw[8], raw[9]],
         y: [raw[10], raw[11], raw[12], raw[13]],
         d: [raw[14], raw[15], raw[16]],
