@@ -1,4 +1,4 @@
-import {SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
+import {LocalSolarEclipseType, SolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import isPointInPolygon from '@package/solarEclipse/services/shadowGeometry/utils/pointInPolygon';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import SolarEclipse from './SolarEclipse';
@@ -127,5 +127,42 @@ describe('getCenterLine', () => {
         const result = eclipse.getCentralLine({stepsInSeconds: 1});
 
         expect(result.length).toBeGreaterThan(9000);
+    });
+});
+
+describe('deltaT normalization', () => {
+    // HSE 2023-04-20 with the catalogue's baked-in deltaT of 73.4s (the canon's prediction;
+    // the observed value is 69.2s). The location lies on a ~330m wide strip of totality near
+    // the total/annular transition, confirmed by Espenak/Jubier — the polygon only contains
+    // it when the drawn longitudes use the modelled deltaT, as local circumstances do.
+    const hybridElements: BesselianElements = {
+        t0Jde: 2460054.679000005,
+        t0Hours: 4,
+        tMin: -4,
+        tMax: 4,
+        deltaT: 73.4000015258789,
+        x: [0.026850000023841858, 0.4950180422564784, 0.000013501388592181158, -0.000007100126895884948],
+        y: [-0.4273659884929657, 0.24419765067797075, -0.000049403513911904996, -0.000003699955015744489],
+        d: [11.411789894104004, 0.01374081049251091, -0.000003000048066689098],
+        mu: [240.24293518066406, 15.003419974059662, 0],
+        l1: [0.5468036232994755, 0.00012159928953018352, -0.000011600085451826532],
+        l2: [0.000663197729422895, 0.00012099960173405906, -0.000011500106814783166],
+        tanF1: 0.004655001144426642,
+        tanF2: 0.00463179903868162,
+        saros: 129,
+    };
+    const hybridEclipse = SolarEclipse.createFromBesselianElements(hybridElements);
+    const kerguelenPlateau = {lat: -46.41408, lon: 72.06939};
+
+    it('draws the umbra path polygon with the modelled deltaT, not the baked-in prediction', () => {
+        const polygon = hybridEclipse.getUmbraPathPolygon();
+
+        expect(isPointInPolygon(kerguelenPlateau, polygon)).toBe(true);
+    });
+
+    it('keeps the umbra path polygon consistent with the local eclipse type', () => {
+        const location = {...kerguelenPlateau, elevation: 0};
+
+        expect(hybridEclipse.getLocalEclipse(location).getType()).toBe(LocalSolarEclipseType.Total);
     });
 });
