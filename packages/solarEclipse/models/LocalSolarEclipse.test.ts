@@ -71,9 +71,9 @@ it('tests getContactTaus', () => {
     const result = localSolarEclipse.getContactTaus();
 
     expect(result?.c1).toBeCloseTo(-0.587742, 6);
-    expect(result?.c2).toBeCloseTo(1.161349, 6);
-    expect(result?.max).toBeCloseTo(1.185224, 6);
-    expect(result?.c3).toBeCloseTo(1.20914, 6);
+    expect(result?.c2).toBeCloseTo(1.1613496, 6);
+    expect(result?.max).toBeCloseTo(1.1852248, 6);
+    expect(result?.c3).toBeCloseTo(1.2091406, 6);
     expect(result?.c4).toBeCloseTo(2.730088, 6);
 });
 
@@ -132,7 +132,7 @@ describe('visibility above the horizon', () => {
 
         expect(localEclipse.getType()).toBe(LocalSolarEclipseType.Partial);
         expect(localEclipse.getUmbraPathWidth()).toBe(0);
-        expect(localEclipse.getDuration()).toBeCloseTo(3058.0, 2);
+        expect(localEclipse.getDuration()).toBeCloseTo(3057.948, 2);
         expect(contactTimes?.c1.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 21, min: 33, sec: 38});
         expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 4});
         expect(contactTimes?.sunset).toBeNull();

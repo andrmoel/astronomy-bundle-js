@@ -170,7 +170,7 @@ const {lat, lon} = eclipse.getLocationOfGreatestEclipse();
 
 The result of the calculation should be:\
 lat: *-17.388965*\
-lon: *-108.999081*
+lon: *-108.998853*
 
 ---
 
@@ -370,8 +370,8 @@ const {c1, c2, max, c3, c4} = contacts;
 
 The result of the calculation should be:\
 c1: *-0.587742*\
-c2: *1.161349*\
-max: *1.185224*\
+c2: *1.161350*\
+max: *1.185225*\
 c3: *1.20914*\
 c4: *2.730088*
 
@@ -577,8 +577,8 @@ const magnitudeTotal   = circumstancesTotal.getMagnitude();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.737315*\
-During total phase: *1.011517*
+During partial phase: *0.737313*\
+During total phase: *1.011516*
 
 ---
 
@@ -594,7 +594,7 @@ const obscurationTotal   = circumstancesTotal.getObscuration();
 ```
 
 The result of the calculation should be:\
-During partial phase: *0.684315*\
+During partial phase: *0.684313*\
 During total phase: *1*
 
 ---

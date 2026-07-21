@@ -1,44 +1,15 @@
-// 2005-2026 observed: https://maia.usno.navy.mil/ser7/deltat.data
-// 2027-2033 predicted: https://maia.usno.navy.mil/ser7/deltat.preds
-const REFERENCE_DELTA_T: Record<number, number> = {
-    2005: 64.6876,
-    2006: 64.8452,
-    2007: 65.1464,
-    2008: 65.4573,
-    2009: 65.7768,
-    2010: 66.0699,
-    2011: 66.3246,
-    2012: 66.603,
-    2013: 66.9069,
-    2014: 67.281,
-    2015: 67.6439,
-    2016: 68.1024,
-    2017: 68.5927,
-    2018: 68.9676,
-    2019: 69.2202,
-    2020: 69.3612,
-    2021: 69.3594,
-    2022: 69.2945,
-    2023: 69.2039,
-    2024: 69.1752,
-    2025: 69.1377,
-    2026: 69.1099,
-    2027: 69.14,
-    2028: 69.34,
-    2029: 69.63,
-    2030: 69.97,
-    2031: 70.32,
-    2032: 70.62,
-    2033: 70.98,
-};
+import {REFERENCE_DELTA_T} from '../constants/deltaTReference';
 
-const REFERENCE_YEARS = Object.keys(REFERENCE_DELTA_T).map(Number);
-const REFERENCE_MIN_YEAR = Math.min(...REFERENCE_YEARS);
-const REFERENCE_MAX_YEAR = Math.max(...REFERENCE_YEARS);
+const REFERENCE_MIN_YEAR = Math.floor(REFERENCE_DELTA_T[0][0]);
+const REFERENCE_MAX_YEAR = Math.floor(REFERENCE_DELTA_T[REFERENCE_DELTA_T.length - 1][0]);
 
-// Cubic least-squares fit to the reference values, used to extrapolate ΔT beyond the tabulated years.
+// Cubic least-squares fit to the most recent reference years, used to extrapolate ΔT beyond the tabulated years.
+const FUTURE_FIT_START_YEAR = 2005;
 const FUTURE_DELTA_T_COEFFICIENTS = fitPolynomial(
-    REFERENCE_YEARS.map((year) => [year - 2000, REFERENCE_DELTA_T[year]]),
+    yearlyReferenceValues(FUTURE_FIT_START_YEAR, REFERENCE_MAX_YEAR).map((deltaT, index) => [
+        FUTURE_FIT_START_YEAR + index - 2000,
+        deltaT,
+    ]),
     3,
 );
 
@@ -145,11 +116,35 @@ export function getDeltaT(year: number, month = 0): number {
 }
 
 function getReferenceDeltaT(y: number): number {
-    const clamped = Math.max(REFERENCE_MIN_YEAR, Math.min(REFERENCE_MAX_YEAR, y));
-    const y0 = Math.min(Math.floor(clamped), REFERENCE_MAX_YEAR - 1);
-    const fraction = clamped - y0;
+    const first = REFERENCE_DELTA_T[0];
+    const last = REFERENCE_DELTA_T[REFERENCE_DELTA_T.length - 1];
+    const clamped = Math.max(first[0], Math.min(last[0], y));
 
-    return REFERENCE_DELTA_T[y0] + fraction * (REFERENCE_DELTA_T[y0 + 1] - REFERENCE_DELTA_T[y0]);
+    let low = 0;
+    let high = REFERENCE_DELTA_T.length - 1;
+    while (high - low > 1) {
+        const mid = (low + high) >> 1;
+        if (REFERENCE_DELTA_T[mid][0] <= clamped) {
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+
+    const [year0, deltaT0] = REFERENCE_DELTA_T[low];
+    const [year1, deltaT1] = REFERENCE_DELTA_T[high];
+    const fraction = (clamped - year0) / (year1 - year0);
+
+    return deltaT0 + fraction * (deltaT1 - deltaT0);
+}
+
+function yearlyReferenceValues(from: number, to: number): number[] {
+    const values: number[] = [];
+    for (let year = from; year <= to; year++) {
+        values.push(getReferenceDeltaT(year));
+    }
+
+    return values;
 }
 
 function evaluatePolynomial(coefficients: number[], x: number): number {

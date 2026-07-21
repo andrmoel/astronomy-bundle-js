@@ -212,5 +212,5 @@ it('tests getLocalApparentSiderealTime', () => {
 it('tests getDeltaT', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
-    expect(toi.getDeltaT()).toBeCloseTo(63.98);
+    expect(toi.getDeltaT()).toBeCloseTo(63.95);
 });

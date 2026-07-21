@@ -133,7 +133,7 @@ Julian Day: *2457937.0673611*\
 Julian Centuries J2000: *0.1750052666*\
 Julian Millennia J2000: *0.0175005267*\
 \
-Julian Ephemeris Day: *2457937.0681573*\
+Julian Ephemeris Day: *2457937.0681578*\
 Julian Centuries J2000 (Ephemeris): *0.1750052884*\
 Julian Millennia J2000 (Ephemeris): *0.0175005288*
 
@@ -157,8 +157,8 @@ const GAST = toi.getGreenwichApparentSiderealTime();
 ```
 
 The result of the calculation should be:\
-GMST: *5h 44m 46.48s*\
-GAST: *5h 44m 45.47s*
+GMST: *8h 20m 08.398s*\
+GAST: *8h 20m 07.832s*
 
 **Example 2**: Get Local Sidereal Time for 02 July 2017 at 13:37 UTC in Berlin, Germany
 
@@ -198,4 +198,4 @@ const deltaT = toi.getDeltaT();
 The result of the calculation should be:\
 Delta T: *64*
 
-Values for 2005–2026 come from observed IERS measurements ([deltat.data](https://maia.usno.navy.mil/ser7/deltat.data)) and 2027–2033 from IERS predictions ([deltat.preds](https://maia.usno.navy.mil/ser7/deltat.preds)). Years before 2005 use the NASA polynomial expressions, and years after 2033 are extrapolated with a cubic fit to the tabulated values. Both extrapolations are only approximate, and the cubic diverges increasingly far into the future.
+Values come from official IERS/USNO tables at their native resolution: half-yearly historical figures for 1657–1972 ([historic_deltat.data](https://maia.usno.navy.mil/ser7/historic_deltat.data)), observed monthly figures for 1973–2026 ([deltat.data](https://maia.usno.navy.mil/ser7/deltat.data)), and quarterly predictions through 2033 ([deltat.preds](https://maia.usno.navy.mil/ser7/deltat.preds)). Within this span ΔT is interpolated between the tabulated points, so the month (not just the year) is taken into account. Years before 1657 use the NASA polynomial expressions, and years after 2033 are extrapolated with a cubic fit to the recent tabulated values. Both extrapolations are only approximate, and the cubic diverges increasingly far into the future.
