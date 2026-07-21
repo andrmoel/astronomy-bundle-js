@@ -32,7 +32,7 @@ it('tests getHeliocentricEclipticRectangularDateCoordinates', () => {
 it('tests getHeliocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = moon.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(202.210278, 6);
+    expect(lon).toBeCloseTo(202.2102785, 6);
     expect(lat).toBeCloseTo(-0.007771, 6);
     expect(radiusVector).toBeCloseTo(1.003374, 6);
 });
@@ -40,7 +40,7 @@ it('tests getHeliocentricEclipticSphericalJ2000Coordinates', () => {
 it('tests getHeliocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = moon.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(202.210278, 6);
+    expect(lon).toBeCloseTo(202.2102785, 6);
     expect(lat).toBeCloseTo(-0.007771, 6);
     expect(radiusVector).toBeCloseTo(1.003374, 6);
 });
@@ -64,7 +64,7 @@ it('tests getGeocentricEclipticRectangularDateCoordinates', () => {
 it('tests getGeocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(133.172335, 6);
+    expect(lon).toBeCloseTo(133.1723389, 6);
     expect(lat).toBeCloseTo(-3.229784, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
@@ -72,7 +72,7 @@ it('tests getGeocentricEclipticSphericalJ2000Coordinates', () => {
 it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = moon.getGeocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(133.172335, 6);
+    expect(lon).toBeCloseTo(133.1723389, 6);
     expect(lat).toBeCloseTo(-3.229784, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
@@ -80,16 +80,16 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(rightAscension).toBeCloseTo(134.693283, 6);
-    expect(declination).toBeCloseTo(13.766317, 6);
+    expect(rightAscension).toBeCloseTo(134.6932863, 6);
+    expect(declination).toBeCloseTo(13.7663155, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
 
 it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
     const {rightAscension, declination, radiusVector} = moon.getGeocentricEquatorialSphericalDateCoordinates();
 
-    expect(rightAscension).toBeCloseTo(134.693283, 6);
-    expect(declination).toBeCloseTo(13.766317, 6);
+    expect(rightAscension).toBeCloseTo(134.6932863, 6);
+    expect(declination).toBeCloseTo(13.7663155, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
 
@@ -104,7 +104,7 @@ it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = moon.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(133.176945, 6);
+    expect(lon).toBeCloseTo(133.1769488, 6);
     expect(lat).toBeCloseTo(-3.229784, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
@@ -112,8 +112,8 @@ it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = moon.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(134.697831, 6);
-    expect(declination).toBeCloseTo(13.765027, 6);
+    expect(rightAscension).toBeCloseTo(134.697835, 6);
+    expect(declination).toBeCloseTo(13.7650258, 6);
     expect(radiusVector).toBeCloseTo(0.002463, 6);
 });
 
@@ -121,43 +121,43 @@ it('tests getTopocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} =
         moon.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
-    expect(rightAscension).toBeCloseTo(135.221214, 6);
-    expect(declination).toBeCloseTo(13.076484, 6);
+    expect(rightAscension).toBeCloseTo(135.2212175, 6);
+    expect(declination).toBeCloseTo(13.0764829, 6);
     expect(radiusVector).toBeCloseTo(0.002441, 6);
 });
 
 it('tests getTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = moon.getApparentTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(108.958631, 6);
-    expect(altitude).toBeCloseTo(30.049601, 6);
+    expect(azimuth).toBeCloseTo(108.958629, 6);
+    expect(altitude).toBeCloseTo(30.049598, 6);
     expect(radiusVector).toBeCloseTo(0.002441, 6);
 });
 
 it('tests getApparentTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = moon.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(108.958631, 6);
-    expect(altitude).toBeCloseTo(30.078644, 6);
+    expect(azimuth).toBeCloseTo(108.958629, 6);
+    expect(altitude).toBeCloseTo(30.0786405, 6);
     expect(radiusVector).toBeCloseTo(0.002441, 6);
 });
 
 it('tests getDistanceToEarth', () => {
     const d = moon.getDistanceToEarth();
 
-    expect(d).toBeCloseTo(368409.007082, 6);
+    expect(d).toBeCloseTo(368409.0068148, 6);
 });
 
 it('tests getApparentDistanceToEarth', () => {
     const d = moon.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(368409.007082, 6);
+    expect(d).toBeCloseTo(368409.0068148, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = moon.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(365174.99517, 6);
+    expect(d).toBeCloseTo(365174.9952098, 6);
 });
 it('tests getTransit', () => {
     const toi = moon.getTransit(location);
@@ -266,25 +266,25 @@ it('tests getTopocentricAngularDiameter', () => {
 it('tests getElongation', () => {
     const phi = moon.getElongation();
 
-    expect(phi).toBeCloseTo(110.801867, 6);
+    expect(phi).toBeCloseTo(110.8018707, 6);
 });
 
 it('tests getTopocentricElongation', () => {
     const phi = moon.getTopocentricElongation(location);
 
-    expect(phi).toBeCloseTo(111.471862, 6);
+    expect(phi).toBeCloseTo(111.4718652, 6);
 });
 
 it('tests getPhaseAngle', () => {
     const i = moon.getPhaseAngle();
 
-    expect(i).toBeCloseTo(69.066674, 6);
+    expect(i).toBeCloseTo(69.0666704, 6);
 });
 
 it('tests getTopocentricPhaseAngle', () => {
     const i = moon.getTopocentricPhaseAngle(location);
 
-    expect(i).toBeCloseTo(68.398424, 6);
+    expect(i).toBeCloseTo(68.3984201, 6);
 });
 
 it('tests getIlluminatedFraction', () => {

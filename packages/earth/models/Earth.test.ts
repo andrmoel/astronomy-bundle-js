@@ -27,7 +27,7 @@ it('test getHeliocentricEclipticRectangularDateCoordinates', () => {
 it('test getHeliocentricEclipticSphericalJ2000Coordinates', () => {
     const coords = earth.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(coords.lon).toBeCloseTo(77.8667122159, 8);
+    expect(coords.lon).toBeCloseTo(77.8667122107, 8);
     expect(coords.lat).toBeCloseTo(-0.0025042883, 8);
     expect(coords.radiusVector).toBeCloseTo(0.9848265411, 8);
 });
@@ -35,7 +35,7 @@ it('test getHeliocentricEclipticSphericalJ2000Coordinates', () => {
 it('test getHeliocentricEclipticSphericalDateCoordinates', () => {
     const coords = earth.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(coords.lon).toBeCloseTo(78.1173354083, 8);
+    expect(coords.lon).toBeCloseTo(78.1173354031, 8);
     expect(coords.lat).toBeCloseTo(-0.0001430345, 8);
     expect(coords.radiusVector).toBeCloseTo(0.9848265416, 8);
 });

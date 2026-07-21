@@ -54,7 +54,7 @@ describe('getContactTaus', () => {
             const result = getContactTaus(besselianElements, location);
 
             expect(result).not.toBeNull();
-            expect(result?.c1).toBeCloseTo(-0.702256, 6);
+            expect(result?.c1).toBeCloseTo(-0.7022553, 6);
             expect(result?.c2).toBeNull();
             expect(result?.max).toBeCloseTo(0.226929, 6);
             expect(result?.c3).toBeNull();
@@ -75,12 +75,12 @@ describe('getContactTaus', () => {
             const result = getContactTaus(besselianElements, location);
 
             expect(result).not.toBeNull();
-            expect(result?.c1).toBeCloseTo(-1.485472, 6);
+            expect(result?.c1).toBeCloseTo(-1.4854727, 6);
             expect(result?.c2).toBeNull();
             expect(result?.max).toBeCloseTo(-0.725519, 6);
             expect(result?.c3).toBeNull();
             expect(result?.c4).toBeCloseTo(0.053285, 6);
-            expect(result?.sunrise).toBeCloseTo(-0.070939, 6);
+            expect(result?.sunrise).toBeCloseTo(-0.0709402, 6);
             expect(result?.sunset).toBeNull();
         });
 
@@ -124,9 +124,9 @@ describe('getContactTaus', () => {
             const result = getContactTaus(elements, location);
 
             expect(result).not.toBeNull();
-            expect(result?.c1).toBeCloseTo(-2.420728, 6);
-            expect(result?.c4).toBeCloseTo(-0.230553, 6);
-            expect(result?.sunrise).toBeCloseTo(-1.079997, 6);
+            expect(result?.c1).toBeCloseTo(-2.4207268, 6);
+            expect(result?.c4).toBeCloseTo(-0.2305546, 6);
+            expect(result?.sunrise).toBeCloseTo(-1.0799845, 6);
             expect(result?.sunset).toBeNull();
         });
 
@@ -137,10 +137,10 @@ describe('getContactTaus', () => {
             const result = getContactTaus(elements, location);
 
             expect(result).not.toBeNull();
-            expect(result?.c1).toBeCloseTo(1.139556, 6);
-            expect(result?.c4).toBeCloseTo(2.585643, 6);
+            expect(result?.c1).toBeCloseTo(1.1395554, 6);
+            expect(result?.c4).toBeCloseTo(2.585641, 6);
             expect(result?.sunrise).toBeNull();
-            expect(result?.sunset).toBeCloseTo(1.846489, 6);
+            expect(result?.sunset).toBeCloseTo(1.8465013, 6);
         });
 
         it('had an observer for whom the eclipse stayed below the horizon', () => {

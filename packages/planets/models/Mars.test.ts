@@ -16,7 +16,7 @@ it('tests getHeliocentricEclipticRectangularJ2000Coordinates', () => {
     const {x, y, z} = mars.getHeliocentricEclipticRectangularJ2000Coordinates();
 
     expect(x).toBeCloseTo(1.3903629914, 8);
-    expect(y).toBeCloseTo(-0.020998056, 8);
+    expect(y).toBeCloseTo(-0.020998062, 8);
     expect(z).toBeCloseTo(-0.0346177163, 8);
 });
 
@@ -24,46 +24,46 @@ it('tests getHeliocentricEclipticRectangularDateCoordinates', () => {
     const {x, y, z} = mars.getHeliocentricEclipticRectangularDateCoordinates();
 
     expect(x).toBeCloseTo(1.3903629847, 8);
-    expect(y).toBeCloseTo(-0.0209985197, 8);
+    expect(y).toBeCloseTo(-0.0209985258, 8);
     expect(z).toBeCloseTo(-0.0346177165, 8);
 });
 
 it('tests getHeliocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = mars.getHeliocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(359.1347521934, 8);
-    expect(lat).toBeCloseTo(-1.4261119718, 8);
+    expect(lon).toBeCloseTo(359.1347519633, 8);
+    expect(lat).toBeCloseTo(-1.4261119769, 8);
     expect(radiusVector).toBeCloseTo(1.3909523905, 8);
 });
 
 it('tests getHeliocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = mars.getHeliocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(359.1347330845, 8);
-    expect(lat).toBeCloseTo(-1.4261119798, 8);
+    expect(lon).toBeCloseTo(359.1347328545, 8);
+    expect(lat).toBeCloseTo(-1.4261119849, 8);
     expect(radiusVector).toBeCloseTo(1.3909523908, 8);
 });
 
 it('tests getGeocentricEclipticRectangularJ2000Coordinates', () => {
     const {x, y, z} = mars.getGeocentricEclipticRectangularJ2000Coordinates();
 
-    expect(x).toBeCloseTo(1.558899592, 8);
-    expect(y).toBeCloseTo(-0.9897791574, 8);
+    expect(x).toBeCloseTo(1.558899585, 8);
+    expect(y).toBeCloseTo(-0.9897791646, 8);
     expect(z).toBeCloseTo(-0.0346144607, 8);
 });
 
 it('tests getGeocentricEclipticRectangularDateCoordinates', () => {
     const {x, y, z} = mars.getGeocentricEclipticRectangularDateCoordinates();
 
-    expect(x).toBeCloseTo(1.5588992617, 8);
-    expect(y).toBeCloseTo(-0.9897796773, 8);
+    expect(x).toBeCloseTo(1.5588992546, 8);
+    expect(y).toBeCloseTo(-0.9897796846, 8);
     expect(z).toBeCloseTo(-0.0346144579, 8);
 });
 
 it('tests getGeocentricEclipticSphericalJ2000Coordinates', () => {
     const {lon, lat, radiusVector} = mars.getGeocentricEclipticSphericalJ2000Coordinates();
 
-    expect(lon).toBeCloseTo(327.5876504576, 8);
+    expect(lon).toBeCloseTo(327.5876501726, 8);
     expect(lat).toBeCloseTo(-1.073897751, 8);
     expect(radiusVector).toBeCloseTo(1.8468970949, 8);
 });
@@ -71,7 +71,7 @@ it('tests getGeocentricEclipticSphericalJ2000Coordinates', () => {
 it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
     const {lon, lat, radiusVector} = mars.getGeocentricEclipticSphericalDateCoordinates();
 
-    expect(lon).toBeCloseTo(327.5876313456, 8);
+    expect(lon).toBeCloseTo(327.5876310606, 8);
     expect(lat).toBeCloseTo(-1.073897664, 8);
     expect(radiusVector).toBeCloseTo(1.8468970948, 8);
 });
@@ -79,31 +79,31 @@ it('tests getGeocentricEclipticSphericalDateCoordinates', () => {
 it('tests getGeocentricEquatorialSphericalJ2000Coordinates', () => {
     const {rightAscension, declination, radiusVector} = mars.getGeocentricEquatorialSphericalJ2000Coordinates();
 
-    expect(rightAscension).toBeCloseTo(330.1569138853, 8);
-    expect(declination).toBeCloseTo(-13.3180595429, 8);
+    expect(rightAscension).toBeCloseTo(330.1569136121, 8);
+    expect(declination).toBeCloseTo(-13.3180596455, 8);
     expect(radiusVector).toBeCloseTo(1.8468970949, 8);
 });
 
 it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
     const {rightAscension, declination, radiusVector} = mars.getGeocentricEquatorialSphericalDateCoordinates();
 
-    expect(rightAscension).toBeCloseTo(330.1568954239, 8);
-    expect(declination).toBeCloseTo(-13.318066055, 8);
+    expect(rightAscension).toBeCloseTo(330.1568951507, 8);
+    expect(declination).toBeCloseTo(-13.318066158, 8);
     expect(radiusVector).toBeCloseTo(1.8468970948, 8);
 });
 
 it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = mars.getApparentGeocentricEclipticRectangularCoordinates();
 
-    expect(x).toBeCloseTo(1.5587570272, 8);
-    expect(y).toBeCloseTo(-0.9901530335, 8);
+    expect(x).toBeCloseTo(1.55875702, 8);
+    expect(y).toBeCloseTo(-0.9901530404, 8);
     expect(z).toBeCloseTo(-0.0346202414, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = mars.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(327.5754864881, 8);
+    expect(lon).toBeCloseTo(327.5754861882, 8);
     expect(lat).toBeCloseTo(-1.0740304791, 8);
     expect(radiusVector).toBeCloseTo(1.8469772767, 8);
 });
@@ -111,8 +111,8 @@ it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = mars.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(330.1452304507, 8);
-    expect(declination).toBeCloseTo(-13.32238052, 8);
+    expect(rightAscension).toBeCloseTo(330.1452301632, 8);
+    expect(declination).toBeCloseTo(-13.322380628, 8);
     expect(radiusVector).toBeCloseTo(1.8469772767, 8);
 });
 
@@ -144,19 +144,19 @@ it('tests getRefractionCorrectedTopocentricHorizontalCoordinates', () => {
 it('tests getDistanceToEarth', () => {
     const d = mars.getDistanceToEarth();
 
-    expect(d).toBeCloseTo(276291872.77731538, 6);
+    expect(d).toBeCloseTo(276291872.4793434, 6);
 });
 
 it('tests getApparentDistanceToEarth', () => {
     const d = mars.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(276303867.82482553, 6);
+    expect(d).toBeCloseTo(276303867.5739881, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = mars.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(276308060.27660793, 6);
+    expect(d).toBeCloseTo(276308060.0257899, 6);
 });
 
 it('tests getLightTime', () => {

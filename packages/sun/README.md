@@ -75,7 +75,7 @@ const coordsDate  = sun.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *209.02565877°*\
+J2000 longitude: *209.02565875°*\
 J2000 latitude: *0.00145256°*\
 J2000 radius vector: *0.99514544 AU*
 
@@ -131,11 +131,11 @@ const coordsDate  = sun.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 right ascension: *206.98183896°*\
+J2000 right ascension: *206.98183895°*\
 J2000 declination: *-11.12562684°*\
 J2000 radius vector: *0.99514544 AU*
 
-Date right ascension: *207.25838680°*\
+Date right ascension: *207.25838678°*\
 Date declination: *-11.22999811°*\
 Date radius vector: *0.99514544 AU*
 
@@ -159,11 +159,11 @@ const equatorialSpherical = sun.getApparentGeocentricEquatorialSphericalCoordina
 ```
 
 The result of the calculation should be:\
-Apparent ecliptic longitude: *209.30558260°*\
+Apparent ecliptic longitude: *209.30558258°*\
 Apparent ecliptic latitude: *-0.00011638°*\
 Apparent ecliptic radius vector: *0.99514544 AU*
 
-Apparent right ascension: *207.24812801°*\
+Apparent right ascension: *207.24812800°*\
 Apparent declination: *-11.22619445°*\
 Apparent radius vector: *0.99514544 AU*
 

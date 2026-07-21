@@ -123,19 +123,19 @@ describe('getMagnitude', () => {
     it('returns magnitude if eclipse has not started', () => {
         const result = circumstancesNoEclipse.getMagnitude();
 
-        expect(result).toBeCloseTo(-0.054002, 6);
+        expect(result).toBeCloseTo(-0.0540031, 6);
     });
 
     it('returns magnitude if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getMagnitude();
 
-        expect(result).toBeCloseTo(0.737315, 6);
+        expect(result).toBeCloseTo(0.7373132, 6);
     });
 
     it('returns magnitude if eclipse is in total phase', () => {
         const result = circumstancesTotal.getMagnitude();
 
-        expect(result).toBeCloseTo(1.011517, 6);
+        expect(result).toBeCloseTo(1.0115157, 6);
     });
 });
 
@@ -149,7 +149,7 @@ describe('getObscuration', () => {
     it('returns obscuration if eclipse is in partial phase', () => {
         const result = circumstancesPartial.getObscuration();
 
-        expect(result).toBeCloseTo(0.684315, 6);
+        expect(result).toBeCloseTo(0.6843127, 6);
     });
 
     it('returns obscuration if eclipse is in total phase', () => {

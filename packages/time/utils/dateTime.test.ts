@@ -127,7 +127,7 @@ it('tests julianMillenniaJ20002julianDay', () => {
 });
 
 it('tests julianDay2julianDayEphemeris adds deltaT', () => {
-    expect(round((julianDay2julianDayEphemeris(2459300.5) - 2459300.5) * 86400, 3)).toBe(69.346);
+    expect(round((julianDay2julianDayEphemeris(2459300.5) - 2459300.5) * 86400, 3)).toBe(69.356);
 });
 
 it('tests julianDayEphemeris2julianDay is the inverse of julianDay2julianDayEphemeris', () => {

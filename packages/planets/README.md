@@ -98,12 +98,12 @@ const coordsDate = mercury.getHeliocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *252.41204722°*\
-J2000 latitude: *-2.16966596°*\
+J2000 longitude: *252.41204621°*\
+J2000 latitude: *-2.16966585°*\
 J2000 radius vector: *0.46625989 AU*
 
-Date longitude: *252.41202812°*\
-Date latitude: *-2.16966582°*\
+Date longitude: *252.41202712°*\
+Date latitude: *-2.16966571°*\
 Date radius vector: *0.46625989 AU*
 
 ---
@@ -154,12 +154,12 @@ const coordsDate = mars.getGeocentricEclipticSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 longitude: *327.58765046°*\
-J2000 latitude: *-1.07389775°*\
+J2000 longitude: *327.58765017°*\
+J2000 latitude: *-1.07389776°*\
 J2000 radius vector: *1.84689709 AU*
 
-Date longitude: *327.58763135°*\
-Date latitude: *-1.07389766°*\
+Date longitude: *327.58763106°*\
+Date latitude: *-1.07389767°*\
 Date radius vector: *1.84689709 AU*
 
 ---
@@ -186,7 +186,7 @@ J2000 x: *4.17198595 AU*\
 J2000 y: *1.96658134 AU*\
 J2000 z: *-0.10181907 AU*
 
-Date x: *4.17198662 AU*\
+Date x: *4.17198661 AU*\
 Date y: *1.96657995 AU*\
 Date z: *-0.10181908 AU*
 
@@ -210,11 +210,11 @@ const coordsDate = saturn.getGeocentricEquatorialSphericalDateCoordinates();
 ```
 
 The result of the calculation should be:\
-J2000 right ascension: *38.77889614°*\
+J2000 right ascension: *38.77889615°*\
 J2000 declination: *12.61683001°*\
 J2000 radius vector: *8.64556706 AU*
 
-Date right ascension: *38.77887773°*\
+Date right ascension: *38.77887774°*\
 Date declination: *12.61682400°*\
 Date radius vector: *8.64556707 AU*
 
@@ -239,15 +239,15 @@ const equatorialSpherical = uranus.getApparentGeocentricEquatorialSphericalCoord
 ```
 
 The result of the calculation should be:\
-Apparent ecliptic longitude: *314.78190266°*\
+Apparent ecliptic longitude: *314.78190264°*\
 Apparent ecliptic latitude: *-0.62453305°*\
 Apparent ecliptic radius vector: *20.72226689 AU*
 
-Apparent ecliptic x: *14.59610593 AU*\
+Apparent ecliptic x: *14.59610592 AU*\
 Apparent ecliptic y: *-14.70765171 AU*\
 Apparent ecliptic z: *-0.22587151 AU*
 
-Apparent right ascension: *317.43719707°*\
+Apparent right ascension: *317.43719706°*\
 Apparent declination: *-16.99601557°*\
 Apparent radius vector: *20.72226689 AU*
 
@@ -343,9 +343,9 @@ const topocentricDistance = mercury.getTopocentricDistanceToEarth(location);
 ```
 
 The result of the calculation should be:\
-Geocentric distance: *211,428,064.50 km*\
-Apparent geocentric distance: *211,418,799.16 km*\
-Topocentric distance: *211,424,147.03 km*
+Geocentric distance: *211,428,064.23 km*\
+Apparent geocentric distance: *211,418,798.84 km*\
+Topocentric distance: *211,424,146.71 km*
 
 ---
 
@@ -413,7 +413,7 @@ const topocentricElongation = jupiter.getTopocentricElongation(location);
 ```
 
 The result of the calculation should be:\
-Elongation: *105.370208°*\
+Elongation: *105.370209°*\
 Topocentric elongation: *105.369756°*
 
 ---
