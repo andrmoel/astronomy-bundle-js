@@ -313,7 +313,7 @@ const polygon = eclipse.getPenumbraPathPolygon();
 
 ##### Sunrise / sunset boundary polygons
 
-Return the rise/set boundary curves shown on Jubier/Espenak maps — the closed loops enclosing the region where the eclipse is already in progress as the Sun rises or sets. `getSunriseBoundaryPolygon` traces the sunrise side, `getSunsetBoundaryPolygon` the sunset side. Each result is an array of `{lat, lon}` coordinate objects in decimal degrees whose first and last points are identical, so the ring is closed. Only the `refraction` option applies here; `stepsInSeconds` is ignored. For an eclipse whose penumbra never fully leaves the day/night terminator both halves form a single loop, which is returned on one side while the other side is an empty array.
+Return the rise/set boundary curves shown on eclipse maps — the closed loops enclosing the region where the eclipse is already in progress as the Sun rises or sets. `getSunriseBoundaryPolygon` traces the sunrise side, `getSunsetBoundaryPolygon` the sunset side. Each result is an array of `{lat, lon}` coordinate objects in decimal degrees whose first and last points are identical, so the ring is closed. Only the `refraction` option applies here; `stepsInSeconds` is ignored. For an eclipse whose penumbra never fully leaves the day/night terminator both halves form a single loop, which is returned on one side while the other side is an empty array.
 
 ```javascript
 const sunrisePolygon = eclipse.getSunriseBoundaryPolygon();

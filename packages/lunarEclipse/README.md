@@ -2,7 +2,7 @@ Part of the [Astronomy Bundle](../../README.md).
 
 # Lunar Eclipse
 
-The `lunarEclipse` package provides lunar eclipse Besselian elements for any eclipse between 2000 BCE and 3000 CE. The elements — computed by Fred Espenak and Jean Meeus — are pre-computed polynomial coefficients describing the Moon's position relative to Earth's shadow, together with eclipse type, magnitudes, and contact times.
+The `lunarEclipse` package provides lunar eclipse Besselian elements for any eclipse between 2000 BCE and 3000 CE. The elements are pre-computed polynomial coefficients describing the Moon's position relative to Earth's shadow, together with eclipse type, magnitudes, and contact times.
 
 ## Contents
 
