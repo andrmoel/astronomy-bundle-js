@@ -28,6 +28,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
       - [Central line](#central-line)
       - [Umbra path polygon](#umbra-path-polygon)
       - [Penumbra path polygon](#penumbra-path-polygon)
+      - [Sunrise / sunset boundary polygons](#sunrise--sunset-boundary-polygons)
     - [Local eclipse for an observer](#local-eclipse-for-an-observer)
   - [LocalSolarEclipse (Eclipse + Location)](#localsolareclipse-eclipse--location)
     - [Local eclipse type](#local-eclipse-type)
@@ -273,9 +274,9 @@ The result of the calculation should be: *272.8*
 
 #### Shadow geometry
 
-**Description:** The following three methods trace the Moon's shadow across Earth's surface: the central line, the umbra (path of totality/annularity), and the penumbra (region of partial visibility). They all accept the same optional `ShadowPathOptions` object:
+**Description:** The following methods trace the Moon's shadow across Earth's surface: the central line, the umbra (path of totality/annularity), the penumbra (region of partial visibility), and the sunrise/sunset boundary loops. They all accept the same optional `ShadowPathOptions` object:
 
-- `stepsInSeconds` (default: `10`) — the time resolution in seconds between sampled points; smaller values produce a denser, more precise path.
+- `stepsInSeconds` (default: `10`) — the time resolution in seconds between sampled points; smaller values produce a denser, more precise path. Ignored by the sunrise/sunset boundary polygons, which use a fixed internal resolution.
 - `refraction` (default: `false`) — the horizon convention used for the endpoints. When `false`, the geometric horizon (Sun altitude 0°) is used. When `true`, the standard rise/set horizon (−50′, i.e. 34′ atmospheric refraction plus the Sun's 16′ semidiameter) is used, so the path reaches slightly further to where the Sun is still visible at the horizon.
 
 ##### Central line
@@ -307,6 +308,16 @@ Returns the region of the partial eclipse as a single closed polygon — the are
 
 ```javascript
 const polygon = eclipse.getPenumbraPathPolygon();
+// [{lat: ..., lon: ...}, ..., {lat: ..., lon: ...}] — first point equals last
+```
+
+##### Sunrise / sunset boundary polygons
+
+Return the rise/set boundary curves shown on Jubier/Espenak maps — the closed loops enclosing the region where the eclipse is already in progress as the Sun rises or sets. `getSunriseBoundaryPolygon` traces the sunrise side, `getSunsetBoundaryPolygon` the sunset side. Each result is an array of `{lat, lon}` coordinate objects in decimal degrees whose first and last points are identical, so the ring is closed. Only the `refraction` option applies here; `stepsInSeconds` is ignored. For an eclipse whose penumbra never fully leaves the day/night terminator both halves form a single loop, which is returned on one side while the other side is an empty array.
+
+```javascript
+const sunrisePolygon = eclipse.getSunriseBoundaryPolygon();
+const sunsetPolygon = eclipse.getSunsetBoundaryPolygon();
 // [{lat: ..., lon: ...}, ..., {lat: ..., lon: ...}] — first point equals last
 ```
 
