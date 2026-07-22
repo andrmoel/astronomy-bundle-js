@@ -18,7 +18,10 @@ describe('penumbraBoundaryFundamental', () => {
             if (solution === null) {
                 continue;
             }
-            const axisDistance = Math.hypot(fundamental.xi - atGreatestEclipse.x, fundamental.eta - atGreatestEclipse.y);
+            const axisDistance = Math.hypot(
+                fundamental.xi - atGreatestEclipse.x,
+                fundamental.eta - atGreatestEclipse.y,
+            );
             const penumbraRadius = Math.abs(atGreatestEclipse.l1 - solution.zeta * elements.tanF1);
             expect(axisDistance).toBeCloseTo(penumbraRadius, 6);
             checked++;

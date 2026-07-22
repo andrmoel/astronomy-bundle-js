@@ -302,7 +302,12 @@ function bisectEndTangent(
     };
 }
 
-function crossingsAtTau(elements: BesselianElements, tau: number, z0: number, deltaT: number): Array<TerminatorCrossing> {
+function crossingsAtTau(
+    elements: BesselianElements,
+    tau: number,
+    z0: number,
+    deltaT: number,
+): Array<TerminatorCrossing> {
     const e = getBesselianElementsAtTime(elements, tau);
     const dx = polynomialDerivative(elements.x, tau);
     const dy = polynomialDerivative(elements.y, tau);
