@@ -1,7 +1,12 @@
 import type {LatLon, Location} from '@app/types/LocationTypes';
 import type {ShadowPathOptions} from '@package/solarEclipse/services/shadowGeometry/types/ShadowPathTypes';
 import {getCentralLine} from '@package/solarEclipse/services/shadowGeometry/utils/centralLine';
+import {horizonSinAltitude} from '@package/solarEclipse/services/shadowGeometry/utils/constants';
 import calculatePenumbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/penumbraPathPolygon';
+import {
+    calculateSunriseBoundary,
+    calculateSunsetBoundary,
+} from '@package/solarEclipse/services/shadowGeometry/utils/riseSetBoundary';
 import calculateUmbraPathPolygon from '@package/solarEclipse/services/shadowGeometry/utils/umbraPathPolygon';
 import type {LocalEclipseCircumstances} from '@package/solarEclipse/types/EclipseCircumstances';
 import {getCentralDuration, getDuration} from '@package/solarEclipse/utils/duration';
@@ -111,5 +116,13 @@ export default class SolarEclipse {
 
     public getPenumbraPathPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
         return calculatePenumbraPathPolygon(this.elements, options);
+    }
+
+    public getSunriseBoundaryPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculateSunriseBoundary(this.elements, horizonSinAltitude(options));
+    }
+
+    public getSunsetBoundaryPolygon(options: ShadowPathOptions = {}): Array<LatLon> {
+        return calculateSunsetBoundary(this.elements, horizonSinAltitude(options));
     }
 }

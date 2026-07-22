@@ -19,3 +19,9 @@ export function horizonSinAltitude(settings?: {refraction?: boolean}): number {
 
 export const CENTRAL_LINE_STEP_HOURS = 1 / (60 * 60);
 export const UMBRA_REGION_STEP_HOURS = 1 / 720;
+
+export const RISE_SET_BOUNDARY_STEP_HOURS = 1 / 60;
+export const RISE_SET_BOUNDARY_Q_SAMPLES = 180;
+export const RISE_SET_TIP_REFINEMENT_SAMPLES = 16;
+export const RISE_SET_MAX_CHORD_DEG = 0.75;
+export const RISE_SET_GAP_SUBDIVISION_DEPTH = 5;

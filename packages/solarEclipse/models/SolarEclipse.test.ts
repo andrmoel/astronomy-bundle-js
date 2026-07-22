@@ -115,6 +115,22 @@ describe('getPenumbraPathPolygon', () => {
     });
 });
 
+describe('getSunsetBoundaryPolygon', () => {
+    it('returns a closed loop around the region seeing the eclipse at sunset', () => {
+        const polygon = eclipse.getSunsetBoundaryPolygon();
+
+        expect(polygon[0]).toEqual(polygon[polygon.length - 1]);
+        expect(isPointInPolygon({lat: -33.447, lon: -70.673}, polygon)).toBe(true);
+        expect(isPointInPolygon({lat: 40.7128, lon: -74.006}, polygon)).toBe(false);
+    });
+});
+
+describe('getSunriseBoundaryPolygon', () => {
+    it('is empty when a single rise/set run covers both halves', () => {
+        expect(eclipse.getSunriseBoundaryPolygon()).toEqual([]);
+    });
+});
+
 describe('getCenterLine', () => {
     it('returns the central line with default 10 sec steps', () => {
         const result = eclipse.getCentralLine();
