@@ -174,8 +174,11 @@ describe('getUmbraShadowOutline', () => {
         const contacts = sunriseEclipse.getContactTimes();
 
         expect(contacts).not.toBeNull();
+        if (contacts === null) {
+            throw new Error('missing contact times for the sunrise location');
+        }
 
-        const outline = sunriseEclipse.getCircumstances(contacts!.max).getUmbraShadowOutline() as Array<{
+        const outline = sunriseEclipse.getCircumstances(contacts.max).getUmbraShadowOutline() as Array<{
             lat: number;
             lon: number;
         }>;

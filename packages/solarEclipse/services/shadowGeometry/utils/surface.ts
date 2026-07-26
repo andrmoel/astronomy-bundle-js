@@ -2,7 +2,13 @@ import type {LatLon} from '@app/types/LocationTypes';
 import {normalizeLongitude} from '@app/utils/location';
 import type {BesselianElements, BesselianElementsAtTime} from '@package/solarEclipse/types/BesselianElementTypes';
 import {getEclipseDeltaT} from '@package/solarEclipse/utils/besselianElements';
-import {E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
+import {DEG, E_SQ, EARTH_ROTATION_DEG_PER_HOUR, ONE_MINUS_F, RAD} from './constants';
+
+export interface FundamentalPoint {
+    xi: number;
+    eta: number;
+    zeta: number;
+}
 
 export interface SurfaceSolution {
     lat: number;
@@ -54,6 +60,26 @@ export function solveLimbClampedSurfacePoint(
     const zeta = Math.sqrt(Math.max(0, 1 - E_SQ * sinU * sinU - xi * xi - eta * eta));
 
     return finishSolution(e, xi, sinU, zeta, deltaT);
+}
+
+export function groundFundamentalPoint(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    lat: number,
+    lon: number,
+    deltaT: number = getEclipseDeltaT(elements),
+): FundamentalPoint {
+    const deltaTCorrection = (EARTH_ROTATION_DEG_PER_HOUR * deltaT) / 3600;
+    const hourAngle = e.mu + (lon - deltaTCorrection) * DEG;
+    const u = Math.atan(ONE_MINUS_F * Math.tan(lat * DEG));
+    const rhoSinPhi = ONE_MINUS_F * Math.sin(u);
+    const rhoCosPhi = Math.cos(u);
+
+    return {
+        xi: rhoCosPhi * Math.sin(hourAngle),
+        eta: rhoSinPhi * e.cosD - rhoCosPhi * Math.cos(hourAngle) * e.sinD,
+        zeta: rhoSinPhi * e.sinD + rhoCosPhi * Math.cos(hourAngle) * e.cosD,
+    };
 }
 
 export function fundamentalToLatLon(

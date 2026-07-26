@@ -61,6 +61,32 @@ describe('getCentralLine', () => {
         expect(refracted[refracted.length - 1]).not.toEqual(line[line.length - 1]);
     });
 
+    it('runs smoothly through the terminator fold at both ends', () => {
+        for (const refraction of [false, true]) {
+            for (const els of [elements, ELEMENTS_2019_07_02]) {
+                const track = getCentralLine(els, {refraction});
+
+                for (let i = 1; i < track.length - 1; i++) {
+                    const cosLat = Math.cos((track[i].lat * Math.PI) / 180);
+                    const v1 = {
+                        x: (track[i].lon - track[i - 1].lon) * cosLat,
+                        y: track[i].lat - track[i - 1].lat,
+                    };
+                    const v2 = {
+                        x: (track[i + 1].lon - track[i].lon) * cosLat,
+                        y: track[i + 1].lat - track[i].lat,
+                    };
+                    if (Math.hypot(v1.x, v1.y) < 1e-12 || Math.hypot(v2.x, v2.y) < 1e-12) {
+                        continue;
+                    }
+                    const turn = Math.abs(Math.atan2(v1.x * v2.y - v1.y * v2.x, v1.x * v2.x + v1.y * v2.y));
+
+                    expect((turn * 180) / Math.PI).toBeLessThan(10);
+                }
+            }
+        }
+    });
+
     it('respects the step size', () => {
         const fine = getCentralLine(elements, {stepsInSeconds: 1});
 

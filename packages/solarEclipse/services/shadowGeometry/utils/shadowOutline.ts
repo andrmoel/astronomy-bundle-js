@@ -10,7 +10,7 @@ import {
     shortestLonDelta,
     signedUnwrappedArea,
 } from './contourGeometry';
-import {solveSurfacePoint} from './surface';
+import {groundFundamentalPoint, solveSurfacePoint} from './surface';
 
 const PENUMBRA_Q_SAMPLES = 240;
 const UMBRA_Q_SAMPLES = 64;
@@ -19,17 +19,30 @@ const RING_ARC_STEP = (2 * Math.PI) / 240;
 const RING_ARC_MAX_CHORD_DEG = 0.1;
 const RING_ARC_MAX_DEPTH = 10;
 
-const UMBRA_EDGE_MAX_CHORD_DEG = 0.1;
-const UMBRA_EDGE_MAX_DEPTH = 10;
+const UMBRA_OUTLINE_SEED_SAMPLES = 96;
+const UMBRA_OUTLINE_DUPLICATE_CHORD_DEG = 1e-7;
 
-const UMBRA_CORNER_TURN_THRESHOLD_DEG = 15;
-const UMBRA_CORNER_MAX_ITERATIONS = 6;
+const MARCH_INITIAL_STEP_DEG = 0.02;
+const MARCH_MIN_STEP_DEG = 0.001;
+const MARCH_MAX_STEP_DEG = 0.12;
+const MARCH_MAX_TURN_DEG = 5;
+const MARCH_STEP_GROW_FACTOR = 1.4;
+const MARCH_GRADIENT_STEP_DEG = 1e-4;
+const MARCH_MARGIN_TOLERANCE = 1e-9;
+const MARCH_CORRECTOR_ITERATIONS = 12;
+const MARCH_MAX_POINTS = 20000;
+const MARCH_CLOSURE_MIN_POINTS = 6;
 
 export interface EdgeSample {
     point: LatLon;
     xi: number;
     eta: number;
     zeta: number;
+}
+
+export interface EdgeAnchor {
+    sample: EdgeSample;
+    q: number;
 }
 
 export interface RingPoint {
@@ -45,9 +58,194 @@ export function getInstantaneousUmbraOutline(
     z0: number,
 ): Array<LatLon> | null {
     const e = getBesselianElementsAtTime(elements, tau);
-    const outline = instantaneousShadowOutline(elements, e, true, UMBRA_Q_SAMPLES, z0, true);
+    const outline = traceVisibleUmbraOutline(elements, e, z0);
+    if (outline === null) {
+        return null;
+    }
 
-    return outline === null ? null : roundOutlineCorners(outline);
+    const cleaned = dropNearDuplicatePoints(outline);
+    if (cleaned.length < 3) {
+        return null;
+    }
+    if (signedUnwrappedArea(cleaned) < 0) {
+        cleaned.reverse();
+    }
+
+    return cleaned.map(({lat, lon}) => ({lat, lon: normalizeLongitude(lon)}));
+}
+
+function traceVisibleUmbraOutline(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    z0: number,
+): Array<LatLon> | null {
+    const margin = groundMarginFunction(elements, e, z0);
+    const seed = findBoundarySeed(elements, e, z0, margin);
+    if (seed === null) {
+        return null;
+    }
+
+    return marchBoundary(margin, seed);
+}
+
+type GroundMargin = (lat: number, lon: number) => number;
+
+function groundMarginFunction(elements: BesselianElements, e: BesselianElementsAtTime, z0: number): GroundMargin {
+    const deltaT = getEclipseDeltaT(elements);
+
+    return (lat: number, lon: number): number => {
+        const {xi, eta, zeta} = groundFundamentalPoint(elements, e, lat, lon, deltaT);
+        const l2 = e.l2 - zeta * elements.tanF2;
+        const distance = Math.hypot(e.x - xi, e.y - eta);
+
+        return Math.min(Math.abs(l2) - distance, zeta - z0);
+    };
+}
+
+function findBoundarySeed(
+    elements: BesselianElements,
+    e: BesselianElementsAtTime,
+    z0: number,
+    margin: GroundMargin,
+): LatLon | null {
+    const qStep = (2 * Math.PI) / UMBRA_OUTLINE_SEED_SAMPLES;
+    let best: EdgeSample | null = null;
+    for (let i = 0; i < UMBRA_OUTLINE_SEED_SAMPLES; i++) {
+        const sample = shadowEdgePoint(elements, e, i * qStep, true, false, z0);
+        if (sample !== null && (best === null || sample.zeta > best.zeta)) {
+            best = sample;
+        }
+    }
+    if (best === null) {
+        return null;
+    }
+
+    return correctOntoBoundary(margin, best.point, MARCH_INITIAL_STEP_DEG);
+}
+
+function marchBoundary(margin: GroundMargin, seed: LatLon): Array<LatLon> | null {
+    const points: Array<LatLon> = [seed];
+    let position = seed;
+    let stepDeg = MARCH_INITIAL_STEP_DEG;
+    for (let i = 0; i < MARCH_MAX_POINTS; i++) {
+        const advanced = advanceAlongBoundary(margin, position, stepDeg);
+        if (advanced === null) {
+            return null;
+        }
+        position = advanced.point;
+        stepDeg =
+            advanced.turnDeg < MARCH_MAX_TURN_DEG / 3
+                ? Math.min(advanced.stepDeg * MARCH_STEP_GROW_FACTOR, MARCH_MAX_STEP_DEG)
+                : advanced.stepDeg;
+        if (points.length >= MARCH_CLOSURE_MIN_POINTS && !groundChordTooLong(position, seed, stepDeg)) {
+            return points;
+        }
+        points.push(position);
+    }
+
+    return null;
+}
+
+function advanceAlongBoundary(
+    margin: GroundMargin,
+    position: LatLon,
+    stepDeg: number,
+): {point: LatLon; stepDeg: number; turnDeg: number} | null {
+    const tangent = boundaryTangent(margin, position);
+    if (tangent === null) {
+        return null;
+    }
+    let step = stepDeg;
+    while (true) {
+        const predicted = movePoint(position, tangent, step);
+        const corrected = correctOntoBoundary(margin, predicted, step);
+        if (corrected !== null) {
+            const newTangent = boundaryTangent(margin, corrected);
+            if (newTangent !== null) {
+                const turnDeg =
+                    Math.acos(Math.max(-1, Math.min(1, tangent.x * newTangent.x + tangent.y * newTangent.y))) * RAD;
+                if (turnDeg <= MARCH_MAX_TURN_DEG || step <= MARCH_MIN_STEP_DEG) {
+                    return {point: corrected, stepDeg: step, turnDeg};
+                }
+            }
+        }
+        if (step <= MARCH_MIN_STEP_DEG) {
+            return null;
+        }
+        step = Math.max(step / 2, MARCH_MIN_STEP_DEG);
+    }
+}
+
+function boundaryTangent(margin: GroundMargin, position: LatLon): {x: number; y: number} | null {
+    const gradient = marginGradient(margin, position);
+    const length = Math.hypot(gradient.x, gradient.y);
+    if (length < 1e-12) {
+        return null;
+    }
+
+    return {x: gradient.y / length, y: -gradient.x / length};
+}
+
+function marginGradient(margin: GroundMargin, position: LatLon): {x: number; y: number} {
+    const h = MARCH_GRADIENT_STEP_DEG;
+    const cosLat = Math.cos(position.lat * DEG);
+    const dLon = h / Math.max(cosLat, 1e-6);
+
+    return {
+        x: (margin(position.lat, position.lon + dLon) - margin(position.lat, position.lon - dLon)) / (2 * h),
+        y: (margin(position.lat + h, position.lon) - margin(position.lat - h, position.lon)) / (2 * h),
+    };
+}
+
+function correctOntoBoundary(margin: GroundMargin, start: LatLon, maxShiftDeg: number): LatLon | null {
+    let position = start;
+    for (let iter = 0; iter < MARCH_CORRECTOR_ITERATIONS; iter++) {
+        const value = margin(position.lat, position.lon);
+        if (Math.abs(value) < MARCH_MARGIN_TOLERANCE) {
+            return position;
+        }
+        const gradient = marginGradient(margin, position);
+        const lengthSq = gradient.x * gradient.x + gradient.y * gradient.y;
+        if (lengthSq < 1e-24) {
+            return null;
+        }
+        const shift = -value / Math.sqrt(lengthSq);
+        const clamped = Math.max(-2 * maxShiftDeg, Math.min(2 * maxShiftDeg, shift));
+        const direction = {
+            x: gradient.x / Math.sqrt(lengthSq),
+            y: gradient.y / Math.sqrt(lengthSq),
+        };
+        position = movePoint(position, direction, clamped);
+    }
+
+    return null;
+}
+
+function movePoint(position: LatLon, direction: {x: number; y: number}, stepDeg: number): LatLon {
+    const cosLat = Math.cos(position.lat * DEG);
+
+    return {
+        lat: position.lat + direction.y * stepDeg,
+        lon: position.lon + (direction.x * stepDeg) / Math.max(cosLat, 1e-6),
+    };
+}
+
+function dropNearDuplicatePoints(outline: Array<LatLon>): Array<LatLon> {
+    const cleaned: Array<LatLon> = [];
+    for (const point of outline) {
+        const last = cleaned[cleaned.length - 1];
+        if (last === undefined || groundChordTooLong(last, point, UMBRA_OUTLINE_DUPLICATE_CHORD_DEG)) {
+            cleaned.push(point);
+        }
+    }
+    while (
+        cleaned.length > 1
+        && !groundChordTooLong(cleaned[0], cleaned[cleaned.length - 1], UMBRA_OUTLINE_DUPLICATE_CHORD_DEG)
+    ) {
+        cleaned.pop();
+    }
+
+    return cleaned;
 }
 
 export function calculateShadowRegionContours(
@@ -60,7 +258,7 @@ export function calculateShadowRegionContours(
     const contours: Array<Array<LatLon>> = [];
     for (let tau = elements.tMin; tau <= elements.tMax; tau += stepHours) {
         const e = getBesselianElementsAtTime(elements, tau);
-        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples, z0, false);
+        let outline = instantaneousShadowOutline(elements, e, useUmbra, qSamples, z0);
         if (outline === null) {
             continue;
         }
@@ -94,7 +292,6 @@ function instantaneousShadowOutline(
     useUmbra: boolean,
     qSamples: number,
     z0: number,
-    refine: boolean,
 ): Array<LatLon> | null {
     const qStep = (2 * Math.PI) / qSamples;
     const samples: Array<EdgeSample | null> = [];
@@ -111,8 +308,7 @@ function instantaneousShadowOutline(
     }
 
     const outline: Array<LatLon> = [];
-    let gapStart: {sample: EdgeSample; q: number} | null = null;
-    let lastEdge: {sample: EdgeSample; q: number} | null = null;
+    let gapStart: EdgeAnchor | null = null;
     for (let offset = 0; offset <= qSamples; offset++) {
         const i = (firstAccepted + offset) % qSamples;
         const q = (firstAccepted + offset) * qStep;
@@ -121,24 +317,9 @@ function instantaneousShadowOutline(
             if (gapStart === null && outline.length > 0) {
                 gapStart = bisectEdgeBoundary(elements, e, q - qStep, q, useUmbra, false, z0);
                 if (gapStart !== null) {
-                    if (refine && lastEdge !== null) {
-                        refineEdgeSegment(
-                            elements,
-                            e,
-                            lastEdge.q,
-                            lastEdge.sample,
-                            gapStart.q,
-                            gapStart.sample,
-                            useUmbra,
-                            z0,
-                            0,
-                            outline,
-                        );
-                    }
                     outline.push(gapStart.sample.point);
                 }
             }
-            lastEdge = null;
             continue;
         }
         if (gapStart !== null) {
@@ -154,18 +335,11 @@ function instantaneousShadowOutline(
             }
             if (gapEnd !== null) {
                 outline.push(gapEnd.sample.point);
-                lastEdge = {sample: gapEnd.sample, q: gapEnd.q};
-            } else {
-                lastEdge = null;
             }
             gapStart = null;
         }
-        if (refine && lastEdge !== null) {
-            refineEdgeSegment(elements, e, lastEdge.q, lastEdge.sample, q, sample, useUmbra, z0, 0, outline);
-        }
         if (offset < qSamples) {
             outline.push(sample.point);
-            lastEdge = {sample, q};
         }
     }
 
@@ -220,7 +394,7 @@ export function bisectEdgeBoundary(
     useUmbra: boolean,
     farSide: boolean,
     z0: number,
-): {sample: EdgeSample; q: number} | null {
+): EdgeAnchor | null {
     let good = qGood;
     let bad = qBad;
     for (let iter = 0; iter < 40; iter++) {
@@ -237,31 +411,6 @@ export function bisectEdgeBoundary(
     const sample = shadowEdgePoint(elements, e, good, useUmbra, farSide, z0);
 
     return sample !== null ? {sample, q: good} : null;
-}
-
-function refineEdgeSegment(
-    elements: BesselianElements,
-    e: BesselianElementsAtTime,
-    qFrom: number,
-    from: EdgeSample,
-    qTo: number,
-    to: EdgeSample,
-    useUmbra: boolean,
-    z0: number,
-    depth: number,
-    outline: Array<LatLon>,
-): void {
-    if (depth >= UMBRA_EDGE_MAX_DEPTH || !groundChordTooLong(from.point, to.point, UMBRA_EDGE_MAX_CHORD_DEG)) {
-        return;
-    }
-    const qMid = (qFrom + qTo) / 2;
-    const mid = shadowEdgePoint(elements, e, qMid, useUmbra, false, z0);
-    if (mid === null) {
-        return;
-    }
-    refineEdgeSegment(elements, e, qFrom, from, qMid, mid, useUmbra, z0, depth + 1, outline);
-    outline.push(mid.point);
-    refineEdgeSegment(elements, e, qMid, mid, qTo, to, useUmbra, z0, depth + 1, outline);
 }
 
 function nightSheetRun(
@@ -408,55 +557,4 @@ function groundChordTooLong(a: LatLon, b: LatLon, maxChordDeg: number): boolean 
     const dLon = shortestLonDelta(a.lon, b.lon) * Math.cos(((a.lat + b.lat) / 2) * DEG);
 
     return dLat * dLat + dLon * dLon > maxChordDeg * maxChordDeg;
-}
-
-function roundOutlineCorners(outline: Array<LatLon>): Array<LatLon> {
-    let points = outline;
-    for (let iteration = 0; iteration < UMBRA_CORNER_MAX_ITERATIONS; iteration++) {
-        let hasSharpCorner = false;
-        const rounded: Array<LatLon> = [];
-        for (let i = 0; i < points.length; i++) {
-            const previous = points[(i - 1 + points.length) % points.length];
-            const current = points[i];
-            const next = points[(i + 1) % points.length];
-            if (cornerTurnDeg(previous, current, next) > UMBRA_CORNER_TURN_THRESHOLD_DEG) {
-                hasSharpCorner = true;
-                rounded.push(interpolateLatLon(current, previous, 0.25));
-                rounded.push(interpolateLatLon(current, next, 0.25));
-            } else {
-                rounded.push(current);
-            }
-        }
-        points = rounded;
-        if (!hasSharpCorner) {
-            break;
-        }
-    }
-
-    return points;
-}
-
-function cornerTurnDeg(previous: LatLon, current: LatLon, next: LatLon): number {
-    const incoming = localTangent(previous, current);
-    const outgoing = localTangent(current, next);
-    let turn = Math.abs(Math.atan2(outgoing.y, outgoing.x) - Math.atan2(incoming.y, incoming.x));
-    if (turn > Math.PI) {
-        turn = 2 * Math.PI - turn;
-    }
-
-    return turn * RAD;
-}
-
-function localTangent(a: LatLon, b: LatLon): {x: number; y: number} {
-    return {
-        x: shortestLonDelta(a.lon, b.lon) * Math.cos(((a.lat + b.lat) / 2) * DEG),
-        y: b.lat - a.lat,
-    };
-}
-
-function interpolateLatLon(a: LatLon, b: LatLon, t: number): LatLon {
-    return {
-        lat: a.lat + (b.lat - a.lat) * t,
-        lon: normalizeLongitude(a.lon + shortestLonDelta(a.lon, b.lon) * t),
-    };
 }
