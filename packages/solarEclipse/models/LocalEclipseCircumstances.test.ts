@@ -1,5 +1,5 @@
 import Location from '@package/location/models/Location';
-import {LocalEclipseCircumstances} from '@package/solarEclipse';
+import {LocalEclipseCircumstances, SolarEclipse} from '@package/solarEclipse';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
@@ -165,6 +165,39 @@ describe('getUmbraShadowOutline', () => {
         expect(location.lat).toBeLessThan(Math.max(...latitudes));
         expect(location.lon).toBeGreaterThan(Math.min(...longitudes));
         expect(location.lon).toBeLessThan(Math.max(...longitudes));
+    });
+
+    it('smooths the sunlit edge so the sunrise footprint has no large gaps', () => {
+        const eclipse = SolarEclipse.createFromBesselianElements(elements);
+        const sunrise = eclipse.getCentralLine()[0];
+        const sunriseEclipse = eclipse.getLocalEclipse(Location.create(sunrise.lat, sunrise.lon, 0));
+        const contacts = sunriseEclipse.getContactTimes();
+
+        expect(contacts).not.toBeNull();
+
+        const outline = sunriseEclipse.getCircumstances(contacts!.max).getUmbraShadowOutline() as Array<{
+            lat: number;
+            lon: number;
+        }>;
+
+        expect(outline).not.toBeNull();
+
+        let maxChordDeg = 0;
+        for (let i = 0; i < outline.length; i++) {
+            const a = outline[i];
+            const b = outline[(i + 1) % outline.length];
+            let dLon = b.lon - a.lon;
+            if (dLon > 180) {
+                dLon -= 360;
+            }
+            if (dLon < -180) {
+                dLon += 360;
+            }
+            dLon *= Math.cos((((a.lat + b.lat) / 2) * Math.PI) / 180);
+            maxChordDeg = Math.max(maxChordDeg, Math.hypot(b.lat - a.lat, dLon));
+        }
+
+        expect(maxChordDeg).toBeLessThan(0.2);
     });
 });
 
