@@ -11,6 +11,7 @@ export * from '@app/enums/limb';
 export * from '@app/types/CoordinateTypes';
 export * from '@app/types/LocationTypes';
 // Utils
+export {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 export * from '@app/utils/direction';
 // Models
 export {default as Location} from '@package/location/models/Location';
