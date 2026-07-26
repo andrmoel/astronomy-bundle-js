@@ -75,7 +75,7 @@ async function fetchBatch(periods: string[]): Promise<number[][]> {
     const results = await Promise.all(
         periods.map(async (period) => {
             process.stdout.write(`  Fetching ${period}... `);
-            const js = await fetchPage(BASE_URL + period + '.js');
+            const js = await fetchPage(`${BASE_URL + period}.js`);
             const blocks = parseElements(js);
             process.stdout.write(`${blocks.length} eclipses\n`);
             return blocks;
