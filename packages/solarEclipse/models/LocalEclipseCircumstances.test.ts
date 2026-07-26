@@ -117,6 +117,39 @@ describe('isInCentralEclipse', () => {
     });
 });
 
+describe('getUmbraShadowOutline', () => {
+    it('returns null if eclipse has not started', () => {
+        const result = circumstancesNoEclipse.getUmbraShadowOutline();
+
+        expect(result).toBeNull();
+    });
+
+    it('returns null in the partial phase, when the location is outside the umbra', () => {
+        const result = circumstancesPartial.getUmbraShadowOutline();
+
+        expect(result).toBeNull();
+    });
+
+    it('returns the instantaneous umbra outline in the total phase', () => {
+        const result = circumstancesTotal.getUmbraShadowOutline();
+
+        expect(result).not.toBeNull();
+        expect((result as Array<{lat: number; lon: number}>).length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('returns an outline that encloses the observer at maximum eclipse', () => {
+        const outline = circumstancesTotal.getUmbraShadowOutline() as Array<{lat: number; lon: number}>;
+
+        const latitudes = outline.map((point) => point.lat);
+        const longitudes = outline.map((point) => point.lon);
+
+        expect(location.lat).toBeGreaterThan(Math.min(...latitudes));
+        expect(location.lat).toBeLessThan(Math.max(...latitudes));
+        expect(location.lon).toBeGreaterThan(Math.min(...longitudes));
+        expect(location.lon).toBeLessThan(Math.max(...longitudes));
+    });
+});
+
 describe('getMagnitude', () => {
     it('returns magnitude if eclipse has not started', () => {
         const result = circumstancesNoEclipse.getMagnitude();

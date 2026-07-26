@@ -1,9 +1,11 @@
 import type {LocalHorizontalCoordinates} from '@app/types/CoordinateTypes';
-import type {Location} from '@app/types/LocationTypes';
+import type {LatLon, Location} from '@app/types/LocationTypes';
 import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import {julianDay2tau} from '@package/solarEclipse/utils/besselianElements';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
+import {GEOMETRIC_HORIZON_SIN_ALTITUDE} from '../services/shadowGeometry/utils/constants';
+import {getInstantaneousUmbraOutline} from '../services/shadowGeometry/utils/shadowOutline';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {LocalEclipseCircumstances as LocalEclipseCircumstancesType} from '../types/EclipseCircumstances';
 import {
@@ -15,15 +17,16 @@ import {
 } from '../utils/localCircumstances';
 
 export default class LocalEclipseCircumstances {
+    private readonly tau: number;
     private readonly circumstances: LocalEclipseCircumstancesType;
 
     private constructor(
-        elements: BesselianElements,
+        private readonly elements: BesselianElements,
         private readonly location: Location,
         toi: TimeOfInterest,
     ) {
-        const tau = julianDay2tau(elements, toi.getJulianDay());
-        this.circumstances = getLocalEclipseCircumstances(elements, location, tau);
+        this.tau = julianDay2tau(elements, toi.getJulianDay());
+        this.circumstances = getLocalEclipseCircumstances(elements, location, this.tau);
     }
 
     public static create(
@@ -44,6 +47,14 @@ export default class LocalEclipseCircumstances {
 
     public isInCentralEclipse(): boolean {
         return this.circumstances.distance < Math.abs(this.circumstances.l2);
+    }
+
+    public getUmbraShadowOutline(): Array<LatLon> | null {
+        if (!this.isInCentralEclipse()) {
+            return null;
+        }
+
+        return getInstantaneousUmbraOutline(this.elements, this.tau, GEOMETRIC_HORIZON_SIN_ALTITUDE);
     }
 
     public getMagnitude(): number {

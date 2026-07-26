@@ -45,6 +45,7 @@ The `solarEclipse` package provides solar eclipse calculations for any location 
     - [Eclipse type at a given moment](#eclipse-type-at-a-given-moment)
     - [Eclipse in progress](#eclipse-in-progress)
     - [Central eclipse in progress](#central-eclipse-in-progress)
+    - [Umbra shadow outline](#umbra-shadow-outline)
     - [Magnitude](#magnitude)
     - [Obscuration](#obscuration)
     - [Geometric topocentric horizontal coordinates](#geometric-topocentric-horizontal-coordinates)
@@ -573,6 +574,21 @@ const inCentralTotal   = circumstancesTotal.isInCentralEclipse();
 The result of the calculation should be:\
 During partial phase: *false*\
 During total phase: *true*
+
+---
+
+#### Umbra shadow outline
+
+**Description:** Returns the instantaneous outline of the Moon's umbra — or the antumbra, for annular eclipses — projected onto Earth's surface at this moment: the actual shadow footprint at that instant, as opposed to the full swept band returned by [`getUmbraPathPolygon`](#umbra-path-polygon). The result is an array of `{lat, lon}` coordinate objects in decimal degrees tracing the shadow edge, ready to draw on a map. The geometric horizon (Sun altitude 0°) is used. Returns `null` when the observer is not within the central shadow at this moment, so any partial-phase or pre/post-eclipse moment yields no footprint.
+
+**Example**: Get the umbra footprint during the total and partial phases in Jeddah
+
+```javascript
+const outlineTotal   = circumstancesTotal.getUmbraShadowOutline();
+const outlinePartial = circumstancesPartial.getUmbraShadowOutline();
+// outlineTotal:   [{lat: ..., lon: ...}, ...] — traces the umbra footprint enclosing the observer
+// outlinePartial: null — the observer is outside the umbra during the partial phase
+```
 
 ---
 

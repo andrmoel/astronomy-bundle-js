@@ -224,6 +224,16 @@ function terminatorRingArc(
     return arc;
 }
 
+export function getInstantaneousUmbraOutline(
+    elements: BesselianElements,
+    tau: number,
+    z0: number,
+): Array<LatLon> | null {
+    const e = getBesselianElementsAtTime(elements, tau);
+
+    return instantaneousShadowOutline(elements, e, true, UMBRA_Q_SAMPLES, z0);
+}
+
 function instantaneousShadowOutline(
     elements: BesselianElements,
     e: BesselianElementsAtTime,
