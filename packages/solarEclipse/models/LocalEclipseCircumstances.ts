@@ -4,7 +4,8 @@ import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections'
 import {julianDay2tau} from '@package/solarEclipse/utils/besselianElements';
 import type TimeOfInterest from '@package/time/models/TimeOfInterest';
 import type {LocalSolarEclipseType} from '../enums/SolarEclipseType';
-import {GEOMETRIC_HORIZON_SIN_ALTITUDE} from '../services/shadowGeometry/utils/constants';
+import type {ShadowPathOptions} from '../services/shadowGeometry/types/ShadowPathTypes';
+import {horizonSinAltitude} from '../services/shadowGeometry/utils/constants';
 import {getInstantaneousUmbraOutline} from '../services/shadowGeometry/utils/shadowOutline';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {LocalEclipseCircumstances as LocalEclipseCircumstancesType} from '../types/EclipseCircumstances';
@@ -49,12 +50,12 @@ export default class LocalEclipseCircumstances {
         return this.circumstances.distance < Math.abs(this.circumstances.l2);
     }
 
-    public getUmbraShadowOutline(): Array<LatLon> | null {
+    public getUmbraShadowOutline(options: ShadowPathOptions = {}): Array<LatLon> | null {
         if (!this.isInCentralEclipse()) {
             return null;
         }
 
-        return getInstantaneousUmbraOutline(this.elements, this.tau, GEOMETRIC_HORIZON_SIN_ALTITUDE);
+        return getInstantaneousUmbraOutline(this.elements, this.tau, horizonSinAltitude(options));
     }
 
     public getMagnitude(): number {

@@ -148,6 +148,24 @@ describe('getUmbraShadowOutline', () => {
         expect(location.lon).toBeGreaterThan(Math.min(...longitudes));
         expect(location.lon).toBeLessThan(Math.max(...longitudes));
     });
+
+    it('returns an enclosing outline when the refracted horizon is requested', () => {
+        const outline = circumstancesTotal.getUmbraShadowOutline({refraction: true}) as Array<{
+            lat: number;
+            lon: number;
+        }>;
+
+        expect(outline).not.toBeNull();
+        expect(outline.length).toBeGreaterThanOrEqual(3);
+
+        const latitudes = outline.map((point) => point.lat);
+        const longitudes = outline.map((point) => point.lon);
+
+        expect(location.lat).toBeGreaterThan(Math.min(...latitudes));
+        expect(location.lat).toBeLessThan(Math.max(...latitudes));
+        expect(location.lon).toBeGreaterThan(Math.min(...longitudes));
+        expect(location.lon).toBeLessThan(Math.max(...longitudes));
+    });
 });
 
 describe('getMagnitude', () => {

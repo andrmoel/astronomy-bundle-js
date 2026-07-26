@@ -579,7 +579,11 @@ During total phase: *true*
 
 #### Umbra shadow outline
 
-**Description:** Returns the instantaneous outline of the Moon's umbra — or the antumbra, for annular eclipses — projected onto Earth's surface at this moment: the actual shadow footprint at that instant, as opposed to the full swept band returned by [`getUmbraPathPolygon`](#umbra-path-polygon). The result is an array of `{lat, lon}` coordinate objects in decimal degrees tracing the shadow edge, ready to draw on a map. The geometric horizon (Sun altitude 0°) is used. Returns `null` when the observer is not within the central shadow at this moment, so any partial-phase or pre/post-eclipse moment yields no footprint.
+**Description:** Returns the instantaneous outline of the Moon's umbra — or the antumbra, for annular eclipses — projected onto Earth's surface at this moment: the actual shadow footprint at that instant, as opposed to the full swept band returned by [`getUmbraPathPolygon`](#umbra-path-polygon). The result is an array of `{lat, lon}` coordinate objects in decimal degrees tracing the shadow edge, ready to draw on a map. Returns `null` when the observer is not within the central shadow at this moment, so any partial-phase or pre/post-eclipse moment yields no footprint.
+
+It accepts the same `refraction` option as the [shadow geometry](#shadow-geometry) methods:
+
+- `refraction` (default: `false`) — the horizon convention used to clip the footprint. When `false`, the geometric horizon (Sun altitude 0°) is used. When `true`, the standard rise/set horizon (−50′) is used, so a footprint touching the horizon reaches slightly further to where the Sun is still visible. It only makes a difference when the shadow is near the horizon; for a high Sun both conventions give the same outline.
 
 **Example**: Get the umbra footprint during the total and partial phases in Jeddah
 
@@ -588,6 +592,9 @@ const outlineTotal   = circumstancesTotal.getUmbraShadowOutline();
 const outlinePartial = circumstancesPartial.getUmbraShadowOutline();
 // outlineTotal:   [{lat: ..., lon: ...}, ...] — traces the umbra footprint enclosing the observer
 // outlinePartial: null — the observer is outside the umbra during the partial phase
+
+// Refraction-corrected horizon
+const outlineRefracted = circumstancesTotal.getUmbraShadowOutline({refraction: true});
 ```
 
 ---
