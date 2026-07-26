@@ -53,13 +53,13 @@ describe('getDuration', () => {
     it('counts only the time after sunrise for an observer whose eclipse begins at sunrise', () => {
         const result = getDuration(elements, partialSunriseLocation);
 
-        expect(result).toBeCloseTo(3057.948, 2);
+        expect(result).toBeCloseTo(3041.249, 2);
     });
 
     it('counts only the time before sunset for an observer whose eclipse ends at sunset', () => {
         const result = getDuration(elements, partialSunsetLocation);
 
-        expect(result).toBeCloseTo(2545.005, 2);
+        expect(result).toBeCloseTo(2526.075, 2);
     });
 
     it('returns 0 when the eclipse stays below the horizon at the observer location', () => {

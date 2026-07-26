@@ -1,5 +1,9 @@
 import type {Location} from '@app/types/LocationTypes';
+import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import Sun from '@package/sun/models/Sun';
+import TimeOfInterest from '@package/time/models/TimeOfInterest';
+import {tau2julianDay} from './besselianElements';
 import {contactTausToContactJulianDays, getContactTaus} from './contacts';
 
 // 2021-12-04 total solar eclipse
@@ -17,6 +21,23 @@ const besselianElements: BesselianElements = {
     tanF1: 0.0047434,
     tanF2: 0.0047198,
     saros: 152,
+};
+
+// Annular eclipse whose path crossed northern Australia and the central Pacific.
+const annularElements: BesselianElements = {
+    t0Jde: 2456422.51829,
+    t0Hours: 0,
+    tMin: -3,
+    tMax: 3,
+    x: [-0.17518, 0.50528872, 0.0000144, -0.00000591],
+    y: [-0.30430099, 0.0888899, -0.0000959, -9.7e-7],
+    d: [17.60548019, 0.010701, -0.000004],
+    mu: [180.9034729, 15.00166035, 0],
+    l1: [0.56367201, 0.0000788, -0.00001],
+    l2: [0.017447, 0.0000784, -0.00001],
+    tanF1: 0.0046313,
+    tanF2: 0.0046082,
+    saros: 138,
 };
 
 describe('getContactTaus', () => {
@@ -79,7 +100,7 @@ describe('getContactTaus', () => {
             expect(result?.max).toBeCloseTo(-0.725519, 6);
             expect(result?.c3).toBeNull();
             expect(result?.c4).toBeCloseTo(0.053285, 6);
-            expect(result?.sunrise).toBeCloseTo(-0.0709402, 6);
+            expect(result?.sunrise).toBeCloseTo(-0.0919414, 6);
             expect(result?.sunset).toBeNull();
         });
 
@@ -98,33 +119,16 @@ describe('getContactTaus', () => {
     });
 
     describe('contacts for the 2013-05-10 annular solar eclipse', () => {
-        // Annular eclipse whose path crossed northern Australia and the central Pacific.
-        const elements: BesselianElements = {
-            t0Jde: 2456422.51829,
-            t0Hours: 0,
-            tMin: -3,
-            tMax: 3,
-            x: [-0.17518, 0.50528872, 0.0000144, -0.00000591],
-            y: [-0.30430099, 0.0888899, -0.0000959, -9.7e-7],
-            d: [17.60548019, 0.010701, -0.000004],
-            mu: [180.9034729, 15.00166035, 0],
-            l1: [0.56367201, 0.0000788, -0.00001],
-            l2: [0.017447, 0.0000784, -0.00001],
-            tanF1: 0.0046313,
-            tanF2: 0.0046082,
-            saros: 138,
-        };
-
         it('had an observer whose eclipse begins while the Sun is still below the horizon', () => {
             // Perth, Australia: first contact below the horizon, Sun rises partway through.
             const location: Location = {lat: -31.9523, lon: 115.8613, elevation: 15};
 
-            const result = getContactTaus(elements, location);
+            const result = getContactTaus(annularElements, location);
 
             expect(result).not.toBeNull();
             expect(result?.c1).toBeCloseTo(-2.4207268, 6);
             expect(result?.c4).toBeCloseTo(-0.2305546, 6);
-            expect(result?.sunrise).toBeCloseTo(-1.0799845, 6);
+            expect(result?.sunrise).toBeCloseTo(-1.0753459, 6);
             expect(result?.sunset).toBeNull();
         });
 
@@ -132,23 +136,48 @@ describe('getContactTaus', () => {
             // South Pacific Ocean: Sun sets partway through, so last contact is below the horizon.
             const location: Location = {lat: -35, lon: -130, elevation: 0};
 
-            const result = getContactTaus(elements, location);
+            const result = getContactTaus(annularElements, location);
 
             expect(result).not.toBeNull();
             expect(result?.c1).toBeCloseTo(1.1395554, 6);
             expect(result?.c4).toBeCloseTo(2.585641, 6);
             expect(result?.sunrise).toBeNull();
-            expect(result?.sunset).toBeCloseTo(1.8465013, 6);
+            expect(result?.sunset).toBeCloseTo(1.8412428, 6);
         });
 
         it('had an observer for whom the eclipse stayed below the horizon', () => {
             // Cape Town: inside the penumbra, but the Sun never rises during the eclipse.
             const location: Location = {lat: -33.9249, lon: 18.4241, elevation: 25};
 
-            const result = getContactTaus(elements, location);
+            const result = getContactTaus(annularElements, location);
 
             expect(result).toBeNull();
         });
+    });
+});
+
+describe('horizon crossings', () => {
+    // Cross-check against the Sun model, which reaches the apparent topocentric altitude through the
+    // full solar position instead of the Besselian shadow axis.
+    const cases: ReadonlyArray<[string, BesselianElements, Location]> = [
+        ['a sunrise during the 2021-12-04 eclipse', besselianElements, {lat: -54.83955, lon: -68.31199, elevation: 20}],
+        ['a sunset during the 2013-05-10 eclipse', annularElements, {lat: -35, lon: -130, elevation: 0}],
+    ];
+
+    it.each(cases)("places the Sun's upper limb on the horizon at %s", (_name, elements, location) => {
+        const contactTaus = getContactTaus(elements, location);
+        const taus = [contactTaus?.sunrise, contactTaus?.sunset].filter(
+            (tau): tau is number => tau !== null && tau !== undefined,
+        );
+
+        expect(taus).toHaveLength(1);
+
+        const toi = TimeOfInterest.fromJulianDay(tau2julianDay(elements, taus[0]));
+        const sun = Sun.create(toi);
+        const {altitude} = sun.getApparentTopocentricHorizontalCoordinates(location);
+        const upperLimbAltitude = correctEffectOfRefraction(altitude + sun.getTopocentricAngularDiameter(location) / 2);
+
+        expect(upperLimbAltitude).toBeCloseTo(0, 2);
     });
 });
 

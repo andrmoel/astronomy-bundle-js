@@ -1,8 +1,11 @@
 import type {Location} from '@app/types/LocationTypes';
+import {correctEffectOfRefraction} from '@app/utils/apparentPositionCorrections';
 import {LocalSolarEclipseType} from '@package/solarEclipse/enums/SolarEclipseType';
 import type {BesselianElements} from '@package/solarEclipse/types/BesselianElementTypes';
+import type {EclipseContacts} from '@package/solarEclipse/types/EclipseContactTypes';
 import {getContactTaus} from './contacts';
 import {
+    getApparentUpperSunLimbAltitude,
     getLocalEclipseCircumstances,
     getLocalEclipseType,
     getLocalHorizontalCoordinates,
@@ -10,6 +13,7 @@ import {
     getMaximumEclipse,
     getMoonSunRatio,
     getObscuration,
+    getSunSemiDiameter,
     isEclipseVisible,
 } from './localCircumstances';
 
@@ -94,12 +98,21 @@ describe('isEclipseVisible', () => {
     });
 
     it('returns false when the Sun stays below the horizon throughout the eclipse', () => {
-        // Antarctic location where contact times exist but the Sun never rises above the horizon
+        // Antarctic location whose geometric contacts all fall before the Sun rises, which is why
+        // getContactTaus finds no visible window at all.
         const location: Location = {lat: -79, lon: 104, elevation: 0};
-        const contactTaus = getContactTaus(elements, location);
+        const contactTaus: EclipseContacts = {
+            c1: -1.2495610885276691,
+            c2: null,
+            max: -0.6724786001932013,
+            c3: null,
+            c4: -0.09088300875638287,
+            sunrise: null,
+            sunset: null,
+        };
 
-        expect(contactTaus).not.toBeNull();
-        expect(isEclipseVisible(elements, location, contactTaus!)).toBe(false);
+        expect(getContactTaus(elements, location)).toBeNull();
+        expect(isEclipseVisible(elements, location, contactTaus)).toBe(false);
     });
 });
 
@@ -178,6 +191,32 @@ describe('getObscuration', () => {
         const result = getObscuration(circumstancesMaximumEclipseExmouth);
 
         expect(result).toBeCloseTo(1, 5);
+    });
+});
+
+describe('getSunSemiDiameter', () => {
+    it('returns the topocentric solar semi-diameter at the given time', () => {
+        const result = getSunSemiDiameter(elements, locationTotal, 0);
+
+        expect(result).toBeCloseTo(0.2653, 4);
+    });
+});
+
+describe('getApparentUpperSunLimbAltitude', () => {
+    it('refracts the limb instead of the centre', () => {
+        const sunSemiDiameter = 0.2653;
+        const centreAltitude = -0.8333;
+
+        const result = getApparentUpperSunLimbAltitude(centreAltitude, sunSemiDiameter);
+
+        expect(result).toBeCloseTo(correctEffectOfRefraction(centreAltitude + sunSemiDiameter), 10);
+        expect(result).toBeLessThan(correctEffectOfRefraction(centreAltitude) + sunSemiDiameter);
+    });
+
+    it('agrees with the standard sunset altitude of Meeus to within an arcminute', () => {
+        const result = getApparentUpperSunLimbAltitude(-0.8333, 16 / 60);
+
+        expect(Math.abs(result)).toBeLessThan(1 / 60);
     });
 });
 

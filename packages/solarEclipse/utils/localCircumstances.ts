@@ -55,6 +55,7 @@ export function isEclipseVisible(
     contactTaus: EclipseContacts,
 ): boolean {
     const taus = [contactTaus.c1, contactTaus.max, contactTaus.c4];
+    const sunSemiDiameter = getSunSemiDiameter(elements, location, contactTaus.max);
 
     return taus.some((tau) => {
         if (tau === null) {
@@ -63,9 +64,8 @@ export function isEclipseVisible(
 
         const circumstances = getLocalEclipseCircumstances(elements, location, tau);
         const {altitude} = getLocalHorizontalCoordinates(circumstances, location);
-        const sunUpperLimbAltitude = getUpperSunLimbAltitude(elements, location, tau, altitude);
 
-        return sunUpperLimbAltitude > 0;
+        return getApparentUpperSunLimbAltitude(altitude, sunSemiDiameter) > 0;
     });
 }
 
@@ -139,7 +139,7 @@ export function getObscuration(circumstances: LocalEclipseCircumstances): number
 }
 
 export function getLocalHorizontalCoordinates(
-    circumstances: LocalEclipseCircumstances,
+    circumstances: Pick<LocalEclipseCircumstances, 'hourAngle' | 'sinD' | 'cosD'>,
     location: Location,
 ): LocalHorizontalCoordinates {
     const {hourAngle, sinD, cosD} = circumstances;
@@ -158,15 +158,12 @@ export function getLocalHorizontalCoordinates(
     };
 }
 
-function getUpperSunLimbAltitude(
-    elements: BesselianElements,
-    location: Location,
-    tau: number,
-    altitude: number,
-): number {
+export function getSunSemiDiameter(elements: BesselianElements, location: Location, tau: number): number {
     const toi = TimeOfInterest.fromJulianDay(tau2julianDay(elements, tau));
-    const sun = Sun.create(toi);
-    const solarDiameter = sun.getTopocentricAngularDiameter(location);
 
-    return correctEffectOfRefraction(altitude) + solarDiameter / 2;
+    return Sun.create(toi).getTopocentricAngularDiameter(location) / 2;
+}
+
+export function getApparentUpperSunLimbAltitude(altitude: number, sunSemiDiameter: number): number {
+    return correctEffectOfRefraction(altitude + sunSemiDiameter);
 }

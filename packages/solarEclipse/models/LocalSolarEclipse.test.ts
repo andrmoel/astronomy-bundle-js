@@ -129,9 +129,9 @@ describe('visibility above the horizon', () => {
 
         expect(localEclipse.getType()).toBe(LocalSolarEclipseType.Partial);
         expect(localEclipse.getUmbraPathWidth()).toBe(0);
-        expect(localEclipse.getDuration()).toBeCloseTo(3057.948, 2);
+        expect(localEclipse.getDuration()).toBeCloseTo(3041.249, 2);
         expect(contactTimes?.c1.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 21, min: 33, sec: 38});
-        expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 4});
+        expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 21});
         expect(contactTimes?.sunset).toBeNull();
     });
 

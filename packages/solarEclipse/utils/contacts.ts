@@ -1,15 +1,11 @@
-import {
-    EARTH_AXIS_RATIO,
-    EARTH_EQUATORIAL_RADIUS_METERS,
-    EARTH_ROTATION_DEG_PER_HOUR,
-    SUNRISE_SUNSET_ALTITUDE_DEG,
-} from '@app/constants/earth';
+import {EARTH_AXIS_RATIO, EARTH_EQUATORIAL_RADIUS_METERS, EARTH_ROTATION_DEG_PER_HOUR} from '@app/constants/earth';
 import {DEG} from '@app/constants/math';
 import type {Location} from '@app/types/LocationTypes';
 import {polynomialDerivative} from '@app/utils/polynoms';
 import type {BesselianElements} from '../types/BesselianElementTypes';
 import type {EclipseContacts} from '../types/EclipseContactTypes';
 import {getBesselianElementsAtTime, getEclipseDeltaT, tau2julianDay} from './besselianElements';
+import {getApparentUpperSunLimbAltitude, getLocalHorizontalCoordinates, getSunSemiDiameter} from './localCircumstances';
 
 const ITERATION_TOLERANCE_HOURS = 1e-8;
 const MAX_ITERATIONS = 30;
@@ -22,7 +18,6 @@ const HORIZON_BISECTION_ITERATIONS = 60;
 interface ObserverGeocentric {
     rhoSinPhi: number;
     rhoCosPhi: number;
-    rho: number;
     lon: number;
 }
 
@@ -34,7 +29,9 @@ interface FundamentalSnapshot {
     nSq: number;
     l1: number;
     l2: number;
-    zeta: number;
+    hourAngle: number;
+    sinD: number;
+    cosD: number;
 }
 
 interface VisibleWindow {
@@ -73,9 +70,7 @@ export function getContactTaus(elements: BesselianElements, location: Location):
         }
     }
 
-    // The solver also has a solution for night-side observers: keep the geometric contacts, report
-    // the horizon crossings, and reject an eclipse that never rises above the horizon.
-    const window = findVisibleWindow(elements, obs, c1, c4);
+    const window = findVisibleWindow(elements, obs, location, c1, c4);
     if (window === null) {
         return null;
     }
@@ -118,13 +113,9 @@ function computeObserverGeocentric(location: Location): ObserverGeocentric {
     const h = location.elevation / EARTH_EQUATORIAL_RADIUS_METERS;
     const u = Math.atan(EARTH_AXIS_RATIO * Math.tan(latRad));
 
-    const rhoSinPhi = EARTH_AXIS_RATIO * Math.sin(u) + h * Math.sin(latRad);
-    const rhoCosPhi = Math.cos(u) + h * Math.cos(latRad);
-
     return {
-        rhoSinPhi,
-        rhoCosPhi,
-        rho: Math.hypot(rhoSinPhi, rhoCosPhi),
+        rhoSinPhi: EARTH_AXIS_RATIO * Math.sin(u) + h * Math.sin(latRad),
+        rhoCosPhi: Math.cos(u) + h * Math.cos(latRad),
         lon: location.lon,
     };
 }
@@ -186,16 +177,18 @@ function findContact(
 function findVisibleWindow(
     elements: BesselianElements,
     obs: ObserverGeocentric,
+    location: Location,
     tauStart: number,
     tauEnd: number,
 ): VisibleWindow | null {
+    const margin = horizonMargin(elements, obs, location, (tauStart + tauEnd) / 2);
     const tauAt = (i: number): number =>
         i === HORIZON_SCAN_SAMPLES ? tauEnd : tauStart + ((tauEnd - tauStart) * i) / HORIZON_SCAN_SAMPLES;
 
     let firstAbove: number | null = null;
     let lastAbove: number | null = null;
     for (let i = 0; i <= HORIZON_SCAN_SAMPLES; i++) {
-        if (horizonMargin(elements, obs, tauAt(i)) >= 0) {
+        if (margin(tauAt(i)) >= 0) {
             if (firstAbove === null) {
                 firstAbove = i;
             }
@@ -207,21 +200,36 @@ function findVisibleWindow(
         return null;
     }
 
-    const sunrise = firstAbove > 0 ? bisectHorizon(elements, obs, tauAt(firstAbove - 1), tauAt(firstAbove)) : null;
+    const sunrise = firstAbove > 0 ? bisectHorizon(margin, tauAt(firstAbove - 1), tauAt(firstAbove)) : null;
     const sunset =
-        lastAbove < HORIZON_SCAN_SAMPLES ? bisectHorizon(elements, obs, tauAt(lastAbove), tauAt(lastAbove + 1)) : null;
+        lastAbove < HORIZON_SCAN_SAMPLES ? bisectHorizon(margin, tauAt(lastAbove), tauAt(lastAbove + 1)) : null;
 
     return {sunrise, sunset};
 }
 
-function bisectHorizon(elements: BesselianElements, obs: ObserverGeocentric, lo: number, hi: number): number {
+function horizonMargin(
+    elements: BesselianElements,
+    obs: ObserverGeocentric,
+    location: Location,
+    tauMiddle: number,
+): (tau: number) => number {
+    const sunSemiDiameter = getSunSemiDiameter(elements, location, tauMiddle);
+
+    return (tau: number): number => {
+        const {altitude} = getLocalHorizontalCoordinates(snapshot(elements, tau, obs), location);
+
+        return getApparentUpperSunLimbAltitude(altitude, sunSemiDiameter);
+    };
+}
+
+function bisectHorizon(margin: (tau: number) => number, lo: number, hi: number): number {
     let low = lo;
     let high = hi;
-    let lowBelow = horizonMargin(elements, obs, low) < 0;
+    let lowBelow = margin(low) < 0;
 
     for (let i = 0; i < HORIZON_BISECTION_ITERATIONS; i++) {
         const mid = (low + high) / 2;
-        const midBelow = horizonMargin(elements, obs, mid) < 0;
+        const midBelow = margin(mid) < 0;
         if (midBelow === lowBelow) {
             low = mid;
             lowBelow = midBelow;
@@ -231,13 +239,6 @@ function bisectHorizon(elements: BesselianElements, obs: ObserverGeocentric, lo:
     }
 
     return (low + high) / 2;
-}
-
-// Positive while the Sun is above the horizon; zeta equals rho * sin(Sun altitude).
-function horizonMargin(elements: BesselianElements, obs: ObserverGeocentric, tau: number): number {
-    const {zeta} = snapshot(elements, tau, obs);
-
-    return zeta / obs.rho - Math.sin(SUNRISE_SUNSET_ALTITUDE_DEG * DEG);
 }
 
 function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocentric): FundamentalSnapshot {
@@ -273,7 +274,9 @@ function snapshot(elements: BesselianElements, tau: number, obs: ObserverGeocent
         nSq: uDot * uDot + vDot * vDot,
         l1: e.l1 - zeta * elements.tanF1,
         l2: e.l2 - zeta * elements.tanF2,
-        zeta,
+        hourAngle,
+        sinD: e.sinD,
+        cosD: e.cosD,
     };
 }
 
