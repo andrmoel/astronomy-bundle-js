@@ -24,6 +24,10 @@ export default class Satellite {
         return new Satellite(parseTwoLineElement(tle));
     }
 
+    public getName(): string | null {
+        return this.tle.name;
+    }
+
     public getGeocentricEquatorialRectangularCoordinates(toi: TimeOfInterest): RectangularCoordinates {
         return this.getTemePosition(toi);
     }

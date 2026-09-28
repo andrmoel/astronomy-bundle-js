@@ -26,6 +26,18 @@ describe('fromTLE', () => {
     });
 });
 
+describe('getName', () => {
+    it('returns the name from the TLE name line', () => {
+        expect(Satellite.fromTLE(TLE).getName()).toBe('ISS (ZARYA)');
+    });
+
+    it('returns null for a TLE without a name line', () => {
+        const twoLineTle = TLE.split('\n').slice(1).join('\n');
+
+        expect(Satellite.fromTLE(twoLineTle).getName()).toBeNull();
+    });
+});
+
 describe('position', () => {
     const satellite = Satellite.fromTLE(TLE);
 

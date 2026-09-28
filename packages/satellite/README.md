@@ -9,6 +9,7 @@ The `satellite` package provides the `Satellite` object, created from a two-line
 - [Install](#install)
 - [API Reference](#api-reference)
   - [Create the satellite object](#create-the-satellite-object)
+  - [Name](#name)
   - [Geocentric equatorial rectangular coordinates](#geocentric-equatorial-rectangular-coordinates)
   - [Geocentric equatorial spherical coordinates](#geocentric-equatorial-spherical-coordinates)
   - [Geographic location](#geographic-location)
@@ -39,6 +40,14 @@ satellite.tle.name; // 'ISS (ZARYA)'
 satellite.tle.satelliteNumber; // 25544
 satellite.tle.inclination; // 51.6315
 satellite.tle.meanMotion; // 15.48664528
+```
+
+### Name
+
+**Description:** Returns the satellite name from the optional name line of the TLE, or `null` if the TLE has no name line.
+
+```javascript
+satellite.getName(); // 'ISS (ZARYA)'
 ```
 
 ### Geocentric equatorial rectangular coordinates
