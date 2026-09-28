@@ -2,7 +2,7 @@
 
 # Astronomy Bundle
 
-A TypeScript library for astronomical calculations including the position of the Sun, Moon, and planets, sunrise and sunset times, and solar eclipses. Most calculations are based on Jean Meeus' *Astronomical Algorithms* and the VSOP87 theory.
+A TypeScript library for astronomical calculations including the position of the Sun, Moon, and planets, sunrise and sunset times, solar eclipses, and satellite positions from TLEs. Most calculations are based on Jean Meeus' *Astronomical Algorithms* and the VSOP87 theory.
 
 ## Packages
 
@@ -13,6 +13,7 @@ A TypeScript library for astronomical calculations including the position of the
 - [`@astronomy-bundle/planets`](https://www.npmjs.com/package/@astronomy-bundle/planets)
 - [`@astronomy-bundle/solar-eclipse`](https://www.npmjs.com/package/@astronomy-bundle/solar-eclipse)
 - [`@astronomy-bundle/lunar-limb-profile`](https://www.npmjs.com/package/@astronomy-bundle/lunar-limb-profile)
+- [`@astronomy-bundle/satellite`](https://www.npmjs.com/package/@astronomy-bundle/satellite)
 
 ## API Reference
 
