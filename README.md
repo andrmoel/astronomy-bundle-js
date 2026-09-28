@@ -1,5 +1,3 @@
-> **Work in progress.** This is the next major version of astronomy-bundle and is not yet stable. If you are looking for the current stable release, see the [README (version 7.7.7)](old/README.md).
-
 # Astronomy Bundle
 
 A TypeScript library for astronomical calculations including the position of the Sun, Moon, and planets, sunrise and sunset times, solar eclipses, and satellite positions from TLEs. Most calculations are based on Jean Meeus' *Astronomical Algorithms* and the VSOP87 theory.
