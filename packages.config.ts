@@ -6,4 +6,5 @@ export default [
     'packages/sun',
     'packages/solarEclipse',
     'packages/lunarLimbProfile',
+    'packages/satellite',
 ];
