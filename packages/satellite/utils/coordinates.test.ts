@@ -1,8 +1,15 @@
 import TimeOfInterest from '@package/time/models/TimeOfInterest';
-import {teme2equatorialSpherical, teme2geographicLocation, teme2topocentricHorizontal} from './coordinates';
+import {EARTH_ROTATION_RAD_PER_SEC} from '../constants/satellite';
+import {
+    getRangeRate,
+    teme2equatorialSpherical,
+    teme2geographicLocation,
+    teme2topocentricHorizontal,
+} from './coordinates';
 
 const {T} = TimeOfInterest.fromTime(2026, 9, 28, 14, 39, 0);
 const POSITION = {x: -1957.968754269824, y: -3744.0801829416077, z: 5319.007487858728};
+const VELOCITY = {x: 6.620784776477823, y: -3.8434066506506723, z: -0.2743363445430745};
 const BERLIN = {lat: 52.52, lon: 13.405, elevation: 34};
 
 describe('teme2equatorialSpherical', () => {
@@ -52,5 +59,24 @@ describe('teme2topocentricHorizontal', () => {
         expect(azimuth).toBeCloseTo(124.5621, 3);
         expect(altitude).toBeCloseTo(68.7434, 3);
         expect(radiusVector).toBeCloseTo(456.947, 2);
+    });
+});
+
+describe('getRangeRate', () => {
+    it('gets the rate of change of the distance to an observer', () => {
+        expect(getRangeRate({position: POSITION, velocity: VELOCITY}, BERLIN, T)).toBeCloseTo(2.0983, 3);
+    });
+
+    it('is zero for an object rotating with the Earth', () => {
+        const position = {x: 42164, y: 0, z: 0};
+        const velocity = {x: 0, y: EARTH_ROTATION_RAD_PER_SEC * 42164, z: 0};
+
+        expect(getRangeRate({position, velocity}, BERLIN, T)).toBeCloseTo(0, 10);
+    });
+
+    it('is negative for an approaching object', () => {
+        const velocity = {x: -VELOCITY.x, y: -VELOCITY.y, z: -VELOCITY.z};
+
+        expect(getRangeRate({position: POSITION, velocity}, BERLIN, T)).toBeLessThan(0);
     });
 });

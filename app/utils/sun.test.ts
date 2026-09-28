@@ -1,4 +1,11 @@
-import {getApparentLongitude, getEquationOfCenter, getMeanAnomaly, getTrueAnomaly, getTrueLongitude} from './sun';
+import {
+    getApparentLongitude,
+    getEquationOfCenter,
+    getMeanAnomaly,
+    getRadiusVector,
+    getTrueAnomaly,
+    getTrueLongitude,
+} from './sun';
 
 it('tests getMeanAnomaly', () => {
     const T = -0.127296372348;
@@ -22,6 +29,12 @@ it('tests getApparentLongitude', () => {
     const T = -0.072183436;
 
     expect(getApparentLongitude(T)).toBeCloseTo(199.908939, 6);
+});
+
+it('tests getRadiusVector', () => {
+    const T = -0.072183436;
+
+    expect(getRadiusVector(T)).toBeCloseTo(0.99766, 5);
 });
 
 it('tests getEquationOfCenter', () => {

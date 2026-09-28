@@ -1,5 +1,6 @@
 import {DEG} from '@app/constants/math';
 import {normalizeAngle} from '@app/utils/angle';
+import {getEccentricity} from '@app/utils/earth';
 
 export function getMeanAnomaly(T: number): number {
     // Meeus 47.4
@@ -42,6 +43,14 @@ export function getApparentLongitude(T: number): number {
     const omegaRad = omega * DEG;
 
     return o - 0.00569 - 0.00478 * Math.sin(omegaRad);
+}
+
+export function getRadiusVector(T: number): number {
+    const e = getEccentricity(T);
+    const v = getTrueAnomaly(T);
+
+    // Meeus 25.5
+    return (1.000001018 * (1 - e * e)) / (1 + e * Math.cos(v * DEG));
 }
 
 export function getEquationOfCenter(T: number): number {

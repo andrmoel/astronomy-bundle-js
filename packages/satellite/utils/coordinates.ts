@@ -19,6 +19,8 @@ import {
     getLocalMeanSiderealTime,
 } from '@app/utils/siderealTime';
 import Location from '@package/location/models/Location';
+import {EARTH_ROTATION_RAD_PER_SEC} from '../constants/satellite';
+import type {Sgp4State} from '../types/Sgp4Types';
 
 const GEODETIC_ITERATIONS = 10;
 
@@ -69,13 +71,11 @@ export function teme2topocentricHorizontal(
     T: number,
 ): LocalHorizontalCoordinates {
     const lmst = getLocalMeanSiderealTime(T, location.lon);
-    const lmstRad = lmst * DEG;
-    const rhoCosLat = getRhoCosLat(location.lat, location.elevation) * EARTH_EQUATORIAL_RADIUS_KM;
-    const rhoSinLat = getRhoSinLat(location.lat, location.elevation) * EARTH_EQUATORIAL_RADIUS_KM;
+    const observer = getObserverTemePosition(location, T);
 
-    const x = position.x - rhoCosLat * Math.cos(lmstRad);
-    const y = position.y - rhoCosLat * Math.sin(lmstRad);
-    const z = position.z - rhoSinLat;
+    const x = position.x - observer.x;
+    const y = position.y - observer.y;
+    const z = position.z - observer.z;
     const distance = Math.sqrt(x * x + y * y + z * z);
 
     const localHourAngle = normalizeAngle(lmst - Math.atan2(y, x) * RAD);
@@ -87,4 +87,25 @@ export function teme2topocentricHorizontal(
         location.lat,
         distance,
     );
+}
+
+export function getRangeRate(state: Sgp4State, location: LocationType, T: number): number {
+    const observer = getObserverTemePosition(location, T);
+
+    const x = state.position.x - observer.x;
+    const y = state.position.y - observer.y;
+    const z = state.position.z - observer.z;
+    const vx = state.velocity.x + EARTH_ROTATION_RAD_PER_SEC * observer.y;
+    const vy = state.velocity.y - EARTH_ROTATION_RAD_PER_SEC * observer.x;
+    const vz = state.velocity.z;
+
+    return (x * vx + y * vy + z * vz) / Math.sqrt(x * x + y * y + z * z);
+}
+
+function getObserverTemePosition(location: LocationType, T: number): RectangularCoordinates {
+    const lmstRad = getLocalMeanSiderealTime(T, location.lon) * DEG;
+    const rhoCosLat = getRhoCosLat(location.lat, location.elevation) * EARTH_EQUATORIAL_RADIUS_KM;
+    const rhoSinLat = getRhoSinLat(location.lat, location.elevation) * EARTH_EQUATORIAL_RADIUS_KM;
+
+    return {x: rhoCosLat * Math.cos(lmstRad), y: rhoCosLat * Math.sin(lmstRad), z: rhoSinLat};
 }
