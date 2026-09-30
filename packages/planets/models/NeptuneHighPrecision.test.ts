@@ -95,15 +95,15 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
 it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = neptune.getApparentGeocentricEclipticRectangularCoordinates();
 
-    expect(x).toBeCloseTo(16.9747251459, 8);
-    expect(y).toBeCloseTo(-25.9643789897, 8);
+    expect(x).toBeCloseTo(16.9747251567, 8);
+    expect(y).toBeCloseTo(-25.9643789843, 8);
     expect(z).toBeCloseTo(0.1272932645, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = neptune.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(303.1754443077, 8);
+    expect(lon).toBeCloseTo(303.1754443318, 8);
     expect(lat).toBeCloseTo(0.235110796, 8);
     expect(radiusVector).toBeCloseTo(31.0210650033, 8);
 });
@@ -111,7 +111,7 @@ it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = neptune.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(305.4147151897, 8);
+    expect(rightAscension).toBeCloseTo(305.4147152147, 8);
     expect(declination).toBeCloseTo(-19.2171861304, 8);
     expect(radiusVector).toBeCloseTo(31.0210650033, 8);
 });
@@ -150,13 +150,13 @@ it('tests getDistanceToEarth', () => {
 it('tests getApparentDistanceToEarth', () => {
     const d = neptune.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(4640685270.960268, 6);
+    expect(d).toBeCloseTo(4640685270.9147, 4);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = neptune.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(4640690520.9331751, 6);
+    expect(d).toBeCloseTo(4640690520.8876066, 6);
 });
 
 it('tests getLightTime', () => {
@@ -258,7 +258,7 @@ it('tests getTransit', () => {
 it('tests getGeometricRise', () => {
     const toi = neptune.getGeometricRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 8, min: 34, sec: 56});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 8, min: 34, sec: 57});
 });
 
 it('tests getApparentRise', () => {

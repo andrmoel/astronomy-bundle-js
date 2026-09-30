@@ -77,11 +77,11 @@ it('tests getContactTaus', () => {
 it('tests getContactTimes', () => {
     const result = localSolarEclipse.getContactTimes();
 
-    expect(result?.c1.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 8, min: 23, sec: 35});
+    expect(result?.c1.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 8, min: 23, sec: 36});
     expect(result?.c2?.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 10, min: 8, sec: 32});
     expect(result?.max.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 10, min: 9, sec: 58});
     expect(result?.c3?.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 10, min: 11, sec: 24});
-    expect(result?.c4.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 11, min: 42, sec: 39});
+    expect(result?.c4.getTime()).toEqual({year: 2016, month: 9, day: 1, hour: 11, min: 42, sec: 40});
 });
 
 it('tests getMaxMagnitude', () => {
@@ -131,7 +131,7 @@ describe('visibility above the horizon', () => {
         expect(localEclipse.getUmbraPathWidth()).toBe(0);
         expect(localEclipse.getDuration()).toBeCloseTo(3041.249, 2);
         expect(contactTimes?.c1.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 21, min: 33, sec: 38});
-        expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 21});
+        expect(contactTimes?.sunrise?.getTime()).toEqual({year: 2013, month: 5, day: 9, hour: 22, min: 54, sec: 22});
         expect(contactTimes?.sunset).toBeNull();
     });
 

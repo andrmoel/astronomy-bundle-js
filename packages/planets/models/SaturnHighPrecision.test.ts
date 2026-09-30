@@ -95,25 +95,25 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
 it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = saturn.getApparentGeocentricEclipticRectangularCoordinates();
 
-    expect(x).toBeCloseTo(6.577393604, 8);
-    expect(y).toBeCloseTo(5.5989646366, 8);
+    expect(x).toBeCloseTo(6.577393564, 8);
+    expect(y).toBeCloseTo(5.5989646705, 8);
     expect(z).toBeCloseTo(-0.369161441, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = saturn.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(40.4058793928, 8);
+    expect(lon).toBeCloseTo(40.4058797481, 8);
     expect(lat).toBeCloseTo(-2.4472297524, 8);
-    expect(radiusVector).toBeCloseTo(8.6456226938, 8);
+    expect(radiusVector).toBeCloseTo(8.6456226872, 8);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = saturn.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(38.7761101013, 8);
-    expect(declination).toBeCloseTo(12.6156830996, 8);
-    expect(radiusVector).toBeCloseTo(8.6456226938, 8);
+    expect(rightAscension).toBeCloseTo(38.7761104456, 8);
+    expect(declination).toBeCloseTo(12.6156832151, 8);
+    expect(radiusVector).toBeCloseTo(8.6456226872, 8);
 });
 
 it('tests getApparentTopocentricEquatorialSphericalCoordinates', () => {
@@ -150,13 +150,13 @@ it('tests getDistanceToEarth', () => {
 it('tests getApparentDistanceToEarth', () => {
     const d = saturn.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(1293366745.9369545, 6);
+    expect(d).toBeCloseTo(1293366744.884305, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = saturn.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(1293364637.4643054, 6);
+    expect(d).toBeCloseTo(1293364636.4116244, 6);
 });
 
 it('tests getLightTime', () => {
@@ -180,13 +180,13 @@ it('tests getTopocentricAngularDiameter', () => {
 it('tests getElongation', () => {
     const phi = saturn.getElongation();
 
-    expect(phi).toBeCloseTo(120.51582059, 6);
+    expect(phi).toBeCloseTo(120.51582133, 6);
 });
 
 it('tests getTopocentricElongation', () => {
     const phi = saturn.getTopocentricElongation(location);
 
-    expect(phi).toBeCloseTo(120.51559459, 6);
+    expect(phi).toBeCloseTo(120.51559532, 6);
 });
 
 it('tests getPhaseAngle', () => {
@@ -252,19 +252,19 @@ it('tests getTopocentricApparentMagnitude', () => {
 it('tests getTransit', () => {
     const toi = saturn.getTransit(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 18, min: 58, sec: 25});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 18, min: 58, sec: 26});
 });
 
 it('tests getGeometricRise', () => {
     const toi = saturn.getGeometricRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 51, sec: 44});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 51, sec: 45});
 });
 
 it('tests getApparentRise', () => {
     const toi = saturn.getApparentRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 47, sec: 45});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 11, min: 47, sec: 46});
 });
 
 it('tests getGeometricSet', () => {

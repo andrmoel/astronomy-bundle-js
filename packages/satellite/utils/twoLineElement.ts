@@ -79,16 +79,9 @@ function parseEpoch(yearField: string, dayOfYearField: string): TimeOfInterest {
     const twoDigitYear = parseInt(yearField, 10);
     const year = twoDigitYear < 57 ? 2000 + twoDigitYear : 1900 + twoDigitYear;
     const dayOfYear = parseFloat(dayOfYearField);
-    const wholeDays = Math.floor(dayOfYear);
     const jdOfJanuaryZero = TimeOfInterest.fromTime(year, 1, 1).jd - 1;
-    const {month, day} = TimeOfInterest.fromJulianDay(jdOfJanuaryZero + wholeDays).time;
-    const hours = (dayOfYear - wholeDays) * 24;
-    const hour = Math.floor(hours);
-    const minutes = (hours - hour) * 60;
-    const min = Math.floor(minutes);
-    const sec = (minutes - min) * 60;
 
-    return new TimeOfInterest({year, month, day, hour, min, sec});
+    return TimeOfInterest.fromJulianDay(jdOfJanuaryZero + dayOfYear);
 }
 
 function parseImpliedDecimal(field: string): number {

@@ -1,6 +1,7 @@
 import {round} from '@app/utils/math';
 import {DAY_OF_WEEK_FRIDAY, DAY_OF_WEEK_WEDNESDAY} from '../constants/dayOfWeek';
 import {
+    date2julianDay,
     dateStringToJulianDay,
     dayOfYear2time,
     getDayOfWeek,
@@ -8,6 +9,7 @@ import {
     getDecimalYear,
     isLeapYear,
     julianCenturiesJ20002julianDay,
+    julianDay2date,
     julianDay2julianCenturiesJ2000,
     julianDay2julianDay0,
     julianDay2julianDayEphemeris,
@@ -96,6 +98,32 @@ it('tests for julianDay2time', () => {
     expect(julianDay2time(1355866.5)).toEqual({year: -1000, month: 2, day: 29, hour: 0, min: 0, sec: 0});
     expect(julianDay2time(1355671.395834)).toEqual({year: -1001, month: 8, day: 17, hour: 21, min: 30, sec: 0});
     expect(julianDay2time(0.0)).toEqual({year: -4712, month: 1, day: 1, hour: 12, min: 0, sec: 0});
+});
+
+it('tests julianDay2time rounds to the nearest second', () => {
+    const jd = time2julianDay({year: 2026, month: 9, day: 28, hour: 14, min: 39, sec: 0});
+
+    expect(julianDay2time(jd)).toEqual({year: 2026, month: 9, day: 28, hour: 14, min: 39, sec: 0});
+    expect(julianDay2time(jd - 0.4 / 86400)).toEqual({year: 2026, month: 9, day: 28, hour: 14, min: 39, sec: 0});
+    expect(julianDay2time(jd + 0.6 / 86400)).toEqual({year: 2026, month: 9, day: 28, hour: 14, min: 39, sec: 1});
+});
+
+it('tests julianDay2time carries a rounded second into the next day', () => {
+    const jd = time2julianDay({year: 2026, month: 12, day: 31, hour: 23, min: 59, sec: 59}) + 0.7 / 86400;
+
+    expect(julianDay2time(jd)).toEqual({year: 2027, month: 1, day: 1, hour: 0, min: 0, sec: 0});
+});
+
+it('tests date2julianDay', () => {
+    expect(date2julianDay(new Date('1970-01-01T00:00:00.000Z'))).toBe(2440587.5);
+    expect(date2julianDay(new Date('2000-01-01T12:00:00.000Z'))).toBe(2451545);
+    expect(date2julianDay(new Date('2000-01-01T12:00:00.500Z'))).toBeCloseTo(2451545 + 0.5 / 86400, 10);
+});
+
+it('tests julianDay2date', () => {
+    expect(julianDay2date(2451545)).toEqual(new Date('2000-01-01T12:00:00.000Z'));
+    expect(julianDay2date(2451545 + 0.5 / 86400)).toEqual(new Date('2000-01-01T12:00:00.500Z'));
+    expect(julianDay2date(2451545 - 1 / 86400000)).toEqual(new Date('2000-01-01T11:59:59.999Z'));
 });
 
 it('tests julianDay2julianDay0', () => {

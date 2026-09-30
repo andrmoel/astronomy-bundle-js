@@ -43,6 +43,27 @@ describe('constructors', () => {
 
             expect(toi.time).toEqual({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
         });
+
+        it('keeps the milliseconds in the julian day', () => {
+            const toi = TimeOfInterest.fromDate(new Date('2000-05-20T13:50:40.700Z'));
+
+            expect(toi.jd).toBeCloseTo(TimeOfInterest.fromTime(2000, 5, 20, 13, 50, 40.7).jd, 10);
+            expect(toi.time).toEqual({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 41});
+        });
+
+        it('round-trips a date with milliseconds', () => {
+            const date = new Date('2026-09-28T14:39:00.123Z');
+
+            expect(TimeOfInterest.fromDate(date).getDate()).toEqual(date);
+        });
+
+        it('converts a proleptic Gregorian date before 1582 to the Julian calendar', () => {
+            const toi = TimeOfInterest.fromDate(new Date('1000-01-01T00:00:00.000Z'));
+
+            expect(toi.jd).toBe(2086302.5);
+            expect(toi.time).toEqual({year: 999, month: 12, day: 27, hour: 0, min: 0, sec: 0});
+            expect(toi.getDate()).toEqual(new Date('1000-01-01T00:00:00.000Z'));
+        });
     });
 
     describe('fromYearOfDay', () => {
@@ -58,6 +79,21 @@ describe('constructors', () => {
             const toi = TimeOfInterest.fromJulianDay(2451684.5);
 
             expect(toi.time).toEqual({year: 2000, month: 5, day: 20, hour: 0, min: 0, sec: 0});
+        });
+
+        it('keeps the exact julian day and rounds the time to the nearest second', () => {
+            const jd = 2451684.5 + 0.7 / 86400;
+            const toi = TimeOfInterest.fromJulianDay(jd);
+
+            expect(toi.jd).toBe(jd);
+            expect(toi.T).toBe((jd - 2451545) / 36525);
+            expect(toi.time).toEqual({year: 2000, month: 5, day: 20, hour: 0, min: 0, sec: 1});
+        });
+
+        it('round-trips the julian day of a whole-second time', () => {
+            const toi = TimeOfInterest.fromTime(2026, 9, 28, 14, 39, 0);
+
+            expect(TimeOfInterest.fromJulianDay(toi.jd).time).toEqual(toi.time);
         });
     });
 
@@ -115,6 +151,12 @@ it('tests getDate', () => {
     const toi = new TimeOfInterest({year: 2000, month: 5, day: 20, hour: 13, min: 50, sec: 40});
 
     expect(toi.getDate()).toEqual(new Date('2000-05-20T13:50:40.000Z'));
+});
+
+it('tests getDate keeps the milliseconds of the julian day', () => {
+    const jd = TimeOfInterest.fromTime(2026, 9, 28, 14, 39, 0).jd + 0.7 / 86400;
+
+    expect(TimeOfInterest.fromJulianDay(jd).getDate()).toEqual(new Date('2026-09-28T14:39:00.700Z'));
 });
 
 it('tests getDecimalYear', () => {

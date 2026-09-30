@@ -175,7 +175,7 @@ describe('getGeometricRise', () => {
     it('tests the center', () => {
         const toi = sun.getGeometricRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 47});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 50, sec: 48});
     });
 
     it('tests the lower limb', () => {
@@ -189,13 +189,13 @@ describe('getApparentRise', () => {
     it('tests the upper limb', () => {
         const toi = sun.getApparentRise(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 0});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 45, sec: 1});
     });
 
     it('tests the center', () => {
         const toi = sun.getApparentRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 51});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 5, min: 46, sec: 52});
     });
 
     it('tests the lower limb', () => {
@@ -215,7 +215,7 @@ describe('getGeometricSet', () => {
     it('tests the center', () => {
         const toi = sun.getGeometricSet(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 55});
+        expect(toi.time).toEqual({year: 2020, month: 10, day: 22, hour: 15, min: 49, sec: 56});
     });
 
     it('tests the lower limb', () => {

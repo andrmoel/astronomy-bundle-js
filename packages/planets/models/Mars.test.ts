@@ -96,48 +96,48 @@ it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = mars.getApparentGeocentricEclipticRectangularCoordinates();
 
     expect(x).toBeCloseTo(1.55875702, 8);
-    expect(y).toBeCloseTo(-0.9901530404, 8);
+    expect(y).toBeCloseTo(-0.9901529723, 8);
     expect(z).toBeCloseTo(-0.0346202414, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = mars.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(327.5754861882, 8);
-    expect(lat).toBeCloseTo(-1.0740304791, 8);
-    expect(radiusVector).toBeCloseTo(1.8469772767, 8);
+    expect(lon).toBeCloseTo(327.5754880355, 8);
+    expect(lat).toBeCloseTo(-1.0740304617, 8);
+    expect(radiusVector).toBeCloseTo(1.8469772411, 8);
 });
 
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = mars.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(330.1452301632, 8);
-    expect(declination).toBeCloseTo(-13.322380628, 8);
-    expect(radiusVector).toBeCloseTo(1.8469772767, 8);
+    expect(rightAscension).toBeCloseTo(330.1452319368, 8);
+    expect(declination).toBeCloseTo(-13.32237997, 8);
+    expect(radiusVector).toBeCloseTo(1.8469772411, 8);
 });
 
 it('tests getApparentTopocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} =
         mars.getApparentTopocentricEquatorialSphericalCoordinates(location);
 
-    expect(rightAscension).toBeCloseTo(330.1447343, 6);
-    expect(declination).toBeCloseTo(-13.32324825, 6);
+    expect(rightAscension).toBeCloseTo(330.1447358, 6);
+    expect(declination).toBeCloseTo(-13.3232477, 6);
     expect(radiusVector).toBeCloseTo(1.8470053, 6);
 });
 
 it('tests getApparentTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = mars.getApparentTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(309.3897926, 6);
-    expect(altitude).toBeCloseTo(-41.08443433, 6);
+    expect(azimuth).toBeCloseTo(309.3897913, 6);
+    expect(altitude).toBeCloseTo(-41.08443315, 6);
     expect(radiusVector).toBeCloseTo(1.8470053, 6);
 });
 
 it('tests getRefractionCorrectedTopocentricHorizontalCoordinates', () => {
     const {azimuth, altitude, radiusVector} = mars.getRefractionCorrectedTopocentricHorizontalCoordinates(location);
 
-    expect(azimuth).toBeCloseTo(309.3897926, 6);
-    expect(altitude).toBeCloseTo(-41.08443433, 6);
+    expect(azimuth).toBeCloseTo(309.3897913, 6);
+    expect(altitude).toBeCloseTo(-41.08443315, 6);
     expect(radiusVector).toBeCloseTo(1.8470053, 6);
 });
 
@@ -150,13 +150,13 @@ it('tests getDistanceToEarth', () => {
 it('tests getApparentDistanceToEarth', () => {
     const d = mars.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(276303867.5739881, 6);
+    expect(d).toBeCloseTo(276303862.5069866, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = mars.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(276308060.0257899, 6);
+    expect(d).toBeCloseTo(276308054.9586701, 6);
 });
 
 it('tests getLightTime', () => {
@@ -180,25 +180,25 @@ it('tests getTopocentricAngularDiameter', () => {
 it('tests getElongation', () => {
     const phi = mars.getElongation();
 
-    expect(phi).toBeCloseTo(47.7254744, 6);
+    expect(phi).toBeCloseTo(47.7254763, 6);
 });
 
 it('tests getTopocentricElongation', () => {
     const phi = mars.getTopocentricElongation(location);
 
-    expect(phi).toBeCloseTo(47.72473302, 6);
+    expect(phi).toBeCloseTo(47.72473494, 6);
 });
 
 it('tests getPhaseAngle', () => {
     const i = mars.getPhaseAngle();
 
-    expect(i).toBeCloseTo(31.53926043, 6);
+    expect(i).toBeCloseTo(31.53926145, 6);
 });
 
 it('tests getTopocentricPhaseAngle', () => {
     const i = mars.getTopocentricPhaseAngle(location);
 
-    expect(i).toBeCloseTo(31.53855898, 6);
+    expect(i).toBeCloseTo(31.53856, 6);
 });
 
 it('tests getIlluminatedFraction', () => {
@@ -258,13 +258,13 @@ it('tests getTransit', () => {
 it('tests getGeometricRise', () => {
     const toi = mars.getGeometricRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 38, sec: 0});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 38, sec: 1});
 });
 
 it('tests getApparentRise', () => {
     const toi = mars.getApparentRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 34, sec: 0});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 34, sec: 1});
 });
 
 it('tests getGeometricSet', () => {

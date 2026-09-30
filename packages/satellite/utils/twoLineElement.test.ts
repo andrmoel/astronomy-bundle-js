@@ -11,8 +11,7 @@ describe('parseTwoLineElement', () => {
         expect(tle.satelliteNumber).toBe(25544);
         expect(tle.classification).toBe('U');
         expect(tle.internationalDesignator).toBe('98067A');
-        expect(tle.epoch.time).toEqual({year: 2026, month: 9, day: 27, hour: 4, min: 10, sec: expect.any(Number)});
-        expect(tle.epoch.time.sec).toBeCloseTo(50.46, 2);
+        expect(tle.epoch.time).toEqual({year: 2026, month: 9, day: 27, hour: 4, min: 10, sec: 50});
         expect(tle.epoch.jd).toBeCloseTo(2461310.67419514, 8);
         expect(tle.meanMotionFirstDerivative).toBe(0.00009528);
         expect(tle.meanMotionSecondDerivative).toBe(0);

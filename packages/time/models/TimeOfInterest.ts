@@ -8,12 +8,14 @@ import {
 } from '@app/utils/siderealTime';
 import type {Time} from '../types/TimeTypes';
 import {
+    date2julianDay,
     dayOfYear2time,
     getDayOfWeek,
     getDayOfYear,
     getDecimalYear,
     isLeapYear,
     julianCenturiesJ20002julianDay,
+    julianDay2date,
     julianDay2julianCenturiesJ2000,
     julianDay2julianDay0,
     julianDay2julianDayEphemeris,
@@ -31,23 +33,17 @@ export default class TimeOfInterest {
 
     public readonly T: number = 0.0;
 
-    public constructor(public readonly time: Time) {
-        this.jd = time2julianDay(time);
+    public constructor(
+        public readonly time: Time,
+        jd: number = time2julianDay(time),
+    ) {
+        this.jd = jd;
         this.jde = julianDay2julianDayEphemeris(this.jd);
         this.T = julianDay2julianCenturiesJ2000(this.jd);
     }
 
     public static fromCurrentTime(): TimeOfInterest {
-        const date = new Date(Date.now());
-
-        return new TimeOfInterest({
-            year: date.getUTCFullYear(),
-            month: date.getUTCMonth() + 1,
-            day: date.getUTCDate(),
-            hour: date.getUTCHours(),
-            min: date.getUTCMinutes(),
-            sec: date.getUTCSeconds(),
-        });
+        return TimeOfInterest.fromDate(new Date(Date.now()));
     }
 
     public static fromTime(year: number, month: number, day: number, hour = 0, min = 0, sec = 0): TimeOfInterest {
@@ -55,14 +51,7 @@ export default class TimeOfInterest {
     }
 
     public static fromDate(date: Date): TimeOfInterest {
-        return new TimeOfInterest({
-            year: date.getUTCFullYear(),
-            month: date.getUTCMonth() + 1,
-            day: date.getUTCDate(),
-            hour: date.getUTCHours(),
-            min: date.getUTCMinutes(),
-            sec: date.getUTCSeconds(),
-        });
+        return TimeOfInterest.fromJulianDay(date2julianDay(date));
     }
 
     public static fromYearOfDay(year: number, dayOfYear: number): TimeOfInterest {
@@ -72,9 +61,7 @@ export default class TimeOfInterest {
     }
 
     public static fromJulianDay(jd: number): TimeOfInterest {
-        const time = julianDay2time(jd);
-
-        return new TimeOfInterest(time);
+        return new TimeOfInterest(julianDay2time(jd), jd);
     }
 
     public static fromJulianDayEphemeris(jde: number): TimeOfInterest {
@@ -82,10 +69,7 @@ export default class TimeOfInterest {
     }
 
     public static fromJulianCenturiesJ2000(T: number): TimeOfInterest {
-        const jd = julianCenturiesJ20002julianDay(T);
-        const time = julianDay2time(jd);
-
-        return new TimeOfInterest(time);
+        return TimeOfInterest.fromJulianDay(julianCenturiesJ20002julianDay(T));
     }
 
     public getTime(): Time {
@@ -99,9 +83,7 @@ export default class TimeOfInterest {
     }
 
     public getDate(): Date {
-        const {year, month, day, hour, min, sec} = this.time;
-
-        return new Date(Date.UTC(year, month - 1, day, hour, min, sec));
+        return julianDay2date(this.jd);
     }
 
     public getDecimalYear(): number {

@@ -84,7 +84,7 @@ describe('getJulianDayOfGreatestEclipse', () => {
             day: 12,
             hour: 17,
             min: 45,
-            sec: 56,
+            sec: 57,
         });
     });
 });

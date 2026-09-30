@@ -1,5 +1,11 @@
-import {EPOCH_J2000} from '@app/constants/epoch';
-import {DAYS_PER_JULIAN_CENTURY, HOURS_PER_DAY, MINUTES_PER_DAY, SECONDS_PER_DAY} from '@app/constants/time';
+import {EPOCH_J2000, EPOCH_UNIX} from '@app/constants/epoch';
+import {
+    DAYS_PER_JULIAN_CENTURY,
+    HOURS_PER_DAY,
+    MILLISECONDS_PER_DAY,
+    MINUTES_PER_DAY,
+    SECONDS_PER_DAY,
+} from '@app/constants/time';
 import {round} from '@app/utils/math';
 import type {Time} from '../types/TimeTypes';
 import {getDeltaT} from './deltaT';
@@ -103,10 +109,10 @@ function parseIsoDateString(dateStr: string): (Time & {offsetMinutes: number}) |
 }
 
 export function julianDay2time(jd: number): Time {
-    jd = jd + 0.5;
+    const secondsSinceNoon = Math.round((jd + 0.5) * SECONDS_PER_DAY);
 
-    const Z = Math.floor(jd);
-    const F = jd - Z;
+    const Z = Math.floor(secondsSinceNoon / SECONDS_PER_DAY);
+    const secondsOfDay = secondsSinceNoon - Z * SECONDS_PER_DAY;
 
     let A = Z;
     if (Z >= 2299161) {
@@ -119,21 +125,26 @@ export function julianDay2time(jd: number): Time {
     const D = Math.floor(365.25 * C);
     const E = Math.floor((B - D) / 30.6001);
 
-    const dayOnMonth = B - D - Math.floor(30.6001 * E) + F;
+    const day = B - D - Math.floor(30.6001 * E);
     const month = E < 14 ? E - 1 : E - 13;
     const year = month > 2 ? C - 4716 : C - 4715;
-    const hour = (dayOnMonth - Math.floor(dayOnMonth)) * 24;
-    const min = (hour - Math.floor(hour)) * 60;
-    const sec = (min - Math.floor(min)) * 60;
 
     return {
-        year: Math.floor(year),
-        month: Math.floor(month),
-        day: Math.floor(dayOnMonth),
-        hour: Math.floor(hour),
-        min: Math.floor(min),
-        sec: Math.floor(sec),
+        year,
+        month,
+        day,
+        hour: Math.floor(secondsOfDay / 3600),
+        min: Math.floor((secondsOfDay % 3600) / 60),
+        sec: secondsOfDay % 60,
     };
+}
+
+export function date2julianDay(date: Date): number {
+    return date.getTime() / MILLISECONDS_PER_DAY + EPOCH_UNIX;
+}
+
+export function julianDay2date(jd: number): Date {
+    return new Date(Math.round((jd - EPOCH_UNIX) * MILLISECONDS_PER_DAY));
 }
 
 export function julianDay2julianDay0(jd: number): number {

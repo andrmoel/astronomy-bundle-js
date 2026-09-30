@@ -162,26 +162,26 @@ it('tests getTopocentricDistanceToEarth', () => {
 it('tests getTransit', () => {
     const toi = moon.getTransit(location);
 
-    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 54, sec: 59});
+    expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 3, min: 55, sec: 0});
 });
 
 describe('getGeometricRise', () => {
     it('tests the upper limb', () => {
         const toi = moon.getGeometricRise(location, LimbAlignment.UpperLimb);
 
-        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 49, sec: 49});
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 49, sec: 50});
     });
 
     it('tests the center', () => {
         const toi = moon.getGeometricRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 51, sec: 45});
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 51, sec: 46});
     });
 
     it('tests the lower limb', () => {
         const toi = moon.getGeometricRise(location, LimbAlignment.LowerLimb);
 
-        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 53, sec: 41});
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 53, sec: 42});
     });
 });
 
@@ -195,7 +195,7 @@ describe('getApparentRise', () => {
     it('tests the center', () => {
         const toi = moon.getApparentRise(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 47, sec: 41});
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 21, min: 47, sec: 42});
     });
 
     it('tests the lower limb', () => {
@@ -235,7 +235,7 @@ describe('getApparentSet', () => {
     it('tests the center', () => {
         const toi = moon.getApparentSet(location, LimbAlignment.Center);
 
-        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 8, sec: 16});
+        expect(toi.time).toEqual({year: 1992, month: 4, day: 12, hour: 11, min: 8, sec: 17});
     });
 
     it('tests the lower limb', () => {
@@ -338,7 +338,7 @@ it('tests getTopocentricApparentMagnitude', () => {
 it('tests getUpcomingNewMoon', () => {
     const toiNewMoon = moon.getUpcomingNewMoon();
 
-    expect(toiNewMoon.time).toEqual({year: 1992, month: 4, day: 3, hour: 5, min: 1, sec: 4});
+    expect(toiNewMoon.time).toEqual({year: 1992, month: 4, day: 3, hour: 5, min: 1, sec: 5});
 });
 
 it('tests getUpcomingFirstQuarter', () => {
@@ -350,13 +350,13 @@ it('tests getUpcomingFirstQuarter', () => {
 it('tests getUpcomingFullMoon', () => {
     const toiFullMoon = moon.getUpcomingFullMoon();
 
-    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 42, sec: 23});
+    expect(toiFullMoon.time).toEqual({year: 1992, month: 4, day: 17, hour: 4, min: 42, sec: 24});
 });
 
 it('tests getUpcomingLastQuarter', () => {
     const toiLastQuarter = moon.getUpcomingLastQuarter();
 
-    expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 39, sec: 38});
+    expect(toiLastQuarter.time).toEqual({year: 1992, month: 4, day: 24, hour: 21, min: 39, sec: 39});
 });
 
 it('tests getSubEarthPoint', () => {

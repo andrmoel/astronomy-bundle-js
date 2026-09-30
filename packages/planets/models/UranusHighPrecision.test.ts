@@ -95,15 +95,15 @@ it('tests getGeocentricEquatorialSphericalDateCoordinates', () => {
 it('tests getApparentGeocentricEclipticRectangularCoordinates', () => {
     const {x, y, z} = uranus.getApparentGeocentricEclipticRectangularCoordinates();
 
-    expect(x).toBeCloseTo(14.5965562268, 8);
-    expect(y).toBeCloseTo(-14.7069520433, 8);
+    expect(x).toBeCloseTo(14.5965562432, 8);
+    expect(y).toBeCloseTo(-14.7069520297, 8);
     expect(z).toBeCloseTo(-0.2381366023, 8);
 });
 
 it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
     const {lon, lat, radiusVector} = uranus.getApparentGeocentricEclipticSphericalCoordinates();
 
-    expect(lon).toBeCloseTo(314.7841492389, 8);
+    expect(lon).toBeCloseTo(314.7841493019, 8);
     expect(lat).toBeCloseTo(-0.658448729, 8);
     expect(radiusVector).toBeCloseTo(20.7222248168, 8);
 });
@@ -111,8 +111,8 @@ it('tests getApparentGeocentricEclipticSphericalCoordinates', () => {
 it('tests getApparentGeocentricEquatorialSphericalCoordinates', () => {
     const {rightAscension, declination, radiusVector} = uranus.getApparentGeocentricEquatorialSphericalCoordinates();
 
-    expect(rightAscension).toBeCloseTo(317.449835439, 8);
-    expect(declination).toBeCloseTo(-17.0277844783, 8);
+    expect(rightAscension).toBeCloseTo(317.449835502, 8);
+    expect(declination).toBeCloseTo(-17.0277844602, 8);
     expect(radiusVector).toBeCloseTo(20.7222248168, 8);
 });
 
@@ -150,13 +150,13 @@ it('tests getDistanceToEarth', () => {
 it('tests getApparentDistanceToEarth', () => {
     const d = uranus.getApparentDistanceToEarth();
 
-    expect(d).toBeCloseTo(3100000708.2140875, 6);
+    expect(d).toBeCloseTo(3100000708.2056894, 6);
 });
 
 it('tests getTopocentricDistanceToEarth', () => {
     const d = uranus.getTopocentricDistanceToEarth(location);
 
-    expect(d).toBeCloseTo(3100005578.7247348, 6);
+    expect(d).toBeCloseTo(3100005578.7163334, 6);
 });
 
 it('tests getLightTime', () => {
@@ -252,13 +252,13 @@ it('tests getTopocentricApparentMagnitude', () => {
 it('tests getTransit', () => {
     const toi = uranus.getTransit(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 13, min: 34, sec: 11});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 13, min: 34, sec: 12});
 });
 
 it('tests getGeometricRise', () => {
     const toi = uranus.getGeometricRise(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 9, sec: 0});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 9, min: 9, sec: 1});
 });
 
 it('tests getApparentRise', () => {
@@ -270,11 +270,11 @@ it('tests getApparentRise', () => {
 it('tests getGeometricSet', () => {
     const toi = uranus.getGeometricSet(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 17, min: 59, sec: 24});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 17, min: 59, sec: 25});
 });
 
 it('tests getApparentSet', () => {
     const toi = uranus.getApparentSet(location);
 
-    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 18, min: 3, sec: 37});
+    expect(toi.time).toEqual({year: 2000, month: 1, day: 1, hour: 18, min: 3, sec: 38});
 });
